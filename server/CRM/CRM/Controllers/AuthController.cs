@@ -1,0 +1,34 @@
+﻿using CRM.DTO;
+using CRM.Modal;
+using CRM.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CRM.Controllers
+{
+    [Route("api/v1/[controller]")]
+    [ApiController]
+    public class AuthController : ControllerBase
+    {
+        public readonly IUserServices _userServices; 
+
+        public AuthController( IUserServices userServices)
+        {
+            _userServices = userServices;
+        }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login(LoginViewModal viewModal)
+        {
+            try
+            {
+                LoginDTO result = await _userServices.Login(viewModal);
+                return Ok(result);
+
+            }catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+    }
+}
