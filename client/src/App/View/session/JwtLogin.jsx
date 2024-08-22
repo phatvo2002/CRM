@@ -11,7 +11,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import toastr from "toastr";
 import * as Yup from "yup";
 import { blue } from "@mui/material/colors";
-
+import logo from "../../Assets/image/logo.png";
+import { keyframes } from "@mui/system";
 const FlexBox = styled(Box)(() => ({ display: "flex", alignItems: "center" }));
 
 const JustifyBox = styled(FlexBox)(() => ({ justifyContent: "center" }));
@@ -23,9 +24,25 @@ const ContentBox = styled(Box)(() => ({
   background: "rgba(0, 0, 0, 0.01)",
 }));
 
+const slideDown = keyframes`
+  0% {
+    transform: translateY(-150px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+
 const JWTRoot = styled(JustifyBox)(() => ({
   background: "#f8fbf8",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "100vh",
   minHeight: "100% !important",
+  animation: `${slideDown} 1s ease-out`,
   "& .card": {
     maxWidth: "80%",
     // minHeight: 400,
@@ -79,10 +96,14 @@ const JwtLogin = () => {
         <Grid container>
           <Grid item sm={12} xs={12}>
             <ContentBox>
-              <Box textAlign={"center"} color={"rgb(20, 70, 140)"}>
+              <Box textAlign={"center"} color={"gray"}>
                 {/* <h3>TRƯỜNG ĐẠI HỌC TÀI CHÍNH MARKETING</h3> */}
-                <h3>PHẦN MỀM QUẢN LÝ QUAN HỆ KHÁCH HÀNG </h3>
-                <h2>CRM</h2>
+                <img
+                  src={logo}
+                  style={{ textAlign: "center", width: "200px" }}
+                />
+                <h2>PHẦN MỀM QUẢN LÝ QUAN HỆ KHÁCH HÀNG </h2>
+                <h2>LPCRM</h2>
               </Box>
 
               <Formik
@@ -140,7 +161,7 @@ const JwtLogin = () => {
 
                       <NavLink
                         to="/session/forgot-password"
-                        style={{ color: blue }}
+                        style={{ color: "black" }}
                       >
                         Quên mật khẩu?
                       </NavLink>
@@ -148,10 +169,13 @@ const JwtLogin = () => {
                     <LoadingButton
                       type="submit"
                       // color="#70ad56"
-                      style={{ background: "rgb(20, 70, 140)", color: "#fff" }}
+                      style={{
+                        background: "black",
+                        color: "#fff",
+                      }}
                       loading={loading}
                       variant="contained"
-                      sx={{ my: 3, left: "10%", right: "10%", width: "80%" }}
+                      sx={{ my: 3, width: "100%" }}
                     >
                       ĐĂNG NHẬP
                     </LoadingButton>

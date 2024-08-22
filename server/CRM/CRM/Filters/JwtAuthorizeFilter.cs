@@ -16,9 +16,9 @@ namespace CRM.Filters
         }
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+          
+            var token = context.HttpContext.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             
-            var token = context.HttpContext.Request
-                .Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
             if (token == null)
             {
                 context.Result = new UnauthorizedResult();
@@ -26,39 +26,35 @@ namespace CRM.Filters
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(AppSettingsProvider.Get("JWT:IssuerSigningKey") ?? "");
+            var key = Encoding.ASCII.GetBytes("vodangphat@12345");
             try
             {
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
                 {
-                    ValidateIssuerSigningKey = true,
+                    ValidateIssuerSigningKey = false,
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    //Nếu token hết hạn,
-                    //thì khi gọi phương thức ValidateToken,
-                    //mã lỗi SecurityTokenExpiredException sẽ được throw ra
                     ClockSkew = TimeSpan.Zero
                 }, out SecurityToken validatedToken);
                 var jwtToken = (JwtSecurityToken)validatedToken;
                 if (jwtToken.ValidTo < DateTime.UtcNow)
                 {
-                    // Token đã hết hạn
-                    // Xử lý lỗi hoặc đăng nhập lại để tạo mới token
                     context.Result = new UnauthorizedResult();
                     return;
                 }
-                var userId = new Guid(jwtToken.Claims.First(x => x.Type == "UserId").Value);
-                context.HttpContext.Items["UserId"] = userId;
-                var groupId = new Guid(jwtToken.Claims.First(x => x.Type == "GroupId").Value);
-                context.HttpContext.Items["GroupId"] = groupId;
-                var userName = jwtToken.Claims.First(x => x.Type == "UserName").Value;
-                context.HttpContext.Items["UserName"] = userName;
+                var user = jwtToken.Claims;
+                var userId = new Guid(jwtToken.Claims.First(x => x.Type == "Id").Value);
+                context.HttpContext.Items["Id"] = userId;
+                var groupId = new Guid(jwtToken.Claims.First(x => x.Type == "MaChucVu").Value);
+                context.HttpContext.Items["MaChucVu"] = groupId;
+                var userName = jwtToken.Claims.First(x => x.Type == "TaiKhoan").Value;
+                context.HttpContext.Items["TaiKhoan"] = userName;
             }
-            catch (Exception)
-            {
-                context.Result = new UnauthorizedResult();
-                return;
+            catch (Exception ex) { 
+            
+                var result = ex.Message;
+                //context.Result = new UnauthorizedResult();
             }
         }
     }

@@ -3,6 +3,7 @@ using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
 using CRM.Repositories.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,6 +21,18 @@ namespace CRM.Repositories
         {
             _context = context;
             _mapper = mapper;
+        }
+
+        public async Task<ResultModal> ChangePassword(Guid id, string newpass)
+        {
+            var db =  _context.Nguoidungs.Where(r => r.Id == id).FirstOrDefault();
+            if (db == null)
+            {
+                db.MatKhau = newpass;
+                await _context.SaveChangesAsync();
+                return new ResultModal() { Status = 200 , Message = "Đổi mật khẩu thành công" ,Success = true };
+            }
+            return new ResultModal() { Status = 202, Message = "Đổi mật khẩu không thành công", Success = false };
         }
 
         public async Task<ResultModal> CreateUser(UserModal userModal)
@@ -48,7 +61,6 @@ namespace CRM.Repositories
                     nguoidung.Email = userModal.Email;
                     nguoidung.MatKhau = userModal.MatKhau;
                     _context.Nguoidungs.Add(nguoidung);
-                    Console.WriteLine(nguoidung);
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thành công", Success = true };
                 }
@@ -59,6 +71,40 @@ namespace CRM.Repositories
                 return new ResultModal() { Status = 500, Message = result.ToString(), Success = false };
             }
           
+        }
+
+
+
+        public async Task<ResultModal> DeleteUser(Guid id)
+        {
+            try
+            {
+                var db = _context.Nguoidungs.FirstOrDefault(r => r.Id == id);
+                if(db != null)
+                {
+                    _context.Nguoidungs.Remove(db);
+                    await _context.SaveChangesAsync();
+                    return new ResultModal() { Message = "Xóa thành công ", Status = 200, Success = true };
+                }
+                return new ResultModal() { Message = "Không tìm thấy người dùng", Status = 202, Success = false };
+            }
+            catch(Exception ex)
+            {
+                return new ResultModal() { Message = ex.ToString(), Success = false ,Status = 500};
+            }
+          
+        }
+
+        public async  Task<LoginDTO> GetUserById(Guid id)
+        {
+            var data = await _context.Nguoidungs.Where(r => r.Id == id).AsNoTracking().FirstOrDefaultAsync();
+            return _mapper.Map<LoginDTO>(data);
+        }
+
+        public async  Task<List<UserDTO>> GetUsers()
+        {
+            var data = await _context.Nguoidungs.ToListAsync();
+            return  _mapper.Map<List<UserDTO>>(data);
         }
 
         public async Task<LoginDTO> Login(LoginViewModal loginViewModel)

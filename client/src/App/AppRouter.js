@@ -8,19 +8,24 @@ import {
 import JwtLogin from "./View/session/JwtLogin";
 import UserProfile from "./View/UserProfile";
 import ProtectedRoute from "./ProtectedRoute";
-import Dashboard from "./View/Dashbroad/Dashbroad";
+import RootLayout from "./View/Dashbroad/RootLayout";
+import BanLamViec from "./View/BanLamViec/BanLamViec";
+import ThongTinNguoiDung from "./View/ThongTinNguoiDung/ThongTinNguoiDung";
 const AppRouter = () => {
   return (
     <Routes>
       <Route path="/login" element={<JwtLogin />} />
       <Route
-        path="/user/profile"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <RootLayout />
           </ProtectedRoute>
         }
-      />
+      >
+        <Route path="/user/profile" element={<ThongTinNguoiDung />} />
+        <Route path="/banlamviec" element={<BanLamViec />} />
+        {/* Add other protected routes here */}
+      </Route>
       <Route path="*" element={<Navigate to="/login" />} />
     </Routes>
   );

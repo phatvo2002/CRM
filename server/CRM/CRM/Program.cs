@@ -1,4 +1,5 @@
-﻿using CRM.Entities;
+﻿using CRM;
+using CRM.Entities;
 using CRM.Filters;
 using CRM.Helper;
 using CRM.Repositories;
@@ -7,7 +8,9 @@ using CRM.Services;
 using CRM.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +26,11 @@ builder.Services.AddControllers();
 // Add services to the container.
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserServices ,UserServices>();
+builder.Services.AddScoped<IChucVuRepository, ChucVuRepository>();
+builder.Services.AddScoped<IChucVuServices ,ChucVuServices>();
+
+builder.Services.AddScoped<JwtAuthorizeFilter>();
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -32,7 +40,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
 // Đăng ký dịch vụ phân quyền
-builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -82,6 +90,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
 app.UseHttpsRedirection();
 
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapControllers();

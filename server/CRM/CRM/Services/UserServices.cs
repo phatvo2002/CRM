@@ -20,6 +20,21 @@ namespace CRM.Services
             return await _userRepository.CreateUser(userModal);
         }
 
+        public async Task<ResultModal> DeleteUser(Guid id)
+        {
+            return await _userRepository.DeleteUser(id);
+        }
+
+        public async Task<List<UserDTO>> GetUsers()
+        {
+            return await _userRepository.GetUsers();
+        }
+
+        public async Task<LoginDTO> GetUserById(Guid Id )
+        {
+            return await _userRepository.GetUserById(Id);
+        }
+
         public async Task<LoginDTO> Login(LoginViewModal loginViewModal)
         {
             return await _userRepository.Login(loginViewModal);

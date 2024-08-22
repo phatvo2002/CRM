@@ -11,14 +11,16 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
+import { Outlet } from "react-router-dom";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Link from "@mui/material/Link";
+import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./listItems";
 import Button from "@mui/material/Button";
+
 import { AuthContext } from "../../Context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
 import Menu from "@mui/material/Menu";
@@ -94,7 +96,7 @@ const Drawer = styled(MuiDrawer, {
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
-export default function Dashboard() {
+export default function RootLayout() {
   const { logout } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -114,7 +116,11 @@ export default function Dashboard() {
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
+        <AppBar
+          position="absolute"
+          open={open}
+          style={{ backgroundColor: "white" }}
+        >
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
@@ -135,13 +141,13 @@ export default function Dashboard() {
             <Typography
               component="h1"
               variant="h6"
-              color="inherit"
+              color="white"
               noWrap
               sx={{ flexGrow: 1 }}
             >
               Dashboard
             </Typography>
-            <IconButton color="inherit">
+            <IconButton color="white">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
@@ -163,7 +169,9 @@ export default function Dashboard() {
                   "aria-labelledby": "basic-button",
                 }}
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem>
+                  <Link to="/user/profile">Thông tin tài khoản</Link>
+                </MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
@@ -204,40 +212,7 @@ export default function Dashboard() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Chart */}
-              {/* <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Chart />
-                </Paper>
-              </Grid> */}
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Orders />
-                </Paper>
-              </Grid>
-            </Grid>
+            <Outlet />
             <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
