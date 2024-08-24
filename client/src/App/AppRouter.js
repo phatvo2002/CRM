@@ -11,6 +11,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import RootLayout from "./View/Dashbroad/RootLayout";
 import BanLamViec from "./View/BanLamViec/BanLamViec";
 import ThongTinNguoiDung from "./View/ThongTinNguoiDung/ThongTinNguoiDung";
+import RouteChild from "./Router";
 const AppRouter = () => {
   return (
     <Routes>
@@ -22,8 +23,11 @@ const AppRouter = () => {
           </ProtectedRoute>
         }
       >
-        <Route path="/user/profile" element={<ThongTinNguoiDung />} />
-        <Route path="/banlamviec" element={<BanLamViec />} />
+        {RouteChild.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+        {/* <Route path="/user/profile" element={<ThongTinNguoiDung />} />
+        <Route path="/banlamviec" element={<BanLamViec />} /> */}
         {/* Add other protected routes here */}
       </Route>
       <Route path="*" element={<Navigate to="/login" />} />

@@ -80,11 +80,11 @@ const JwtLogin = () => {
     setLoading(true);
     try {
       await login(values.UserName, values.password);
-      navigate("/user/profile");
-      Swal.fire({
-        title: "Đăng nhập thành công!",
-        icon: "success",
-      });
+      // navigate("/user/profile");
+      // Swal.fire({
+      //   title: "Đăng nhập thành công!",
+      //   icon: "success",
+      // });
     } catch (e) {
       setLoading(false);
     }

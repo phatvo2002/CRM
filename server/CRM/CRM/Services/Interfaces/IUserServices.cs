@@ -14,6 +14,8 @@ namespace CRM.Services.Interfaces
         Task<ResultModal> DeleteUser(Guid id);
 
         Task<LoginDTO> GetUserById(Guid Id);
+
+        Task<ResultModal> ActiveAccount(AcviteModal modal);
     }
 
 }

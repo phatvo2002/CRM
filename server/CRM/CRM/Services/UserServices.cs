@@ -39,5 +39,10 @@ namespace CRM.Services
         {
             return await _userRepository.Login(loginViewModal);
         }
+
+        public async Task<ResultModal> ActiveAccount(AcviteModal modal)
+        {
+            return await _userRepository.ActiveAccount(modal);
+        }
     }
 }

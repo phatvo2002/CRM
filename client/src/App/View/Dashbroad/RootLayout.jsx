@@ -10,6 +10,7 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
+import Tooltip from "@mui/material/Tooltip";
 import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
 import Grid from "@mui/material/Grid";
@@ -20,6 +21,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./listItems";
 import Button from "@mui/material/Button";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import { AuthContext } from "../../Context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
@@ -100,12 +102,23 @@ export default function RootLayout() {
   const { logout } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl1, setAnchorEl1] = React.useState(null);
   const opens = Boolean(anchorEl);
+  const opens1 = Boolean(anchorEl1);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const handleClick1 = (event) => {
+    setAnchorEl1(event.currentTarget);
+  };
+
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleClose1 = () => {
+    setAnchorEl1(null);
   };
 
   const toggleDrawer = () => {
@@ -144,9 +157,22 @@ export default function RootLayout() {
               color="white"
               noWrap
               sx={{ flexGrow: 1 }}
-            >
-              Dashboard
-            </Typography>
+            ></Typography>
+            <IconButton color="white">
+              <SettingsIcon
+                id="basic-button"
+                onClick={handleClick1}
+                aria-expanded={open ? "true" : undefined}
+                aria-controls={open ? "basic-menu" : undefined}
+                aria-haspopup="true"
+              ></SettingsIcon>
+              <Menu open={opens1} anchorEl={anchorEl1} onClose={handleClose1}>
+                <MenuItem>
+                  <Link to="/thietlap">Thiết lập người dùng</Link>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>Thiết lập vai trò</MenuItem>
+              </Menu>
+            </IconButton>
             <IconButton color="white">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
@@ -211,10 +237,10 @@ export default function RootLayout() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth="100%" sx={{ mt: 4, mb: 4, height: "70vh" }}>
             <Outlet />
-            <Copyright sx={{ pt: 4 }} />
           </Container>
+          <Copyright sx={{ pt: 4 }} />
         </Box>
       </Box>
     </ThemeProvider>

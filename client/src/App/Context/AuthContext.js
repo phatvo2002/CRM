@@ -2,6 +2,7 @@ import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthApi from "../Api/AuthApi";
 import toastr from "toastr";
+import Swal from "sweetalert2";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -28,12 +29,29 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const response = await AuthApi.login(email, password);
-      console.log(response);
-      localStorage.setItem("token", response.token);
+      if (response.status === 200) {
+        localStorage.setItem("token", response.token);
+        setAuthState(response.token);
+        navigate("/user/profile");
+        Swal.fire({
+          title: "Đăng nhập thành công!",
+          icon: "success",
+        });
+      } else {
+        Swal.fire({
+          title: "Tài khoản chưa được kích hoạt !",
+          icon: "error",
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+
+        navigate("/login");
+      }
       //   const userData = await AuthApi.getUserData(token);
       //   setUser(userData);
-      //   navigate("/user/profile");
-      setAuthState(response.token);
     } catch (error) {
       console.error("Login failed:", error);
     }

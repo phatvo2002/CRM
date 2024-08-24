@@ -66,6 +66,8 @@ namespace CRM.Entities
                 entity.Property(e => e.TaiKhoan).HasMaxLength(50);
                 entity.Property(e=> e.MatKhau).HasMaxLength(50);
 
+                entity.Property(e=> e.IsActive);
+
                 entity.HasOne(d => d.ChucVu).WithMany(p => p.Nguoidung)
                       .HasForeignKey(d => d.MaChucVu)
                       .OnDelete(DeleteBehavior.ClientSetNull)

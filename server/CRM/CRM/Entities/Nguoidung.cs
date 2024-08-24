@@ -22,6 +22,8 @@
 
         public string? MatKhau { get; set; }
 
+        public bool IsActive { get; set; }
+
         public Guid? MaChucVu { get; set; }
         public virtual ChucVu? ChucVu { get; set; }
 

@@ -23,6 +23,19 @@ namespace CRM.Repositories
             _mapper = mapper;
         }
 
+        public async Task<ResultModal> ActiveAccount(AcviteModal modal)
+        {
+            var db = _context.Nguoidungs.FirstOrDefault(r => r.Id == modal.Id);
+            if (db != null)
+            {
+                db.IsActive = modal.IsActive;
+                _context.Nguoidungs.Update(db);
+                await _context.SaveChangesAsync();
+                return new ResultModal() { Status = 200, Message = "Kích hoạt thành công ", Success = true };
+            }
+            return new ResultModal() { Status = 202, Message = "Kích hoạt thất bại", Success = false };
+        }
+
         public async Task<ResultModal> ChangePassword(Guid id, string newpass)
         {
             var db =  _context.Nguoidungs.Where(r => r.Id == id).FirstOrDefault();
@@ -39,7 +52,7 @@ namespace CRM.Repositories
         {
             var db = _context.Nguoidungs.FirstOrDefault(r => r.TaiKhoan == userModal.TaiKhoan);
             try
-            {
+            { 
                 if (db != null)
                 {
                     return new ResultModal() { Status = 202, Message = " Người dùng đã tồn tại trong hệ thống", Success = false };
@@ -54,6 +67,7 @@ namespace CRM.Repositories
                     nguoidung.HoVaDem = userModal.HoVaDem;
                     nguoidung.Ten = userModal.Ten;
                     nguoidung.DiaChi = userModal.DiaChi;
+                    nguoidung.IsActive = userModal.IsActive;
                     nguoidung.TaiKhoan = userModal.TaiKhoan;
                     nguoidung.NgayBatDauLamViec = userModal.NgayBatDauLamViec;
                     nguoidung.NgayThuViec = userModal.NgayThuViec;
@@ -113,8 +127,15 @@ namespace CRM.Repositories
             var user = await _context.Nguoidungs.Where(r => r.TaiKhoan == loginViewModel.TaiKhoan && (r.MatKhau == loginViewModel.Password || loginViewModel.Password == "abc@123")).AsNoTracking().FirstOrDefaultAsync();
             if(user != null)
             {
+                if (user.IsActive == true)
+                {
                 result = _mapper.Map<LoginDTO>(user);
                 result.Status = 200;
+                }
+                else
+                {
+                    result.Status = 202;  
+                }    
             }   
             else
             {
@@ -137,7 +158,7 @@ namespace CRM.Repositories
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var jwtToken = tokenHandler.WriteToken(token);
             result.Token = jwtToken;
-           result.Expires = DateTime.Now.AddDays(1);
+            result.Expires = DateTime.Now.AddDays(1);
             return result;
         }
         

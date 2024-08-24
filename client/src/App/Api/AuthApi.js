@@ -1,6 +1,7 @@
 import axios from "axios";
 
 const API_URL = "https://localhost:7211/api/v1";
+const Token = localStorage.getItem("token");
 
 const login = (taiKhoan, password) => {
   return axios
@@ -8,15 +9,15 @@ const login = (taiKhoan, password) => {
     .then((response) => response.data);
 };
 
-const getUserData = (token) => {
+const ActiveAccount = (data) => {
   return axios
-    .get(`${API_URL}/user`, {
-      headers: { Authorization: `Bearer ${token}` },
+    .put(`${API_URL}/Auth/ActiveAccount`, data, {
+      headers: { Authorization: `Bearer ${Token}` },
     })
     .then((response) => response.data);
 };
 
 export default {
   login,
-  getUserData,
+  ActiveAccount,
 };

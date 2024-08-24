@@ -14,6 +14,8 @@
 
         public string? Email { get; set; }
 
+        public bool IsActive { get; set; }
+
         public DateTime? NgayThuViec { get; set; }
 
         public DateTime? NgayBatDauLamViec { get; set; }

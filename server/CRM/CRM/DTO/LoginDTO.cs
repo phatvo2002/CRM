@@ -14,6 +14,7 @@ namespace CRM.DTO
 
         public string? Email { get; set; }
 
+        public bool IsActive { get; set; }
 
         public string? TaiKhoan { get; set; }
 

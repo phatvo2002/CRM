@@ -1,4 +1,5 @@
-﻿using CRM.DTO;
+﻿using CRM.Attributes;
+using CRM.DTO;
 using CRM.Modal;
 using CRM.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -25,6 +26,19 @@ namespace CRM.Controllers
                 LoginDTO result = await _userServices.Login(viewModal);
                 return Ok(result);
 
+            }catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("ActiveAccount")]
+        [JwtAuthorize]
+        public async Task<IActionResult> ActiveAccount(AcviteModal modal)
+        {
+            try
+            {
+                ResultModal result = await _userServices.ActiveAccount(modal);
+                return Ok(result);
             }catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
