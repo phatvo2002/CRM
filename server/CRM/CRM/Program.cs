@@ -1,4 +1,5 @@
 ﻿using CRM;
+using CRM.Abstraction;
 using CRM.Entities;
 using CRM.Filters;
 using CRM.Helper;
@@ -24,11 +25,15 @@ builder.Services.AddDbContext<CrmDbContext>(options =>
 
 builder.Services.AddControllers();
 // Add services to the container.
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserServices ,UserServices>();
+
 builder.Services.AddScoped<IChucVuRepository, ChucVuRepository>();
 builder.Services.AddScoped<IChucVuServices ,ChucVuServices>();
 
+//builder.Services.AddScoped<ITinhTrangRepository, TinhTrangRepository>();
+builder.Services.AddScoped<ITinhTrangServices, TinhTrangServices>();
+builder.Services.AddScoped<IUnitOfWork ,UnitOfWork>();
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
 
@@ -48,7 +53,7 @@ builder.Services.AddAuthentication(options =>
 });
 builder.Services.AddCors(options => options.AddPolicy("Cors", build =>
 {
-    build.WithOrigins("http://localhost:3000").AllowAnyMethod().AllowAnyHeader();
+    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
 
 builder.Services.AddSwaggerGen(opt =>
@@ -82,12 +87,12 @@ builder.Services.AddSwaggerGen(opt =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment()) 
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"));
 app.UseHttpsRedirection();
 
 app.UseAuthentication(); 

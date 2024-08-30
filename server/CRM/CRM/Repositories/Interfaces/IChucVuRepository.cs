@@ -1,10 +1,15 @@
-﻿using CRM.Modal;
+﻿using CRM.DTO;
+using CRM.Modal;
 
 namespace CRM.Repositories.Interfaces
 {
     public interface IChucVuRepository
     {
         public Task<ResultModal> CreateChucVu(ChucVuModal chucVuModal);
+
+        public Task<List<ChucVuDTO>> GetAllChucVu();
+
+        public Task<ResultModal> DeleteChucVu(Guid Id);
 
     }
 }

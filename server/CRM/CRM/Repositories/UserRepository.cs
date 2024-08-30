@@ -16,11 +16,12 @@ namespace CRM.Repositories
     {
         private readonly CrmDbContext _context;
         private readonly IMapper _mapper;
-
-        public UserRepository(CrmDbContext context, IMapper mapper)
+  
+        public UserRepository(CrmDbContext context, IMapper mapper )
         {
             _context = context;
             _mapper = mapper;
+           
         }
 
         public async Task<ResultModal> ActiveAccount(AcviteModal modal)
@@ -82,6 +83,7 @@ namespace CRM.Repositories
             catch(Exception ex)
             {
                 var result = ex;
+     
                 return new ResultModal() { Status = 500, Message = result.ToString(), Success = false };
             }
           

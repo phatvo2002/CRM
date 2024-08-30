@@ -11,6 +11,23 @@ const getAllUserData = () => {
     .then((response) => response.data);
 };
 
+const insertUser = (data) => {
+  return axios.post(`${API_URL}/User/createUser`,data ,{
+    headers: { Authorization: `Bearer ${Token}` },
+  })
+  .then((response) => response.data);
+}
+
+const deleteUser = (id) => {
+  return axios.delete(`${API_URL}/User?id=${id}` ,{
+    headers: { Authorization: `Bearer ${Token}` },
+  })
+  .then((response) => response.data);
+}
+
+
 export default {
   getAllUserData,
+  insertUser,
+  deleteUser
 };

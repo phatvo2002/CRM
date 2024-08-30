@@ -237,10 +237,10 @@ export default function RootLayout() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="100%" sx={{ mt: 4, mb: 4, height: "70vh" }}>
+          <Container maxWidth="100%" sx={{ mt: 4, mb: 4, height: "100%" }}>
             <Outlet />
           </Container>
-          <Copyright sx={{ pt: 4 }} />
+        
         </Box>
       </Box>
     </ThemeProvider>

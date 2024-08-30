@@ -1,6 +1,6 @@
-﻿using CRM.DTO;
+﻿using CRM.Abstraction;
+using CRM.DTO;
 using CRM.Modal;
-using CRM.Repositories;
 using CRM.Repositories.Interfaces;
 using CRM.Services.Interfaces;
 
@@ -8,41 +8,41 @@ namespace CRM.Services
 {
     public class UserServices : IUserServices
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public UserServices(IUserRepository userRepository)
+        public UserServices( IUnitOfWork unitOfWork)
         {
-            _userRepository = userRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<ResultModal> CreateUser(UserModal userModal)
         {
-            return await _userRepository.CreateUser(userModal);
+            return await _unitOfWork.UserRepository.CreateUser(userModal);
         }
 
         public async Task<ResultModal> DeleteUser(Guid id)
         {
-            return await _userRepository.DeleteUser(id);
+            return await _unitOfWork.UserRepository.DeleteUser(id);
         }
 
         public async Task<List<UserDTO>> GetUsers()
         {
-            return await _userRepository.GetUsers();
+            return await _unitOfWork.UserRepository.GetUsers();
         }
 
         public async Task<LoginDTO> GetUserById(Guid Id )
         {
-            return await _userRepository.GetUserById(Id);
+            return await _unitOfWork.UserRepository.GetUserById(Id);
         }
 
         public async Task<LoginDTO> Login(LoginViewModal loginViewModal)
         {
-            return await _userRepository.Login(loginViewModal);
+            return await _unitOfWork.UserRepository.Login(loginViewModal);
         }
 
         public async Task<ResultModal> ActiveAccount(AcviteModal modal)
         {
-            return await _userRepository.ActiveAccount(modal);
+            return await _unitOfWork.UserRepository.ActiveAccount(modal);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using CRM.Entities;
+﻿using AutoMapper;
+using CRM.DTO;
+using CRM.Entities;
 using CRM.Modal;
 using CRM.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -8,10 +10,13 @@ namespace CRM.Repositories
     public class ChucVuRepository : IChucVuRepository
     {
         private readonly CrmDbContext _context;
+        private readonly IMapper _mapper;
 
-        public ChucVuRepository(CrmDbContext context)
+
+        public ChucVuRepository(CrmDbContext context ,IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         public async Task<ResultModal> CreateChucVu(ChucVuModal chucVuModal)
         {
@@ -35,6 +40,31 @@ namespace CRM.Repositories
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
          
+        }
+
+        public async Task<ResultModal> DeleteChucVu(Guid Id)
+        {
+            try
+            {
+                var db = _context.ChucVus.FirstOrDefault(r => r.Id == Id);
+                if (db != null)
+                {
+                    _context.ChucVus.Remove(db);
+                    await _context.SaveChangesAsync();
+                    return new ResultModal() { Message = "Xóa thành công ", Status = 200, Success = true };
+                }
+                return new ResultModal() { Message = "Không tìm thấy", Status = 202, Success = false };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Message = ex.ToString(), Success = false, Status = 500 };
+            }
+        }
+
+        public async Task<List<ChucVuDTO>> GetAllChucVu()
+        {
+           var db = await _context.ChucVus.ToListAsync();
+            return _mapper.Map<List<ChucVuDTO>>(db);
         }
     }
 }

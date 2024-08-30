@@ -42,7 +42,6 @@ const ThietLap = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         setChecked(event.target.checked);
-        console.log(checked);
         if (checked === false) {
           setDataCheck(false);
         } else {
@@ -61,6 +60,27 @@ const ThietLap = () => {
       }
     });
   };
+
+  const handleDeleteNguoiDung = () =>{
+    Swal.fire({
+      title: "Bạn có muốn xóa người dùng này",
+      text: "Người dùng này sẽ bị xóa vĩnh viễn",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có"
+    }).then((result) => {
+      if (result.isConfirmed) {
+          UserApi.deleteUser(selectedRow[0])
+          Swal.fire({
+            title: "Xóa công",
+            icon: "success",
+          });
+           setLoading(true)
+      }
+    });
+  }
 
   const getData = async () => {
     const response = await UserApi.getAllUserData();
@@ -125,8 +145,8 @@ const ThietLap = () => {
           <Button>
             <CreateIcon></CreateIcon>
           </Button>
-          <Button>
-            <DeleteIcon></DeleteIcon>
+          <Button disabled={selectedRow.length > 0 ? false : true}>
+            <DeleteIcon  onClick={handleDeleteNguoiDung}></DeleteIcon>
           </Button>
         </div>
       ),
@@ -135,9 +155,11 @@ const ThietLap = () => {
   return (
     <Container style={{ maxWidth: "100%" }}>
       <div style={{ width: "100%" }}>
+        <h2>DANH SÁCH TÀI KHOẢN</h2>
+        <p>Quản lý danh sách người dùng của LPCRM</p>
         <Button
           variant="contained"
-          style={{ marginTop: "10px" }}
+          style={{ marginTop: "10px", marginLeft: "86%" }}
           onClick={gotoLink}
         >
           {" "}
