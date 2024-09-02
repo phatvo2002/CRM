@@ -8,7 +8,7 @@ namespace CRM.Repositories.Interfaces
 
         Task<LoginDTO> Login(LoginViewModal loginViewModel);
 
-        Task<ResultModal> ChangePassword(Guid id ,string newpass);
+        Task<ResultModal> ChangePassword(Guid id , string oldpass, string newpass);
 
         Task<ResultModal> CreateUser(UserModal userModal);
 
@@ -19,5 +19,6 @@ namespace CRM.Repositories.Interfaces
         Task<LoginDTO> GetUserById(Guid id);
 
         Task<ResultModal> ActiveAccount(AcviteModal modal);
+
     }
 }

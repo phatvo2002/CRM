@@ -16,6 +16,8 @@ namespace CRM.Services.Interfaces
         Task<LoginDTO> GetUserById(Guid Id);
 
         Task<ResultModal> ActiveAccount(AcviteModal modal);
+
+        Task<ResultModal> ChangePasswrord(Guid id ,  string oldPassword , string newPassword);
     }
 
 }

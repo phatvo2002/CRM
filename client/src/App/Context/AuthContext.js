@@ -31,6 +31,7 @@ export const AuthProvider = ({ children }) => {
       const response = await AuthApi.login(email, password);
       if (response.status === 200) {
         localStorage.setItem("token", response.token);
+        localStorage.setItem("userId", response.id);
         setAuthState(response.token);
         navigate("/user/profile");
         Swal.fire({
@@ -58,7 +59,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.clear()
     setUser(null);
     navigate("/login");
   };

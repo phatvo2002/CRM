@@ -70,7 +70,7 @@ const validationSchema = Yup.object().shape({
 
 const JwtLogin = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   const { login } = useContext(AuthContext);
 

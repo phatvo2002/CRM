@@ -20,20 +20,13 @@ namespace CRM.Repositories
         }
         public async Task<ResultModal> CreateChucVu(ChucVuModal chucVuModal)
         {
-            var db = await _context.ChucVus.FirstOrDefaultAsync(r => r.Id == chucVuModal.Id);
             try {
-                if (db != null)
-                {
-                    return new ResultModal() { Status = 202, Message = "Chức vụ đã tồn tại", Success = false };
-                }
-                else
-                {
                     ChucVu chucVu = new ChucVu();
                     chucVu.Id =  Guid.NewGuid();
                     chucVu.TenChucVu = chucVuModal.TenChucVu;
                     _context.ChucVus.Add(chucVu);
+                    await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm chức vụ thành công", Success = true };
-                }
             }
             catch (Exception ex) 
             {
@@ -65,6 +58,12 @@ namespace CRM.Repositories
         {
            var db = await _context.ChucVus.ToListAsync();
             return _mapper.Map<List<ChucVuDTO>>(db);
+        }
+
+        public Task<ResultModal> UpdateChucVu(ChucVuModal chucVuModal, Guid id)
+        {
+            var db = _context.ChucVus.Where(r => r.Id == id);
+            throw new NotImplementedException();
         }
     }
 }

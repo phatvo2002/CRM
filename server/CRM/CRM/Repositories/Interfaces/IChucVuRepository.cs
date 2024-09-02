@@ -11,5 +11,7 @@ namespace CRM.Repositories.Interfaces
 
         public Task<ResultModal> DeleteChucVu(Guid Id);
 
+        public Task<ResultModal> UpdateChucVu(ChucVuModal chucVuModal, Guid id);
+
     }
 }

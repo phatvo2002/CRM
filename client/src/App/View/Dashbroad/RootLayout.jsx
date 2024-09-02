@@ -22,7 +22,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./listItems";
 import Button from "@mui/material/Button";
 import SettingsIcon from "@mui/icons-material/Settings";
-
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
 import Menu from "@mui/material/Menu";
@@ -30,6 +30,7 @@ import MenuItem from "@mui/material/MenuItem";
 // import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
+
 
 function Copyright(props) {
   return (
@@ -105,6 +106,7 @@ export default function RootLayout() {
   const [anchorEl1, setAnchorEl1] = React.useState(null);
   const opens = Boolean(anchorEl);
   const opens1 = Boolean(anchorEl1);
+  const navigate = useNavigate()
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -116,6 +118,10 @@ export default function RootLayout() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const gotoLink  = ()=>{
+      navigate("/doimatkhau")
+  }
 
   const handleClose1 = () => {
     setAnchorEl1(null);
@@ -198,7 +204,7 @@ export default function RootLayout() {
                 <MenuItem>
                   <Link to="/user/profile">Thông tin tài khoản</Link>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
+                <MenuItem onClick={gotoLink}>Đổi mật khẩu</MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
             </IconButton>

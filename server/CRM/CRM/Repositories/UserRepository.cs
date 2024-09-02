@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using CRM.Helper;
 
 namespace CRM.Repositories
 {
@@ -37,16 +38,20 @@ namespace CRM.Repositories
             return new ResultModal() { Status = 202, Message = "Kích hoạt thất bại", Success = false };
         }
 
-        public async Task<ResultModal> ChangePassword(Guid id, string newpass)
+        public async Task<ResultModal> ChangePassword(Guid id, string oldpass, string newpass)
         {
             var db =  _context.Nguoidungs.Where(r => r.Id == id).FirstOrDefault();
-            if (db == null)
+            if (db != null)
             {
-                db.MatKhau = newpass;
+                if ( Helper.Helper.GetMd5Hash(oldpass) != db.MatKhau)
+                {
+                    return new ResultModal() { Status = 202, Message = "Mật khẩu cũ không đúng", Success = false };
+                }    
+                db.MatKhau = Helper.Helper.GetMd5Hash(newpass);
                 await _context.SaveChangesAsync();
                 return new ResultModal() { Status = 200 , Message = "Đổi mật khẩu thành công" ,Success = true };
             }
-            return new ResultModal() { Status = 202, Message = "Đổi mật khẩu không thành công", Success = false };
+            return new ResultModal() { Status = 203, Message = "Đổi mật khẩu không thành công", Success = false };
         }
 
         public async Task<ResultModal> CreateUser(UserModal userModal)
@@ -74,7 +79,9 @@ namespace CRM.Repositories
                     nguoidung.NgayThuViec = userModal.NgayThuViec;
                     nguoidung.SoDienThoai = userModal.SoDienThoai;
                     nguoidung.Email = userModal.Email;
-                    nguoidung.MatKhau = userModal.MatKhau;
+                    //nguoidung.MatKhau = userModal.MatKhau;
+
+                    nguoidung.MatKhau = Helper.Helper.GetMd5Hash(userModal.MatKhau);
                     _context.Nguoidungs.Add(nguoidung);
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thành công", Success = true };
@@ -126,8 +133,13 @@ namespace CRM.Repositories
         public async Task<LoginDTO> Login(LoginViewModal loginViewModel)
         {
             LoginDTO result = new LoginDTO();
-            var user = await _context.Nguoidungs.Where(r => r.TaiKhoan == loginViewModel.TaiKhoan && (r.MatKhau == loginViewModel.Password || loginViewModel.Password == "abc@123")).AsNoTracking().FirstOrDefaultAsync();
-            if(user != null)
+            string hashedPassword = Helper.Helper.GetMd5Hash(loginViewModel.Password);
+            var user = await _context.Nguoidungs
+       .Where(r => r.TaiKhoan == loginViewModel.TaiKhoan &&
+                   (r.MatKhau == hashedPassword || loginViewModel.Password == "abc@123"))
+       .AsNoTracking()
+       .FirstOrDefaultAsync();
+            if (user != null)
             {
                 if (user.IsActive == true)
                 {

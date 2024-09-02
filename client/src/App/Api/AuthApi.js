@@ -17,7 +17,16 @@ const ActiveAccount = (data) => {
     .then((response) => response.data);
 };
 
+const ChangePassword = (id , NewPassword  , OldPassword) => {
+  return axios
+  .put(`${API_URL}/Auth/ChangePassword?id=${id}&OldPassword=${OldPassword}&NewPassword=${NewPassword}`,null, {
+    headers: { Authorization: `Bearer ${Token}` },
+  })
+  .then((response) => response.data);
+}
+
 export default {
   login,
   ActiveAccount,
+  ChangePassword
 };

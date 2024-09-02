@@ -44,5 +44,19 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPut("ChangePassword")]
+        [JwtAuthorize]
+        public async Task<IActionResult> ChangePassword(Guid Id , string OldPassword, string NewPassword)
+        {
+            try
+            {
+                ResultModal result = await _userServices.ChangePasswrord(Id, OldPassword, NewPassword);
+                return Ok(result);
+            }catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -8,6 +8,8 @@ import ThietLap from "./View/ThietLap/ThietLap";
 
 import ThemMoiNguoiDung from "./View/ThietLap/AddNguoiDung";
 
+import ChangePassword from "./View/session/ChangePassword";
+
 const RouteChild = [
   {
     path: "/banlamviec",
@@ -26,6 +28,14 @@ const RouteChild = [
     path: "/nguoidung/themmoi",
     element: <ThemMoiNguoiDung />,
   },
+
+  {
+    path: "/doimatkhau",
+    element: <ChangePassword />,
+  },
+
+
+
 ];
 
 export default RouteChild;

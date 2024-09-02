@@ -44,5 +44,10 @@ namespace CRM.Services
         {
             return await _unitOfWork.UserRepository.ActiveAccount(modal);
         }
+
+        public async Task<ResultModal> ChangePasswrord(Guid id, string oldPassword, string newPassword)
+        {
+            return await _unitOfWork.UserRepository.ChangePassword(id, oldPassword, newPassword);
+        }
     }
 }
