@@ -17,12 +17,13 @@ namespace CRM.Repositories
     {
         private readonly CrmDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ILogger<UserRepository> _logger;
   
-        public UserRepository(CrmDbContext context, IMapper mapper )
+        public UserRepository(CrmDbContext context, IMapper mapper, ILogger<UserRepository> logger )
         {
             _context = context;
             _mapper = mapper;
-           
+            _logger = logger;
         }
 
         public async Task<ResultModal> ActiveAccount(AcviteModal modal)
@@ -79,8 +80,7 @@ namespace CRM.Repositories
                     nguoidung.NgayThuViec = userModal.NgayThuViec;
                     nguoidung.SoDienThoai = userModal.SoDienThoai;
                     nguoidung.Email = userModal.Email;
-                    //nguoidung.MatKhau = userModal.MatKhau;
-
+                    //nguoidung.MatKhau = userModal.MatKhau 
                     nguoidung.MatKhau = Helper.Helper.GetMd5Hash(userModal.MatKhau);
                     _context.Nguoidungs.Add(nguoidung);
                     await _context.SaveChangesAsync();
@@ -89,8 +89,8 @@ namespace CRM.Repositories
             }
             catch(Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 var result = ex;
-     
                 return new ResultModal() { Status = 500, Message = result.ToString(), Success = false };
             }
           
@@ -165,7 +165,7 @@ namespace CRM.Repositories
                         new Claim("MaChucVu", result.MaChucVu.ToString()),
                         new Claim("TaiKhoan", loginViewModel.TaiKhoan.ToString())
                }),
-                Expires = DateTime.UtcNow.AddDays(30),
+                Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials
                    (new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
@@ -175,6 +175,52 @@ namespace CRM.Repositories
             result.Expires = DateTime.Now.AddDays(1);
             return result;
         }
-        
+
+        public async Task<ResultModal> UserRolePermission(Guid userId, Guid roleId, string roleName)
+        {
+            var db = _context.Nguoidungs.FirstOrDefault(r => r.Id == userId);
+            try
+            {
+                if (db != null)
+                {
+                    if (roleName == "Giám đốc")
+                    {
+                        db.MaChucVu = roleId;
+                        db.CheckIsGiamDoc = true;
+                        db.CheckIsTruongPhong = false;
+                        _context.Update(db);
+                        await _context.SaveChangesAsync();
+                        return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };
+                    }
+                    else if (roleName == "Trưởng phòng")
+                    {
+                        db.MaChucVu = roleId;
+                        db.CheckIsTruongPhong = true;
+                        db.CheckIsGiamDoc = false;
+                        _context.Update(db);
+                        await _context.SaveChangesAsync();
+                        return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };
+                    }
+                    else
+                    {
+                        db.MaChucVu = roleId;
+                        db.CheckIsGiamDoc = false;
+                        db.CheckIsTruongPhong = false;
+                        _context.Update(db);
+                        await _context.SaveChangesAsync();
+                        return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };
+                    }
+                }
+                return new ResultModal() { Status = 202, Message = "Không tìm thấy người dùng trong hệ thống" ,Success= false};
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex , ex.Message);
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+          
+
+
+        }
     }
 }

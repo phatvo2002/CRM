@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CRM.Entities;
+using CRM.Entities.StoreProcedure;
 using CRM.Repositories;
 using CRM.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -11,16 +12,21 @@ namespace CRM.Abstraction
         private readonly CrmDbContext _context;
         private readonly IMapper _mapper;
 
+        private readonly AppCrmContext _appCrmContext;
+
+        private readonly ILoggerFactory _loggerFactory;
+
         private IUserRepository userRepository;
         private IChucVuRepository chucVuRepository;
         private ITinhTrangRepository tinhTrangRepository;
-        public UnitOfWork(CrmDbContext dbContext ,IMapper mapper)
+        private IMenuRepository menuRepository;
+        public UnitOfWork(CrmDbContext dbContext ,IMapper mapper ,AppCrmContext appCrmContext , ILoggerFactory loggerFactory)
         {
             _context = dbContext;
             _mapper = mapper;
+            _appCrmContext = appCrmContext;
+            _loggerFactory = loggerFactory;
         }
-
-  
 
         public IUserRepository UserRepository
         {
@@ -28,7 +34,8 @@ namespace CRM.Abstraction
             {
                 if (this.userRepository == null)
                 {
-                    this.userRepository = new UserRepository(_context , _mapper);
+                    var logger = _loggerFactory.CreateLogger<UserRepository>();
+                    this.userRepository = new UserRepository(_context , _mapper, logger);
                 }
                 return userRepository;
             }
@@ -40,7 +47,8 @@ namespace CRM.Abstraction
             {
                 if(this.chucVuRepository == null)
                 {
-                    this.chucVuRepository = new ChucVuRepository(_context ,_mapper);
+                    var logger = _loggerFactory.CreateLogger<ChucVuRepository>();
+                    this.chucVuRepository = new ChucVuRepository(_context ,_mapper ,_appCrmContext , logger);
                 }  
                 return chucVuRepository;
             }
@@ -55,6 +63,18 @@ namespace CRM.Abstraction
                     this.tinhTrangRepository = new TinhTrangRepository(_context,_mapper);
                 }
                 return tinhTrangRepository;
+            }
+        }
+
+        public IMenuRepository MenuRepository
+        {
+            get
+            {
+                if (this.menuRepository == null)
+                {
+                    this.menuRepository = new MenuRepository(_context, _mapper);
+                }
+                return menuRepository;
             }
         }
     }

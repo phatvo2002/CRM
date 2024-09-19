@@ -62,7 +62,7 @@ namespace CRM.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("deleteUserById/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> DeleteUser(Guid id)
         {
@@ -71,6 +71,20 @@ namespace CRM.Controllers
                 ResultModal result = await _userService.DeleteUser(id);
                 return Ok(result);
             }catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("userRolePermission")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UserRolePermission(Guid id , Guid roleId , string roleName)
+        {
+            try
+            {
+                ResultModal result = await _userService.UserRolePermission(id , roleId , roleName);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }

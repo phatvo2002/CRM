@@ -27,6 +27,10 @@ namespace CRM.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("MoTa")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
                     b.Property<string>("TenChucVu")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -37,11 +41,71 @@ namespace CRM.Migrations
                     b.ToTable("ChucVu", (string)null);
                 });
 
+            modelBuilder.Entity("CRM.Entities.Menu", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("OrderNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_menu");
+
+                    b.ToTable("Menu", (string)null);
+                });
+
+            modelBuilder.Entity("CRM.Entities.MenuRole", b =>
+                {
+                    b.Property<Guid>("MenuId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("Sua")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Them")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Xem")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Xoa")
+                        .HasColumnType("bit");
+
+                    b.HasKey("MenuId", "GroupId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("Menu_Group", (string)null);
+                });
+
             modelBuilder.Entity("CRM.Entities.Nguoidung", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("CheckIsGiamDoc")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CheckIsTruongPhong")
+                        .HasColumnType("bit");
 
                     b.Property<string>("DiaChi")
                         .HasMaxLength(100)
@@ -131,6 +195,25 @@ namespace CRM.Migrations
                     b.ToTable("TinhTrang", (string)null);
                 });
 
+            modelBuilder.Entity("CRM.Entities.MenuRole", b =>
+                {
+                    b.HasOne("CRM.Entities.ChucVu", "ChucVu")
+                        .WithMany("MenuRole")
+                        .HasForeignKey("GroupId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Menu_Role_ChucVu");
+
+                    b.HasOne("CRM.Entities.Menu", "Menu")
+                        .WithMany("MenuRoles")
+                        .HasForeignKey("MenuId")
+                        .IsRequired()
+                        .HasConstraintName("FK_Menu_Role_Menu");
+
+                    b.Navigation("ChucVu");
+
+                    b.Navigation("Menu");
+                });
+
             modelBuilder.Entity("CRM.Entities.Nguoidung", b =>
                 {
                     b.HasOne("CRM.Entities.ChucVu", "ChucVu")
@@ -157,7 +240,14 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Entities.ChucVu", b =>
                 {
+                    b.Navigation("MenuRole");
+
                     b.Navigation("Nguoidung");
+                });
+
+            modelBuilder.Entity("CRM.Entities.Menu", b =>
+                {
+                    b.Navigation("MenuRoles");
                 });
 
             modelBuilder.Entity("CRM.Entities.PhongBan", b =>

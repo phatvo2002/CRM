@@ -20,7 +20,6 @@ namespace CRM.DTO
 
         public string? MatKhau { get; set; }
         public Guid? MaChucVu { get; set; }
-   
 
         public Guid? MaPhongBan { get; set; }
 

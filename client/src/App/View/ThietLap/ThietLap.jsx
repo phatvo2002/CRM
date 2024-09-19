@@ -10,6 +10,7 @@ import AuthApi from "../../Api/AuthApi";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import ModalUpdateRole from "./Modal/ModalUpdateRole";
 const ThietLap = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState([]);
@@ -21,6 +22,7 @@ const ThietLap = () => {
   const [dataCheck, setDataCheck] = useState();
   const [selectedRow, setSelectedRow] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [openModalUpdateRole , setOpenModalUpdateRole] = useState(false);
   const [title, setTitle] = useState("");
   const titleChange = (event) => {
     if (event.target.checked === true) {
@@ -29,6 +31,13 @@ const ThietLap = () => {
       return "Bạn có muốn hủy kích hoạt tài khoản không ?";
     }
   };
+
+  const handleOpenModalUpdate = () => {
+    setOpenModalUpdateRole(true)
+  }
+  const handleCloseModalUpdate = () => {
+    setOpenModalUpdateRole(false)
+  }
 
   const handleChange = async (event) => {
     Swal.fire({
@@ -118,6 +127,23 @@ const ThietLap = () => {
     setLoading(false);
   }, [loading]);
   const columns = [
+    {
+      field: "",
+      headerName: "Action",
+      width: 150,
+      renderCell: () => (
+        <div>
+          <Button onClick={handleOpenModalUpdate}>
+            <CreateIcon>
+
+            </CreateIcon>
+          </Button>
+          <Button disabled={selectedRow.length > 0 ? false : true}>
+            <DeleteIcon  onClick={handleDeleteNguoiDung}></DeleteIcon>
+          </Button>
+        </div>
+      ),
+    },
     { field: "hoVaDem", headerName: "Họ Và Đệm", width: 200, flex: 1 },
     { field: "ten", headerName: "Tên", width: 200, flex: 1 },
     { field: "diaChi", headerName: "Địa Chỉ", width: 200, flex: 1 },
@@ -136,21 +162,7 @@ const ThietLap = () => {
         />
       ),
     },
-    {
-      field: "",
-      headerName: "Action",
-      width: 150,
-      renderCell: () => (
-        <div>
-          <Button>
-            <CreateIcon></CreateIcon>
-          </Button>
-          <Button disabled={selectedRow.length > 0 ? false : true}>
-            <DeleteIcon  onClick={handleDeleteNguoiDung}></DeleteIcon>
-          </Button>
-        </div>
-      ),
-    },
+  
   ];
   return (
     <Container style={{ maxWidth: "100%" }}>
@@ -178,9 +190,11 @@ const ThietLap = () => {
             setSelectedRow(newRowSelectionModel);
           }}
           pageSizeOptions={[5, 10]}
-          checkboxSelection
+          
         />
       </div>
+      {/* Modal UpdateRole */}
+      <ModalUpdateRole openModal={openModalUpdateRole} selectedRow={selectedRow} closeModal={handleCloseModalUpdate} />
     </Container>
   );
 };

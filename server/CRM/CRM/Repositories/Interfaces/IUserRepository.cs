@@ -20,5 +20,7 @@ namespace CRM.Repositories.Interfaces
 
         Task<ResultModal> ActiveAccount(AcviteModal modal);
 
+        Task<ResultModal> UserRolePermission(Guid userId , Guid roleId , string roleName);
+
     }
 }

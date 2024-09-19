@@ -23,5 +23,9 @@
         public Guid? MaChucVu { get; set; }
 
         public Guid? MaPhongBan { get; set; }
+
+        public bool CheckIsTruongPhong { get; set; }
+
+        public bool CheckIsGiamDoc { get; set; }
     }
 }

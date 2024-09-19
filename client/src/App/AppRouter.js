@@ -6,16 +6,13 @@ import {
   Navigate,
 } from "react-router-dom";
 import JwtLogin from "./View/session/JwtLogin";
-import UserProfile from "./View/UserProfile";
 import ProtectedRoute from "./ProtectedRoute";
 import RootLayout from "./View/Dashbroad/RootLayout";
-import BanLamViec from "./View/BanLamViec/BanLamViec";
-import ThongTinNguoiDung from "./View/ThongTinNguoiDung/ThongTinNguoiDung";
 import RouteChild from "./Router";
+import NotFound from "./View/session/NotFound";
 const AppRouter = () => {
   return (
     <Routes>
-      <Route path="/login" element={<JwtLogin />} />
       <Route
         element={
           <ProtectedRoute>
@@ -26,11 +23,10 @@ const AppRouter = () => {
         {RouteChild.map((route, index) => (
           <Route key={index} path={route.path} element={route.element} />
         ))}
-        {/* <Route path="/user/profile" element={<ThongTinNguoiDung />} />
-        <Route path="/banlamviec" element={<BanLamViec />} /> */}
-        {/* Add other protected routes here */}
       </Route>
-      <Route path="*" element={<Navigate to="/login" />} />
+     <Route path="/" element={<Navigate to="/user/profile" />} />
+     <Route path="*" element={<NotFound />} />
+     <Route path="/login" element={<JwtLogin />} />
     </Routes>
   );
 };

@@ -21,9 +21,12 @@
         public string? TaiKhoan { get; set; }
 
         public string? MatKhau { get; set; }
-
+         
         public bool IsActive { get; set; }
 
+        public bool CheckIsTruongPhong { get; set; } 
+
+        public bool CheckIsGiamDoc { get; set; }
         public Guid? MaChucVu { get; set; }
         public virtual ChucVu? ChucVu { get; set; }
 

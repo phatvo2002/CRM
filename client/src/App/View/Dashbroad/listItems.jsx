@@ -1,24 +1,32 @@
 import * as React from "react";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ListSubheader from "@mui/material/ListSubheader";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import PeopleIcon from "@mui/icons-material/People";
-import BarChartIcon from "@mui/icons-material/BarChart";
-import LayersIcon from "@mui/icons-material/Layers";
-import AssignmentIcon from "@mui/icons-material/Assignment";
-import { Link } from "react-router-dom";
-export const mainListItems = (
-  <React.Fragment>
-    <ListItemButton>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <Link to="/banlamviec">Bàn làm việc</Link>
-    </ListItemButton>
-  </React.Fragment>
-);
 
-export const secondaryListItems = <React.Fragment></React.Fragment>;
+import Icon from '@mui/material/Icon';
+import { Link } from "react-router-dom";
+
+
+
+const ListItems = (props) => {
+  console.log(props.listMenu)
+  return (
+    <React.Fragment>
+      {props.listMenu.map((item) =>{
+        return (
+          <ListItemButton>
+          <ListItemIcon>
+            <Icon>
+            {item.menu.icon}
+            </Icon>
+          </ListItemIcon>
+          <Link to={item.menu.url }>{item.menu.name}</Link>
+        </ListItemButton>
+        )
+      })}
+   
+  </React.Fragment>
+  )
+}
+
+export default ListItems
+

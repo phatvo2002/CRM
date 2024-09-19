@@ -32,7 +32,9 @@ export const AuthProvider = ({ children }) => {
       if (response.status === 200) {
         localStorage.setItem("token", response.token);
         localStorage.setItem("userId", response.id);
+        localStorage.setItem("roleId",response.maChucVu);
         setAuthState(response.token);
+        setIsAuthenticated(true)
         navigate("/user/profile");
         Swal.fire({
           title: "Đăng nhập thành công!",
@@ -45,6 +47,7 @@ export const AuthProvider = ({ children }) => {
           showCancelButton: false,
           showConfirmButton: false,
         });
+        setIsAuthenticated(false)
         setTimeout(() => {
           window.location.reload();
         }, 1500);

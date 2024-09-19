@@ -9,5 +9,7 @@ namespace CRM.Abstraction
         IChucVuRepository ChucVuRepository { get; }
 
         ITinhTrangRepository TrangRepository { get; }
+
+        IMenuRepository MenuRepository { get; }
     }
 }

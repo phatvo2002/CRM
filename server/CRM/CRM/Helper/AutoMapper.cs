@@ -13,6 +13,8 @@ namespace CRM.Helper
             CreateMap<Nguoidung , UserDTO>();
             CreateMap<ChucVu ,ChucVuDTO>();
             CreateMap<TinhTrang , TinhTrangDTO>();
+            CreateMap<Menu ,MenuDTO>();
+            CreateMap<MenuRole ,MenuRoleDTO>();
         }
     }
 }

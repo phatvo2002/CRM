@@ -20,7 +20,12 @@ namespace CRM.Entities
         public virtual DbSet<ChucVu> ChucVus { get; set; }
 
         public virtual  DbSet<TinhTrang> TinhTrangs { get; set; }
- 
+
+        public virtual DbSet<Menu> Menus { get; set; }
+
+        public virtual DbSet<MenuRole> MenuRoles { get; set; }
+
+   
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
       => optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
@@ -36,8 +41,44 @@ namespace CRM.Entities
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e=> e.TenChucVu).HasMaxLength(50);
+                entity.Property(e => e.MoTa).HasMaxLength(300);
 
             });
+
+            modelBuilder.Entity<Menu>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_menu");
+
+                entity.ToTable("Menu");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e=> e.Name).HasMaxLength(50);
+                entity.Property(e=> e.Url).HasMaxLength(50);
+                entity.Property(e=> e.Icon).HasMaxLength(50);
+                entity.Property(e => e.OrderNumber);
+            });
+
+            modelBuilder.Entity<MenuRole>(entity =>
+            {
+                entity.HasKey(e => new { e.MenuId, e.GroupId });
+                entity.ToTable("Menu_Group");
+
+                entity.Property(e => e.Xem);
+                entity.Property(e => e.Them);
+                entity.Property(e => e.Sua);
+                entity.Property(e => e.Xoa);
+
+                entity.HasOne(d => d.ChucVu).WithMany(p => p.MenuRole)
+              .HasForeignKey(d => d.GroupId)
+              .OnDelete(DeleteBehavior.ClientSetNull)
+              .HasConstraintName("FK_Menu_Role_ChucVu");
+
+                entity.HasOne(d => d.Menu).WithMany(p => p.MenuRoles)
+                    .HasForeignKey(d => d.MenuId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Menu_Role_Menu");
+            });
+       
             modelBuilder.Entity<TinhTrang>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_TinhTrang");
@@ -67,6 +108,10 @@ namespace CRM.Entities
                 entity.Property(e=> e.MatKhau).HasMaxLength(50);
 
                 entity.Property(e=> e.IsActive);
+
+                entity.Property(e => e.CheckIsTruongPhong);
+
+                entity.Property(e => e.CheckIsGiamDoc);
 
                 entity.HasOne(d => d.ChucVu).WithMany(p => p.Nguoidung)
                       .HasForeignKey(d => d.MaChucVu)

@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { mainListItems, secondaryListItems } from "./listItems";
+import ListItems from "../Dashbroad/ListItems"
 import Button from "@mui/material/Button";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
@@ -30,6 +30,7 @@ import MenuItem from "@mui/material/MenuItem";
 // import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
+import MenuApi from "../../Api/MenuApi";
 
 
 function Copyright(props) {
@@ -104,6 +105,7 @@ export default function RootLayout() {
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [anchorEl1, setAnchorEl1] = React.useState(null);
+  const [menu ,setMenu] = React.useState([]);
   const opens = Boolean(anchorEl);
   const opens1 = Boolean(anchorEl1);
   const navigate = useNavigate()
@@ -130,6 +132,27 @@ export default function RootLayout() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const roleId = localStorage.getItem("roleId")
+
+  React.useEffect(()=>{
+     if(roleId)
+     {
+       const getMenuByRole = async (roleId)=>{
+             const res = await MenuApi.GetMenuRoleById(roleId);
+             if(res.length>0)
+             {
+                setMenu(res)
+             }
+             else
+             {
+              setMenu([])
+             }
+       }
+       getMenuByRole(roleId)
+     }
+  },[roleId])
+
+  console.log(menu)
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -176,7 +199,9 @@ export default function RootLayout() {
                 <MenuItem>
                   <Link to="/thietlap">Thiết lập người dùng</Link>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>Thiết lập vai trò</MenuItem>
+                <MenuItem >
+                <Link to="/thietlapvaitro">Thiết Lập vai trò</Link>
+              </MenuItem>
               </Menu>
             </IconButton>
             <IconButton color="white">
@@ -225,9 +250,8 @@ export default function RootLayout() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+            <ListItems listMenu={menu}/>
             <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
           </List>
         </Drawer>
         <Box

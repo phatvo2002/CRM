@@ -30,5 +30,9 @@
 
         public bool IsActive { get; set; }
 
+        public bool CheckIsTruongPhong { get; set; }
+
+        public bool CheckIsGiamDoc { get; set; }
+
     }
 }

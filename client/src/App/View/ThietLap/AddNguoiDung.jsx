@@ -11,6 +11,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Swal from "sweetalert2";
 import dayjs from 'dayjs';
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import RoleApi from "../../Api/RoleApi";
 import Checkbox from '@mui/material/Checkbox';
 const AddNguoiDung = () => {
   const styles = {
@@ -28,6 +29,7 @@ const AddNguoiDung = () => {
     ];
     const navigate = useNavigate();
   const [tinhTrang,setTinhTrang] = useState([])
+  const [chucVu ,setChucVu] = useState([])
   const [obj,setobj] = useState(
     {
       hoVaDem :"",
@@ -84,6 +86,14 @@ const AddNguoiDung = () => {
       }
       getDataTinhTrang()
   },[])
+
+  useEffect(()=>{
+    const getDataChucVu= async ()=>{
+        const response = await RoleApi.GetChucVu()
+        setChucVu(response)
+    }
+    getDataChucVu()
+},[])
 
   const handleSave = async () => {
     try {
@@ -269,7 +279,8 @@ const AddNguoiDung = () => {
             <Autocomplete
              style={{ width: "70%" }}
              disablePortal
-             options={options}
+             options={chucVu}
+             getOptionLabel={(option) => option.tenChucVu}
              renderInput={(params) => <TextField {...params} label="Vai trò" />}
              onChange={handelChaneAutoConplete('maChucVu')}
             />

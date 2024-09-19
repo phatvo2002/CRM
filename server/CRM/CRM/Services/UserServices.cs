@@ -49,5 +49,10 @@ namespace CRM.Services
         {
             return await _unitOfWork.UserRepository.ChangePassword(id, oldPassword, newPassword);
         }
+
+        public async Task<ResultModal> UserRolePermission(Guid id, Guid roleId, string roleName)
+        {
+           return await _unitOfWork.UserRepository.UserRolePermission(id, roleId, roleName);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRM.DTO;
 using CRM.Entities;
+using CRM.Entities.StoreProcedure;
 using CRM.Modal;
 using CRM.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -11,12 +12,16 @@ namespace CRM.Repositories
     {
         private readonly CrmDbContext _context;
         private readonly IMapper _mapper;
+        private readonly AppCrmContext _appCrmContext;
+        private readonly ILogger<ChucVuRepository> _logger;
 
 
-        public ChucVuRepository(CrmDbContext context ,IMapper mapper)
+        public ChucVuRepository(CrmDbContext context ,IMapper mapper ,AppCrmContext appCrmContext , ILogger<ChucVuRepository> logger)
         {
             _context = context;
             _mapper = mapper;
+            _appCrmContext = appCrmContext;
+            _logger = logger;
         }
         public async Task<ResultModal> CreateChucVu(ChucVuModal chucVuModal)
         {
@@ -24,12 +29,14 @@ namespace CRM.Repositories
                     ChucVu chucVu = new ChucVu();
                     chucVu.Id =  Guid.NewGuid();
                     chucVu.TenChucVu = chucVuModal.TenChucVu;
+                    chucVu.MoTa = chucVuModal.MoTa;
                     _context.ChucVus.Add(chucVu);
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm chức vụ thành công", Success = true };
             }
             catch (Exception ex) 
             {
+                _logger.LogError(ex, ex.Message);
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
          
@@ -50,6 +57,7 @@ namespace CRM.Repositories
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return new ResultModal() { Message = ex.ToString(), Success = false, Status = 500 };
             }
         }
@@ -60,10 +68,36 @@ namespace CRM.Repositories
             return _mapper.Map<List<ChucVuDTO>>(db);
         }
 
-        public Task<ResultModal> UpdateChucVu(ChucVuModal chucVuModal, Guid id)
+        public async  Task<List<crm_getmenugroup_by_id>> GetMenuTroleById(Guid id)
         {
-            var db = _context.ChucVus.Where(r => r.Id == id);
-            throw new NotImplementedException();
+            return await _appCrmContext.crm_getmenugroup_by_id.FromSql($"Execute dbo.crm_getmenugroup_by_id @Id={id}").ToListAsync();
+        }
+
+        public async Task<ResultModal> UpdateChucVu(ChucVuModal chucVuModal, Guid id)
+        {
+            var db = _context.ChucVus.FirstOrDefault(r => r.Id == id);
+            try
+            {
+                if (db != null)
+                {
+                    db.TenChucVu = chucVuModal.TenChucVu;
+                    db.MoTa = chucVuModal.MoTa;
+                    _context.ChucVus.Update(db);
+                    await _context.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Sửa thành công", Success = true };
+                }
+                else
+                {
+                    return new ResultModal() { Status = 202, Message = "Có lỗi đã xảy ra", Success = false };
+                }    
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+          
+       
         }
     }
 }

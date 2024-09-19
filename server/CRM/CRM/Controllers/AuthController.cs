@@ -11,7 +11,8 @@ namespace CRM.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public readonly IUserServices _userServices; 
+        public readonly IUserServices _userServices;
+        private readonly ILogger<AuthController> _logger;
 
         public AuthController( IUserServices userServices)
         {
@@ -24,6 +25,7 @@ namespace CRM.Controllers
             try
             {
                 LoginDTO result = await _userServices.Login(viewModal);
+        
                 return Ok(result);
 
             }catch (ArgumentException ex)

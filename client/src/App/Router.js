@@ -10,6 +10,8 @@ import ThemMoiNguoiDung from "./View/ThietLap/AddNguoiDung";
 
 import ChangePassword from "./View/session/ChangePassword";
 
+import ThietLapVaiTro from "./View/ThietLap/ThietLapVaiTro/Index";
+
 const RouteChild = [
   {
     path: "/banlamviec",
@@ -22,6 +24,11 @@ const RouteChild = [
   {
     path: "/thietlap",
     element: <ThietLap />,
+  },
+
+  {
+    path: "/thietlapvaitro",
+    element: <ThietLapVaiTro />,
   },
 
   {

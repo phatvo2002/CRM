@@ -1,5 +1,6 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
+using CRM.Entities.StoreProcedure;
 using CRM.Modal;
 using CRM.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -52,6 +53,36 @@ namespace CRM.Controllers
             try
             {
                 ResultModal result = await _chucVuServices.DeleteChucVu(id);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("getmenurolechucvubyid")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetMenuRoleById(Guid Id)
+        {
+            try
+            {
+                List<crm_getmenugroup_by_id> result = await _chucVuServices.GetMenuRoleById(Id);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("UpdateChucVu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UpdateChucVU(ChucVuModal modal ,Guid id)
+        {
+            try
+            {
+                ResultModal result  = await _chucVuServices.UpdateChucVu(modal, id);
                 return Ok(result);
             }
             catch (ArgumentException ex)

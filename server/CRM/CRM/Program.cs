@@ -1,6 +1,7 @@
 ﻿using CRM;
 using CRM.Abstraction;
 using CRM.Entities;
+using CRM.Entities.StoreProcedure;
 using CRM.Filters;
 using CRM.Helper;
 using CRM.Repositories;
@@ -11,7 +12,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog.Events;
+using Serilog.Sinks.MSSqlServer;
+using Serilog;
 using System.Text;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +27,23 @@ var settings = builder.Configuration
 builder.Services.AddDbContext<CrmDbContext>(options =>
         options.UseSqlServer(settings["DefaultConnection"]));
 
+builder.Services.AddDbContext<AppCrmContext>(options =>
+        options.UseSqlServer(settings["DefaultConnection"]));
 
+var logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.MSSqlServer(
+        connectionString: settings["DefaultConnection"],
+        sinkOptions: new MSSqlServerSinkOptions
+        {
+            TableName = "Logs",
+            AutoCreateSqlTable = true
+        })
+    .CreateLogger();
+
+builder.Host.UseSerilog(logger);
 builder.Services.AddControllers();
 // Add services to the container.
 //builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -30,6 +51,10 @@ builder.Services.AddScoped<IUserServices ,UserServices>();
 
 builder.Services.AddScoped<IChucVuRepository, ChucVuRepository>();
 builder.Services.AddScoped<IChucVuServices ,ChucVuServices>();
+
+
+builder.Services.AddScoped<IMenuRepository, MenuRepository>();
+builder.Services.AddScoped<IMenuServices, MenuServices>();
 
 //builder.Services.AddScoped<ITinhTrangRepository, TinhTrangRepository>();
 builder.Services.AddScoped<ITinhTrangServices, TinhTrangServices>();
