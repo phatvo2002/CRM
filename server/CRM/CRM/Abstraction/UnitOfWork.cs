@@ -20,6 +20,7 @@ namespace CRM.Abstraction
         private IChucVuRepository chucVuRepository;
         private ITinhTrangRepository tinhTrangRepository;
         private IMenuRepository menuRepository;
+        private IPhongBanRepository phongBanRepository;
         public UnitOfWork(CrmDbContext dbContext ,IMapper mapper ,AppCrmContext appCrmContext , ILoggerFactory loggerFactory)
         {
             _context = dbContext;
@@ -75,6 +76,18 @@ namespace CRM.Abstraction
                     this.menuRepository = new MenuRepository(_context, _mapper);
                 }
                 return menuRepository;
+            }
+        }
+        public IPhongBanRepository PhongBanRepository
+        {
+            get
+            {
+                if (this.phongBanRepository == null)
+                {
+                    var logger = _loggerFactory.CreateLogger<PhongBanRepository>();
+                    this.phongBanRepository = new PhongBanRepository(_context, _mapper , logger);
+                }
+                return phongBanRepository;
             }
         }
     }

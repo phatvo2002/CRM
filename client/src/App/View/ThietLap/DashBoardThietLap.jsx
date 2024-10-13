@@ -44,7 +44,7 @@ const DashBoardThietLap = () => {
               <CardActions>
                 <Button size="small"  style={{textAlign:"center" }}>
                   <Link
-                    to={"/thietlap"}
+                    to={"/thietlap/thietlapnhanvien"}
                     style={{ textDecoration: "none", color: "black" }}
                   >
                     Quản trị người dùng
@@ -61,7 +61,7 @@ const DashBoardThietLap = () => {
               <CardActions>
                 <Button size="small"  style={{textAlign:"center" }}>
                   <Link
-                    to={"/thietlapvaitro"}
+                    to={"/thietlap/thietlapvaitro"}
                     style={{ textDecoration: "none", color: "black" }}
                   >
                     Thiết lập bảo mật 
@@ -78,7 +78,7 @@ const DashBoardThietLap = () => {
               <CardActions>
                 <Button size="small"  style={{textAlign:"center" }}>
                   <Link
-                    to={"/quanlyphongban"}
+                    to={"/thietlap/quanlyphongban"}
                     style={{ textDecoration: "none", color: "black" }}
                   >
                     Quản trị phòng ban

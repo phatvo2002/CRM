@@ -10,17 +10,13 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
-import Tooltip from "@mui/material/Tooltip";
 import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
-import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import ListItems from "../Dashbroad/ListItems"
-import Button from "@mui/material/Button";
+import ListItems from "../Dashbroad/listItems"
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
@@ -28,8 +24,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 // import Chart from "./Chart";
-import Deposits from "./Deposits";
-import Orders from "./Orders";
 import MenuApi from "../../Api/MenuApi";
 
 
@@ -152,7 +146,9 @@ export default function RootLayout() {
      }
   },[roleId])
 
-  console.log(menu)
+  const gotoLinkThietLap  = ()=>{
+    navigate("/thietlap")
+}
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -190,19 +186,11 @@ export default function RootLayout() {
             <IconButton color="white">
               <SettingsIcon
                 id="basic-button"
-                onClick={handleClick1}
+                onClick={gotoLinkThietLap}
                 aria-expanded={open ? "true" : undefined}
                 aria-controls={open ? "basic-menu" : undefined}
                 aria-haspopup="true"
               ></SettingsIcon>
-              <Menu open={opens1} anchorEl={anchorEl1} onClose={handleClose1}>
-                <MenuItem>
-                  <Link to="/thietlap">Thiết lập người dùng</Link>
-                </MenuItem>
-                <MenuItem >
-                <Link to="/thietlapvaitro">Thiết Lập vai trò</Link>
-              </MenuItem>
-              </Menu>
             </IconButton>
             <IconButton color="white">
               <Badge badgeContent={4} color="secondary">

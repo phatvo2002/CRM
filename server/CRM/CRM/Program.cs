@@ -58,6 +58,7 @@ builder.Services.AddScoped<IMenuServices, MenuServices>();
 
 //builder.Services.AddScoped<ITinhTrangRepository, TinhTrangRepository>();
 builder.Services.AddScoped<ITinhTrangServices, TinhTrangServices>();
+builder.Services.AddScoped<IPhongBanServices, PhongBanServices>();
 builder.Services.AddScoped<IUnitOfWork ,UnitOfWork>();
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 

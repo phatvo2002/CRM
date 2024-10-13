@@ -11,5 +11,7 @@ namespace CRM.Abstraction
         ITinhTrangRepository TrangRepository { get; }
 
         IMenuRepository MenuRepository { get; }
+
+        IPhongBanRepository PhongBanRepository { get; }
     }
 }
