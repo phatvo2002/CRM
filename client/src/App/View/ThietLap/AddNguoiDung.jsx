@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Grid, TextField ,Autocomplete} from "@mui/material";
-import { FormProvider,useForm } from "react-hook-form";
 import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useNavigate } from "react-router-dom";
@@ -141,7 +140,7 @@ const AddNguoiDung = () => {
       <Container
         style={{
           maxWidth: "100%",
-          backgroundColor: "white",
+         // backgroundColor: "background.paper",
           marginBottom:20
         }}
       >
@@ -152,7 +151,7 @@ const AddNguoiDung = () => {
                 width: "50px",
                 height: "50px",
                 padding: 4,
-                backgroundColor: "#ffffff",
+                //backgroundColor: "background.paper",
               }}
             />
             <span

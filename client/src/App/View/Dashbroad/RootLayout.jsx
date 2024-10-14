@@ -35,8 +35,15 @@ function Copyright(props) {
       variant="body2"
       color="text.secondary"
       align="center"
-      overflow={"auto"}
-      height="50px"
+     // overflow={"auto"}
+     style={{
+      position: "fixed",
+      bottom: 0,
+      left: 0,
+      width: "100%",
+      textAlign: "center",
+      backgroundColor:"background.paper"
+     }}
       {...props}
     >
       {"Copyright © "}
@@ -255,7 +262,7 @@ export default function RootLayout() {
             <Icon color="text.primary" style={{height:"20px"}}>
             {item.menu.icon}
             </Icon>
-              <Link component={RouterLink} style={{textDecoration:"none" ,color:"text.primary" , padding:"10px" }} to={item.menu.url}>{item.menu.name}</Link>
+              <Link component={RouterLink} style={{textDecoration:"none" ,color:"text.primary" , padding:"10px" ,fontSize:"1rem" }} to={item.menu.url}>{item.menu.name}</Link>
             </Typography>
             )
           })}

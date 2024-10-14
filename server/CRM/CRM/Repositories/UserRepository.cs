@@ -176,6 +176,27 @@ namespace CRM.Repositories
             return result;
         }
 
+        public async Task<ResultModal> UserDepartment(Guid userId, Guid departmentId, string departmentName)
+        {
+            var db = _context.Nguoidungs.Where(r => r.Id == userId).AsNoTracking().FirstOrDefault();
+            try
+            {
+                if (db != null)
+                {
+                    db.MaPhongBan = departmentId;
+                    _context.Nguoidungs.Update(db);
+                    await _context.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Phân quyền phòng ban thành công", Success = true };
+                }
+                return new ResultModal() { Status = 202, Message = "Không tìm thấy người dùng", Success = true };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = true };
+            }
+           
+        }
+
         public async Task<ResultModal> UserRolePermission(Guid userId, Guid roleId, string roleName)
         {
             var db = _context.Nguoidungs.FirstOrDefault(r => r.Id == userId);

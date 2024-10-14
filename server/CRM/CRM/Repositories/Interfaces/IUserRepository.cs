@@ -22,5 +22,7 @@ namespace CRM.Repositories.Interfaces
 
         Task<ResultModal> UserRolePermission(Guid userId , Guid roleId , string roleName);
 
+        Task<ResultModal> UserDepartment(Guid userId , Guid departmentId , string departmentName);
+
     }
 }

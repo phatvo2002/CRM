@@ -8,9 +8,10 @@ import Swal from "sweetalert2";
 import CreateIcon from "@mui/icons-material/Create";
 import AuthApi from "../../Api/AuthApi";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from "@mui/icons-material/Add";
 import { useNavigate } from "react-router-dom";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ModalUpdateRole from "./Modal/ModalUpdateRole";
+import GroupIcon from '@mui/icons-material/Group';
 const ThietLap = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState([]);
@@ -127,13 +128,16 @@ const ThietLap = () => {
   const columns = [
     {
       field: "",
-      headerName: "Action",
-      width: 150,
+      headerName: "Hành động",
+      width: 250,
+      flex: 1,
       renderCell: () => (
         <div>
+           <Button >
+            <GroupIcon/>
+          </Button>
           <Button onClick={handleOpenModalUpdate}>
             <CreateIcon>
-
             </CreateIcon>
           </Button>
           <Button disabled={selectedRow.length > 0 ? false : true}>
@@ -173,7 +177,7 @@ const ThietLap = () => {
           onClick={gotoLink}
         >
           {" "}
-          <AddIcon></AddIcon> Thêm mới tài khoản
+          <PersonAddIcon /> Thêm mới tài khoản
         </Button>
         <DataGrid
           rows={user}
