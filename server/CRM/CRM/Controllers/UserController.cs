@@ -19,19 +19,7 @@ namespace CRM.Controllers
         {
             _userService = userService;
         }
-        [HttpPost("createUser")]
-        [JwtAuthorize]
-        public async Task<IActionResult> CreateUser(UserModal modal)
-        {
-            try
-            {
-                ResultModal result = await _userService.CreateUser(modal);
-                return Ok(result);
-            }catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+      
 
         [HttpGet("getAllUser")]
         [JwtAuthorize]
@@ -57,6 +45,20 @@ namespace CRM.Controllers
                 LoginDTO result = await _userService.GetUserById(Id);
                 return Ok(result);
             }catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("createUser")]
+        [JwtAuthorize]
+        public async Task<IActionResult> CreateUser(UserModal modal)
+        {
+            try
+            {
+                ResultModal result = await _userService.CreateUser(modal);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
             }

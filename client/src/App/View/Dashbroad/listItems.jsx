@@ -3,26 +3,26 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 
 import Icon from '@mui/material/Icon';
-import { Link } from "react-router-dom";
-
-
+import { Link as RouterLink } from "react-router-dom";
+import { Grid, Link } from "@mui/material";
 
 const ListItems = (props) => {
-  console.log(props.listMenu)
   return (
-    <React.Fragment>
+    <React.Fragment >
+      <Grid style={{marginTop:60}}>
       {props.listMenu.map((item) =>{
         return (
-          <ListItemButton>
+        <ListItemButton>
           <ListItemIcon>
             <Icon>
             {item.menu.icon}
             </Icon>
           </ListItemIcon>
-          <Link to={item.menu.url }>{item.menu.name}</Link>
+          <Link component={RouterLink} style={{textDecoration:"none" ,color:"text.primary"}} to={item.menu.url}>{item.menu.name}</Link>
         </ListItemButton>
         )
       })}
+      </Grid>
    
   </React.Fragment>
   )

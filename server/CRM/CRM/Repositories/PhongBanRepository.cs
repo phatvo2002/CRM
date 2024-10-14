@@ -62,7 +62,7 @@ namespace CRM.Repositories
 
         public async Task<List<PhongBanDTO>> GetAllPhongBan()
         {
-            var db = await _context.PhongBans.OrderBy(e => e.SoThuTu).ToListAsync();
+            var db = await _context.PhongBans.OrderBy(e => e.SoThuTu).Include(e=> e.Nguoidung).ToListAsync();
             return _mapper.Map<List<PhongBanDTO>>(db);
         }
 

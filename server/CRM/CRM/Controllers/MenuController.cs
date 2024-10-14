@@ -19,19 +19,7 @@ namespace CRM.Controllers
             _menuServices = menuServices;
         }
 
-        [HttpPost("insertmenu")]
-        [JwtAuthorize]
-        public async Task<IActionResult> InsertMenu(MenuModel model)
-        {
-            try
-            {
-                ResultModal result = await _menuServices.InsertMenu(model);
-                return Ok(result);
-            }catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+      
         [HttpGet("getallmenu")]
         [JwtAuthorize]
         public async Task<IActionResult> GetAllMenu()
@@ -46,22 +34,6 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpDelete("deletemenu")]
-        [JwtAuthorize]
-        public async Task<IActionResult> DeleteMenu(Guid Id )
-        {
-            try
-            {
-                ResultModal result = await _menuServices.DeleteMenu(Id);
-                return Ok(result);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpGet("getmenurole/{roleid}")]
         [JwtAuthorize]
         public async Task<IActionResult> GetRoleMenu(Guid roleid)
@@ -76,7 +48,34 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpPost("insertmenu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> InsertMenu(MenuModel model)
+        {
+            try
+            {
+                ResultModal result = await _menuServices.InsertMenu(model);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("deletemenu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> DeleteMenu(Guid Id )
+        {
+            try
+            {
+                ResultModal result = await _menuServices.DeleteMenu(Id);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPut("updategroup")]
         [JwtAuthorize]
         public async Task<IActionResult> UpdateGroup(GroupModel model)

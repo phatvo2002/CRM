@@ -9,23 +9,17 @@ import {
   Typography,
 } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link as RouterLink} from "react-router-dom";
+import {Link} from "@mui/material";
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import Groups2Icon from '@mui/icons-material/Groups2';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 const DashBoardThietLap = () => {
   return (
-    <Container style={{ maxWidth: "100%" }}>
+    <Container style={{ maxWidth: "100%" , fontFamily: "inherit",}}>
       <Grid container spacing={2}>
-        <Grid
-          xs={12}
-          style={{ backgroundColor: "#ecf0f1", color: "Gray", padding: 10 }}
-        >
-          <Typography variant="h5" component="p">
-            Thiết lập
-          </Typography>
-        </Grid>
+      
         <Stack
           direction="row"
           spacing={2}
@@ -34,6 +28,7 @@ const DashBoardThietLap = () => {
             alignItems: "center",
             margin: "auto",
             marginTop: "20vh",
+           
           }}
         >
           <Stack>
@@ -44,8 +39,9 @@ const DashBoardThietLap = () => {
               <CardActions>
                 <Button size="small"  style={{textAlign:"center" }}>
                   <Link
+                    component={RouterLink}
                     to={"/thietlap/thietlapnhanvien"}
-                    style={{ textDecoration: "none", color: "black" }}
+                    style={{ textDecoration: "none", color: "primary.main" }}
                   >
                     Quản trị người dùng
                   </Link>
@@ -61,8 +57,9 @@ const DashBoardThietLap = () => {
               <CardActions>
                 <Button size="small"  style={{textAlign:"center" }}>
                   <Link
+                    component={RouterLink}
                     to={"/thietlap/thietlapvaitro"}
-                    style={{ textDecoration: "none", color: "black" }}
+                    style={{ textDecoration: "none",  color: "primary.main" }}
                   >
                     Thiết lập bảo mật 
                   </Link>
@@ -78,8 +75,9 @@ const DashBoardThietLap = () => {
               <CardActions>
                 <Button size="small"  style={{textAlign:"center" }}>
                   <Link
+                   component={RouterLink}
                     to={"/thietlap/quanlyphongban"}
-                    style={{ textDecoration: "none", color: "black" }}
+                    style={{ textDecoration: "none", color: "primary.main" }}
                   >
                     Quản trị phòng ban
                   </Link>
@@ -95,8 +93,9 @@ const DashBoardThietLap = () => {
               <CardActions>
                 <Button size="small"  style={{textAlign:"center" }}>
                   <Link
+                    component={RouterLink}
                     to={"/"}
-                    style={{ textDecoration: "none", color: "black" }}
+                    style={{ textDecoration: "none", color: "primary.main"  }}
                   >
                     Danh sách thành viên
                   </Link>

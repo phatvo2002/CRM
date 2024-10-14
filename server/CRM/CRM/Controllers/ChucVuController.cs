@@ -19,19 +19,7 @@ namespace CRM.Controllers
             _chucVuServices = chucVuServices;
         }
 
-        [HttpPost("createChucVu")]
-        [JwtAuthorize]
-        public async Task<IActionResult> CreateChucVu(ChucVuModal modal)
-        {
-            try
-            {
-                ResultModal result = await _chucVuServices.CreateChucVu(modal);
-                return Ok(result);
-            }catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+     
         [HttpGet("getAllChucVu")]
         [JwtAuthorize]
         public async Task<IActionResult> GetAllChucVu()
@@ -39,6 +27,20 @@ namespace CRM.Controllers
             try
             {
                 List<ChucVuDTO> result = await _chucVuServices.GetAllChucVu();
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("createChucVu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> CreateChucVu(ChucVuModal modal)
+        {
+            try
+            {
+                ResultModal result = await _chucVuServices.CreateChucVu(modal);
                 return Ok(result);
             }
             catch (ArgumentException ex)

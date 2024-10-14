@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, ThemeProvider } from "@mui/material";
+import {  Button  } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import UserApi from "../../Api/UserApi";
 import { Container } from "@mui/material";
@@ -14,9 +14,7 @@ import ModalUpdateRole from "./Modal/ModalUpdateRole";
 const ThietLap = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState([]);
-  const handleSwitchChange = (id, newValue) => {
-    // Update the state or make an API call to update the database
-  };
+ 
 
   const [checked, setChecked] = useState(false);
   const [dataCheck, setDataCheck] = useState();

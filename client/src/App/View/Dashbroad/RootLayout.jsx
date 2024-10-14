@@ -12,7 +12,8 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link as RouterLink} from "react-router-dom";
+import { Grid, Link } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -23,16 +24,19 @@ import { AuthContext } from "../../Context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import Icon from '@mui/material/Icon';
 // import Chart from "./Chart";
 import MenuApi from "../../Api/MenuApi";
-
-
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 function Copyright(props) {
   return (
     <Typography
       variant="body2"
       color="text.secondary"
       align="center"
+      overflow={"auto"}
+      height="50px"
       {...props}
     >
       {"Copyright © "}
@@ -92,24 +96,32 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 // TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
 
 export default function RootLayout() {
   const { logout } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [anchorEl1, setAnchorEl1] = React.useState(null);
   const [menu ,setMenu] = React.useState([]);
   const opens = Boolean(anchorEl);
-  const opens1 = Boolean(anchorEl1);
   const navigate = useNavigate()
+  const [darkMode, setDarkMode] = React.useState(false);
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+  };
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: darkMode ? 'dark' : 'light',
+        },
+      }),
+    [darkMode] 
+  );
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClick1 = (event) => {
-    setAnchorEl1(event.currentTarget);
-  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -118,10 +130,6 @@ export default function RootLayout() {
   const gotoLink  = ()=>{
       navigate("/doimatkhau")
   }
-
-  const handleClose1 = () => {
-    setAnchorEl1(null);
-  };
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -151,19 +159,25 @@ export default function RootLayout() {
 }
 
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Box sx={{ display: "flex" }}>
+    <ThemeProvider theme={theme}>
+      <Box sx={{
+          display: 'flex',
+          bgcolor: 'background.default',
+          color: 'text.primary',
+          fontFamily: "inherit",
+        }} >
         <CssBaseline />
         <AppBar
-          position="absolute"
-          open={open}
-          style={{ backgroundColor: "white" }}
+          position="fixed"
+         // open={open}
+          sx={{ backgroundColor: 'background.paper' }}
         >
           <Toolbar
             sx={{
               pr: "24px", // keep right padding when drawer closed
             }}
-          >
+          > 
+           
             <IconButton
               edge="start"
               color="inherit"
@@ -176,13 +190,18 @@ export default function RootLayout() {
             >
               <MenuIcon />
             </IconButton>
+         
             <Typography
-              component="h1"
-              variant="h6"
+              component="h6"
+              variant="caption"
               color="white"
-              noWrap
               sx={{ flexGrow: 1 }}
             ></Typography>
+            <IconButton>
+            <IconButton  onClick={toggleTheme}>
+                {darkMode ? <WbSunnyIcon style={{color:"white"}}/> : <DarkModeIcon style={{color:"black"}}/>} 
+             </IconButton>
+            </IconButton>
             <IconButton color="white">
               <SettingsIcon
                 id="basic-button"
@@ -197,7 +216,7 @@ export default function RootLayout() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
-            <IconButton>
+            <IconButton style={{border:"1px solid" , padding: 10 , marginLeft:"20px"}}>
               <PersonIcon
                 id="basic-button"
                 aria-controls={open ? "basic-menu" : undefined}
@@ -215,15 +234,36 @@ export default function RootLayout() {
                 }}
               >
                 <MenuItem>
-                  <Link to="/user/profile">Thông tin tài khoản</Link>
+                  <Link component={RouterLink} to="/user/profile">Thông tin tài khoản</Link>
                 </MenuItem>
                 <MenuItem onClick={gotoLink}>Đổi mật khẩu</MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
             </IconButton>
+         
           </Toolbar>
+          <Toolbar style={{height:"10px"}}>
+          {menu.map((item, index)=>{
+            return (
+              <Typography
+              component="h6"
+              variant="caption"
+              color="white"
+             
+              key={index}
+            >
+            <Icon color="text.primary" style={{height:"20px"}}>
+            {item.menu.icon}
+            </Icon>
+              <Link component={RouterLink} style={{textDecoration:"none" ,color:"text.primary" , padding:"10px" }} to={item.menu.url}>{item.menu.name}</Link>
+            </Typography>
+            )
+          })}
+          </Toolbar>
+
+         
         </AppBar>
-        <Drawer variant="permanent" open={open}>
+        <Drawer variant="permanent" >
           <Toolbar
             sx={{
               display: "flex",
@@ -255,12 +295,13 @@ export default function RootLayout() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="100%" sx={{ mt: 4, mb: 4, height: "100%" }}>
+          <Container maxWidth="100%" sx={{ mt: 4, mb: 4 , marginTop:10}}>
             <Outlet />
           </Container>
         
         </Box>
       </Box>
+        <Copyright />
     </ThemeProvider>
   );
 }
