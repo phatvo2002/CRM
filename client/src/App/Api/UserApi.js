@@ -1,57 +1,63 @@
-import axios from "axios";
-
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const API_URL = "https://localhost:7211/api/v1";
+
 const Token = localStorage.getItem("token");
 
-const getAllUserData = () => {
-  return axios
-    .get(`${API_URL}/User/getAllUser`, {
-      headers: { Authorization: `Bearer ${Token}` },
-    })
-    .then((response) => response.data);
-};
 
-const getUserById = (id) =>
-{
-  return axios.get(`${API_URL}/User/getUserById?id=${id}` ,{
-    headers: { Authorization: `Bearer ${Token}` },
-  })
-  .then((response) => response.data);
-}
+export const apiUser = createApi({
+  reducerPath: "apiUser", 
+  baseQuery: fetchBaseQuery({
+    baseUrl: API_URL, 
+    prepareHeaders: (headers) => {
+      if (Token) {
+        headers.set("Authorization", `Bearer ${Token}`);
+      } else {
+        console.warn("Token is not available or expired");
+      }
+      return headers;
+    },
+  }),
+  endpoints: (builder) => ({
+    // Fetch all users
+    getUserAll: builder.query({
+      query: () => `/User/getAllUser`,
+    }),
+    // Fetch user by ID
+    getUserById: builder.query({
+      query: (id) => `/User/getUserById?id=${id}`,
+    }),
+    // Add a new user
+    addUser: builder.mutation({
+      query: (data) => ({
+        url: `/User/createUser`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+    // Delete a user by ID
+    deleteUser: builder.mutation({
+      query: (id) => ({
+        url: `/User?id=${id}`,
+        method: "DELETE",
+      }),
+    }),
+    // Update user permissions
+    updateUserPermission: builder.mutation({
+      query: (userId,roleId,roleName) => ({
+        url: `/User/userRolePermission?id=${userId}&roleId=${roleId}&roleName=${roleName}`,
+        method: "PUT",
+      }),
+    }),
+  }),
+});
 
-const insertUser = (data) => {
-  return axios.post(`${API_URL}/User/createUser`,data ,{
-    headers: { Authorization: `Bearer ${Token}` },
-  })
-  .then((response) => response.data);
-}
+// Export hooks for usage in components
+export const { 
+  useGetUserAllQuery, 
+  useGetUserByIdQuery, 
+  useAddUserMutation, 
+  useDeleteUserMutation,
+  useUpdateUserPermissionMutation 
+} = apiUser;
 
-const deleteUser = (id) => {
-  return axios.delete(`${API_URL}/User?id=${id}` ,{
-    headers: { Authorization: `Bearer ${Token}` },
-  })
-  .then((response) => response.data);
-}
-
-const UpdateUserPermission = (userId , roleId , roleName) =>{
-  return axios.put(
-    `${API_URL}/User/userRolePermission?id=${userId}&roleId=${roleId}&roleName=${roleName}`,
-    {}, 
-    {
-      headers: { Authorization: `Bearer ${Token}` }, 
-    }
-  )
-  .then((response) => response.data)
-  .catch((error) => {
-    console.error("Error updating user permission:", error);
-  });
-}
-
-
-export default {
-  getAllUserData,
-  getUserById,
-  insertUser,
-  deleteUser,
-  UpdateUserPermission
-};
+export default apiUser.reducer;

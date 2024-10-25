@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
 import {  Button  } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import UserApi from "../../Api/UserApi";
 import { Container } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import Swal from "sweetalert2";
-import CreateIcon from "@mui/icons-material/Create";
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import AuthApi from "../../Api/AuthApi";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ModalUpdateRole from "./Modal/ModalUpdateRole";
 import GroupIcon from '@mui/icons-material/Group';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import { useGetUserAllQuery } from "../../Api/UserApi";
 const ThietLap = () => {
   const navigate = useNavigate();
-  const [user, setUser] = useState([]);
+ // const [user, setUser] = useState([]);
  
 
   const [checked, setChecked] = useState(false);
   const [dataCheck, setDataCheck] = useState();
   const [selectedRow, setSelectedRow] = useState([]);
   const [loading, setLoading] = useState(false);
+  const {data: userList ,refetch } = useGetUserAllQuery();
+  const [rows, setRows] = useState([]);
   const [openModalUpdateRole , setOpenModalUpdateRole] = useState(false);
   const [title, setTitle] = useState("");
   const titleChange = (event) => {
@@ -56,7 +60,7 @@ const ThietLap = () => {
           setDataCheck(true);
         }
         const dataActive = {
-          id: selectedRow[0],
+          id: selectedRow[0].id,
           isActive: !event.target.checked,
         };
         ActiveAccount(dataActive);
@@ -64,10 +68,11 @@ const ThietLap = () => {
           title: "Thành công",
           icon: "success",
         });
-        setLoading(true);
+        refetch()
       }
     });
   };
+
 
   const handleDeleteNguoiDung = () =>{
     Swal.fire({
@@ -85,21 +90,21 @@ const ThietLap = () => {
             title: "Xóa công",
             icon: "success",
           });
-           setLoading(true)
+           refetch()
       }
     });
   }
 
-  const getData = async () => {
-    const response = await UserApi.getAllUserData();
-    setLoading(true);
-    if (response.length > 0) {
-      setLoading(false);
-      setUser(response);
-    } else {
-      setUser([]);
-    }
-  };
+  // const getData = async () => {
+  //   const response = await UserApi.getAllUserData();
+  //   setLoading(true);
+  //   if (response.length > 0) {
+  //     setLoading(false);
+  //     setUser(response);
+  //   } else {
+  //     setUser([]);
+  //   }
+  // };
 
   const ActiveAccount = async (data) => {
     if (data) {
@@ -118,34 +123,24 @@ const ThietLap = () => {
     navigate("/nguoidung/themmoi");
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
-  useEffect(() => {
-    if (loading) getData();
-    setLoading(false);
-  }, [loading]);
+  // useEffect(() => {
+  //   getData();
+  // }, []);
+  // useEffect(() => {
+  //   if (loading) getData();
+  //   setLoading(false);
+  // }, [loading]);
+
+  
+useEffect(() => {
+  if (userList) {
+    setRows(userList);
+  }
+}, [userList]);
+
+
   const columns = [
-    {
-      field: "",
-      headerName: "Hành động",
-      width: 250,
-      flex: 1,
-      renderCell: () => (
-        <div>
-           <Button >
-            <GroupIcon/>
-          </Button>
-          <Button onClick={handleOpenModalUpdate}>
-            <CreateIcon>
-            </CreateIcon>
-          </Button>
-          <Button disabled={selectedRow.length > 0 ? false : true}>
-            <DeleteIcon  onClick={handleDeleteNguoiDung}></DeleteIcon>
-          </Button>
-        </div>
-      ),
-    },
+   
     { field: "hoVaDem", headerName: "Họ Và Đệm", width: 200, flex: 1 },
     { field: "ten", headerName: "Tên", width: 200, flex: 1 },
     { field: "diaChi", headerName: "Địa Chỉ", width: 200, flex: 1 },
@@ -153,7 +148,7 @@ const ThietLap = () => {
     { field: "email", headerName: "Tài khoản Email", width: 200, flex: 1 },
     {
       field: "isActive",
-      headerName: "Active",
+      headerName: "Kích hoạt tài khoản",
       width: 150,
       renderCell: (params) => (
         <Switch
@@ -164,6 +159,44 @@ const ThietLap = () => {
         />
       ),
     },
+    // {
+    //   field: "",
+    //   headerName: "Hành động",
+    //   width: 250,
+    //   flex: 1,
+    //   renderCell: () => (
+    //     <div>
+    //        <Button >
+    //         <GroupIcon/>
+    //       </Button>
+    //       <Button onClick={handleOpenModalUpdate}>
+    //         <CreateIcon>
+    //         </CreateIcon>
+    //       </Button>
+    //       <Button disabled={selectedRow.length > 0 ? false : true}>
+    //         <DeleteIcon  onClick={handleDeleteNguoiDung}></DeleteIcon>
+    //       </Button>
+    //     </div>
+    //   ),
+    // },
+    {
+      field: "action",
+      headerName: "Thao tác",
+      flex:1,
+      renderCell: () => (
+        <div style={{ display:"flex", justifyContent:"space-around" , padding: 5,margin: 5}}> 
+          <Button style={{backgroundColor:"blue" , color:"white"}} onClick={handleOpenModalUpdate}  > 
+            <PermIdentityIcon ></PermIdentityIcon>
+          </Button>
+          <Button style={{backgroundColor:"WindowFrame" , color:"white"}}  > 
+            <GroupAddIcon ></GroupAddIcon>
+          </Button>
+          <Button style={{backgroundColor:"red" , color:"white" }} onClick={handleDeleteNguoiDung} >
+            <DeleteIcon  ></DeleteIcon>
+          </Button>
+        </div>
+      ),
+    }
   
   ];
   return (
@@ -179,8 +212,8 @@ const ThietLap = () => {
           {" "}
           <PersonAddIcon /> Thêm mới tài khoản
         </Button>
-        <DataGrid
-          rows={user}
+        {/* <DataGrid
+          rows={userList}
           columns={columns}
           style={{ marginTop: "10px" }}
           initialState={{
@@ -193,7 +226,38 @@ const ThietLap = () => {
           }}
           pageSizeOptions={[5, 10]}
           
-        />
+        /> */}
+         <DataGrid
+  rows={rows|| []}
+  columns={columns}
+  showCellVerticalBorder
+  style={{ marginTop: "10px" }}
+  initialState={{
+    pagination: {
+      paginationModel: { page: 0, pageSize: 25 },
+    },
+  }}
+  getRowClassName={(params) =>
+    params.indexRelativeToCurrentPage % 2 === 0 ? 'Mui-even' : 'Mui-odd'
+  }
+  showTopToolbar={true}
+  onRowSelectionModelChange={(newRowSelectionModel) => {
+    const selectedRows = userList.filter((row) => newRowSelectionModel.includes(row.id));
+    setSelectedRow(selectedRows);
+  }}
+  slotProps={{
+    toolbar: {
+      showQuickFilter: true,
+    },
+  }}
+  slots={{ toolbar: GridToolbar }}
+  pageSizeOptions={[25, 50, 75, 100]}
+  checkboxSelection={false}
+  disableMultipleSelection={true}  
+  SelectionMode="Single"
+  disableRowSelectionOnClick={false}  
+/>
+
       </div>
       {/* Modal UpdateRole */}
       <ModalUpdateRole openModal={openModalUpdateRole} selectedRow={selectedRow} closeModal={handleCloseModalUpdate} />

@@ -1,16 +1,12 @@
 import { LoadingButton } from "@mui/lab";
 import { Card, Grid, TextField } from "@mui/material";
-import { Box, styled, useTheme } from "@mui/system";
+import { Box, styled } from "@mui/system";
 // import { GoogleLogin } from "@react-oauth/google";
 import { AuthContext } from "../../Context/AuthContext";
-import axios from "axios";
 import { Formik } from "formik";
-import Swal from "sweetalert2";
 import { useState, useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import toastr from "toastr";
+import { NavLink } from "react-router-dom";
 import * as Yup from "yup";
-import { blue } from "@mui/material/colors";
 import logo from "../../Assets/image/logo.png";
 import { keyframes } from "@mui/system";
 const FlexBox = styled(Box)(() => ({ display: "flex", alignItems: "center" }));
@@ -69,8 +65,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const JwtLogin = () => {
-  const theme = useTheme();
-  const navigate = useNavigate(); 
+
 
   const { login } = useContext(AuthContext);
 
@@ -97,7 +92,6 @@ const JwtLogin = () => {
           <Grid item sm={12} xs={12}>
             <ContentBox>
               <Box textAlign={"center"} color={"gray"}>
-                {/* <h3>TRƯỜNG ĐẠI HỌC TÀI CHÍNH MARKETING</h3> */}
                 <img
                   src={logo}
                   style={{ textAlign: "center", width: "200px" }}

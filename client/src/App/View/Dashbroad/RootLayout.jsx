@@ -13,7 +13,8 @@ import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
 import { Link as RouterLink} from "react-router-dom";
-import { Grid, Link } from "@mui/material";
+import { Fab, Grid, Link } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
@@ -24,35 +25,34 @@ import { AuthContext } from "../../Context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import Icon from '@mui/material/Icon';
 // import Chart from "./Chart";
 import MenuApi from "../../Api/MenuApi";
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 function Copyright(props) {
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-     // overflow={"auto"}
-     style={{
-      position: "fixed",
-      bottom: 0,
-      left: 0,
-      width: "100%",
-      textAlign: "center",
-      backgroundColor:"background.paper"
-     }}
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
+    <Grid 
+  sx={{
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    width: "100%",
+    backgroundColor: "background.paper",
+    height: "50px",
+    textAlign: "center"
+  }}
+>
+  {/* Footer content */}
+  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: "50px" }}>
+    {"Copyright © "}
+    <Link color="inherit" href="">
+      LP CRM
+    </Link>{" "}
+    {new Date().getFullYear()}
+    {"."}
+  </Typography>
+</Grid>
+
   );
 }
 
@@ -175,13 +175,15 @@ export default function RootLayout() {
         }} >
         <CssBaseline />
         <AppBar
-          position="fixed"
-         // open={open}
+           overflow={"auto"}
+           height="50px"
+          position="absolute"
+          open={open}
           sx={{ backgroundColor: 'background.paper' }}
         >
           <Toolbar
             sx={{
-              pr: "24px", // keep right padding when drawer closed
+              pr: "24px",
             }}
           > 
            
@@ -249,7 +251,7 @@ export default function RootLayout() {
             </IconButton>
          
           </Toolbar>
-          <Toolbar style={{height:"10px"}}>
+          {/* <Toolbar style={{height:"10px"}}>
           {menu.map((item, index)=>{
             return (
               <Typography
@@ -266,11 +268,12 @@ export default function RootLayout() {
             </Typography>
             )
           })}
-          </Toolbar>
+          </Toolbar> */}
 
          
         </AppBar>
-        <Drawer variant="permanent" >
+        <Drawer variant="permanent"  open={open} > 
+          
           <Toolbar
             sx={{
               display: "flex",
@@ -279,15 +282,16 @@ export default function RootLayout() {
               px: [1],
             }}
           >
-            <IconButton onClick={toggleDrawer}>
+            <IconButton onClick={toggleDrawer} sx={{color:"black"}}>
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
           <Divider />
-          <List component="nav">
+          <List component="nav" >
             <ListItems listMenu={menu}/>
             <Divider sx={{ my: 1 }} />
           </List>
+         
         </Drawer>
         <Box
           component="main"
@@ -302,13 +306,19 @@ export default function RootLayout() {
           }}
         >
           <Toolbar />
-          <Container maxWidth="100%" sx={{ mt: 4, mb: 4 , marginTop:10}}>
+          <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
             <Outlet />
           </Container>
-        
+          <Copyright />
+            
+          <Fab color="secondary" aria-label="edit" style={{position:"fixed" ,top:"90%" ,left:"95%"}}>
+            <EditIcon />
+         </Fab>
         </Box>
+       
       </Box>
-        <Copyright />
+          
+       
     </ThemeProvider>
   );
 }

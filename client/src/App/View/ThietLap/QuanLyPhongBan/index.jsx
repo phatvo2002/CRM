@@ -1,37 +1,37 @@
 import { Button, Container } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import AddIcon from "@mui/icons-material/Add";
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ModalAddPhongBan from './Modal/ModalAddPhongBan';
 import { TYPE_MODAL } from '../../../Until/constant';
 import ModalUpdatePhongBan from './Modal/ModalUpdatePhongBan';
-import { useDeletePhongBanMutation, useGetPhongbanQuery } from '../../../Api/Phongban';
-import toastr from 'toastr';
+import { useDeletePhongBanMutation, useGetPhongBanQuery, useGetPhongbanQuery } from '../../../Api/Phongban';
+import { useNavigate } from 'react-router-dom';
+import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import Swal from 'sweetalert2';
 const QuanLyPhongban = () => {
   const columns = [
-    {
-      field: "",
-      headerName: "Thao tác",
-      width: 150,
-      renderCell: () => (
-        <div>
-          <Button style={{color:"green"}} onClick={onOpenModalUpdatePhongBan}  disabled={selectedRow.length > 0 ? false : true}> 
-            <CreateIcon ></CreateIcon>
-          </Button>
-          <Button style={{color:"red"}} onClick={handleDeletePhongBan} disabled={selectedRow.length > 0 ? false : true}>
-            <DeleteIcon  ></DeleteIcon>
-          </Button>
-        </div>
-      ),
-    },
     { field: "soThuTu", headerName: "Số thứ tự", width: 200, flex: 1 },
     { field: "maQuanLy", headerName: "mã quản lý", width: 200, flex: 1 },
     { field: "tenPhongBan", headerName: "Tên phòng ban", width: 200, flex: 1 },
     { field: "moTa", headerName: "Mô tả", width: 200, flex: 1 },
-  
+    {
+      field: "action",
+      headerName: "Thao tác",
+      flex:1,
+      renderCell: () => (
+        <div style={{alignItems : "center"}}> 
+          <Button style={{backgroundColor:"green" , color:"white"}}  onClick={onOpenModalUpdatePhongBan}  > 
+            <CreateIcon ></CreateIcon>
+          </Button>
+          <Button style={{backgroundColor:"red" , color:"white" , margin:"0 10px"}} onClick={handleDeletePhongBan} >
+            <DeleteIcon  ></DeleteIcon>
+          </Button>
+        </div>
+      ),
+    }
 ]
 
 const [selectedRow, setSelectedRow] = useState([]);
@@ -42,8 +42,8 @@ const [openModalUpdate , setOpenModalUpdate] = useState(false);
 const [rows, setRows] = useState([]);
 
 const [loading ,setLoading] = useState(false);
-
-const {data: phongbanlist ,refetch } = useGetPhongbanQuery()
+const navigate = useNavigate()
+const { data: phongbanlist, refetch } = useGetPhongBanQuery();
 const [PhongBanDelete] = useDeletePhongBanMutation()
 
 const onOpenModalAddPhongBan = () =>{
@@ -89,6 +89,10 @@ const handleDeletePhongBan = async () =>{
     }
   });
 }
+const gotoLink = ()=>{
+  navigate("/thietlap")
+}
+
  
 
 
@@ -100,6 +104,9 @@ useEffect(() => {
 
 return (
 <Container style={{ maxWidth: "100%" }}>
+<Button style={{}} onClick={gotoLink}>
+            <KeyboardBackspaceIcon/>
+          </Button>
   <div style={{ width: "100%" }}>
     <h2>Danh Sách Phòng Ban</h2>
     <p>Đây là phần quản lý thông tin của các phòng ban trong công ty</p>
@@ -114,23 +121,32 @@ return (
     </Button>
   
     <DataGrid
-      rows={rows}
-      columns={columns}
-      style={{ marginTop: "10px" }}
-      initialState={{
-        pagination: {
-          paginationModel: { page: 0, pageSize: 5 },
-        },
-      }}
-     
-      onRowSelectionModelChange={(newRowSelectionModel) => {
-        const selectedRows = rows.filter((row) => newRowSelectionModel.includes(row.id));
-        setSelectedRow(selectedRows);
-      }}
-      pageSizeOptions={[5 ,10 ,25]}
-      checkboxSelection={false}
+  rows={rows}
+  columns={columns}
+  showCellVerticalBorder
+  style={{ marginTop: "10px" }}
+  initialState={{
+    pagination: {
+      paginationModel: { page: 0, pageSize: 25 },
+    },
+  }}
+  showTopToolbar={true}
+  onRowSelectionModelChange={(newRowSelectionModel) => {
+    const selectedRows = rows.filter((row) => newRowSelectionModel.includes(row.id));
+    setSelectedRow(selectedRows);
+  }}
+  slotProps={{
+    toolbar: {
+      showQuickFilter: true,
+    },
+  }}
+  slots={{ toolbar: GridToolbar }}
+  pageSizeOptions={[25, 50, 75, 100]}
+  checkboxSelection={false}
+  disableMultipleSelection={true}  
+  disableRowSelectionOnClick={false}  
+/>
 
-    />
   </div>
   {/* <ModalThemSua openModal={openModal} selectedRow={selectedRow} closeModal={handelCloseModalThemSua} /> */}
 

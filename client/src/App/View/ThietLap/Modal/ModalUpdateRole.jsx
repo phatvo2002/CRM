@@ -7,8 +7,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import { Grid } from '@mui/material';
 import RoleApi from '../../../Api/RoleApi';
-import UserApi from '../../../Api/UserApi';
+import UserApi, { useGetUserByIdQuery } from '../../../Api/UserApi';
 import { toast } from "react-toastify";
+import { SkipNext } from '@mui/icons-material';
 const ModalUpdateRole = (props) => {
     const {
         openModal,
@@ -16,8 +17,15 @@ const ModalUpdateRole = (props) => {
         closeModal
     } = props;
 
+  
     const [role ,setRole] = useState([])
     const [user ,setUser] = useState({})
+    const selectedUserId = selectedRow[0]?.id;
+    const {data: getUserid, error, refetch } = useGetUserByIdQuery(
+      selectedUserId , 
+      { skip: !openModal || !selectedRow[0]?.id } // Skip if no ID or modal is closed
+    );
+   // const {getUserid , refetch} =useGetUserByIdQuery(selectedRow[0]?.id ,{ skip : !openModal })
     const [checkedRoleId, setCheckedRoleId] = useState("");
     const [checkRoleName, setCheckRoleName] = useState("");
     
@@ -41,7 +49,7 @@ const ModalUpdateRole = (props) => {
          const res = await UserApi.UpdateUserPermission(data.id  , data.roleId ,data.rolename)
          console.log(res)
       }
-
+    
     useEffect(() => {
         if(openModal)
         {
@@ -61,16 +69,15 @@ const ModalUpdateRole = (props) => {
         }
          
     },[openModal])
-
+  console.log(getUserid)
     useEffect(() => {
         if(openModal)
         {
             const getUserById = async()=>{
-                const res = await UserApi.getUserById(selectedRow[0]);
-                if(res)
+                if(getUserid)
                 {
-                  setUser(res)
-                  setCheckedRoleId(res.maChucVu)
+                  setUser(getUserid)
+                  setCheckedRoleId(getUserid.maChucVu)
                 }
                 else
                 {
@@ -81,6 +88,8 @@ const ModalUpdateRole = (props) => {
         }
          
     },[openModal])
+
+    // console.log(getUserid)
   return (
     <React.Fragment>
     <Dialog

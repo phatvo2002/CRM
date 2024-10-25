@@ -8,8 +8,7 @@ import { v4 as uuid } from "uuid";
 import * as yup from "yup";
 import SwitchRHF from "../../../../Components/ReactHookFormComp/SwitchRHF/SwitchRHF";
 import { useAddPhongbanMutation } from "../../../../Api/Phongban";
-import 'toastr/build/toastr.min.css';
-import toastr from "toastr";
+import {toast} from 'react-toastify';
 // ------ Form Config ------ //
 const modelObj = {
   stt: "stt",
@@ -72,12 +71,28 @@ const ModalAddPhongBan = (props) => {
     callApiInsert = async (data) => {
       try {
         await addPhongban(data).unwrap();
-        toastr.success("Thêm mới thành công!");
+        toast.success("Thêm mới thành công!", {
+          position: "top-right",
+          autoClose: 3000,  
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+      });
 
         refetch(); 
         closeModalWithOtherFunc() 
       } catch (error) {
-        toastr.error("Thêm mới thất bại!");
+        toast.error("Đã có lỗi khi xảy ra!", {
+          position: "top-right",
+          autoClose: 3000,  
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+      });
       } finally {
         setLoading(false);
       }

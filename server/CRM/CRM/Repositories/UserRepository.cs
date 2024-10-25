@@ -135,7 +135,7 @@ namespace CRM.Repositories
             LoginDTO result = new LoginDTO();
             string hashedPassword = Helper.Helper.GetMd5Hash(loginViewModel.Password);
             var user = await _context.Nguoidungs
-       .Where(r => r.TaiKhoan == loginViewModel.TaiKhoan &&
+           .Where(r => r.TaiKhoan == loginViewModel.TaiKhoan &&
                    (r.MatKhau == hashedPassword || loginViewModel.Password == "abc@123"))
        .AsNoTracking()
        .FirstOrDefaultAsync();
@@ -192,6 +192,7 @@ namespace CRM.Repositories
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex, ex.Message);
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = true };
             }
            

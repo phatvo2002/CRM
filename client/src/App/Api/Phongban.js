@@ -5,7 +5,7 @@ const Token = localStorage.getItem("token");
 
 
 export const apiPhongban = createApi({
-    reducerPath: 'api',
+    reducerPath: 'apiPhongban',
     baseQuery: fetchBaseQuery({
       baseUrl: API_URL,
       prepareHeaders: (headers) => {
@@ -16,7 +16,7 @@ export const apiPhongban = createApi({
       },
     }),
     endpoints: (builder) => ({
-      getPhongban: builder.query({
+      getPhongBan: builder.query({
         query: () => `/PhongBan/getAllphongban`,
       }),
       getPhongbanById: builder.query({
@@ -45,7 +45,7 @@ export const apiPhongban = createApi({
     }),
   });
   export const { 
-    useGetPhongbanQuery, 
+    useGetPhongBanQuery, 
     useGetPhongbanByIdQuery, 
     useAddPhongbanMutation, 
     useDeletePhongBanMutation,

@@ -1,14 +1,12 @@
 import { Grid } from "@mui/material";
-import { memo, useEffect, useRef } from "react";
+import {  useEffect, useRef } from "react";
 import { validateString } from "../../../../Until/validateYup";
 import TextFieldRHF from "../../../../Components/ReactHookFormComp/TextFieldRHF/TextFieldRHF";
 import RHFDrawer from "../../../../Components/ReactHookFormComp/RHFDrawer/RHFDrawer";
 import { TYPE_MODAL } from "../../../../Until/constant";
 import * as yup from "yup";
-import { useGetPhongbanByIdQuery, useUpdatePhongBanMutation } from "../../../../Api/Phongban";
-import SwitchRHF from "../../../../Components/ReactHookFormComp/SwitchRHF/SwitchRHF";
+import {useUpdatePhongBanMutation } from "../../../../Api/Phongban";
 import toastr from "toastr";
-import { validateIsActive } from "../../../../Until/validateYup";
 
 // ------ Form Config ------ //
 const modelObj = {
@@ -91,7 +89,6 @@ const ModalUpdatePhongBan = (props) => {
    
     getInitialStateFromApiToUpdate = async (selectedItem) => {
 
-    
       modalRef.current?.reset(
         {
           ...selectedItem,
