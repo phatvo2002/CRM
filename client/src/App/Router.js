@@ -28,7 +28,6 @@ const RouteChild = [
     path: "/thietlap",
     element: <DashBoardThietLap />,
   },
-
   {
     path: "/thietlap/thietlapvaitro",
     element: <ThietLapVaiTro />,
@@ -50,7 +49,10 @@ const RouteChild = [
     path: "/doimatkhau",
     element: <ChangePassword />,
   },
-
+  {
+    path: "/quantrihethong",
+    element: <DashBoardThietLap />,
+  },
 
 
 ];

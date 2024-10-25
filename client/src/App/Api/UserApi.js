@@ -37,14 +37,20 @@ export const apiUser = createApi({
     // Delete a user by ID
     deleteUser: builder.mutation({
       query: (id) => ({
-        url: `/User?id=${id}`,
+        url: `/User/deleteUserById/${id}`,
         method: "DELETE",
       }),
     }),
     // Update user permissions
     updateUserPermission: builder.mutation({
-      query: (userId,roleId,roleName) => ({
+      query: ({userId,roleId,roleName}) => ({
         url: `/User/userRolePermission?id=${userId}&roleId=${roleId}&roleName=${roleName}`,
+        method: "PUT",
+      }),
+    }),
+    updateUserDepartment: builder.mutation({
+      query: ({userId,departmentId}) => ({
+        url: `/User/userdepartment?userId=${userId}&departmentId=${departmentId}`,
         method: "PUT",
       }),
     }),
@@ -57,7 +63,8 @@ export const {
   useGetUserByIdQuery, 
   useAddUserMutation, 
   useDeleteUserMutation,
-  useUpdateUserPermissionMutation 
+  useUpdateUserPermissionMutation,
+  useUpdateUserDepartmentMutation
 } = apiUser;
 
 export default apiUser.reducer;

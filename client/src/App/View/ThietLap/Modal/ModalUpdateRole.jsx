@@ -7,9 +7,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
 import { Grid } from '@mui/material';
 import RoleApi from '../../../Api/RoleApi';
-import UserApi, { useGetUserByIdQuery } from '../../../Api/UserApi';
-import { toast } from "react-toastify";
-import { SkipNext } from '@mui/icons-material';
+import UserApi, { useGetUserByIdQuery, useUpdateUserPermissionMutation } from '../../../Api/UserApi';
+import { toast } from 'react-toastify';
 const ModalUpdateRole = (props) => {
     const {
         openModal,
@@ -19,16 +18,10 @@ const ModalUpdateRole = (props) => {
 
   
     const [role ,setRole] = useState([])
-    const [user ,setUser] = useState({})
-    const selectedUserId = selectedRow[0]?.id;
-    const {data: getUserid, error, refetch } = useGetUserByIdQuery(
-      selectedUserId , 
-      { skip: !openModal || !selectedRow[0]?.id } // Skip if no ID or modal is closed
-    );
    // const {getUserid , refetch} =useGetUserByIdQuery(selectedRow[0]?.id ,{ skip : !openModal })
     const [checkedRoleId, setCheckedRoleId] = useState("");
     const [checkRoleName, setCheckRoleName] = useState("");
-    
+    const [updaterole] = useUpdateUserPermissionMutation()
     const handleCheckboxChange = (event, roleId, roleName) => {
       console.log(roleId, roleName)
       if (event.target.checked) {
@@ -41,13 +34,32 @@ const ModalUpdateRole = (props) => {
     };
 
       const handelSubmit = async () => {
-         const data = {
-            id:selectedRow[0],  
-            roleId : checkedRoleId,
-            rolename : checkRoleName ,
+         const res = await updaterole({ userId:selectedRow[0]?.id, roleId: checkedRoleId, roleName: checkRoleName});
+         if(res?.data?.status ===200)
+         {
+          toast.success("Phân quyền thành công", {
+            position: "top-right",
+            autoClose: 3000,  
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+           closeModal()
          }
-         const res = await UserApi.UpdateUserPermission(data.id  , data.roleId ,data.rolename)
-         console.log(res)
+         else
+         {
+          toast.error("Đã có lỗi xảy ra", {
+            position: "top-right",
+            autoClose: 3000,  
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+         }
       }
     
     useEffect(() => {
@@ -69,19 +81,14 @@ const ModalUpdateRole = (props) => {
         }
          
     },[openModal])
-  console.log(getUserid)
     useEffect(() => {
         if(openModal)
         {
             const getUserById = async()=>{
-                if(getUserid)
+                if(selectedRow[0])
                 {
-                  setUser(getUserid)
-                  setCheckedRoleId(getUserid.maChucVu)
-                }
-                else
-                {
-                  setUser([])
+                //  setUser(getUserid)
+                  setCheckedRoleId(selectedRow[0]?.maChucVu)
                 }
             }
             getUserById()

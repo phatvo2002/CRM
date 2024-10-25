@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {  Button  } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import UserApi from "../../Api/UserApi";
+import UserApi, { useDeleteUserMutation } from "../../Api/UserApi";
 import { Container } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import Swal from "sweetalert2";
@@ -11,9 +11,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import ModalUpdateRole from "./Modal/ModalUpdateRole";
-import GroupIcon from '@mui/icons-material/Group';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { useGetUserAllQuery } from "../../Api/UserApi";
+import ModalUpdateDepartment from "./Modal/ModalUpdateDepartment";
 const ThietLap = () => {
   const navigate = useNavigate();
  // const [user, setUser] = useState([]);
@@ -24,8 +24,10 @@ const ThietLap = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [loading, setLoading] = useState(false);
   const {data: userList ,refetch } = useGetUserAllQuery();
+  const [deleteuser] = useDeleteUserMutation()
   const [rows, setRows] = useState([]);
   const [openModalUpdateRole , setOpenModalUpdateRole] = useState(false);
+  const [openModalUpdateDepartment , setOpenModalUpdateDepartment] = useState(false);
   const [title, setTitle] = useState("");
   const titleChange = (event) => {
     if (event.target.checked === true) {
@@ -39,7 +41,17 @@ const ThietLap = () => {
     setOpenModalUpdateRole(true)
   }
   const handleCloseModalUpdate = () => {
+    setSelectedRow([])
     setOpenModalUpdateRole(false)
+    refetch()
+  }
+  const handleOpenModalUpdateDepartments = () => {
+      setOpenModalUpdateDepartment(true)
+  }
+  const handleCloseModalUpdateDepartments = () => {
+    setSelectedRow([])
+    setOpenModalUpdateDepartment(false)
+    refetch()
   }
 
   const handleChange = async (event) => {
@@ -83,11 +95,11 @@ const ThietLap = () => {
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
       confirmButtonText: "Có"
-    }).then((result) => {
+    }).then(async(result) => {
       if (result.isConfirmed) {
-          UserApi.deleteUser(selectedRow[0])
+         await deleteuser(selectedRow[0]?.id)
           Swal.fire({
-            title: "Xóa công",
+            title: "Xóa thành công",
             icon: "success",
           });
            refetch()
@@ -181,17 +193,18 @@ useEffect(() => {
     // },
     {
       field: "action",
+      width: 200, 
+      flex: 1,
       headerName: "Thao tác",
-      flex:1,
       renderCell: () => (
         <div style={{ display:"flex", justifyContent:"space-around" , padding: 5,margin: 5}}> 
-          <Button style={{backgroundColor:"blue" , color:"white"}} onClick={handleOpenModalUpdate}  > 
+          <Button disabled={selectedRow.length === 0} style={{backgroundColor:"blue" , color:"white"}} onClick={handleOpenModalUpdate}  > 
             <PermIdentityIcon ></PermIdentityIcon>
           </Button>
-          <Button style={{backgroundColor:"WindowFrame" , color:"white"}}  > 
+          <Button disabled={selectedRow.length === 0} style={{backgroundColor:"WindowFrame" , color:"white"}} onClick={handleOpenModalUpdateDepartments} > 
             <GroupAddIcon ></GroupAddIcon>
           </Button>
-          <Button style={{backgroundColor:"red" , color:"white" }} onClick={handleDeleteNguoiDung} >
+          <Button disabled={selectedRow.length === 0} style={{backgroundColor:"red" , color:"white" }} onClick={handleDeleteNguoiDung} >
             <DeleteIcon  ></DeleteIcon>
           </Button>
         </div>
@@ -212,26 +225,12 @@ useEffect(() => {
           {" "}
           <PersonAddIcon /> Thêm mới tài khoản
         </Button>
-        {/* <DataGrid
-          rows={userList}
-          columns={columns}
-          style={{ marginTop: "10px" }}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          onRowSelectionModelChange={(newRowSelectionModel) => {
-            setSelectedRow(newRowSelectionModel);
-          }}
-          pageSizeOptions={[5, 10]}
-          
-        /> */}
+  
          <DataGrid
   rows={rows|| []}
   columns={columns}
   showCellVerticalBorder
-  style={{ marginTop: "10px" }}
+  style={{ marginTop: "10px", overflow:"auto" ,height: "60vh"}}
   initialState={{
     pagination: {
       paginationModel: { page: 0, pageSize: 25 },
@@ -261,6 +260,8 @@ useEffect(() => {
       </div>
       {/* Modal UpdateRole */}
       <ModalUpdateRole openModal={openModalUpdateRole} selectedRow={selectedRow} closeModal={handleCloseModalUpdate} />
+      {/* Modal Update Department */}
+      <ModalUpdateDepartment openModal={openModalUpdateDepartment} selectedRow={selectedRow} closeModal={handleCloseModalUpdateDepartments}/>
     </Container>
   );
 };

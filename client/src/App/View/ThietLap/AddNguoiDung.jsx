@@ -4,13 +4,14 @@ import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useNavigate } from "react-router-dom";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import UserApi from "../../Api/UserApi";
+import UserApi, { useAddUserMutation } from "../../Api/UserApi";
 import ApiData from "../../Api/ApiData";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Swal from "sweetalert2";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import RoleApi from "../../Api/RoleApi";
 import Checkbox from '@mui/material/Checkbox';
+import { toast } from "react-toastify";
 const AddNguoiDung = () => {
   const styles = {
        display:"flex" ,
@@ -28,6 +29,7 @@ const AddNguoiDung = () => {
     const navigate = useNavigate();
   const [tinhTrang,setTinhTrang] = useState([])
   const [chucVu ,setChucVu] = useState([])
+  const [addUser] = useAddUserMutation()
   const [obj,setobj] = useState(
     {
       hoVaDem :"",
@@ -74,7 +76,7 @@ const AddNguoiDung = () => {
   }
 
   const gotoLink = ()=>{
-    navigate("/thietlap")
+    navigate("/thietlap/thietlapnhanvien")
   }
 
   useEffect(()=>{
@@ -95,27 +97,32 @@ const AddNguoiDung = () => {
 
   const handleSave = async () => {
     try {
-       const response = await UserApi.insertUser(obj)
-       if(response.status == 200)
+       const response = await addUser(obj)
+       console.log(response)
+       if(response?.data?.status === 200)
        {
-        Swal.fire({
-          position: "center",
-          icon: "success",
-          title: "Dữ liệu được thêm thành công",
-          showConfirmButton: false,
-        })
-        setTimeout(() => {
-          navigate("/thietlap")
-        },1500)
+        toast.success("Thêm người dùng thành công", {
+          position: "top-right",
+          autoClose: 3000,  
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+      });
+        gotoLink()
        }
        else
        {
-        Swal.fire({
-          position: "center",
-          icon: "error",
-          title: "Đã có lỗi xảy ra",
-          showConfirmButton: true,
-        })
+        toast.error("Đã có lỗi khi xảy ra", {
+          position: "top-right",
+          autoClose: 3000,  
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+      });
        }
        
     } catch (error) {
