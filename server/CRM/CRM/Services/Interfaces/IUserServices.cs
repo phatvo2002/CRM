@@ -20,6 +20,8 @@ namespace CRM.Services.Interfaces
         Task<ResultModal> ChangePasswrord(Guid id ,  string oldPassword , string newPassword);
 
         Task<ResultModal> UserRolePermission(Guid id , Guid roleId , string roleName);
+
+        Task<ResultModal> UserDepartment(Guid userId, Guid departmentId);
     }
 
 }

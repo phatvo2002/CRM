@@ -16,6 +16,7 @@ using Serilog.Events;
 using Serilog.Sinks.MSSqlServer;
 using Serilog;
 using System.Text;
+using System.Text.Json.Serialization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -44,6 +45,11 @@ var logger = new LoggerConfiguration()
     .CreateLogger();
 
 builder.Host.UseSerilog(logger);
+builder.Services.AddControllers()
+       .AddJsonOptions(options =>
+       {
+           options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+       });
 builder.Services.AddControllers();
 // Add services to the container.
 //builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -81,6 +87,8 @@ builder.Services.AddCors(options => options.AddPolicy("Cors", build =>
 {
     build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
 }));
+
+
 
 builder.Services.AddSwaggerGen(opt =>
 {

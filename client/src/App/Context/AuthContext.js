@@ -33,6 +33,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.setItem("token", response.token);
         localStorage.setItem("userId", response.id);
         localStorage.setItem("roleId",response.maChucVu);
+        localStorage.setItem("authorizationData", JSON.stringify({ response }));
         setAuthState(response.token);
         setIsAuthenticated(true)
         navigate("/user/profile");

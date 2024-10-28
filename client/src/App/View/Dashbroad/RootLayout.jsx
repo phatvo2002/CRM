@@ -12,8 +12,9 @@ import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 import { Link as RouterLink} from "react-router-dom";
-import { Fab, Grid, Link } from "@mui/material";
+import { Breadcrumbs, Fab, Grid, Link, Stack } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -104,7 +105,10 @@ const Drawer = styled(MuiDrawer, {
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
+
 export default function RootLayout() {
+  const location = useLocation();
+  const pathParts = location.pathname.split('/').filter(Boolean);
   const { logout } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -186,7 +190,7 @@ export default function RootLayout() {
               pr: "24px",
             }}
           > 
-           
+            
             <IconButton
               edge="start"
               color="inherit"
@@ -199,7 +203,22 @@ export default function RootLayout() {
             >
               <MenuIcon />
             </IconButton>
-         
+            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+      {pathParts.map((item, index) => {
+        const href = '/' + pathParts.slice(0, index + 1).join('/');
+
+        return (
+          <Link
+            key={index}
+            underline="hover"
+            color="Highlight"
+            href={href}
+          >
+            {item.charAt(0).toUpperCase() + item.slice(1)} 
+          </Link>
+        );
+      })}
+    </Breadcrumbs>
             <Typography
               component="h6"
               variant="caption"

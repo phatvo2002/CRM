@@ -16,17 +16,20 @@ namespace CRM.DTO
 
         public bool IsActive { get; set; }
 
-        public string? TaiKhoan { get; set; }
+      // public string? TaiKhoan { get; set; }
 
-        public string? MatKhau { get; set; }
+        //public string? MatKhau { get; set; }
         public Guid? MaChucVu { get; set; }
 
         public Guid? MaPhongBan { get; set; }
+        public PhongBanDTO? PhongBan { get; set; }
+        public ChucVuDTO? ChucVu { get; set; }
+        public bool CheckIsTruongPhong { get; set; }
 
+        public bool CheckIsGiamDoc { get; set; }
 
         public int? MaTinhTrang { get; set; }
     
-
         public string? Token { get; set; }
 
         public int Status { get; set; }

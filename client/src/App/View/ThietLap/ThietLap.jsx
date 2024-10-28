@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {  Button  } from "@mui/material";
+import {  Button, Icon, IconButton  } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import UserApi, { useDeleteUserMutation } from "../../Api/UserApi";
 import { Container } from "@mui/material";
@@ -153,11 +153,32 @@ useEffect(() => {
 
   const columns = [
    
-    { field: "hoVaDem", headerName: "Họ Và Đệm", width: 200, flex: 1 },
-    { field: "ten", headerName: "Tên", width: 200, flex: 1 },
-    { field: "diaChi", headerName: "Địa Chỉ", width: 200, flex: 1 },
-    { field: "soDienThoai", headerName: "Số điện thoại", width: 200, flex: 1 },
-    { field: "email", headerName: "Tài khoản Email", width: 200, flex: 1 },
+    { field: "hoVaDem", headerName: "Họ Và Đệm", flex: 1 },
+    { field: "ten", headerName: "Tên", flex: 1 },
+   // { field: "diaChi", headerName: "Địa Chỉ", width: 200, flex: 1 },
+    { field: "soDienThoai", headerName: "Số điện thoại", flex: 1 },
+    { field: "email", headerName: "Tài khoản Email", flex: 1 },
+    { field: "taiKhoan", headerName: "Tài khoản", flex: 1 },
+    {
+      field: "phongBan",
+      headerName: "Phòng ban",
+      width: 150,
+      renderCell: (params) => (
+         <span>
+          {params.row?.phongBan?.tenPhongBan}
+         </span>
+      ),
+    },
+    {
+      field: "chucVu",
+      headerName: "Chức vụ ",
+      width: 150,
+      renderCell: (params) => (
+         <span>
+          {params.row?.chucVu?.tenChucVu}
+         </span>
+      ),
+    },
     {
       field: "isActive",
       headerName: "Kích hoạt tài khoản",
@@ -193,20 +214,20 @@ useEffect(() => {
     // },
     {
       field: "action",
-      width: 200, 
       flex: 1,
+      width: 250,
       headerName: "Thao tác",
       renderCell: () => (
-        <div style={{ display:"flex", justifyContent:"space-around" , padding: 5,margin: 5}}> 
-          <Button disabled={selectedRow.length === 0} style={{backgroundColor:"blue" , color:"white"}} onClick={handleOpenModalUpdate}  > 
+        <div style={{display:"flex",justifyContent:"space-between", alignItems:"center", padding: 5,margin: 5 }}> 
+          <IconButton disabled={selectedRow.length === 0} style={{backgroundColor:"blue" , color:"white"}} onClick={handleOpenModalUpdate}  > 
             <PermIdentityIcon ></PermIdentityIcon>
-          </Button>
-          <Button disabled={selectedRow.length === 0} style={{backgroundColor:"WindowFrame" , color:"white"}} onClick={handleOpenModalUpdateDepartments} > 
+          </IconButton>
+          <IconButton disabled={selectedRow.length === 0} style={{backgroundColor:"WindowFrame" , color:"white"}} onClick={handleOpenModalUpdateDepartments} > 
             <GroupAddIcon ></GroupAddIcon>
-          </Button>
-          <Button disabled={selectedRow.length === 0} style={{backgroundColor:"red" , color:"white" }} onClick={handleDeleteNguoiDung} >
+          </IconButton>
+          <IconButton disabled={selectedRow.length === 0} style={{backgroundColor:"red" , color:"white" }} onClick={handleDeleteNguoiDung} >
             <DeleteIcon  ></DeleteIcon>
-          </Button>
+          </IconButton>
         </div>
       ),
     }

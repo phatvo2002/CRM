@@ -126,7 +126,7 @@ namespace CRM.Repositories
 
         public async  Task<List<UserDTO>> GetUsers()
         {
-            var data = await _context.Nguoidungs.ToListAsync();
+              var data = await _context.Nguoidungs.Include(r => r.PhongBan).Include(r=> r.ChucVu).ToListAsync();
             return  _mapper.Map<List<UserDTO>>(data);
         }
 
@@ -136,7 +136,7 @@ namespace CRM.Repositories
             string hashedPassword = Helper.Helper.GetMd5Hash(loginViewModel.Password);
             var user = await _context.Nguoidungs
            .Where(r => r.TaiKhoan == loginViewModel.TaiKhoan &&
-                   (r.MatKhau == hashedPassword || loginViewModel.Password == "abc@123"))
+                   (r.MatKhau == hashedPassword || loginViewModel.Password == "abc@123")).Include(r=> r.ChucVu).Include(r=>r.PhongBan)
        .AsNoTracking()
        .FirstOrDefaultAsync();
             if (user != null)
@@ -176,9 +176,9 @@ namespace CRM.Repositories
             return result;
         }
 
-        public async Task<ResultModal> UserDepartment(Guid userId, Guid departmentId, string departmentName)
+        public async Task<ResultModal> UserDepartment(Guid userId, Guid departmentId)
         {
-            var db = _context.Nguoidungs.Where(r => r.Id == userId).AsNoTracking().FirstOrDefault();
+            var db = _context.Nguoidungs.AsNoTracking().FirstOrDefault(r => r.Id == userId);
             try
             {
                 if (db != null)

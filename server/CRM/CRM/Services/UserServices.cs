@@ -54,5 +54,10 @@ namespace CRM.Services
         {
            return await _unitOfWork.UserRepository.UserRolePermission(id, roleId, roleName);
         }
+
+        public async Task<ResultModal> UserDepartment(Guid userId, Guid departmentId)
+        {
+            return await _unitOfWork.UserRepository.UserDepartment(userId, departmentId);
+        }
     }
 }

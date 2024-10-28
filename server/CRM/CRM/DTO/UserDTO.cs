@@ -1,4 +1,6 @@
-﻿namespace CRM.DTO
+﻿using CRM.Entities;
+
+namespace CRM.DTO
 {
     public class UserDTO
     {
@@ -9,7 +11,7 @@
         public string? Ten { get; set; }
 
         public string? DiaChi { get; set; }
-
+        public string? TaiKhoan { get; set; }
         public string? SoDienThoai { get; set; }
 
         public string? Email { get; set; }
@@ -27,5 +29,9 @@
         public bool CheckIsTruongPhong { get; set; }
 
         public bool CheckIsGiamDoc { get; set; }
+
+        public PhongBanDTO? PhongBan { get; set; }
+
+        public ChucVuDTO? ChucVu { get; set; }
     }
 }

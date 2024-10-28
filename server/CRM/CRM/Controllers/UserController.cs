@@ -91,5 +91,19 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("userdepartment")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UserDepartment(Guid userId, Guid departmentId)
+        {
+            try
+            {
+                ResultModal result = await _userService.UserDepartment(userId, departmentId);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
