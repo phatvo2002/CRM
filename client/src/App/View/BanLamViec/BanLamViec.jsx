@@ -3,6 +3,7 @@ import { Grid } from "@mui/material";
 import Deposits from "../Dashbroad/Deposits";
 import Paper from "@mui/material/Paper";
 const BanLamViec = () => {
+  console.log("API URL:", process.env.REACT_APP_API_URL);
   return (
     <Grid>
       <Grid item xs={12} md={4} lg={3}>

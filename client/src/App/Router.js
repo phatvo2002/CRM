@@ -1,57 +1,131 @@
-import { lazy } from "react";
+import { lazy ,Suspense  } from "react";
 
-import BanLamViec from "./View/BanLamViec/BanLamViec";
 
-import ThongTinNguoiDung from "./View/ThongTinNguoiDung/ThongTinNguoiDung";
+// import BanLamViec from "./View/BanLamViec/BanLamViec";
 
-import ThietLapNhanVien from "./View/ThietLap/ThietLap";
+//import ThongTinNguoiDung from "./View/ThongTinNguoiDung/ThongTinNguoiDung";
 
-import ThemMoiNguoiDung from "./View/ThietLap/AddNguoiDung";
+//import ThietLapNhanVien from "./View/ThietLap/ThietLap";
 
-import ChangePassword from "./View/session/ChangePassword";
+ //import ThemMoiNguoiDung from "./View/ThietLap/AddNguoiDung";
 
-import ThietLapVaiTro from "./View/ThietLap/ThietLapVaiTro/Index";
+// import ChangePassword from "./View/session/ChangePassword";
 
-import DashBoardThietLap from "./View/ThietLap/DashBoardThietLap";
+//import ThietLapVaiTro from "./View/ThietLap/ThietLapVaiTro/Index";
 
-import QuanLyPhongban from "./View/ThietLap/QuanLyPhongBan";
+// import DashBoardThietLap from "./View/ThietLap/DashBoardThietLap";
+
+// import QuanLyPhongban from "./View/ThietLap/QuanLyPhongBan";
+
+//quản trị hệ thống 
+const BanLamViec = lazy(() =>
+  import("./View/BanLamViec/BanLamViec")
+);
+const ThongTinNguoiDung = lazy(() =>
+  import("./View/ThongTinNguoiDung/ThongTinNguoiDung")
+);
+const ThietLapNhanVien = lazy(() =>
+  import("./View/ThietLap/ThietLap")
+);
+const ThemMoiNguoiDung = lazy(() =>
+  import("./View/ThietLap/AddNguoiDung")
+);
+const ChangePassword = lazy(() =>
+  import("./View/session/ChangePassword")
+);
+const ThietLapVaiTro = lazy(() =>
+  import("./View/ThietLap/ThietLapVaiTro/Index")
+);
+const QuanLyPhongban = lazy(() =>
+  import("./View/ThietLap/QuanLyPhongBan")
+);
+const QuanLyMenu = lazy(() =>
+  import("./View/ThietLap/QuanLyMenu/index")
+);
+const DashBoardThietLap = lazy(() =>
+  import("./View/ThietLap/DashBoardThietLap")
+);
 const RouteChild = [
   {
     path: "/banlamviec",
-    element: <BanLamViec />,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <BanLamViec />
+      </Suspense>
+    ),
   },
   {
     path: "/user/profile",
-    element: <ThongTinNguoiDung />,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThongTinNguoiDung />
+      </Suspense>
+    ),
+  },
+  // {
+  //   path: "/thietlap",
+  //   element: (
+  //     <Suspense fallback={<div>Loading...</div>}>
+  //       <DashBoardThietLap />
+  //     </Suspense>
+  //   ),
+  // },
+  {
+    path: "/quantrihethong/thietlapvaitro",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThietLapVaiTro />
+      </Suspense>
+    ),
   },
   {
-    path: "/thietlap",
-    element: <DashBoardThietLap />,
+    path: "/quantrihethong/quanlyphongban",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <QuanLyPhongban />
+      </Suspense>
+    ),
   },
   {
-    path: "/thietlap/thietlapvaitro",
-    element: <ThietLapVaiTro />,
+    path: "/quantrihethong/quanlymenu",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <QuanLyMenu />
+      </Suspense>
+    ),
   },
   {
-    path: "/thietlap/quanlyphongban",
-    element: <QuanLyPhongban />,
-  },
-  {
-    path: "/thietlap/thietlapnhanvien",
-    element: <ThietLapNhanVien />,
+    path: "/quantrihethong/thietlapnhanvien",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThietLapNhanVien />
+      </Suspense>
+    ),
   },
   {
     path: "/nguoidung/themmoi",
-    element: <ThemMoiNguoiDung />,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThemMoiNguoiDung />
+      </Suspense>
+    ),
   },
 
   {
     path: "/doimatkhau",
-    element: <ChangePassword />,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ChangePassword />
+      </Suspense>
+    ),
   },
   {
     path: "/quantrihethong",
-    element: <DashBoardThietLap />,
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+         <DashBoardThietLap />
+      </Suspense>
+    ),
   },
 
 

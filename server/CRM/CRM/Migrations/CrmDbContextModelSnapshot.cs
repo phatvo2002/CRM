@@ -58,6 +58,9 @@ namespace CRM.Migrations
                     b.Property<int?>("OrderNumber")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("TrangThai")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Url")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -169,6 +172,18 @@ namespace CRM.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MaQuanLy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MoTa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SoThuTu")
+                        .HasColumnType("int");
 
                     b.Property<string>("TenPhongBan")
                         .HasMaxLength(50)

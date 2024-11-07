@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRM.Migrations
 {
     [DbContext(typeof(CrmDbContext))]
-    [Migration("20240923094111_NewPhongBan")]
-    partial class NewPhongBan
+    [Migration("20241107091842_update")]
+    partial class update
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,9 @@ namespace CRM.Migrations
 
                     b.Property<int?>("OrderNumber")
                         .HasColumnType("int");
+
+                    b.Property<bool?>("TrangThai")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Url")
                         .HasMaxLength(50)
@@ -177,12 +180,10 @@ namespace CRM.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("MaQuanLy")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MoTa")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("SoThuTu")
                         .HasColumnType("int");

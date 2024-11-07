@@ -14,6 +14,7 @@ import ModalUpdateRole from "./Modal/ModalUpdateRole";
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { useGetUserAllQuery } from "../../Api/UserApi";
 import ModalUpdateDepartment from "./Modal/ModalUpdateDepartment";
+import Tooltip from '@mui/material/Tooltip';
 const ThietLap = () => {
   const navigate = useNavigate();
  // const [user, setUser] = useState([]);
@@ -153,7 +154,7 @@ useEffect(() => {
 
   const columns = [
    
-    { field: "hoVaDem", headerName: "Họ Và Đệm", flex: 1 },
+   // { field: "hoVaDem", headerName: "Họ Và Đệm", flex: 1 },
     { field: "ten", headerName: "Tên", flex: 1 },
    // { field: "diaChi", headerName: "Địa Chỉ", width: 200, flex: 1 },
     { field: "soDienThoai", headerName: "Số điện thoại", flex: 1 },
@@ -219,13 +220,15 @@ useEffect(() => {
       headerName: "Thao tác",
       renderCell: () => (
         <div style={{display:"flex",justifyContent:"space-between", alignItems:"center", padding: 5,margin: 5 }}> 
-          <IconButton disabled={selectedRow.length === 0} style={{backgroundColor:"blue" , color:"white"}} onClick={handleOpenModalUpdate}  > 
+         <Tooltip title="Delete">
+          <IconButton disabled={selectedRow.length === 0} style={{}} onClick={handleOpenModalUpdate}  > 
             <PermIdentityIcon ></PermIdentityIcon>
           </IconButton>
-          <IconButton disabled={selectedRow.length === 0} style={{backgroundColor:"WindowFrame" , color:"white"}} onClick={handleOpenModalUpdateDepartments} > 
+         </Tooltip>
+          <IconButton disabled={selectedRow.length === 0} style={{}} onClick={handleOpenModalUpdateDepartments} > 
             <GroupAddIcon ></GroupAddIcon>
           </IconButton>
-          <IconButton disabled={selectedRow.length === 0} style={{backgroundColor:"red" , color:"white" }} onClick={handleDeleteNguoiDung} >
+          <IconButton disabled={selectedRow.length === 0} style={{ }} onClick={handleDeleteNguoiDung} >
             <DeleteIcon  ></DeleteIcon>
           </IconButton>
         </div>
@@ -273,8 +276,7 @@ useEffect(() => {
   slots={{ toolbar: GridToolbar }}
   pageSizeOptions={[25, 50, 75, 100]}
   checkboxSelection={false}
-  disableMultipleSelection={true}  
-  SelectionMode="Single"
+  disableMultipleSelection={false}  
   disableRowSelectionOnClick={false}  
 />
 

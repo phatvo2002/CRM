@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CRM.Migrations
 {
     [DbContext(typeof(CrmDbContext))]
-    [Migration("20240916100032_UpdateUser")]
-    partial class UpdateUser
+    [Migration("20241107091520_updatemenu")]
+    partial class updatemenu
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,6 +60,9 @@ namespace CRM.Migrations
 
                     b.Property<int?>("OrderNumber")
                         .HasColumnType("int");
+
+                    b.Property<bool?>("TrangThai")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Url")
                         .HasMaxLength(50)
@@ -172,6 +175,18 @@ namespace CRM.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool?>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MaQuanLy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MoTa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SoThuTu")
+                        .HasColumnType("int");
 
                     b.Property<string>("TenPhongBan")
                         .HasMaxLength(50)

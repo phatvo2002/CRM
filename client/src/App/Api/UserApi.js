@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-const API_URL = "https://localhost:7211/api/v1";
+const API_URL = process.env.REACT_APP_API_URL;
 
 const Token = localStorage.getItem("token");
 

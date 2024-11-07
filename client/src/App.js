@@ -7,7 +7,7 @@ function App() {
   return (
     <AuthProvider>
       <AppRouter />
-      <ToastContainer />
+      <ToastContainer position="top-center" />
     </AuthProvider>
     
   );

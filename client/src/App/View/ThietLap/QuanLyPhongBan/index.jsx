@@ -1,4 +1,4 @@
-import { Button, Container } from '@mui/material'
+import { Button, Container, IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import AddIcon from "@mui/icons-material/Add";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
@@ -23,12 +23,12 @@ const QuanLyPhongban = () => {
       flex:1,
       renderCell: () => (
         <div style={{alignItems : "center"}}> 
-          <Button style={{backgroundColor:"green" , color:"white"}}  onClick={onOpenModalUpdatePhongBan}  > 
-            <CreateIcon ></CreateIcon>
-          </Button>
-          <Button style={{backgroundColor:"red" , color:"white" , margin:"0 10px"}} onClick={handleDeletePhongBan} >
+        <IconButton style={{}} disabled={selectedRow.length === 0}  onClick={onOpenModalUpdatePhongBan} >
+            <CreateIcon ></CreateIcon>  
+        </IconButton>
+          <IconButton style={{ margin:"0 10px"}} disabled={selectedRow.length === 0} onClick={handleDeletePhongBan}>
             <DeleteIcon  ></DeleteIcon>
-          </Button>
+          </IconButton>
         </div>
       ),
     }
@@ -90,7 +90,7 @@ const handleDeletePhongBan = async () =>{
   });
 }
 const gotoLink = ()=>{
-  navigate("/thietlap")
+  navigate(-1)
 }
 
  

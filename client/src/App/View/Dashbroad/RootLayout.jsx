@@ -27,9 +27,10 @@ import PersonIcon from "@mui/icons-material/Person";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 // import Chart from "./Chart";
-import MenuApi from "../../Api/MenuApi";
+import MenuApi, { useGetMenuRoleByIdQuery } from "../../Api/MenuApi";
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import panner from "../../Assets/image/banner.png"
 function Copyright(props) {
   return (
     <Grid 
@@ -147,27 +148,22 @@ export default function RootLayout() {
   };
   const roleId = localStorage.getItem("roleId")
 
-  React.useEffect(()=>{
-     if(roleId)
-     {
-       const getMenuByRole = async (roleId)=>{
-             const res = await MenuApi.GetMenuRoleById(roleId);
-             if(res.length>0)
-             {
-                setMenu(res)
-             }
-             else
-             {
-              setMenu([])
-             }
-       }
-       getMenuByRole(roleId)
-     }
-  },[roleId])
+  const { data: menuRoleData, error, isLoading } = useGetMenuRoleByIdQuery(roleId, {
+    skip: !roleId, 
+});
+React.useEffect(() => {
+  if (menuRoleData) {
+      if (menuRoleData.length > 0) {
+          setMenu(menuRoleData);
+      } else {
+          setMenu([]);
+      }
+  }
+}, [menuRoleData]);
 
-  const gotoLinkThietLap  = ()=>{
-    navigate("/thietlap")
-}
+//   const gotoLinkThietLap  = ()=>{
+//     navigate("/thietlap")
+// }
 
   return (
     <ThemeProvider theme={theme}>
@@ -177,6 +173,7 @@ export default function RootLayout() {
           color: 'text.primary',
           fontFamily: "inherit",
         }} >
+          
         <CssBaseline />
         <AppBar
            overflow={"auto"}
@@ -185,6 +182,7 @@ export default function RootLayout() {
           open={open}
           sx={{ backgroundColor: 'background.paper' }}
         >
+          
           <Toolbar
             sx={{
               pr: "24px",
@@ -193,7 +191,7 @@ export default function RootLayout() {
             
             <IconButton
               edge="start"
-              color="inherit"
+              color="black"
               aria-label="open drawer"
               onClick={toggleDrawer}
               sx={{
@@ -230,16 +228,16 @@ export default function RootLayout() {
                 {darkMode ? <WbSunnyIcon style={{color:"white"}}/> : <DarkModeIcon style={{color:"black"}}/>} 
              </IconButton>
             </IconButton>
-            <IconButton color="white">
+            <IconButton color="black">
               <SettingsIcon
-                id="basic-button"
-                onClick={gotoLinkThietLap}
-                aria-expanded={open ? "true" : undefined}
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
+                // id="basic-button"
+                // onClick={gotoLinkThietLap}
+                // aria-expanded={open ? "true" : undefined}
+                // aria-controls={open ? "basic-menu" : undefined}
+                // aria-haspopup="true"
               ></SettingsIcon>
             </IconButton>
-            <IconButton color="white">
+            <IconButton color="black">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
@@ -301,6 +299,7 @@ export default function RootLayout() {
               px: [1],
             }}
           >
+          <img src={panner} style={{width:"100%" ,paddingLeft:"30px"}}></img>
             <IconButton onClick={toggleDrawer} sx={{color:"black"}}>
               <ChevronLeftIcon />
             </IconButton>

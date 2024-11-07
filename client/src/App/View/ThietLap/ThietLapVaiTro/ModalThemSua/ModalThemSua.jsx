@@ -5,10 +5,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
-import MenuApi from "../../../../Api/MenuApi"
+import MenuApi, { useGetAllMenuQuery, useGetMenuRoleByIdQuery, useUpdateMenuRoleMutation } from "../../../../Api/MenuApi"
 import Swal  from 'sweetalert2';
 
 import { Grid } from '@mui/material';
+import { toast } from 'react-toastify';
 const ModalThemSua = (props) => {
     const {
         openModal,
@@ -18,6 +19,11 @@ const ModalThemSua = (props) => {
     const [menu,setMenu] = useState([])
     const [menuRole,setMenuRole] = useState([])
     const [checkedMenuIds, setCheckedMenuIds] = useState([]);
+    const { data: menuData } = useGetAllMenuQuery({ skip: !openModal });
+    const { data: menuRoleData } = useGetMenuRoleByIdQuery(selectedRow[0], {
+      skip: !openModal || !selectedRow[0],
+  });
+    const [updateGroupMenu] = useUpdateMenuRoleMutation()
       const handleCheckboxChange = (event, menuId) => {
     
         if (event.target.checked) {
@@ -32,17 +38,11 @@ const ModalThemSua = (props) => {
             oid:selectedRow[0],
             menu :checkedMenuIds
           }
-         const res =  await MenuApi.UpdateMenuRole(data)
-         if(res.status == 200)
+         const res =  await updateGroupMenu(data)
+         if(res?.data.status== 200)
          {
              closeModal()
-             Swal.fire({
-                 position: "center",
-                 icon: "success",
-                 title: "Phân quyền thành công ",
-                 showConfirmButton: false,
-                 timer: 1500
-               });
+             toast.success("Phân quyền thành công!");
          }
         else
         {
@@ -50,45 +50,22 @@ const ModalThemSua = (props) => {
         }
       }
 
-    useEffect(() => {
-        if(openModal)
-        {
-            const getAllMenu = async()=>{
-                const res = await MenuApi.GetAllMenu();
-                if(res.length > 0)
-                {
-                  setMenu(res)
-             
-                }
-                else
-                {
-                  setMenu([])
-                }
-            }
-            getAllMenu()
+     useEffect(() => {
+        if (menuData) {
+            setMenu(menuData.length > 0 ? menuData : []);
         }
-         
-    },[openModal])
+    }, [menuData]);
 
     useEffect(() => {
-        if(openModal)
-        {
-            const getAllMenuRole = async()=>{
-                const res = await MenuApi.GetMenuRoleById(selectedRow[0]);
-                if(res.length > 0)
-                {
-                  setMenuRole(res)
-                  setCheckedMenuIds(res.map(e => e.menuId))
-                }
-                else
-                {
-                  setMenuRole([])
-                }
-            }
-            getAllMenuRole()
-        }
-         
-    },[openModal])
+      if (menuRoleData) {
+          if (menuRoleData.length > 0) {
+              setMenuRole(menuRoleData);
+              setCheckedMenuIds(menuRoleData.map(e => e.menuId));
+          } else {
+              setMenuRole([]);
+          }
+      }
+  }, [menuRoleData]);
   return (
     <React.Fragment>
     <Dialog
