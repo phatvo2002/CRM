@@ -1,41 +1,43 @@
-﻿using CRM.Abstraction;
+﻿
 using CRM.DTO;
 using CRM.Modal;
+using CRM.Repositories.Interfaces;
 using CRM.Services.Interfaces;
 
 namespace CRM.Services
 {
     public class PhongBanServices : IPhongBanServices
     {
-        public readonly IUnitOfWork _unitOfWork;
-        public PhongBanServices(IUnitOfWork unitOfWork)
+        private readonly IPhongBanRepository _phongBanRepository;
+
+        public PhongBanServices( IPhongBanRepository phongBanRepository)
         {
-            _unitOfWork = unitOfWork;
+            _phongBanRepository = phongBanRepository;
         }
 
         public async Task<ResultModal> CreatePhongBan(PhongBanModel model)
         {
-           return await _unitOfWork.PhongBanRepository.CreatePhongBan(model);
+           return await _phongBanRepository.CreatePhongBan(model);
         }
 
         public async Task<ResultModal> DeletePhongBan(Guid id)
         {
-           return await _unitOfWork.PhongBanRepository.DeletePhongBan(id);
+           return await _phongBanRepository.DeletePhongBan(id);
         }
 
         public async Task<List<PhongBanDTO>> GetAllPhongBan()
         {
-            return await _unitOfWork.PhongBanRepository.GetAllPhongBan();
+            return await _phongBanRepository.GetAllPhongBan();
         }
 
         public async Task<PhongBanDTO> GetPhongBanById(Guid id)
         {
-            return await  _unitOfWork.PhongBanRepository.GetPhongBanById(id);
+            return await  _phongBanRepository.GetPhongBanById(id);
         }
 
         public async  Task<ResultModal> UpdatePhongBan(PhongBanModel model, Guid phongBanId)
         {
-            return await _unitOfWork.PhongBanRepository.UpdatePhongBan(model, phongBanId);
+            return await _phongBanRepository.UpdatePhongBan(model, phongBanId);
         }
     }
 }

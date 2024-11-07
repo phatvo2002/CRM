@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import {  Button, Icon, IconButton  } from "@mui/material";
+import {  Button, IconButton  } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import UserApi, { useDeleteUserMutation } from "../../Api/UserApi";
+import  { useDeleteUserMutation } from "../../Api/UserApi";
 import { Container } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import Swal from "sweetalert2";

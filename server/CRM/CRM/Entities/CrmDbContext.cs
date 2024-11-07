@@ -28,7 +28,7 @@ namespace CRM.Entities
    
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-      => optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
+      => optionsBuilder.UseSqlServer("Server=vodangphat2024.database.windows.net;Initial Catalog=crm-2024;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=true;Connection Timeout=1000;");
 
 
         protected override void OnModelCreating (ModelBuilder modelBuilder)

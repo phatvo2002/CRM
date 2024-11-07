@@ -10,8 +10,8 @@ namespace CRM.Repositories
 {
     public class PhongBanRepository : IPhongBanRepository
     {
-        public readonly CrmDbContext _context;
-        public readonly IMapper _mapper;
+        private readonly CrmDbContext _context;
+        private readonly IMapper _mapper;
         private readonly ILogger<PhongBanRepository> _logger;
 
 

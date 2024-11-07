@@ -1,5 +1,4 @@
 ﻿using CRM;
-using CRM.Abstraction;
 using CRM.Entities;
 using CRM.Entities.StoreProcedure;
 using CRM.Filters;
@@ -52,7 +51,7 @@ builder.Services.AddControllers()
        });
 builder.Services.AddControllers();
 // Add services to the container.
-//builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserServices ,UserServices>();
 
 builder.Services.AddScoped<IChucVuRepository, ChucVuRepository>();
@@ -62,10 +61,13 @@ builder.Services.AddScoped<IChucVuServices ,ChucVuServices>();
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
 builder.Services.AddScoped<IMenuServices, MenuServices>();
 
-//builder.Services.AddScoped<ITinhTrangRepository, TinhTrangRepository>();
+builder.Services.AddScoped<ITinhTrangRepository, TinhTrangRepository>();
 builder.Services.AddScoped<ITinhTrangServices, TinhTrangServices>();
+
+builder.Services.AddScoped<IPhongBanRepository, PhongBanRepository>();
 builder.Services.AddScoped<IPhongBanServices, PhongBanServices>();
-builder.Services.AddScoped<IUnitOfWork ,UnitOfWork>();
+
+
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
 
@@ -92,7 +94,7 @@ builder.Services.AddCors(options => options.AddPolicy("Cors", build =>
 
 builder.Services.AddSwaggerGen(opt =>
 {
-    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Phần mềm quản lý bán hàng APIs", Version = "v1" });
+    opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Phần mềm quản lý mối quan hệ khách hàng CRM APIs", Version = "v1" });
     opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,

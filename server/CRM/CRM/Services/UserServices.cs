@@ -1,4 +1,4 @@
-﻿using CRM.Abstraction;
+﻿
 using CRM.DTO;
 using CRM.Modal;
 using CRM.Repositories.Interfaces;
@@ -8,56 +8,58 @@ namespace CRM.Services
 {
     public class UserServices : IUserServices
     {
-        private readonly IUnitOfWork _unitOfWork;
 
-        public UserServices( IUnitOfWork unitOfWork)
+        private readonly IUserRepository _userRepository;
+
+        public UserServices( IUserRepository userRepository)
         {
-            _unitOfWork = unitOfWork;
+ 
+            _userRepository = userRepository;
         }
 
         public async Task<ResultModal> CreateUser(UserModal userModal)
         {
-            return await _unitOfWork.UserRepository.CreateUser(userModal);
+            return await _userRepository.CreateUser(userModal);
         }
 
         public async Task<ResultModal> DeleteUser(Guid id)
         {
-            return await _unitOfWork.UserRepository.DeleteUser(id);
+            return await _userRepository.DeleteUser(id);
         }
 
         public async Task<List<UserDTO>> GetUsers()
         {
-            return await _unitOfWork.UserRepository.GetUsers();
+            return await _userRepository.GetUsers();
         }
 
         public async Task<LoginDTO> GetUserById(Guid Id )
         {
-            return await _unitOfWork.UserRepository.GetUserById(Id);
+            return await _userRepository.GetUserById(Id);
         }
 
         public async Task<LoginDTO> Login(LoginViewModal loginViewModal)
         {
-            return await _unitOfWork.UserRepository.Login(loginViewModal);
+            return await _userRepository.Login(loginViewModal);
         }
 
         public async Task<ResultModal> ActiveAccount(AcviteModal modal)
         {
-            return await _unitOfWork.UserRepository.ActiveAccount(modal);
+            return await _userRepository.ActiveAccount(modal);
         }
 
         public async Task<ResultModal> ChangePasswrord(Guid id, string oldPassword, string newPassword)
         {
-            return await _unitOfWork.UserRepository.ChangePassword(id, oldPassword, newPassword);
+            return await _userRepository.ChangePassword(id, oldPassword, newPassword);
         }
 
         public async Task<ResultModal> UserRolePermission(Guid id, Guid roleId, string roleName)
         {
-           return await _unitOfWork.UserRepository.UserRolePermission(id, roleId, roleName);
+           return await _userRepository.UserRolePermission(id, roleId, roleName);
         }
 
         public async Task<ResultModal> UserDepartment(Guid userId, Guid departmentId)
         {
-            return await _unitOfWork.UserRepository.UserDepartment(userId, departmentId);
+            return await _userRepository.UserDepartment(userId, departmentId);
         }
     }
 }
