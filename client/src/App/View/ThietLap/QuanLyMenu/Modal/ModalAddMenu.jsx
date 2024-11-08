@@ -8,60 +8,61 @@ import * as yup from "yup";
 import SwitchRHF from "../../../../Components/ReactHookFormComp/SwitchRHF/SwitchRHF";
 import { useAddPhongbanMutation } from "../../../../Api/Phongban";
 import {toast} from 'react-toastify';
+import { useAddMenuMutation } from "App/Api/MenuApi";
 // ------ Form Config ------ //
 const modelObj = {
-  stt: "stt",
-  maQuanLy: "maQuanLy",
-  tenPhongban: "tenPhongban",
-  moTa :"moTa",
+orderNumber: "orderNumber",
+  name: "name",
+  url: "url",
+  icon :"icon",
   isAcTive : "isAcTive"
 
 },
   labelObj = {
-    stt: "Số thứ tự",
-    maQuanLy: "Mã quản lý ",
-    tenPhongban: "Tên phòng ban",
-    moTa :  "Mô tả",
-    isAcTive :"Kích hoạt phòng ban"
+    orderNumber: "Số thứ tự",
+    name: "Tên menu",
+    url: "Đường dẫn",
+    icon :  "Icon",
+    isAcTive :"Kích hoạt menu"
   },
   initialFormState = {
-    [modelObj.stt]: "",
-    [modelObj.maQuanLy]: "",
-    [modelObj.tenPhongban]: "",
-    [modelObj.moTa]: "",
-    [modelObj.isAcTive]: "",
+    [modelObj.orderNumber]: "",
+    [modelObj.name]: "",
+    [modelObj.url]: "",
+    [modelObj.icon]: "",
+    [modelObj.isAcTive]: false,
   },
   schema = yup.object().shape({
-    [modelObj.stt]: validateString(),
-    [modelObj.maQuanLy]: validateString(),
-    [modelObj.tenPhongban]: validateString(),
-    [modelObj.moTa]: validateString(),
-    [modelObj.isAcTive]: validateString(),
+    [modelObj.orderNumber]: validateString(),
+    [modelObj.name]: validateString(),
+    [modelObj.url]: validateString(),
+    [modelObj.icon]: validateString(),
   });
 // ------ End Of Form Config ------ //
 
 const getHeader = (typeModal) => {
   const title = {
-    [TYPE_MODAL.INSERT]: "Thêm mới",
+    [TYPE_MODAL.INSERT]: "Thêm mới menu",
   };
   return title[typeModal] ?? "";
 };
 
-const ModalAddPhongBan = (props) => {
+const ModalAddMenu = (props) => {
   const { showModal, closeModal, typeModal, setTypeModal ,setLoading ,refetch} =
     props,
     _isMounted = useRef(false),
     modalRef = useRef(null),
-    [addPhongban] = useAddPhongbanMutation(),
+    [addMenu] = useAddMenuMutation(),
     isLoading = false,
     header = getHeader(typeModal);
 
   const submitForm = (data) => {
     const tempData = {
-      [modelObj.stt]: data[modelObj.stt],
-      [modelObj.maQuanLy]: data[modelObj.maQuanLy],
-      [modelObj.tenPhongban]: data[modelObj.tenPhongban],
-      [modelObj.moTa]: data[modelObj.moTa],
+      [modelObj.orderNumber]: data[modelObj.orderNumber],
+      [modelObj.name]: data[modelObj.name],
+      [modelObj.url]: data[modelObj.url],
+      [modelObj.icon]: data[modelObj.icon],
+      [modelObj.isAcTive]: data[modelObj.isAcTive],
     };
 
     typeModal === TYPE_MODAL.INSERT && callApiInsert(tempData);
@@ -69,7 +70,7 @@ const ModalAddPhongBan = (props) => {
   },
     callApiInsert = async (data) => {
       try {
-        await addPhongban(data).unwrap();
+        await addMenu(data).unwrap();
         toast.success("Thêm mới thành công!", {
           position: "top-right",
           autoClose: 3000,  
@@ -98,7 +99,6 @@ const ModalAddPhongBan = (props) => {
     },
    
     closeModalWithOtherFunc = () => {
-    
       setTypeModal("");
       modalRef.current.reset(initialFormState);
       closeModal();
@@ -126,8 +126,8 @@ const ModalAddPhongBan = (props) => {
 
         <Grid item xs={12}>
           <TextFieldRHF
-            name={modelObj.stt}
-            label={labelObj.stt}
+            name={modelObj.orderNumber}
+            label={labelObj.orderNumber}
             disabled={isLoading}
             required
           />
@@ -135,8 +135,8 @@ const ModalAddPhongBan = (props) => {
 
         <Grid item xs={12}>
           <TextFieldRHF
-            name={modelObj.tenPhongban}
-            label={labelObj.tenPhongban}
+            name={modelObj.name}
+            label={labelObj.name}
             disabled={isLoading}
             required
           />
@@ -144,21 +144,22 @@ const ModalAddPhongBan = (props) => {
 
         <Grid item xs={12}>
           <TextFieldRHF
-            name={modelObj.maQuanLy}
-            label={labelObj.maQuanLy}
+            name={modelObj.url}
+            label={labelObj.url}
             disabled={isLoading}
             required
           />
         </Grid>
         <Grid item xs={12}>
           <TextFieldRHF
-            name={modelObj.moTa}
-            label={labelObj.moTa}
+            name={modelObj.icon}
+            label={labelObj.icon}
             disabled={isLoading}
             required
           />
         </Grid>
         <Grid item xs={12}>
+        <label>{labelObj.isAcTive}</label>
           <SwitchRHF
             name={modelObj.isAcTive}
             label={labelObj.isAcTive}
@@ -166,10 +167,9 @@ const ModalAddPhongBan = (props) => {
             required
           />
         </Grid>
-
       </Grid>
     </RHFDrawer>
   );
 };
 
-export default ModalAddPhongBan;
+export default ModalAddMenu;

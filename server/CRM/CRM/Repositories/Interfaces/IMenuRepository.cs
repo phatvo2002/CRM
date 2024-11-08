@@ -16,5 +16,7 @@ namespace CRM.Repositories.Interfaces
         public Task<ResultModal> UpdateGroup(GroupModel model);
 
         public Task<List<MenuRoleDTO>> GetAllMenuRole(Guid Id);
+
+        public Task<ResultModal> UpdateMenu(MenuModel model);
     }
 }

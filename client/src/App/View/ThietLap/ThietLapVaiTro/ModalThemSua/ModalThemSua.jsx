@@ -20,7 +20,7 @@ const ModalThemSua = (props) => {
     const [menuRole,setMenuRole] = useState([])
     const [checkedMenuIds, setCheckedMenuIds] = useState([]);
     const { data: menuData } = useGetAllMenuQuery({ skip: !openModal });
-    const { data: menuRoleData } = useGetMenuRoleByIdQuery(selectedRow[0], {
+    const { data: menuRoleData } = useGetMenuRoleByIdQuery(selectedRow[0]?.id, {
       skip: !openModal || !selectedRow[0],
   });
     const [updateGroupMenu] = useUpdateMenuRoleMutation()
@@ -35,7 +35,7 @@ const ModalThemSua = (props) => {
 
       const handelSubmit = async () => {
          const data = {
-            oid:selectedRow[0],
+            oid:selectedRow[0]?.id,
             menu :checkedMenuIds
           }
          const res =  await updateGroupMenu(data)

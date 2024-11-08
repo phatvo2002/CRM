@@ -14,5 +14,7 @@ namespace CRM.Services.Interfaces
         public Task<ResultModal> UpdateMenuRole(GroupModel model);
 
         public Task<List<MenuRoleDTO>> GetAllMenuRoles(Guid roleid);
+
+        public Task<ResultModal> UpdateMenu(MenuModel model);
     }
 }

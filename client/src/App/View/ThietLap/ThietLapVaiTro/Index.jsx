@@ -9,6 +9,7 @@ import ModalThemSua from './ModalThemSua/ModalThemSua';
 import ModalAdd from './ModalThemSua/ModalAdd';
 import Swal from 'sweetalert2';
 import { TYPE_MODAL } from '../../../Until/constant';
+import CustomDatagrid from 'App/Components/DataGrid/CustomDatagrid';
 const ThietLapVaiTro = () => {
     const columns = [
         { field: "tenChucVu", headerName: "Tên chức vụ", width: 200, flex: 1 },
@@ -98,7 +99,9 @@ const ThietLapVaiTro = () => {
       if (loading) getDataChucVu();
       setLoading(false);
     }, [loading]);
-
+    const handleRowSelectionChange = (selectedRows) => {
+      setSelectedRow(selectedRows)
+    };
   return (
     <Container style={{ maxWidth: "100%" }}>
       <div style={{ width: "100%" }}>
@@ -122,7 +125,7 @@ const ThietLapVaiTro = () => {
           {" "}
           <AddIcon></AddIcon> Phân quyền menu
         </Button>
-        <DataGrid
+        {/* <DataGrid
           rows={datatable}
           columns={columns}
           style={{ marginTop: "10px" }}
@@ -136,7 +139,16 @@ const ThietLapVaiTro = () => {
           }}
           pageSizeOptions={[5, 10]}
           checkboxSelection
-        />
+        /> */}
+         <CustomDatagrid
+      rows={datatable}
+      columns={columns}
+      pageSizeOptions={[10, 25, 50]}
+      initialPageSize={25}
+      checkboxSelection={false}
+      showTopToolbar={true}
+      onRowSelectionChange={handleRowSelectionChange}
+    />
       </div>
       <ModalThemSua openModal={openModal} selectedRow={selectedRow} closeModal={handelCloseModalThemSua} />
 

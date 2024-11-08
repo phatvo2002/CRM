@@ -14,6 +14,7 @@ import ModalUpdateRole from "./Modal/ModalUpdateRole";
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { useGetUserAllQuery } from "../../Api/UserApi";
 import ModalUpdateDepartment from "./Modal/ModalUpdateDepartment";
+import CustomDatagrid from "App/Components/DataGrid/CustomDatagrid";
 import Tooltip from '@mui/material/Tooltip';
 const ThietLap = () => {
   const navigate = useNavigate();
@@ -236,6 +237,10 @@ useEffect(() => {
     }
   
   ];
+
+  const handleRowSelectionChange = (selectedRows) => {
+    setSelectedRow(selectedRows)
+  };
   return (
     <Container style={{ maxWidth: "100%" }}>
       <div style={{ width: "100%" }}>
@@ -250,36 +255,15 @@ useEffect(() => {
           <PersonAddIcon /> Thêm mới tài khoản
         </Button>
   
-         <DataGrid
-  rows={rows|| []}
-  columns={columns}
-  showCellVerticalBorder
-  style={{ marginTop: "10px", overflow:"auto" ,height: "60vh"}}
-  initialState={{
-    pagination: {
-      paginationModel: { page: 0, pageSize: 25 },
-    },
-  }}
-  getRowClassName={(params) =>
-    params.indexRelativeToCurrentPage % 2 === 0 ? 'Mui-even' : 'Mui-odd'
-  }
-  showTopToolbar={true}
-  onRowSelectionModelChange={(newRowSelectionModel) => {
-    const selectedRows = userList.filter((row) => newRowSelectionModel.includes(row.id));
-    setSelectedRow(selectedRows);
-  }}
-  slotProps={{
-    toolbar: {
-      showQuickFilter: true,
-    },
-  }}
-  slots={{ toolbar: GridToolbar }}
-  pageSizeOptions={[25, 50, 75, 100]}
-  checkboxSelection={false}
-  disableMultipleSelection={false}  
-  disableRowSelectionOnClick={false}  
-/>
-
+        <CustomDatagrid
+      rows={rows}
+      columns={columns}
+      pageSizeOptions={[10, 25, 50]}
+      initialPageSize={25}
+      checkboxSelection={false}
+      showTopToolbar={true}
+      onRowSelectionChange={handleRowSelectionChange}
+    />
       </div>
       {/* Modal UpdateRole */}
       <ModalUpdateRole openModal={openModalUpdateRole} selectedRow={selectedRow} closeModal={handleCloseModalUpdate} />

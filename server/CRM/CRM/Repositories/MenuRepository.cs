@@ -37,7 +37,7 @@ namespace CRM.Repositories
                     menu.Url = modal.Url;
                     menu.Icon = modal.Icon;
                     menu.OrderNumber = modal.OrderNumber;
-
+                    menu.IsActive = modal.IsActive;
                     _context.Menus.Add(menu);
                    await  _context.SaveChangesAsync();
                    return new ResultModal() { Message = "Tạo menu thành công", Status = 200, Success = true };
@@ -75,7 +75,7 @@ namespace CRM.Repositories
 
         public async Task<List<MenuDTO>> GetAllMenu()
         {
-            var data = await _context.Menus.AsNoTracking().ToListAsync();
+            var data = await _context.Menus.AsNoTracking().OrderBy(r=> r.OrderNumber).ToListAsync();
             return _mapper.Map<List<MenuDTO>>(data);
         }
 
@@ -112,6 +112,30 @@ namespace CRM.Repositories
                 return new ResultModal() { Status = 200, Message = "Cập nhật thành công", Success = true };
             }
             return new ResultModal() { Status = 202, Message = "Lỗi", Success = false };
+        }
+
+        public async Task<ResultModal> UpdateMenu(MenuModel model)
+        {
+            var data = _context.Menus.FirstOrDefault(r => r.Id == model.Id);
+            try
+            {
+                if (data != null)
+                {
+                    data.Name = model.Name;
+                    data.OrderNumber = model.OrderNumber;
+                    data.Url = model.Url;
+                    data.Icon = model.Icon;
+                    data.IsActive = model.IsActive;
+                    _context.Menus.Update(data);
+                    await _context.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Cập nhật thành công", Success = true };
+                }
+                return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+            }
+            catch (Exception ex) {
+                return new ResultModal() { Status = 202, Message = ex.Message, Success = false };
+            }
+           
         }
     }
 }

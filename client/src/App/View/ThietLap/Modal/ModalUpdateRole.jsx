@@ -23,7 +23,6 @@ const ModalUpdateRole = (props) => {
     const [checkRoleName, setCheckRoleName] = useState("");
     const [updaterole] = useUpdateUserPermissionMutation()
     const handleCheckboxChange = (event, roleId, roleName) => {
-      console.log(roleId, roleName)
       if (event.target.checked) {
         setCheckedRoleId(roleId);
         setCheckRoleName(roleName);
@@ -113,7 +112,7 @@ const ModalUpdateRole = (props) => {
             return (
                 <Grid>
                     <Checkbox
-                     checked={checkedRoleId.includes(item.id)}
+                     checked={checkedRoleId && checkedRoleId.includes(item.id)}
                     onChange={(e) => handleCheckboxChange(e, item.id , item.tenChucVu)}
                     name={`menu-${item.id}`}
                   />

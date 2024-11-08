@@ -33,6 +33,11 @@ namespace CRM.Services
            return await _menuRepository.AddMenu(modal);
         }
 
+        public async Task<ResultModal> UpdateMenu(MenuModel model)
+        {
+           return await _menuRepository.UpdateMenu(model); 
+        }
+
         public async Task<ResultModal> UpdateMenuRole(GroupModel model)
         {
            return await _menuRepository.UpdateGroup(model);

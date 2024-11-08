@@ -54,6 +54,13 @@ export const apiMenu = createApi({
       getMenuRoleById: builder.query({
         query: (roleId) => `/Menu/getmenurole/${roleId}`,
       }),
+      addMenu: builder.mutation({
+        query: (data) => ({
+          url: '/Menu/insertmenu',
+          method: 'POST',
+          body: data,
+        }),
+      }),
       UpdateMenuRole: builder.mutation({
         query: (data) => ({
           url: `/Menu/updategroup`, 
@@ -61,12 +68,28 @@ export const apiMenu = createApi({
           body: data, 
         }),
       }),
+      UpdateMenu: builder.mutation({
+        query: (data) => ({
+          url: `/Menu/updatemenu`, 
+          method: 'PUT', 
+          body: data, 
+        }),
+      }),
+      deleteMenu: builder.mutation({
+        query: (id) => ({
+          url: `/Menu/deletemenu?id=${id}`,
+          method: 'DELETE',
+        }),
+      }),
     }),
   });
   export const { 
     useGetAllMenuQuery, 
     useGetMenuRoleByIdQuery, 
+    useAddMenuMutation,
     useUpdateMenuRoleMutation,
+    useUpdateMenuMutation,
+    useDeleteMenuMutation
   } = apiMenu;
 
 

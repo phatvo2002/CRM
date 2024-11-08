@@ -76,6 +76,20 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("updatemenu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> Updatemenu(MenuModel model)
+        {
+            try
+            {
+                ResultModal result = await _menuServices.UpdateMenu(model);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPut("updategroup")]
         [JwtAuthorize]
         public async Task<IActionResult> UpdateGroup(GroupModel model)

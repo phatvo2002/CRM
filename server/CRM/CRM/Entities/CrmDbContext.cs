@@ -55,6 +55,7 @@ namespace CRM.Entities
                 entity.Property(e=> e.Name).HasMaxLength(50);
                 entity.Property(e=> e.Url).HasMaxLength(50);
                 entity.Property(e=> e.Icon).HasMaxLength(50);
+                entity.Property(e => e.IsActive).HasColumnType("bit");
                 entity.Property(e => e.OrderNumber);
             });
 

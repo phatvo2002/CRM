@@ -12,6 +12,7 @@
 
         public int? OrderNumber {  get; set; }
 
+        public bool? IsActive { get; set; }
         public virtual ICollection<MenuRole> MenuRoles { get; set; } = new List<MenuRole>();
     }
 }
