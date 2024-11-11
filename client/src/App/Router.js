@@ -22,7 +22,7 @@ const BanLamViec = lazy(() =>
   import("./View/BanLamViec/BanLamViec")
 );
 const ThongTinNguoiDung = lazy(() =>
-  import("./View/ThongTinNguoiDung/ThongTinNguoiDung")
+  import("./View/ThongTinNguoiDung")
 );
 const ThietLapNhanVien = lazy(() =>
   import("./View/ThietLap/ThietLap")

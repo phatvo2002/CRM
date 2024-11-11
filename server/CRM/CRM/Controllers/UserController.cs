@@ -42,7 +42,7 @@ namespace CRM.Controllers
         {
             try
             {
-                LoginDTO result = await _userService.GetUserById(Id);
+                UserDTO result = await _userService.GetUserById(Id);
                 return Ok(result);
             }catch (ArgumentException ex)
             {

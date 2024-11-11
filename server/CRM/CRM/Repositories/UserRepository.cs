@@ -118,10 +118,10 @@ namespace CRM.Repositories
           
         }
 
-        public async  Task<LoginDTO> GetUserById(Guid id)
+        public async  Task<UserDTO> GetUserById(Guid id)
         {
-            var data = await _context.Nguoidungs.Where(r => r.Id == id).AsNoTracking().FirstOrDefaultAsync();
-            return _mapper.Map<LoginDTO>(data);
+            var data = await _context.Nguoidungs.Where(r => r.Id == id).Include(r => r.ChucVu).Include(r=> r.PhongBan).AsNoTracking().FirstOrDefaultAsync();
+            return _mapper.Map<UserDTO>(data);
         }
 
         public async  Task<List<UserDTO>> GetUsers()

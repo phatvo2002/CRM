@@ -30,6 +30,8 @@ namespace CRM.DTO
 
         public bool CheckIsGiamDoc { get; set; }
 
+        public int? MaTinhTrang { get; set; }
+
         public PhongBanDTO? PhongBan { get; set; }
 
         public ChucVuDTO? ChucVu { get; set; }

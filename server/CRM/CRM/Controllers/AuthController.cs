@@ -1,6 +1,8 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
+using CRM.Extensions;
 using CRM.Modal;
+using CRM.Services;
 using CRM.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -33,6 +35,24 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        //[HttpGet("getprofileuser")]
+        //[JwtAuthorize]
+        //public async Task<IActionResult> GetProfile()
+        //{
+        //    try
+        //    {
+        //        LoginDTO result = new LoginDTO();
+        //        // Lấy UserId từ context
+        //        var userID = HttpContext.GetUserId();
+                
+        //        result = await _userServices.GetUserById(userID);
+        //        return Ok(result);
+        //    }
+        //    catch (ArgumentException ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
         [HttpPut("ActiveAccount")]
         [JwtAuthorize]
         public async Task<IActionResult> ActiveAccount(AcviteModal modal)

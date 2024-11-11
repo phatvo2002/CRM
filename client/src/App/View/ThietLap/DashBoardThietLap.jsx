@@ -97,7 +97,7 @@ const DashBoardThietLap = () => {
                     to={"/quantrihethong/quanlymenu"}
                     style={{ textDecoration: "none", color: "primary.main"  }}
                   >
-                    Quản lý menu
+                    Quản lý phân hệ
                   </Link>
                 </Button>
               </CardActions>

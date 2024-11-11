@@ -30,7 +30,7 @@ namespace CRM.Services
 
         public async Task<ResultModal> InsertMenu(MenuModel modal)
         {
-           return await _menuRepository.AddMenu(modal);
+           return await _menuRepository.AddMenu(modal); 
         }
 
         public async Task<ResultModal> UpdateMenu(MenuModel model)

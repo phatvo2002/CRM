@@ -221,14 +221,16 @@ useEffect(() => {
       headerName: "Thao tác",
       renderCell: () => (
         <div style={{display:"flex",justifyContent:"space-between", alignItems:"center", padding: 5,margin: 5 }}> 
-         <Tooltip title="Delete">
+         <Tooltip title="Phân quyền phân hệ">
           <IconButton disabled={selectedRow.length === 0} style={{}} onClick={handleOpenModalUpdate}  > 
             <PermIdentityIcon ></PermIdentityIcon>
           </IconButton>
          </Tooltip>
+         <Tooltip title="Phân quyền phòng ban">
           <IconButton disabled={selectedRow.length === 0} style={{}} onClick={handleOpenModalUpdateDepartments} > 
             <GroupAddIcon ></GroupAddIcon>
           </IconButton>
+         </Tooltip>
           <IconButton disabled={selectedRow.length === 0} style={{ }} onClick={handleDeleteNguoiDung} >
             <DeleteIcon  ></DeleteIcon>
           </IconButton>

@@ -32,7 +32,7 @@ namespace CRM.Services
             return await _userRepository.GetUsers();
         }
 
-        public async Task<LoginDTO> GetUserById(Guid Id )
+        public async Task<UserDTO> GetUserById(Guid Id )
         {
             return await _userRepository.GetUserById(Id);
         }

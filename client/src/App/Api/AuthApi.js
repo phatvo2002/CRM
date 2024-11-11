@@ -9,6 +9,15 @@ const login = (taiKhoan, password) => {
     .then((response) => response.data);
 };
 
+// const getProfile = () => {
+//   return axios
+//     .get(`${API_URL}/Auth/getprofileuser`,{
+//       headers: { Authorization: `Bearer ${Token}` },
+//     })
+//     .then((response) => response.data);
+// };
+
+
 const ActiveAccount = (data) => {
   return axios
     .put(`${API_URL}/Auth/ActiveAccount`, data, {
