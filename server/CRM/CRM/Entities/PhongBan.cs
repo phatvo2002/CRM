@@ -13,5 +13,7 @@
         public bool? IsActive { get; set; }
 
         public virtual ICollection<Nguoidung> Nguoidung { get; set;} = new List<Nguoidung>();
+
+        public virtual ICollection<KhachHangTiemNang> KhachHangTiemNangs { get; set; } = new List<KhachHangTiemNang>();
     }
 }

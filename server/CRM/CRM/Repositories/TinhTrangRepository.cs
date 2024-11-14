@@ -16,7 +16,7 @@ namespace CRM.Repositories
         {
             _context = context;
             _mapper = mapper;
-        }
+        } 
         public async Task<List<TinhTrangDTO>> getAllTinhTrang()
         {
             var data = await _context.TinhTrangs.ToListAsync();

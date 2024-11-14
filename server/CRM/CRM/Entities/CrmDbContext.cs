@@ -19,11 +19,24 @@ namespace CRM.Entities
 
         public virtual DbSet<ChucVu> ChucVus { get; set; }
 
-        public virtual  DbSet<TinhTrang> TinhTrangs { get; set; }
+        public virtual DbSet<TinhTrang> TinhTrangs { get; set; }
 
         public virtual DbSet<Menu> Menus { get; set; }
 
         public virtual DbSet<MenuRole> MenuRoles { get; set; }
+
+        public virtual DbSet<KhachHangTiemNang> KhachHangTiemNangs { get; set; }
+
+        public virtual DbSet<PhongBanKhachHang> PhongBanKhachHangs { get; set; }
+        public virtual DbSet<NguonGocKhachHang> NguonGocKhachHangs { get; set; }
+
+        public virtual DbSet<LoaiTiemNang> LoaiTiemNangs{ get; set; }
+        public virtual DbSet<LoaiHinhNgheNghiep> LoaiHinhNgheNghieps{ get; set; }
+
+        public virtual DbSet<NganhNghe> NganhNghes{ get; set; }
+        public virtual DbSet<LinhVucNgheNghiep> LinhVucNgheNghieps { get; set; }
+
+        public virtual DbSet<DoanhThu> DoanhThus{ get; set; }
 
    
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -126,6 +139,87 @@ namespace CRM.Entities
                       .HasForeignKey(d => d.MaTinhTrang)
                       .HasConstraintName("FK_TinhTrang_NguoiDung");
             });
+            // Khách hàng tiềm năng 
+            modelBuilder.Entity<PhongBanKhachHang>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_PhongBanKhachhang");
+
+                entity.ToTable("PhongBanKhachHang");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.TenPhongban).HasMaxLength(50);
+
+            });
+            modelBuilder.Entity<NguonGocKhachHang>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_NguonGocKhachHang");
+
+                entity.ToTable("NguonGocKhachHang");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.TenNguonGoc).HasMaxLength(50);
+
+            });
+
+            modelBuilder.Entity<LoaiTiemNang>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_LoaiTiemNang");
+
+                entity.ToTable("LoaiTiemNang");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.TenLoaiTiemNang).HasMaxLength(50);
+
+            });
+            modelBuilder.Entity<LoaiHinhNgheNghiep>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_LoaiHinhNgheNghiep");
+
+                entity.ToTable("LoaiHinhNgheNghiep");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.TenLoaiHinh).HasMaxLength(50);
+
+            });
+            modelBuilder.Entity<LinhVucNgheNghiep>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_LinhVucNgheNghiep");
+
+                entity.ToTable("LinhVucNgheNghiep");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.TenLinhVuc).HasMaxLength(50);
+
+            });
+            modelBuilder.Entity<NganhNghe>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_NganhNghe");
+
+                entity.ToTable("NganhNghe");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.TenNganhNghe).HasMaxLength(50);
+                entity.HasOne(d => d.LinhVucNgheNghiep).WithMany(p => p.NganhNghes)
+                      .HasForeignKey(d => d.MaLinhVucNgheNghiep)
+                      .OnDelete(DeleteBehavior.ClientSetNull)
+                      .HasConstraintName("FK_NganhNghe_LinhVucNgheNghiep");
+
+            });
+            modelBuilder.Entity<DoanhThu>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_DoanhThu");
+
+                entity.ToTable("DoanhThu");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.TenDoanhThu).HasMaxLength(50);
+
+            });
+
+           
+
+
+
         }
         
 

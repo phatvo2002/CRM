@@ -36,5 +36,7 @@
         public int? MaTinhTrang {  get; set; }
         public virtual TinhTrang? TinhTrang { get; set; }
 
+        public virtual ICollection<KhachHangTiemNang> KhachHangTiemNangs { get; set; } = new List<KhachHangTiemNang>();
+
     }
 }
