@@ -12,6 +12,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import RoleApi from "../../Api/RoleApi";
 import Checkbox from '@mui/material/Checkbox';
 import { toast } from "react-toastify";
+import { useGetPhongBanQuery } from "App/Api/Phongban";
 const AddNguoiDung = () => {
   const styles = {
        display:"flex" ,
@@ -29,6 +30,7 @@ const AddNguoiDung = () => {
     const navigate = useNavigate();
   const [tinhTrang,setTinhTrang] = useState([])
   const [chucVu ,setChucVu] = useState([])
+  const{data :dataphongban} = useGetPhongBanQuery()
   const [addUser] = useAddUserMutation()
   const [obj,setobj] = useState(
     {
@@ -76,7 +78,7 @@ const AddNguoiDung = () => {
   }
 
   const gotoLink = ()=>{
-    navigate("/thietlap/thietlapnhanvien")
+    navigate(-1)
   }
 
   useEffect(()=>{
@@ -189,7 +191,7 @@ const AddNguoiDung = () => {
             />
           </Grid>
           <Grid xs={6} style={styles}>
-            <label style={{width:"30%" ,fontWeight:500}}>Họ và đệm</label>
+            <label style={{width:"30%" ,fontWeight:500}}>Họ và đệm <span style={{color:"red"}}>*</span></label>
             <TextField
               style={{ width: "70%" }}
               name="hoVaDem"
@@ -201,7 +203,7 @@ const AddNguoiDung = () => {
             />
           </Grid>
           <Grid xs={6} style={styles}>
-            <label style={{width:"30%" ,fontWeight:500}}>Tên</label>
+            <label style={{width:"30%" ,fontWeight:500}}>Tên <span style={{color:"red"}}>*</span></label>
             <TextField
               style={{ width: "70%" }}
               id="outlined-basic"
@@ -235,7 +237,7 @@ const AddNguoiDung = () => {
             <TextField
               style={{ width: "70%" }}
               id="outlined-basic"
-              label="Số điện thoại"
+              label="Email"
               variant="outlined"
               onChange={handleChange('email')}
             />
@@ -244,13 +246,13 @@ const AddNguoiDung = () => {
             <h3>Thông tin công việc</h3>
           </Grid>
           <Grid xs={6} style={styles}>
-            <label style={{width:"30%" ,fontWeight:500}}>Ngày thử việc</label>
+            <label style={{width:"30%" ,fontWeight:500}} >Ngày thử việc <span style={{color:"red"}}>*</span></label>
             <LocalizationProvider  dateAdapter={AdapterDayjs} style={{width:"70%"}}>
                  <DatePicker sx={{width:"70%"}} onChange={handleChangeDate('ngayThuViec')}/>
             </LocalizationProvider>
           </Grid>
           <Grid xs={6} style={styles}>
-            <label style={{width:"30%" ,fontWeight:500}}>Ngày chính thức</label>
+            <label style={{width:"30%" ,fontWeight:500}}>Ngày chính thức <span style={{color:"red"}}>*</span></label>
             <LocalizationProvider  dateAdapter={AdapterDayjs} style={{width:"70%"}}>
                  <DatePicker   sx={{width:"70%"}} 
                    onChange={handleChangeDate("ngayBatDauLamViec")}
@@ -258,7 +260,7 @@ const AddNguoiDung = () => {
             </LocalizationProvider>
           </Grid>
           <Grid xs={6} style={styles}>
-            <label style={{width:"30%" ,fontWeight:500}}>Tài khoản</label>
+            <label style={{width:"30%" ,fontWeight:500}}>Tài khoản <span style={{color:"red"}}>*</span></label>
             <TextField
               style={{ width: "70%" }}
               id="outlined-basic"
@@ -280,7 +282,7 @@ const AddNguoiDung = () => {
           </Grid>
 
           <Grid xs={6} style={styles}>
-          <label style={{width:"30%" ,fontWeight:500}}>Vai trò</label>
+          <label style={{width:"30%" ,fontWeight:500}}> <span style={{color:"red"}}>*</span> Vai trò</label>
             <Autocomplete
              style={{ width: "70%" }}
              disablePortal
@@ -291,7 +293,7 @@ const AddNguoiDung = () => {
             />
           </Grid>
           <Grid xs={6} style={styles}>
-          <label style={{width:"30%" ,fontWeight:500}}>Tình trạng</label>
+          <label style={{width:"30%" ,fontWeight:500}}>Tình trạng <span style={{color:"red"}}>*</span></label>
             <Autocomplete
              style={{ width: "70%" }}
              disablePortal
@@ -302,11 +304,12 @@ const AddNguoiDung = () => {
             />
           </Grid>
           <Grid xs={6} style={styles}>
-          <label style={{width:"30%" ,fontWeight:500}}>Phòng ban</label>
+          <label style={{width:"30%" ,fontWeight:500}}>Phòng ban <span style={{color:"red"}}>*</span></label>
             <Autocomplete
              style={{ width: "70%" }}
              disablePortal
-             options={options}
+             options={dataphongban}
+             getOptionLabel={(option) => option.tenPhongBan}
              renderInput={(params) => <TextField {...params} label="Phòng ban" />}
              onChange={handelChaneAutoConplete("maPhongBan")}
             />
