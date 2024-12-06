@@ -32,5 +32,8 @@
         public virtual LinhVucNgheNghiep? LinhVucNgheNghiep { get; set;}
         public virtual DoanhThu? DoanhThu{get; set; }
 
+        public virtual ICollection<CuocGoi> CuocGois { get; set;} = new List<CuocGoi>();
+        public virtual ICollection<LichHen> LichHens { get; set;} = new List<LichHen>();
+
     }
 }

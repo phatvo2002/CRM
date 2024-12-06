@@ -17,7 +17,7 @@ namespace CRM.Repositories
         }
         public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync()
         {
-            var db = await _context.KhachHangTiemNangs.AsNoTracking().ToListAsync();
+            var db = await _context.KhachHangTiemNangs.AsNoTracking().Where(r => r.IsDeleted != false).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
 
@@ -90,9 +90,16 @@ namespace CRM.Repositories
         {
             throw new NotImplementedException();
         }
-        public Task<ResultModal> XoaKhachHangTiemNangAsync(Guid id)
+        public async Task<ResultModal> XoaKhachHangTiemNangAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var db =  _context.KhachHangTiemNangs.Where(r=> r.Id == id).FirstOrDefault();
+            if (db != null)
+            {
+                db.IsDeleted = false;
+                await _context.SaveChangesAsync();
+                return new ResultModal() { Status = 200, Message = "Xóa khách hàng thành công", Success = true };
+            }
+            return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = true };
         }
     }
 }

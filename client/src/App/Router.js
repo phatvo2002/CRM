@@ -45,6 +45,9 @@ const QuanLyMenu = lazy(() =>
 const DashBoardThietLap = lazy(() =>
   import("./View/ThietLap/DashBoardThietLap")
 );
+const KhachHangTiemNang = lazy(() =>
+  import("./View/KhachHangTiemNang/index")
+)
 const RouteChild = [
   {
     path: "/banlamviec",
@@ -70,6 +73,8 @@ const RouteChild = [
   //     </Suspense>
   //   ),
   // },
+
+  // Quản trị hệ thống
   {
     path: "/quantrihethong/thietlapvaitro",
     element: (
@@ -128,7 +133,15 @@ const RouteChild = [
     ),
   },
 
-
+    // Khách hàng tiềm năng
+    {
+      path: "/tiemnang",
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+           <KhachHangTiemNang />
+        </Suspense>
+      ),
+    },
 ];
 
 export default RouteChild;

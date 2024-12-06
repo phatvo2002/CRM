@@ -15,5 +15,7 @@
         public virtual ICollection<Nguoidung> Nguoidung { get; set;} = new List<Nguoidung>();
 
         public virtual ICollection<KhachHangTiemNang> KhachHangTiemNangs { get; set; } = new List<KhachHangTiemNang>();
+        public virtual ICollection<CuocGoi> CuocGois { get; set; }  = new List<CuocGoi>();
+        public virtual ICollection<LichHen> LichHens { get; set; } = new List<LichHen>();
     }
 }
