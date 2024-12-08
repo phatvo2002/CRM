@@ -17,6 +17,10 @@ namespace CRM.Helper
             CreateMap<MenuRole ,MenuRoleDTO>();
             CreateMap<PhongBan , PhongBanDTO>();
             CreateMap<KhachHangTiemNang, KhachHangTiemNangDTO>();
+            CreateMap<PhongBanKhachHang, PhongBanKhachHangDTO>();
+            CreateMap<NguonGocKhachHang, NguonGocKhachHangDTO>();
+            CreateMap<LoaiTiemNang, LoaiTiemNangDTO>();
+            CreateMap<LoaiHinhNgheNghiep, LoaiHinhNgheNghiepDTO>();
         }
     }
 }
