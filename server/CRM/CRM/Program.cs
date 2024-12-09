@@ -67,6 +67,9 @@ builder.Services.AddScoped<ITinhTrangServices, TinhTrangServices>();
 builder.Services.AddScoped<IPhongBanRepository, PhongBanRepository>();
 builder.Services.AddScoped<IPhongBanServices, PhongBanServices>();
 
+builder.Services.AddScoped<IGetDataRepository, GetDataRepository>();
+builder.Services.AddScoped<IGetDataServices, GetDataServices>();
+
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 

@@ -1,14 +1,13 @@
 ﻿using CRM.DTO;
-using CRM.Entities;
 
-namespace CRM.Repositories.Interfaces
+namespace CRM.Services.Interfaces
 {
-    public interface IGetDataRepository
+    public interface IGetDataServices
     {
         Task<List<PhongBanKhachHangDTO>> GetAllPhongBanKhachHang();
         Task<List<NguonGocKhachHangDTO>> GetAllNguonGocKhachHang();
         Task<List<LoaiTiemNangDTO>> GetAllLoaiTiemNang();
-        Task<List<LoaiHinhNgheNghiepDTO>> GetAllLoaiHinhNgheNghiep ();
+        Task<List<LoaiHinhNgheNghiepDTO>> GetAllLoaiHinhNgheNghiep();
         Task<List<NganhNgheDTO>> GetAllNganhNgheByLinhVucId(int maLinhVuc);
         Task<List<LinhVucNgheNghiepDTO>> GetAllLinhVucNgheNghiep();
         Task<List<DoanhThuDTO>> GetAllDoanhThu();

@@ -48,6 +48,9 @@ const DashBoardThietLap = lazy(() =>
 const KhachHangTiemNang = lazy(() =>
   import("./View/KhachHangTiemNang/index")
 )
+const ThemMoiKhachHangTiemNang = lazy(() =>
+  import("./View/KhachHangTiemNang/components/AddKhachHangTiemNang")
+)
 const RouteChild = [
   {
     path: "/banlamviec",
@@ -139,6 +142,14 @@ const RouteChild = [
       element: (
         <Suspense fallback={<div>Loading...</div>}>
            <KhachHangTiemNang />
+        </Suspense>
+      ),
+    },
+    {
+      path: "/tiemnang/themmoikhachhangtiemnang",
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+           <ThemMoiKhachHangTiemNang />
         </Suspense>
       ),
     },

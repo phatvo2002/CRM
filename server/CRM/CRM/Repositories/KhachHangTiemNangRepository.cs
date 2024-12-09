@@ -11,9 +11,12 @@ namespace CRM.Repositories
     {
         private readonly CrmDbContext _context;
         private readonly IMapper _mapper;
-        public KhachHangTiemNangRepository(CrmDbContext context , IMapper mapper) {
-            _context=context;
-            _mapper=mapper;
+        private readonly ILogger<KhachHangTiemNangRepository> _logger;
+        public KhachHangTiemNangRepository(CrmDbContext context , IMapper mapper, ILogger<KhachHangTiemNangRepository> logger)
+        {
+            _context = context;
+            _mapper = mapper;
+            _logger = logger;
         }
         public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync()
         {
@@ -78,10 +81,12 @@ namespace CRM.Repositories
                 }
                 else
                 {
-                    return new ResultModal() { Status = 202, Message = "Thêm mới thành công", Success = false };
+
+                    return new ResultModal() { Status = 202, Message = "Dữ liệu đã tồn tại trong hệ thống", Success = false };
                 }    
             }
             catch (Exception ex) {
+                _logger.LogError(ex, ex.Message);
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
               

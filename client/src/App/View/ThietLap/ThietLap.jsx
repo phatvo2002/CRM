@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {  Button, IconButton  } from "@mui/material";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import  { useDeleteUserMutation } from "../../Api/UserApi";
 import { Container } from "@mui/material";
 import Switch from "@mui/material/Switch";
