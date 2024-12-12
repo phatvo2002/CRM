@@ -59,7 +59,7 @@ const { logout } = React.useContext(AuthContext);
             <b> Mã nhân viên : </b><span>{dataUser?.id}</span>
           </Typography>
           <Typography variant="body1" component="h6" style={{ padding: 10, margin: 10 }}>
-            <b> Trạng thái làm việc  </b>{dataUser?.maTinhTrang == 1 ? (<span style={{color:"#52b202" , display:"flex" ,justifyItems:"center" ,alignItems:"center"}}> <CheckCircleIcon />Đang làm việc</span>) :(<span style={{color:"#b2102f"}}>Đã nghỉ việc</span>)}
+            <b> Trạng thái làm việc  </b>{dataUser?.maTinhTrang === 1 ? (<span style={{color:"#52b202" , display:"flex" ,justifyItems:"center" ,alignItems:"center"}}> <CheckCircleIcon />Đang làm việc</span>) :(<span style={{color:"#b2102f"}}>Đã nghỉ việc</span>)}
           </Typography>
         </Grid>
         <Grid style={{ marginTop: 30 }}>

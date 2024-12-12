@@ -1,16 +1,15 @@
 //import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import Editor from "ckeditor5-custom-build/build/ckeditor";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
-import { ErrorMessage } from "@hookform/error-message";
 import { Alert } from "@mui/material";
 import { bool, string } from "prop-types";
 import { memo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useFileInsertMutation } from "src/apis/fileApi";
-import PSCInputSkeleton from "src/components/PSCInputSkeleton";
-import { getFileType } from "src/ultis/common";
+// import { useFileInsertMutation } from "src/apis/fileApi";
+import PSCInputSkeleton from "../../PSCInputSkeleton";
 import { v4 as uuid } from "uuid";
 import "./CKEditorRHF.styles.scss";
+
 // import { Alignment } from "@ckeditor/ckeditor5-alignment";
 
 const CKEditorRHF = (props) => {
@@ -27,77 +26,77 @@ const CKEditorRHF = (props) => {
       control,
     } = useFormContext();
 
-  const [fileInsertMutation] = useFileInsertMutation();
+  // const [fileInsertMutation] = useFileInsertMutation();
 
   const handleEditorInit = (editor) => {
     editor.plugins.get("FileRepository").createUploadAdapter = (loader) => {
-      return {
-        upload: async () => {
-          try {
-            const _id = uuid();
-            const file = await loader.file;
+      // return {
+      //   upload: async () => {
+      //     try {
+      //       const _id = uuid();
+      //       const file = await loader.file;
 
-            return new Promise((resolve, reject) => {
-              const reader = new FileReader();
-              reader.onloadend = (e) => {
-                const newFile = {
-                  // Config File Obj here
-                  pdfPath:
-                    getFileType(file.name) === ".pdf" ? e.target.result : null,
-                  file: {
-                    ...file,
-                    FileBase64: reader.result
-                      ?.replace("data:", "")
-                      ?.replace(/^.+,/, ""),
-                  },
-                  Id: _id,
-                  FileBase64: reader.result
-                    ?.replace("data:", "")
-                    ?.replace(/^.+,/, ""),
-                  fileName: file.name,
-                  size: file.size,
-                  explain: "",
-                };
-                fileInsertMutation(newFile)
-                  .unwrap()
-                  .then(({ Data }) => {
-                    resolve({ default: Data?.FilePath });
-                    // Get the file URL from the uploaded file response
-                    // const fileUrl = Data?.FilePath;
-                    // Insert the file URL into the editor
-                    // const imageElement = editor.model.schema.create("image", {
-                    //   src: fileUrl,
-                    // });
+      //     //   return new Promise((resolve, reject) => {
+      //     //     const reader = new FileReader();
+      //     //     reader.onloadend = (e) => {
+      //     //       const newFile = {
+      //     //         // Config File Obj here
+      //     //         // pdfPath:
+      //     //       //     getFileType(file.name) === ".pdf" ? e.target.result : null,
+      //     //       //   file: {
+      //     //       //     ...file,
+      //     //       //     FileBase64: reader.result
+      //     //       //       ?.replace("data:", "")
+      //     //       //       ?.replace(/^.+,/, ""),
+      //     //       //   },
+      //     //       //   Id: _id,
+      //     //       //   FileBase64: reader.result
+      //     //       //     ?.replace("data:", "")
+      //     //       //     ?.replace(/^.+,/, ""),
+      //     //       //   fileName: file.name,
+      //     //       //   size: file.size,
+      //     //       //   explain: "",
+      //     //       // };
+      //     //       // fileInsertMutation(newFile)
+      //     //       //   .unwrap()
+      //     //       //   .then(({ Data }) => {
+      //     //       //     resolve({ default: Data?.FilePath });
+      //     //       //     // Get the file URL from the uploaded file response
+      //     //       //     // const fileUrl = Data?.FilePath;
+      //     //       //     // Insert the file URL into the editor
+      //     //       //     // const imageElement = editor.model.schema.create("image", {
+      //     //       //     //   src: fileUrl,
+      //     //       //     // });
 
-                    // editor.model.insertContent(
-                    //   imageElement,
-                    //   editor.model.document.selection
-                    // );
-                  });
-              };
+      //     //       //     // editor.model.insertContent(
+      //     //       //     //   imageElement,
+      //     //       //     //   editor.model.document.selection
+      //     //       //     // );
+      //     //       //   });
+      //     //     };
 
-              reader.onerror = (error) => {
-                console.error("Error reading file:", error);
-                reject(error);
-              };
+      //     //     reader.onerror = (error) => {
+      //     //       console.error("Error reading file:", error);
+      //     //       reject(error);
+      //     //     };
 
-              reader.readAsDataURL(file);
-            });
-          } catch (error) {
-            console.error("Error uploading file:", error);
-          }
-        },
-        delete: async (file) => {
-          try {
-            //console.log("delete");
-            // Perform the delete logic here using the 'file' object
-            // await deleteFileFromServer(file);
-            // Remove the file from the editor content, if necessary
-          } catch (error) {
-            console.error("Error deleting file:", error);
-          }
-        },
-      };
+      //     //     reader.readAsDataURL(file);
+      //     //   });
+      //     // } catch (error) {
+      //     //   console.error("Error uploading file:", error);
+      //     // }
+      //   },
+      //   delete: async (file) => {
+      //     try {
+      //       //console.log("delete");
+      //       // Perform the delete logic here using the 'file' object
+      //       // await deleteFileFromServer(file);
+      //       // Remove the file from the editor content, if necessary
+      //     } catch (error) {
+      //       console.error("Error deleting file:", error);
+      //     }
+      //   },
+      // };
     };
     // show lên các toolbar item có thể sử dụng
     // const toolbar = Array.from(editor?.ui?.componentFactory?.names());
@@ -195,11 +194,7 @@ const CKEditorRHF = (props) => {
         )}
       />
 
-      <ErrorMessage
-        errors={errors}
-        name={name}
-        render={({ message }) => <Alert severity="error">{message}</Alert>}
-      />
+    
     </div>
   );
 };

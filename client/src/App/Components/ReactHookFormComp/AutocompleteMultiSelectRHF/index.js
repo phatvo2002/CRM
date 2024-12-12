@@ -1,3 +1,0 @@
-import TestAutocompleteMultiSelectRHF from "./AutocompleteMultiSelectRHF"
-
-export default TestAutocompleteMultiSelectRHF;

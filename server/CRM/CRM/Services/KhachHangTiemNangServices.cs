@@ -13,39 +13,39 @@ namespace CRM.Services
             _khachHangTiemNang = khachHangTiemNang;
         }
 
-        public Task<ResultModal> ChinhSuaKhachHangTiemNangAsync(KhachHangTiemNangModel model)
+        public async Task<ResultModal> ChinhSuaKhachHangTiemNangAsync(KhachHangTiemNangModel model)
         {
-            throw new NotImplementedException();
+            return await _khachHangTiemNang.ChinhSuaKhachHangTiemNangAsync(model);
         }
 
-        public Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync()
+        public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync()
         {
-            throw new NotImplementedException();
+            return await _khachHangTiemNang.GetAllKhachHangTiemNangAsync();
         }
 
-        public Task<KhachHangTiemNangDTO> GetKhachHangTiemNangByIdAsync(Guid id)
+        public async Task<KhachHangTiemNangDTO> GetKhachHangTiemNangByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _khachHangTiemNang.GetKhachHangTiemNangByIdAsync(id);
         }
 
-        public Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByNguoiDungIdAsync(Guid nguoiDungId)
+        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByNguoiDungIdAsync(Guid nguoiDungId)
         {
-            throw new NotImplementedException();
+            return await _khachHangTiemNang.GetKhachHangTiemNangByNguoiDungIdAsync(nguoiDungId);
         }
 
-        public Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByPhongBanIdAsync(Guid phongBanId)
+        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByPhongBanIdAsync(Guid phongBanId)
         {
-            throw new NotImplementedException();
+            return await _khachHangTiemNang.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId);
         }
 
-        public Task<ResultModal> ThemMoiKhachHangTiemNangAsync(KhachHangTiemNangModel model)
+        public async Task<ResultModal> ThemMoiKhachHangTiemNangAsync(KhachHangTiemNangModel model)
         {
-            throw new NotImplementedException();
+            return await _khachHangTiemNang.ThemMoiKhachHangTiemNangAsync(model);
         }
 
-        public Task<ResultModal> XoaKhachHangTiemNangAsync(Guid id)
+        public async Task<ResultModal> XoaKhachHangTiemNangAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _khachHangTiemNang.XoaKhachHangTiemNangAsync(id);
         }
     }
 }

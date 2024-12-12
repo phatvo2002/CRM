@@ -28,9 +28,14 @@ const DateTimePickerRHF = (props) => {
     {
       formState: { errors },
       control,
-    } = useFormContext(),
-    watchingMinDate = minDate ? useWatch({ control, name: minDate }) : MIN_DATE,
-    watchingMaxDate = maxDate ? useWatch({ control, name: maxDate }) : MAX_DATE;
+    } = useFormContext();
+    const watchingMinDateRaw = useWatch({ control, name: minDate });
+    const watchingMaxDateRaw = useWatch({ control, name: maxDate });
+  
+    // Xử lý logic sau khi lấy giá trị
+    const watchingMinDate = minDate ? watchingMinDateRaw : MIN_DATE;
+    const watchingMaxDate = maxDate ? watchingMaxDateRaw : MAX_DATE;
+  
 
   return (
     <Controller
@@ -82,7 +87,7 @@ const DateTimePickerRHF = (props) => {
 
 // Specifies Type for props:
 DateTimePickerRHF.propTypes = {
-  name: string.isRequired,
+  name: string,
   minDate: string,
   maxDate: string,
   placeholder: string,

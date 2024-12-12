@@ -1,68 +1,71 @@
 import { memo, Fragment, useCallback } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 import { string, array, bool, func, number } from "prop-types";
-import { getError, getErrorMessage } from "src/ultis/common";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
-import { filterSelectedItemsAutocompleteRHF } from "src/ultis/mapData.helper";
-import PSCInputSkeleton from "src/components/PSCInputSkeleton";
+import { filterSelectedItemsAutocompleteRHF } from "../../../Until/mapData.helper";
+import PSCInputSkeleton from "../../PSCInputSkeleton";
+import { getError, getErrorMessage } from "../../../Until/common";
 
 const AutocompleteRHF = (props) => {
   const {
-      name,
-      shouldFilterOptions,
-      parentName,
-      keyCompare,
-      labelCompare,
-      index,
-      data,
-      disabled,
-      triggerInput,
-      loading,
-      loadingText,
-      onFocusCallback,
-      onChangeCallback,
-      isGetOnlyId,
-      skeletonLoading,
-      ...otherProps
-    } = props,
-    {
-      formState: { errors },
-      control,
-      trigger,
-      getValues,
-    } = useFormContext();
+    name,
+    shouldFilterOptions,
+    parentName,
+    keyCompare,
+    labelCompare,
+    index,
+    data = [],
+    disabled = false,
+    triggerInput = false,
+    loading = false,
+    loadingText = "Đang Tải...",
+    onFocusCallback,
+    onChangeCallback,
+    isGetOnlyId = false,
+    skeletonLoading = false,
+    ...otherProps
+  } = props;
+
+  const {
+    formState: { errors },
+    control,
+    trigger,
+    getValues,
+  } = useFormContext();
 
   const filterOptions = useCallback(() => {
-    if (!shouldFilterOptions) {
-      return {};
-    }
+    if (!shouldFilterOptions) return {};
+
     return {
       filterOptions: (options, state) => {
-        const result = filterSelectedItemsAutocompleteRHF({
+        const filteredData = filterSelectedItemsAutocompleteRHF({
           data: options,
           valueArrFieldWatching: getValues(parentName),
-          keyCompare: keyCompare,
+          keyCompare,
           label: labelCompare,
         });
 
-        let newOptions = [];
-        result.forEach((element) => {
-          if (
-            element[labelCompare]
-              ?.toLowerCase()
-              .includes(state.inputValue.toLowerCase())
-          ) {
-            newOptions.push(element);
-          }
-        });
+        const inputValue = state.inputValue.toLowerCase();
+        const filteredOptions = filteredData.filter((item) =>
+          item[labelCompare]?.toLowerCase().includes(inputValue)
+        );
 
-        return [
-          !isGetOnlyId ? getValues(parentName)?.[index]?.[keyCompare] : null,
-          ...newOptions,
-        ].filter((x) => x);
+        const currentSelection = !isGetOnlyId
+          ? getValues(parentName)?.[index]?.[keyCompare]
+          : null;
+
+        return [currentSelection, ...filteredOptions].filter(Boolean);
       },
     };
-  }, [shouldFilterOptions]);
+  }, [
+    shouldFilterOptions,
+    parentName,
+    keyCompare,
+    labelCompare,
+    getValues,
+    index,
+    isGetOnlyId,
+  ]);
 
   return (
     <Controller
@@ -74,42 +77,39 @@ const AutocompleteRHF = (props) => {
           <Autocomplete
             onBlur={onBlur}
             onChange={(event, item) => {
-              isGetOnlyId ? onChange(item?.value ?? "") : onChange(item);
-              isGetOnlyId
-                ? onChangeCallback?.(item?.value ?? "")
-                : onChangeCallback?.(item);
+              const newValue = isGetOnlyId ? item?.value || "" : item || null;
+              onChange(newValue);
+              onChangeCallback?.(newValue);
             }}
             onFocus={() => {
-              onFocusCallback && onFocusCallback();
-              triggerInput && trigger(name);
+              onFocusCallback?.();
+              if (triggerInput) trigger(name);
             }}
             value={
-              isGetOnlyId ? data?.find((r) => r.value === value) || null : value
+              isGetOnlyId
+                ? data.find((r) => r.value === value) || null
+                : value
             }
             options={data}
             disabled={disabled}
             getOptionLabel={(item) => item.label || ""}
             isOptionEqualToValue={(option, value) => {
-              if (isGetOnlyId) {
-                return option?.value === value?.value;
-              }
-              return value === "" || option?.value === value?.value;
+              return isGetOnlyId
+                ? option?.value === value?.value
+                : value === "" || option?.value === value?.value;
             }}
             loading={loading}
             {...filterOptions()}
             loadingText={loadingText}
             noOptionsText="Chưa có dữ liệu ..."
-            renderOption={(props, option) => {
-              return (
-                <li {...props} key={option?.value}>
-                  {option?.label}
-                </li>
-              );
-            }}
+            renderOption={(props, option) => (
+              <li {...props} key={option?.value}>
+                {option?.label}
+              </li>
+            )}
             renderInput={(params) => (
               <TextField
                 {...params}
-                // size="small"
                 variant="outlined"
                 error={getError(errors, name)}
                 helperText={getErrorMessage(errors, name)}
@@ -117,9 +117,7 @@ const AutocompleteRHF = (props) => {
                   ...params.InputProps,
                   endAdornment: (
                     <Fragment>
-                      {loading ? (
-                        <CircularProgress color="primary" size={22} />
-                      ) : null}
+                      {loading && <CircularProgress color="primary" size={22} />}
                       {params.InputProps.endAdornment}
                     </Fragment>
                   ),
@@ -134,10 +132,9 @@ const AutocompleteRHF = (props) => {
   );
 };
 
-// Specifies Type for props:
 AutocompleteRHF.propTypes = {
   name: string.isRequired,
-  data: array, // Array Object ( must have 2 key {label , value} )
+  data: array, // Array of objects ({label, value})
   disabled: bool,
   triggerInput: bool,
   onFocusCallback: func,
@@ -153,7 +150,6 @@ AutocompleteRHF.propTypes = {
   skeletonLoading: bool,
 };
 
-// Specifies the default values for props:
 AutocompleteRHF.defaultProps = {
   data: [],
   disabled: false,
@@ -170,12 +166,3 @@ AutocompleteRHF.defaultProps = {
 };
 
 export default memo(AutocompleteRHF);
-
-/*
-    ----- Map data >>> Autocomplete Data -----
-    commonMapDataAutocomplete : add 2 key ({label , value}) to object in array
-    filterSelectedItemsAutocompleteRHF : Filter Selected Item ( remove them from array object )
-    commonMapObjectToAutocompleteInitValue : Map Object Receive from API To Autocomplete Init Value
-    getError : 2 case ( normal input , field array input )
-    getErrorMessage : 2 case ( normal input , field array input )
-*/

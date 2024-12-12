@@ -5,8 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
-import MenuApi, { useGetAllMenuQuery, useGetMenuRoleByIdQuery, useUpdateMenuRoleMutation } from "../../../../Api/MenuApi"
-import Swal  from 'sweetalert2';
+import  { useGetAllMenuQuery, useGetMenuRoleByIdQuery, useUpdateMenuRoleMutation } from "../../../../Api/MenuApi";
 
 import { Grid } from '@mui/material';
 import { toast } from 'react-toastify';

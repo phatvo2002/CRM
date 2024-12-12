@@ -1,36 +1,6 @@
-// import axios from "axios";
+
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-// const API_URL = process.env.REACT_APP_API_URL;
-// const Token = localStorage.getItem("token");
 
-// const GetAllMenu = () => {
-//     return axios
-//     .get(`${API_URL}/Menu/getallmenu`, {
-//       headers: { Authorization: `Bearer ${Token}` },
-//     })
-//     .then((response) => response.data);
-// }
-// const GetMenuRoleById = (roleId) => {
-//   return axios
-//     .get(`${API_URL}/Menu/getmenurole/${roleId}`, {
-//       headers: { Authorization: `Bearer ${Token}` },
-//     })
-//     .then((response) => response.data);
-// }
-
-// const UpdateMenuRole = (data) => {
-//   return axios
-//     .put(`${API_URL}/Menu/updategroup`, data ,{
-//       headers: { Authorization: `Bearer ${Token}` },
-//     })
-//     .then((response) => response.data);
-// }
-
-// export default {
-//     GetAllMenu,
-//     GetMenuRoleById,
-//     UpdateMenuRole
-// };
 
 const API_URL = process.env.REACT_APP_API_URL;
 const Token = localStorage.getItem("token");

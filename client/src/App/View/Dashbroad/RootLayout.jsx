@@ -39,6 +39,7 @@ function Copyright(props) {
     bottom: 0,
     left: 0,
     width: "100%",
+    marginTop :100,
     backgroundColor: "background.paper",
     height: "50px",
     textAlign: "center"
@@ -324,7 +325,7 @@ React.useEffect(() => {
           }}
         >
           <Toolbar />
-          <Container maxWidth="100%" sx={{ mt: 4, mb: 4 }}>
+          <Container maxWidth="100%" sx={{ mt: 4, mb: 4 ,marginBottom:10}}>
             <Outlet />
           </Container>
           <Copyright />
