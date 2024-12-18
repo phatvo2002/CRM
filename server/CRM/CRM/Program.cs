@@ -70,6 +70,8 @@ builder.Services.AddScoped<IPhongBanServices, PhongBanServices>();
 builder.Services.AddScoped<IGetDataRepository, GetDataRepository>();
 builder.Services.AddScoped<IGetDataServices, GetDataServices>();
 
+builder.Services.AddScoped<IKhachHangTiemNangRepository, KhachHangTiemNangRepository>();
+builder.Services.AddScoped<IKhachHangTiemNangServices, KhachHangTiemNangServices>();
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 

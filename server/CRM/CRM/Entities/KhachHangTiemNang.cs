@@ -12,7 +12,7 @@
         public string? EmailCoQuan { get; set; }
         public string? TenToChuc { get; set; }
         public string? MaSoThue { get; set; }
-        public DateTime NgayThanhLap { get; set; }
+        public DateTime? NgayThanhLap { get; set; }
         public string? DiaChi {  get; set; }
   
         public string? ThongTinMoTa { get; set; }

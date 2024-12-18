@@ -112,7 +112,7 @@ const CustomDatagrid = ({
   };
 
   return (
-    <div style={{  width: '100%' }}>
+    <div style={{  width: '100%', overflow: 'auto'  }}>
       <StyledDataGrid
         rows={rows}
         columns={columns}

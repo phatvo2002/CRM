@@ -2,13 +2,13 @@
 {
     public partial class BaseNguoiDung
     {
-        public Guid NguoiDungId { get; set; }
+        public Guid? NguoiDungId { get; set; }
 
-        public Guid PhongBanId { get; set; }
+        public Guid? PhongBanId { get; set; }
 
-        public DateTime CreateAt { get; set; }
+        public DateTime? CreateAt { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual Nguoidung? Nguoidung {  get; set; }
 

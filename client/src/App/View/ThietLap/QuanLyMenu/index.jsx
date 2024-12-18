@@ -1,7 +1,6 @@
 import { Button, Container, IconButton, Switch } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import AddIcon from "@mui/icons-material/Add";
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { TYPE_MODAL } from '../../../Until/constant';
@@ -129,34 +128,9 @@ return (
       <AddIcon></AddIcon> Thêm mới 
     </Button>
   
-    {/* <DataGrid
-  rows={rows}
-  columns={columns}
-  showCellVerticalBorder
-  style={{ marginTop: "10px" }}
-  initialState={{
-    pagination: {
-      paginationModel: { page: 0, pageSize: 25 },
-    },
-  }}
-  showTopToolbar={true}
-  onRowSelectionModelChange={(newRowSelectionModel) => {
-    const selectedRows = rows.filter((row) => newRowSelectionModel.includes(row.id));
-    setSelectedRow(selectedRows);
-  }}
-  slotProps={{
-    toolbar: {
-      showQuickFilter: true,
-    },
-  }}
-  slots={{ toolbar: GridToolbar }}
-  pageSizeOptions={[25, 50, 75, 100]}
-  checkboxSelection={false}
-  disableMultipleSelection={true}  
-  disableRowSelectionOnClick={false}  
-/> */}
+ 
 
- <CustomDatagrid
+    <CustomDatagrid
       rows={rows}
       columns={columns}
       pageSizeOptions={[10, 25, 50]}

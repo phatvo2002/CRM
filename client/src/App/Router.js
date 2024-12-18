@@ -48,9 +48,8 @@ const DashBoardThietLap = lazy(() =>
 const KhachHangTiemNang = lazy(() =>
   import("./View/KhachHangTiemNang/index")
 )
-const ThemMoiKhachHangTiemNang = lazy(() =>
-  import("./View/KhachHangTiemNang/components/AddKhachHangTiemNang")
-)
+const ThemMoiKhachHangTiemNang = lazy(() => import("./View/KhachHangTiemNang/components/AddKhachHangTiemNang"));
+
 const RouteChild = [
   {
     path: "/banlamviec",

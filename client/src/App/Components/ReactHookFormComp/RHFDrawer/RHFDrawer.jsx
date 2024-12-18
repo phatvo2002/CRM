@@ -53,6 +53,7 @@ const RHFDrawer = forwardRef((props, ref) => {
       initialFormState,
       anchor = "center",
       schema,
+      fullScreen,
       width,
       isActiveFileList,
       ...otherProps
@@ -69,7 +70,7 @@ const RHFDrawer = forwardRef((props, ref) => {
       reset,
       formState: { isDirty, isValid },
     } = methods,
-    isDesktop = useMediaQuery((theme) => theme.breakpoints.up("lg")),
+    isDesktop = useMediaQuery((theme) => theme.breakpoints.up("xl")),
     drawerWidth = getWidth(isDesktop, width),
     handleClose = (e, reason) => {
       switch (true) {
@@ -91,7 +92,7 @@ const RHFDrawer = forwardRef((props, ref) => {
   }));
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} {...otherProps} >
+    <Dialog open={isOpen} onClose={handleClose} {...otherProps} fullScreen={fullScreen}>
       <Box
         sx={{
           width: drawerWidth,

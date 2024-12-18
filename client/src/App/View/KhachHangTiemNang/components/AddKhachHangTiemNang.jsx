@@ -27,6 +27,8 @@ import {
   useGetAllNguonGocKhachHangQuery,
   useGetAllPhongBanKhachHangQuery,
 } from "App/Api/GetDataApi";
+import { toast } from "react-toastify";
+import { useAddKhachHangTiemNangMutation } from "App/Api/KhachHangTiemNangApi";
 //
 const modelObj = {
     nguoiDungId: "nguoiDungId",
@@ -74,24 +76,25 @@ const modelObj = {
     maDoanhThu: "Doanh thu",
   },
   initialFormState = {
-    [modelObj.nguoiDungId]: "",
-    [modelObj.phongBanId]: "",
-    [modelObj.tenKhachHang]: "",
-    [modelObj.soDienThoaiDiDong]: "",
-    [modelObj.chucDanh]: "",
-    [modelObj.soZalo]: "",
-    [modelObj.emailCaNhan]: "",
-    [modelObj.emailCoQuan]: "",
-    [modelObj.tenToChuc]: "",
-    [modelObj.maSoThue]: "",
-    [modelObj.ngayThanhLap]: "",
-    [modelObj.diaChi]: "",
-    [modelObj.thongTinMoTa]: "",
-    [modelObj.maPhongbanKhachHang]: "",
-    [modelObj.maLoaiTiemNang]: "",
-    [modelObj.maLoaiHinhNgheNghiep]: "",
-    [modelObj.maNganhNghe]: "",
-    [modelObj.maDoanhThu]: "",
+    [modelObj.nguoiDungId]: null,
+    [modelObj.phongBanId]: null,
+    [modelObj.tenKhachHang]: null,
+    [modelObj.soDienThoaiDiDong]: null,
+    [modelObj.chucDanh]: null,
+    [modelObj.soZalo]: null,
+    [modelObj.emailCaNhan]: null,
+    [modelObj.emailCoQuan]:null ,
+    [modelObj.tenToChuc]: null,
+    [modelObj.maSoThue]: null,
+    [modelObj.ngayThanhLap]: null,
+    [modelObj.diaChi]: null,
+    [modelObj.thongTinMoTa]: null,
+    [modelObj.maPhongbanKhachHang]: null,
+    [modelObj.maLoaiTiemNang]: null,
+    [modelObj.maLoaiHinhNgheNghiep]: null,
+    [modelObj.maNganhNghe]: null,
+    [modelObj.maDoanhThu]: null,
+    [modelObj.maLinhVuc] :null,
     [modelObj.isDungChung]: false,
   };
 const AddKhachHangTiemNang = () => {
@@ -99,8 +102,7 @@ const AddKhachHangTiemNang = () => {
 
   
   const userData = JSON.parse(localStorage.getItem('authorizationData'));
-
-  console.log(userData);
+   
 
   const [linhVucId, setLinhVucId] = useState("");
   const previousPage = () => {
@@ -142,6 +144,8 @@ const AddKhachHangTiemNang = () => {
       data: dataLoaiDoanhThu,
       isFetching: { isGetDoanhThuFetching },
     } = useGetAllDoanhThuQuery(),
+    [createKhachHangTiemNang] = useAddKhachHangTiemNangMutation(),
+    
     schema = yup.object().shape({
       [modelObj.tenKhachHang]: validateString(),
       [modelObj.soDienThoaiDiDong]: validateString(),
@@ -162,8 +166,52 @@ const AddKhachHangTiemNang = () => {
     } = methods;
 
   const submitForm = (data) => {
-    const tempData = {};
+    const tempData = {
+      [modelObj.tenKhachHang]: data[modelObj.tenKhachHang],
+      [modelObj.soDienThoaiDiDong]: data[modelObj.soDienThoaiDiDong],
+      [modelObj.soDienThoaiCoQuan]: data[modelObj.soDienThoaiCoQuan],
+      [modelObj.chucDanh]: data[modelObj.chucDanh],
+      [modelObj.soZalo]: data[modelObj.soZalo],
+      [modelObj.emailCaNhan]: data[modelObj.emailCaNhan],
+      [modelObj.emailCoQuan]: data[modelObj.emailCoQuan],
+      [modelObj.orderNumber]: data[modelObj.orderNumber],
+      [modelObj.tenToChuc]: data[modelObj.tenToChuc],
+      [modelObj.maSoThue]: data[modelObj.maSoThue],
+      [modelObj.ngayThanhLap]: data[modelObj.ngayThanhLap],
+      [modelObj.diaChi]: data[modelObj.diaChi],
+      [modelObj.thongTinMoTa]: data[modelObj.thongTinMoTa],
+      [modelObj.maPhongbanKhachHang]: data[modelObj.maPhongbanKhachHang],
+      [modelObj.maLoaiTiemNang]: data[modelObj.maLoaiTiemNang],
+      [modelObj.maLinhVuc]: data[modelObj.maLinhVuc],
+      [modelObj.maNganhNghe]: data[modelObj.maNganhNghe],
+      [modelObj.maDoanhThu]: data[modelObj.maDoanhThu],
+      [modelObj.isDungChung]: data[modelObj.isDungChung],
+      [modelObj.nguoiDungId]: userData?.response?.id,  
+      [modelObj.phongBanId]: userData?.response?.phongBan?.id,
+    };
+    if(userData?.response?.phongBan?.id == null || userData?.response?.phongBan?.id === undefined) {
+       toast.warning("Bạn chưa được phân phòng ban nên chưa thể thực hiện thao tác này")
+    }
+    else
+    {
+      callApiAddData(tempData)
+    }
+
   };
+  const callApiAddData = async (data) => {
+       const response = await createKhachHangTiemNang(data)
+       console.log(response)
+       if(response?.data?.status === 200)
+       {
+         toast.success("Tạo thành công")
+         navigate(-1)
+         reset(initialFormState);
+       }
+       else
+       {
+        toast.error("Đã có lỗi xảy ra , vui lòng liên hệ nhân viên quản trị hệ thống để nhận hỗ trợ") 
+       }
+  }
 
   return (
     <>
@@ -353,6 +401,7 @@ const AddKhachHangTiemNang = () => {
             variant="outlined"
             startIcon={<AddIcon />}
             style={{ marginRight: 10 }}
+            type="submit"
           >
             Lưu tiềm năng
           </Button>

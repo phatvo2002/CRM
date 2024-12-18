@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class KhachHangTiemNangController : ControllerBase
     {
@@ -88,6 +88,21 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("updatekhachhangtiemnang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UpdateKhachHangTiemNang(KhachHangTiemNangModel model)
+        {
+            try
+            {
+                ResultModal result = await _khachHangTiemNangServices.ChinhSuaKhachHangTiemNangAsync(model);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete("deletekhachhangtiemnang/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> DeleteKhachHangTiemNang(Guid id)

@@ -60,14 +60,14 @@ namespace CRM.Repositories
                     khachHangTiemNang.EmailCoQuan = model.EmailCoQuan;
                     khachHangTiemNang.TenToChuc = model.TenToChuc;
                     khachHangTiemNang.MaSoThue = model.MaSoThue;
-                    khachHangTiemNang.NgayThanhLap = model.NgayThanhLap;
+                    khachHangTiemNang.NgayThanhLap = null;
                     khachHangTiemNang.DiaChi = model.DiaChi;
                     khachHangTiemNang.ThongTinMoTa = model.ThongTinMoTa;
                     khachHangTiemNang.MaPhongbanKhachHang = model.MaPhongbanKhachHang;
                     khachHangTiemNang.MaNguonGocKhachHang = model.MaNguonGocKhachHang;
                     khachHangTiemNang.MaLoaiTiemNang = model.MaLoaiTiemNang;
                     khachHangTiemNang.MaLoaiHinhNgheNghiep = model.MaLoaiHinhNgheNghiep;
-                    khachHangTiemNang.MaNganhNghe = model.MaNganhNghe;
+                    khachHangTiemNang.MaNganhNghe = model.MaNganhNghe ;
                     khachHangTiemNang.MaLinhVuc = model.MaLinhVuc;
                     khachHangTiemNang.MaDoanhThu = model.MaDoanhThu;
                     khachHangTiemNang.IsDungChung = model.IsDungChung;
@@ -91,9 +91,36 @@ namespace CRM.Repositories
             }
               
         }
-        public Task<ResultModal> ChinhSuaKhachHangTiemNangAsync(KhachHangTiemNangModel model)
+        public async Task<ResultModal> ChinhSuaKhachHangTiemNangAsync(KhachHangTiemNangModel model)
         {
-            throw new NotImplementedException();
+            var db = _context.KhachHangTiemNangs.Where(r => r.Id == model.Id).FirstOrDefault();
+            if(db != null)
+            {
+                db.TenKhachHang = model.TenKhachHang;
+                db.SoDienThoaiDiDong = model.SoDienThoaiDiDong;
+                db.SoDienThoaiCoQuan = model.SoDienThoaiCoQuan;
+                db.ChucDanh = model.ChucDanh;
+                db.SoZalo = model.SoZalo;
+                db.EmailCaNhan = model.EmailCaNhan;
+                db.EmailCoQuan = model.EmailCoQuan;
+                db.TenToChuc = model.TenToChuc;
+                db.MaSoThue = model.MaSoThue;
+                db.NgayThanhLap = null;
+                db.DiaChi = model.DiaChi;
+                db.ThongTinMoTa = model.ThongTinMoTa;
+                db.MaPhongbanKhachHang = model.MaPhongbanKhachHang;
+                db.MaNguonGocKhachHang = model.MaNguonGocKhachHang;
+                db.MaLoaiTiemNang = model.MaLoaiTiemNang;
+                db.MaLoaiHinhNgheNghiep = model.MaLoaiHinhNgheNghiep;
+                db.MaNganhNghe = model.MaNganhNghe;
+                db.MaLinhVuc = model.MaLinhVuc;
+                db.MaDoanhThu = model.MaDoanhThu;
+                db.IsDungChung = model.IsDungChung;
+                _context.KhachHangTiemNangs.Update(db);
+                await _context.SaveChangesAsync();
+                return new ResultModal() { Status = 200, Message = "Chỉnh sửa khách hàng thành công", Success = true };
+            }
+            return new ResultModal() { Status = 202, Message = "Không tìm thấy khách hàng", Success = false };
         }
         public async Task<ResultModal> XoaKhachHangTiemNangAsync(Guid id)
         {
