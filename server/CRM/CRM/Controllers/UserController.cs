@@ -1,5 +1,6 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
+using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -38,11 +39,12 @@ namespace CRM.Controllers
 
         [HttpGet("getUserById")]
         [JwtAuthorize]
-        public async Task<IActionResult> GetUserById(Guid Id)
+        public async Task<IActionResult> GetUserById()
         {
             try
             {
-                UserDTO result = await _userService.GetUserById(Id);
+                Guid userId = HttpContext.GetUserId();
+                UserDTO result = await _userService.GetUserById(userId);
                 return Ok(result);
             }catch (ArgumentException ex)
             {

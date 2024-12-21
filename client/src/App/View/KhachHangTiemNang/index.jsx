@@ -12,10 +12,14 @@ import { useNavigate } from "react-router-dom";
 import { TYPE_MODAL } from '../../Until/constant';
 import ScreenShareIcon from "@mui/icons-material/ScreenShare";
 import {
+  useDeleteKhachHangTiemNangMutation,
   useGetKhachHangTiemNangByNguoiDungIdQuery,
   useGetKhachHangTiemNangByPhongBanIdQuery,
 } from "App/Api/KhachHangTiemNangApi";
 import UpdateKhachHangTiemNang from "./components/UpdateKhachHangTiemNang";
+import { Link } from "react-router-dom";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const navigate = useNavigate();
@@ -23,12 +27,13 @@ const KhachHangTiemNang = () => {
     navigate("/tiemnang/themmoikhachhangtiemnang");
   };
 
+
   const columns = [
     {
       field: "action",
       width: 150,
       headerName: "Thao tác",
-      renderCell: () => (
+      renderCell: (params) => (
         <div
           style={{
             display: "flex",
@@ -44,7 +49,7 @@ const KhachHangTiemNang = () => {
             </IconButton>
           </Tooltip>
           <Tooltip title="Xóa">
-            <IconButton disabled={selectedRow.length === 0} style={{}}>
+            <IconButton disabled={selectedRow.length === 0} style={{}} onClick={()=> handleDeletePhongBan(params?.id)}>
               <DeleteIcon />
             </IconButton>
           </Tooltip>
@@ -57,7 +62,19 @@ const KhachHangTiemNang = () => {
       ),
     },
     // { field: "hoVaDem", headerName: "Họ Và Đệm", flex: 1 },
-    { field: "tenKhachHang", headerName: "Họ và tên", width: 130 },
+    {
+      field: "tenKhachHang",
+      headerName: "Họ và tên",
+      width: 200,
+      renderCell: (params) => (
+        <div
+        >
+          <Link to={`/tiemnang/${params.id}`} style={{textDecoration:"none"}}>
+            {params.value}
+          </Link>
+        </div>
+      ),
+    },    
      { field: "diaChi", headerName: "Địa Chỉ", width: 200},
     { field: "soDienThoai", headerName: "Số điện thoại di động", width: 200 },
     {
@@ -77,6 +94,19 @@ const KhachHangTiemNang = () => {
   const [openModalUpdate , setOpenModalUpdate] = useState(false);
   const [typeModal, setTypeModal] = useState("");
   const [loading ,setLoading] = useState(false);
+  const { data: dataKhachHangByNguoiDung } =
+  useGetKhachHangTiemNangByNguoiDungIdQuery(userData?.response?.id, {
+    skip:
+      userData?.response.checkIsTruongPhong === true ||
+      userData?.response.checkIsGiamDoc === true,
+  });
+const { data: dataKhachHangPhongBan ,refetch} =
+  useGetKhachHangTiemNangByPhongBanIdQuery(userData?.response?.phongBan?.id, {
+    skip:
+      userData?.response.checkIsTruongPhong === false &&
+      userData?.response.checkIsGiamDoc === false,
+  });
+  const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation()
   const onOpenModalUpdateKhachHang = () => {
     setOpenModalUpdate(true)
     setTypeModal(TYPE_MODAL.UPDATE)
@@ -85,19 +115,37 @@ const KhachHangTiemNang = () => {
     setOpenModalUpdate(false)
     setTypeModal("");
   }
+
+  const handleDeletePhongBan = async (id) =>{
+    if( userData?.response.checkIsTruongPhong === false &&
+      userData?.response.checkIsGiamDoc === false)
+      {
+        toast.warning("Chỉ có trưởng phòng mới có quyền xóa khách hàng")
+      }
+    else
+    {
+      Swal.fire({
+        title: "Bạn có muốn xóa khách hàng này",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có"
+      }).then(async (result) =>  {
+        if (result.isConfirmed) {
+           await deleteNguoiDung(id)
+            Swal.fire({
+              title: "Xóa thành công",
+              icon: "success",
+            });
+            refetch()
+        }
+      });
+    }
+   
+  }
   
-  const { data: dataKhachHangByNguoiDung ,refetch } =
-    useGetKhachHangTiemNangByNguoiDungIdQuery(userData?.response?.id, {
-      skip:
-        userData?.response.checkIsTruongPhong === true ||
-        userData?.response.checkIsGiamDoc === true,
-    });
-  const { data: dataKhachHangPhongBan } =
-    useGetKhachHangTiemNangByPhongBanIdQuery(userData?.response?.phongBan?.id, {
-      skip:
-        userData?.response.checkIsTruongPhong === false &&
-        userData?.response.checkIsGiamDoc === false,
-    });
+
 
   useEffect(() => {
     if (userData?.response?.checkIsTruongPhong === true) {
@@ -168,7 +216,6 @@ const KhachHangTiemNang = () => {
 
       {/* Phần lịch sử giao dịch */}
       <ActionComponents />
-    
     </div>
     
   );

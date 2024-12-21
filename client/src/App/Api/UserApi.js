@@ -24,7 +24,7 @@ export const apiUser = createApi({
     }),
     // Fetch user by ID
     getUserById: builder.query({
-      query: (id) => `/User/getUserById?id=${id}`,
+      query: () => `/User/getUserById`,
     }),
     // Add a new user
     addUser: builder.mutation({

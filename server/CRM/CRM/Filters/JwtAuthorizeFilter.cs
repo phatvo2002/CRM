@@ -26,7 +26,7 @@ namespace CRM.Filters
             }
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("vodangphat@12345");
+            var key = Encoding.ASCII.GetBytes(AppSettingsProvider.Get("JWT:IssuerSigningKey") ?? "");
             try
             {
                 tokenHandler.ValidateToken(token, new TokenValidationParameters
@@ -44,8 +44,10 @@ namespace CRM.Filters
                     return;
                 }
                 var user = jwtToken.Claims;
-                var userId = new Guid(jwtToken.Claims.First(x => x.Type == "Id").Value);
-                context.HttpContext.Items["Id"] = userId;
+                var userId = new Guid(jwtToken.Claims.First(x => x.Type == "UserId").Value);
+                context.HttpContext.Items["UserId"] = userId;
+                var phongban = new Guid(jwtToken.Claims.First(x => x.Type == "PhongBan").Value);
+                context.HttpContext.Items["PhongBan"] = phongban;
                 var groupId = new Guid(jwtToken.Claims.First(x => x.Type == "MaChucVu").Value);
                 context.HttpContext.Items["MaChucVu"] = groupId;
                 var userName = jwtToken.Claims.First(x => x.Type == "TaiKhoan").Value;

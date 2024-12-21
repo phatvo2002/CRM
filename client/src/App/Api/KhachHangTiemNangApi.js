@@ -44,7 +44,7 @@ export const apiKhachHangTiemNang = createApi({
       }),
       deleteKhachHangTiemNang: builder.mutation({
         query: (id) => ({
-          url: `/KhachHangTiemNang/deletekhachhangtiemnang?id=${id}`,
+          url: `/KhachHangTiemNang/deletekhachhangtiemnang/${id}`,
           method: 'DELETE',
         }),
       }),

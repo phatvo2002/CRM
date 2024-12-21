@@ -4,7 +4,6 @@ using CRM.Entities;
 using CRM.Modal;
 using CRM.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
-
 namespace CRM.Repositories
 {
     public class KhachHangTiemNangRepository : IKhachHangTiemNangRepository
@@ -20,7 +19,7 @@ namespace CRM.Repositories
         }
         public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync()
         {
-            var db = await _context.KhachHangTiemNangs.AsNoTracking().Where(r => r.IsDeleted != false).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.AsNoTracking().Where(r => r.IsDeleted == false).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
 
@@ -32,13 +31,13 @@ namespace CRM.Repositories
 
         public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByNguoiDungIdAsync(Guid nguoiDungId)
         {
-            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
 
         public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByPhongBanIdAsync(Guid phongBanId)
         {
-            var db = await _context.KhachHangTiemNangs.Where(r=> r.PhongBanId == phongBanId).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.Where(r=> r.PhongBanId == phongBanId && r.IsDeleted == false).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
       
@@ -127,7 +126,7 @@ namespace CRM.Repositories
             var db =  _context.KhachHangTiemNangs.Where(r=> r.Id == id).FirstOrDefault();
             if (db != null)
             {
-                db.IsDeleted = false;
+                db.IsDeleted = true;
                 await _context.SaveChangesAsync();
                 return new ResultModal() { Status = 200, Message = "Xóa khách hàng thành công", Success = true };
             }

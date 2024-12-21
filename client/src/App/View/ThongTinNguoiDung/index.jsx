@@ -17,8 +17,7 @@ import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import Groups3Icon from '@mui/icons-material/Groups3';
 const ThongTinNguoiDung = () => {
   const navigate = useNavigate()
-  const userId = localStorage.getItem("userId")
-  const {data : dataUser } =useGetUserByIdQuery(userId ,{skip :!userId})
+  const {data : dataUser } = useGetUserByIdQuery()
   const gotoLink  = ()=>{
     navigate("/doimatkhau")
  }
@@ -33,7 +32,7 @@ const { logout } = React.useContext(AuthContext);
       <Box textAlign="center" width="300px" padding={2} display="flex" flexDirection="column" alignItems="center">
         <img src={personimg} alt="Admin" />
         <CustomImageUpload />
-        <span>Admin</span>
+        <span>{`${dataUser?.hoVaDem}`}</span>
         <List>
           <ListItem onClick={gotoLink} style={{cursor:"pointer"}}>
           <LockResetIcon  style={{marginRight:10}}/>  Đổi mật khẩu

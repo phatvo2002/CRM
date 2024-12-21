@@ -161,8 +161,9 @@ namespace CRM.Repositories
             {
                 Subject = new ClaimsIdentity(new Claim[]
                {
-                        new Claim("Id",result.Id.ToString()),
+                        new Claim("UserId",result.Id.ToString()),
                         new Claim("MaChucVu", result.MaChucVu.ToString()),
+                        new Claim("PhongBan", result.MaPhongBan.ToString()),
                         new Claim("TaiKhoan", loginViewModel.TaiKhoan.ToString())
                }),
                 Expires = DateTime.UtcNow.AddDays(1),

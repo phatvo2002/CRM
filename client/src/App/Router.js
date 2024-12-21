@@ -1,22 +1,6 @@
 import { lazy ,Suspense  } from "react";
 
 
-// import BanLamViec from "./View/BanLamViec/BanLamViec";
-
-//import ThongTinNguoiDung from "./View/ThongTinNguoiDung/ThongTinNguoiDung";
-
-//import ThietLapNhanVien from "./View/ThietLap/ThietLap";
-
- //import ThemMoiNguoiDung from "./View/ThietLap/AddNguoiDung";
-
-// import ChangePassword from "./View/session/ChangePassword";
-
-//import ThietLapVaiTro from "./View/ThietLap/ThietLapVaiTro/Index";
-
-// import DashBoardThietLap from "./View/ThietLap/DashBoardThietLap";
-
-// import QuanLyPhongban from "./View/ThietLap/QuanLyPhongBan";
-
 //quản trị hệ thống 
 const BanLamViec = lazy(() =>
   import("./View/BanLamViec/BanLamViec")
@@ -50,6 +34,7 @@ const KhachHangTiemNang = lazy(() =>
 )
 const ThemMoiKhachHangTiemNang = lazy(() => import("./View/KhachHangTiemNang/components/AddKhachHangTiemNang"));
 
+const KhachHangTiemNangDetail = lazy(() => import("./View/KhachHangTiemNang/components/KhachHangTiemNangDetail"));
 const RouteChild = [
   {
     path: "/banlamviec",
@@ -149,6 +134,14 @@ const RouteChild = [
       element: (
         <Suspense fallback={<div>Loading...</div>}>
            <ThemMoiKhachHangTiemNang />
+        </Suspense>
+      ),
+    },
+    {
+      path: "/tiemnang/:id",
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+           <KhachHangTiemNangDetail />
         </Suspense>
       ),
     },
