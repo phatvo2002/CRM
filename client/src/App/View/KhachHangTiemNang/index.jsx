@@ -15,6 +15,7 @@ import {
   useDeleteKhachHangTiemNangMutation,
   useGetKhachHangTiemNangByNguoiDungIdQuery,
   useGetKhachHangTiemNangByPhongBanIdQuery,
+  useGetTemplatesQuery,
 } from "App/Api/KhachHangTiemNangApi";
 import UpdateKhachHangTiemNang from "./components/UpdateKhachHangTiemNang";
 import { Link } from "react-router-dom";
@@ -94,6 +95,7 @@ const KhachHangTiemNang = () => {
   const [openModalUpdate , setOpenModalUpdate] = useState(false);
   const [typeModal, setTypeModal] = useState("");
   const [loading ,setLoading] = useState(false);
+  const {data : getTemplate} = useGetTemplatesQuery({path:"Templates/ThongTinTiemNang.xlsx",filename:"ThongTinTiemNang"})
   const { data: dataKhachHangByNguoiDung } =
   useGetKhachHangTiemNangByNguoiDungIdQuery(userData?.response?.id, {
     skip:
@@ -116,35 +118,49 @@ const { data: dataKhachHangPhongBan ,refetch} =
     setTypeModal("");
   }
 
-  const handleDeletePhongBan = async (id) =>{
-    if( userData?.response.checkIsTruongPhong === false &&
-      userData?.response.checkIsGiamDoc === false)
-      {
-        toast.warning("Chỉ có trưởng phòng mới có quyền xóa khách hàng")
-      }
-    else
-    {
-      Swal.fire({
-        title: "Bạn có muốn xóa khách hàng này",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Có"
-      }).then(async (result) =>  {
-        if (result.isConfirmed) {
-           await deleteNguoiDung(id)
-            Swal.fire({
-              title: "Xóa thành công",
-              icon: "success",
-            });
-            refetch()
-        }
-      });
+  const handleDeletePhongBan = async (id) => {
+    if (
+      !userData?.response.checkIsTruongPhong && 
+      userData?.response.maChucVu !== "6840b4ed-39ce-4d32-8c69-835d3356de42" 
+    ) {
+      toast.warning("Chỉ trưởng phòng hoặc nhân viên quản trị hệ thống mới có quyền xóa khách hàng.");
+      return;
     }
-   
-  }
   
+    Swal.fire({
+      title: "Bạn có muốn xóa khách hàng này?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+          await deleteNguoiDung(id);
+          Swal.fire({
+            title: "Xóa thành công",
+            icon: "success",
+          });
+      }
+    });
+  };
+  const handleGetTemplates = () => {
+    if (getTemplate) {
+      const blob = new Blob([getTemplate], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+      
+      const url = window.URL.createObjectURL(blob);
+  
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ThongTinTiemNang.xlsx"; 
+      a.click();
+  
+      // Sau khi tải xong, giải phóng URL
+      window.URL.revokeObjectURL(url);
+    } else {
+      console.error("Không có dữ liệu để tải file.");
+    }
+  };
 
 
   useEffect(() => {
@@ -169,6 +185,7 @@ const { data: dataKhachHangPhongBan ,refetch} =
               variant="outlined"
               color="success"
               startIcon={<GetAppIcon />}
+              onClick={handleGetTemplates}
             >
               Xuất Template
             </Button>

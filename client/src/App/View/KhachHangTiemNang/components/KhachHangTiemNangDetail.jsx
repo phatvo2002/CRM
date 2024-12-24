@@ -26,7 +26,7 @@ const KhachHangTiemNangDetail = () => {
     navigate(-1);
   };
 
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState("1");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };

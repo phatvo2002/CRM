@@ -27,6 +27,9 @@ namespace CRM.Helper
             CreateMap<LoaiCuocGoi, LoaiCuocGoiDTO>();
             CreateMap<TrangThaiThucHien, TrangThaiThucHienDTO>();
             CreateMap<MucDoUuTien, MucDoUuTienDTO>();
+            CreateMap<CuocGoi, CuocGoiDTO>();    
+            CreateMap<LichHen, LichHenDTO>();
+            CreateMap<NhiemVu,NhiemVuDTO>();
         }
     }
 }

@@ -46,10 +46,10 @@ namespace CRM.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsHoanThanh")
@@ -64,13 +64,17 @@ namespace CRM.Migrations
                     b.Property<Guid?>("LoaiCuocGoiId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("MoTa")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<DateTime?>("NgayBatDau")
                         .HasColumnType("datetime");
 
-                    b.Property<Guid>("NguoiDungId")
+                    b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PhongBanId")
+                    b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("SoGiayGoi")
@@ -141,7 +145,7 @@ namespace CRM.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime");
 
                     b.Property<string>("DiaChi")
@@ -156,7 +160,7 @@ namespace CRM.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsDungChung")
@@ -187,13 +191,13 @@ namespace CRM.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<DateTime>("NgayThanhLap")
+                    b.Property<DateTime?>("NgayThanhLap")
                         .HasColumnType("date");
 
-                    b.Property<Guid>("NguoiDungId")
+                    b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PhongBanId")
+                    b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("SoDienThoaiCoQuan")
@@ -249,14 +253,14 @@ namespace CRM.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime");
 
                     b.Property<string>("DiaDiem")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<Guid>("KhachHangTiemNangId")
@@ -272,10 +276,10 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("NgayKetThuc")
                         .HasColumnType("date");
 
-                    b.Property<Guid>("NguoiDungId")
+                    b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PhongBanId")
+                    b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TieuDe")
@@ -556,13 +560,13 @@ namespace CRM.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("CreateAt")
+                    b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("HanHoanThanh")
                         .HasColumnType("datetime");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
                     b.Property<Guid>("KhachHangTiemNangId")
@@ -575,10 +579,10 @@ namespace CRM.Migrations
                     b.Property<Guid>("MucDoUuTienId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("NguoiDungId")
+                    b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("PhongBanId")
+                    b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TieuDe")
@@ -699,13 +703,11 @@ namespace CRM.Migrations
                     b.HasOne("CRM.Entities.Nguoidung", "Nguoidung")
                         .WithMany("CuocGois")
                         .HasForeignKey("NguoiDungId")
-                        .IsRequired()
                         .HasConstraintName("FK_NguoiDung_CuocGoi");
 
                     b.HasOne("CRM.Entities.PhongBan", "PhongBan")
                         .WithMany("CuocGois")
                         .HasForeignKey("PhongBanId")
-                        .IsRequired()
                         .HasConstraintName("FK_PhongBan_CuocGoi");
 
                     b.Navigation("KetQuaCuocGoi");
@@ -759,13 +761,11 @@ namespace CRM.Migrations
                     b.HasOne("CRM.Entities.Nguoidung", "Nguoidung")
                         .WithMany("KhachHangTiemNangs")
                         .HasForeignKey("NguoiDungId")
-                        .IsRequired()
                         .HasConstraintName("FK_NguoiDung_KhachHangTiemNang");
 
                     b.HasOne("CRM.Entities.PhongBan", "PhongBan")
                         .WithMany("KhachHangTiemNangs")
                         .HasForeignKey("PhongBanId")
-                        .IsRequired()
                         .HasConstraintName("FK_PhongBan_KhachHangTiemNang");
 
                     b.Navigation("DoanhThu");
@@ -798,13 +798,11 @@ namespace CRM.Migrations
                     b.HasOne("CRM.Entities.Nguoidung", "Nguoidung")
                         .WithMany("LichHens")
                         .HasForeignKey("NguoiDungId")
-                        .IsRequired()
                         .HasConstraintName("FK_NguoiDung_LichHen");
 
                     b.HasOne("CRM.Entities.PhongBan", "PhongBan")
                         .WithMany("LichHens")
                         .HasForeignKey("PhongBanId")
-                        .IsRequired()
                         .HasConstraintName("FK_PhongBan_LichHen");
 
                     b.HasOne("CRM.Entities.TrangThaiThucHien", "TrangThaiThucHien")
@@ -893,13 +891,11 @@ namespace CRM.Migrations
                     b.HasOne("CRM.Entities.Nguoidung", "Nguoidung")
                         .WithMany("NhiemVus")
                         .HasForeignKey("NguoiDungId")
-                        .IsRequired()
                         .HasConstraintName("FK_NguoiDung_NhiemVu");
 
                     b.HasOne("CRM.Entities.PhongBan", "PhongBan")
                         .WithMany("NhiemVus")
                         .HasForeignKey("PhongBanId")
-                        .IsRequired()
                         .HasConstraintName("FK_PhongBan_NhiemVu");
 
                     b.HasOne("CRM.Entities.TrangThaiThucHien", "TrangThaiThucHien")

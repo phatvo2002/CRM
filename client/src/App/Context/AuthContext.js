@@ -13,13 +13,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      // AuthApi.getUserData(token)
-      //   .then((data) => {
-      //     setUser(data);
-      //   })
-      //   .catch(() => {
-      //     logout();
-      //   });
       setAuthState(token);
     } else {
       setAuthState(null);

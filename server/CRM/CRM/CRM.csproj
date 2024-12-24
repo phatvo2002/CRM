@@ -28,6 +28,10 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\files\UploadFiles\" />
+    <Folder Include="wwwroot\UploadFiles\Files\" />
+    <Folder Include="wwwroot\UploadFiles\Images\" />
+    <Folder Include="wwwroot\UploadFiles\Pdfs\" />
   </ItemGroup>
 
 </Project>

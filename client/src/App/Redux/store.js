@@ -4,16 +4,28 @@ import { apiUser } from 'App/Api/UserApi';
 import { apiMenu } from 'App/Api/MenuApi';
 import { apiGetData } from 'App/Api/GetDataApi';
 import { apiKhachHangTiemNang } from 'App/Api/KhachHangTiemNangApi';
+import { apiCuocGoi } from 'App/Api/CuocGoiApi';
+import { apiNhiemVu } from 'App/Api/NhiemVuApi';
+import { apiLichHen } from 'App/Api/LichhenApi';
+
+const apis = [
+  apiPhongban,
+  apiUser,
+  apiMenu,
+  apiGetData,
+  apiKhachHangTiemNang,
+  apiCuocGoi,
+  apiNhiemVu,
+  apiLichHen
+];
+
 const store = configureStore({
-  reducer: {
-    [apiPhongban.reducerPath]: apiPhongban.reducer,
-    [apiUser.reducerPath]: apiUser.reducer,
-    [apiMenu.reducerPath]: apiMenu.reducer,
-    [apiGetData.reducerPath]: apiGetData.reducer,
-    [apiKhachHangTiemNang.reducerPath] : apiKhachHangTiemNang.reducer,
-  },
+  reducer: apis.reduce((acc, api) => {
+    acc[api.reducerPath] = api.reducer;
+    return acc;
+  }, {}),
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(apiPhongban.middleware , apiUser.middleware ,apiMenu.middleware,apiGetData.middleware,apiKhachHangTiemNang.middleware),
+    getDefaultMiddleware().concat(apis.map(api => api.middleware)),
 });
 
 export default store;

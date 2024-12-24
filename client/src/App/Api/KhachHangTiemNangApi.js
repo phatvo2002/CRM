@@ -28,6 +28,13 @@ export const apiKhachHangTiemNang = createApi({
       getKhachHangTiemNangByPhongBanId: builder.query({
         query: (id) => `/KhachHangTiemNang/getkhachhangtiemnangbyPhongbanId/${id}`,
       }),
+      getTemplates: builder.query({
+        query: ({ path, filename }) => ({
+          url: `KhachHangTiemNang/getTemplate`,
+          params: { path, filename },
+          responseHandler: (response) => response.blob(), 
+        }),
+      }),
       addKhachHangTiemNang: builder.mutation({
         query: (data) => ({
           url: '/KhachHangTiemNang/createkhachhangtiemnang',
@@ -55,6 +62,7 @@ export const apiKhachHangTiemNang = createApi({
     useGetKhachHangTiemNangByIdQuery,
     useGetKhachHangTiemNangByNguoiDungIdQuery,
     useGetKhachHangTiemNangByPhongBanIdQuery,
+    useGetTemplatesQuery,
     useAddKhachHangTiemNangMutation,
     useUpdateKhachHangTiemNangMutation,
     useDeleteKhachHangTiemNangMutation,

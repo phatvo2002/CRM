@@ -322,6 +322,7 @@ namespace CRM.Entities
 
                 entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e => e.TieuDe).HasMaxLength(50);
+                entity.Property(e => e.MoTa).HasMaxLength(100);
                 entity.Property(e => e.NgayBatDau).HasColumnType("datetime");
                 entity.Property(e => e.SoPhutGoi).HasColumnType("int");
                 entity.Property(e => e.SoGiayGoi).HasColumnType("int");

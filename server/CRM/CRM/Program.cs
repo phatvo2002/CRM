@@ -73,6 +73,15 @@ builder.Services.AddScoped<IGetDataServices, GetDataServices>();
 builder.Services.AddScoped<IKhachHangTiemNangRepository, KhachHangTiemNangRepository>();
 builder.Services.AddScoped<IKhachHangTiemNangServices, KhachHangTiemNangServices>();
 
+builder.Services.AddScoped<ILichHenRepository, LichHenRepository>();
+builder.Services.AddScoped<ILichHenServices, LichHenServices>();
+
+builder.Services.AddScoped<INhiemVuRepository, NhiemVuRepository>();
+builder.Services.AddScoped<INhiemVuServices, NhiemVuServices>();
+
+builder.Services.AddScoped<ICuocGoiRepository, CuocGoiRepository>();
+builder.Services.AddScoped<ICuocGoiServices, CuocGoiServices>();
+
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
 
