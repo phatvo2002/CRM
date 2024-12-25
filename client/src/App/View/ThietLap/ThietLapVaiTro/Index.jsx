@@ -9,7 +9,7 @@ import ModalThemSua from './ModalThemSua/ModalThemSua';
 import ModalAdd from './ModalThemSua/ModalAdd';
 import Swal from 'sweetalert2';
 import { TYPE_MODAL } from '../../../Until/constant';
-import CustomDatagrid from 'App/Components/DataGrid/CustomDatagrid';
+import CustomDatagrid from 'src/App/Components/DataGrid/CustomDatagrid';
 const ThietLapVaiTro = () => {
     const columns = [
         { field: "tenChucVu", headerName: "Tên chức vụ", width: 200, flex: 1 },

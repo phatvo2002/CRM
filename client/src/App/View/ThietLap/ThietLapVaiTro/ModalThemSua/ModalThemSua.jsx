@@ -77,9 +77,9 @@ const ModalThemSua = (props) => {
     >
       <DialogTitle>Phân quyền menu</DialogTitle>
       <DialogContent>
-        {menu.map((item )=>{
+        {menu.map((item ,index)=>{
             return (
-                <Grid>
+                <Grid key={index}>
                     <Checkbox
                     checked={checkedMenuIds.includes(item.id)}
                     onChange={(e) => handleCheckboxChange(e, item.id)}

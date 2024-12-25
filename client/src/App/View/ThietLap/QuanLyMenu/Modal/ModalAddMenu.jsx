@@ -8,7 +8,7 @@ import * as yup from "yup";
 import SwitchRHF from "../../../../Components/ReactHookFormComp/SwitchRHF/SwitchRHF";
 import { useAddPhongbanMutation } from "../../../../Api/Phongban";
 import {toast} from 'react-toastify';
-import { useAddMenuMutation } from "App/Api/MenuApi";
+import { useAddMenuMutation } from "src/App/Api/MenuApi";
 // ------ Form Config ------ //
 const modelObj = {
 orderNumber: "orderNumber",

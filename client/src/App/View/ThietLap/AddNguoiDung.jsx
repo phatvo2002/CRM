@@ -11,7 +11,7 @@ import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import RoleApi from "../../Api/RoleApi";
 import Checkbox from '@mui/material/Checkbox';
 import { toast } from "react-toastify";
-import { useGetPhongBanQuery } from "App/Api/Phongban";
+import { useGetPhongBanQuery } from "src/App/Api/Phongban";
 const AddNguoiDung = () => {
   const styles = {
        display:"flex" ,

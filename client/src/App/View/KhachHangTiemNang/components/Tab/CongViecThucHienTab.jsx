@@ -7,11 +7,40 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
+import ModlaAddCuocGoi from './Modal/ModalAddCuocGoi';
+import { TYPE_MODAL } from 'src/App/Until/constant';
 import TabPanel from "@mui/lab/TabPanel";
 const CongViecThucHienTab = () => {
-   const [value, setValue] = useState("1");
+   const [value, setValue] = useState("1"),
+         [modalAddCuocGoi ,setModalAddCuocGoi] = useState(false),
+         [modalUpdateCuocGoi ,setModalUpdateCuocGoi] = useState(false),
+         [typeModal, setTypeModal] = useState(""),
+         [isLoading, setIsLoading] = useState(false),
+         [selectedRowCuocGoi, setSelectedRowCuocGoi] = useState([]);
     const handleChange = (event, newValue) => {
       setValue(newValue);
+    };
+
+    const handelModalAddCuocGoi  = ()=>
+    {
+      setModalAddCuocGoi(true)
+      setTypeModal(TYPE_MODAL.INSERT)
+    }
+    const onCloseModalAddCuocGoi= () => {
+      setTypeModal("");
+      setModalAddCuocGoi(false);
+    };
+    const onOpenModalUpdateCuocGoi = () => {
+      setModalUpdateCuocGoi(true)
+      setTypeModal(TYPE_MODAL.UPDATE)
+    }
+    
+    const onCloseModalUpdateCuocGoi = ()=>{
+      setModalUpdateCuocGoi(false)
+      setTypeModal("");
+    }
+    const handleRowCuocGoiSelectionChange = (selectedRows) => {
+      setSelectedRowCuocGoi(selectedRows)
     };
   return (
     <>
@@ -21,6 +50,7 @@ const CongViecThucHienTab = () => {
               variant="outlined"
               color="success"
              startIcon={<PermPhoneMsgIcon/>}
+             onClick={handelModalAddCuocGoi}
             >
               Thêm Cuộc gọi
             </Button>
@@ -59,6 +89,14 @@ const CongViecThucHienTab = () => {
             </TabContext>
           </Box>
          </Grid2>
+         {/* Modal Add cuoc goi */}
+         <ModlaAddCuocGoi
+            showModal={modalAddCuocGoi}
+            closeModal={onCloseModalAddCuocGoi}   
+            typeModal={typeModal}
+            setTypeModal={setTypeModal}
+            setLoading={setIsLoading}
+         />
      </Grid2>
     </>
   )

@@ -9,7 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { useGetUserByIdQuery } from "App/Api/UserApi";
+import { useGetUserByIdQuery } from "src/App/Api/UserApi";
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ContactsIcon from '@mui/icons-material/Contacts';

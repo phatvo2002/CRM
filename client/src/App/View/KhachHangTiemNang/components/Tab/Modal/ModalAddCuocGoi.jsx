@@ -1,68 +1,94 @@
-import { Grid } from "@mui/material";
+import {  Grid2 } from "@mui/material";
 import { useEffect, useRef } from "react";
-import TextFieldRHF from "../../../../Components/ReactHookFormComp/TextFieldRHF/TextFieldRHF";
-import RHFDrawer from "../../../../Components/ReactHookFormComp/RHFDrawer/RHFDrawer";
-import { TYPE_MODAL } from "../../../../Until/constant";
-import { validateString } from "../../../../Until/validateYup";
+import TextFieldRHF from "../../../../../Components/ReactHookFormComp/TextFieldRHF/TextFieldRHF";
+import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
+import { TYPE_MODAL } from "src/App/Until/constant";
+import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
+import { validateString } from "../../../../../Until/validateYup";
 import * as yup from "yup";
-import SwitchRHF from "../../../../Components/ReactHookFormComp/SwitchRHF/SwitchRHF";
-import { useAddPhongbanMutation } from "../../../../Api/Phongban";
+import { SwitchRHF } from "src/App/Components/ReactHookFormComp";
+import { useParams } from "react-router-dom";
 import {toast} from 'react-toastify';
-import { useAddMenuMutation } from "App/Api/MenuApi";
+import { useAddMenuMutation } from "src/App/Api/MenuApi";
+import { validateDatePicker } from "../../../../../Until/validateYup";
+import AutocompleteRHF from "src/App/Components/ReactHookFormComp/AutocompleteRHF";
+import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
+import { useGetAllKetQuaCuocGoiQuery, useGetAllLoaiCuocGoiQuery } from "src/App/Api/GetDataApi";
+import { useAddCuocGoiMutation } from "src/App/Api/CuocGoiApi";
 // ------ Form Config ------ //
 const modelObj = {
-orderNumber: "orderNumber",
-  name: "name",
-  url: "url",
-  icon :"icon",
-  isAcTive : "isAcTive"
+  tieuDe: "tieuDe",
+  moTa: "moTa",
+  ngayBatDau: "ngayBatDau",
+  soPhutGoi :"soPhutGoi",
+  soGiayGoi : "soGiayGoi",
+  isHoanThanh : "isHoanThanh",
+  loaiCuocGoiId : "loaiCuocGoiId",
+  khachHangTiemNangId :"khachHangTiemNangId",
+  ketQuaCuocGoiId :"ketQuaCuocGoiId"
 
 },
   labelObj = {
-    orderNumber: "Số thứ tự",
-    name: "Tên menu",
-    url: "Đường dẫn",
-    icon :  "Icon",
-    isAcTive :"Kích hoạt menu"
+    tieuDe: "Tiêu đề",
+    moTa: "Mô tả ",
+    ngayBatDau: "Ngày bắt đầu",
+    soPhutGoi :  "Số phút gọi",
+    soGiayGoi :"Số giây gọi",
+    isHoanThanh : "Đã hoàn thành",
+    loaiCuocGoiId :"Loại cuộc gọi",
+    ketQuaCuocGoiId :"Kết quả cuộc gọi"
   },
   initialFormState = {
-    [modelObj.orderNumber]: "",
-    [modelObj.name]: "",
-    [modelObj.url]: "",
-    [modelObj.icon]: "",
-    [modelObj.isAcTive]: false,
+    [modelObj.tieuDe]: "",
+    [modelObj.moTa]: "",
+    [modelObj.ngayBatDau]: "",
+    [modelObj.soPhutGoi]: 0,
+    [modelObj.soGiayGoi]: 0,
+    [modelObj.isHoanThanh]:false,
+    [modelObj.loaiCuocGoiId]: "", 
+    [modelObj.ketQuaCuocGoiId]: "", 
+    [modelObj.khachHangTiemNangId]: "", 
   },
   schema = yup.object().shape({
-    [modelObj.orderNumber]: validateString(),
-    [modelObj.name]: validateString(),
-    [modelObj.url]: validateString(),
-    [modelObj.icon]: validateString(),
+    [modelObj.tieuDe]: validateString(),
+    [modelObj.moTa]: validateString(),
+    [modelObj.soPhutGoi]: validateString(),
+    [modelObj.soGiayGoi]: validateString(),
+    [modelObj.ngayBatDau]: validateDatePicker(),
+    [modelObj.ketQuaCuocGoiId]: validateString(),
+    [modelObj.loaiCuocGoiId]: validateString(), 
   });
 // ------ End Of Form Config ------ //
 
 const getHeader = (typeModal) => {
   const title = {
-    [TYPE_MODAL.INSERT]: "Thêm mới menu",
+    [TYPE_MODAL.INSERT]: "Thêm mới cuộc gọi",
   };
   return title[typeModal] ?? "";
 };
 
 const ModlaAddCuocGoi = (props) => {
-  const { showModal, closeModal, typeModal, setTypeModal ,setLoading ,refetch} =
+  const { showModal, closeModal, typeModal, setTypeModal ,setLoading} =
     props,
     _isMounted = useRef(false),
     modalRef = useRef(null),
-    [addMenu] = useAddMenuMutation(),
+    {id}= useParams,
     isLoading = false,
     header = getHeader(typeModal);
 
+    const {data : loaiCuocGoiData , isFetching :isGetCuocGoiFetching} = useGetAllLoaiCuocGoiQuery()
+    const {data : KetQuaCuocGoiData , isFetching :isGetKetQuaCuocGoiFetching} = useGetAllKetQuaCuocGoiQuery()
+    const [addCuocGoi] = useAddCuocGoiMutation()
   const submitForm = (data) => {
     const tempData = {
-      [modelObj.orderNumber]: data[modelObj.orderNumber],
-      [modelObj.name]: data[modelObj.name],
-      [modelObj.url]: data[modelObj.url],
-      [modelObj.icon]: data[modelObj.icon],
-      [modelObj.isAcTive]: data[modelObj.isAcTive],
+      [modelObj.tieuDe]: data[modelObj.tieuDe],
+      [modelObj.moTa]: data[modelObj.moTa],
+      [modelObj.soPhutGoi]: data[modelObj.soPhutGoi],
+      [modelObj.soGiayGoi]: data[modelObj.soGiayGoi],
+      [modelObj.ngayBatDau]: data[modelObj.ngayBatDau],
+      [modelObj.ketQuaCuocGoiId]: data[modelObj.ketQuaCuocGoiId],
+      [modelObj.loaiCuocGoiId]: data[modelObj.loaiCuocGoiId],
+      [modelObj.khachHangTiemNangId] : id
     };
 
     typeModal === TYPE_MODAL.INSERT && callApiInsert(tempData);
@@ -70,7 +96,7 @@ const ModlaAddCuocGoi = (props) => {
   },
     callApiInsert = async (data) => {
       try {
-        await addMenu(data).unwrap();
+        await addCuocGoi(data).unwrap();
         toast.success("Thêm mới thành công!", {
           position: "top-right",
           autoClose: 3000,  
@@ -81,7 +107,7 @@ const ModlaAddCuocGoi = (props) => {
           progress: undefined,
       });
 
-        refetch(); 
+      
         closeModalWithOtherFunc() 
       } catch (error) {
         toast.error("Đã có lỗi khi xảy ra!", {
@@ -122,52 +148,82 @@ const ModlaAddCuocGoi = (props) => {
       schema={schema}
       ref={modalRef}
     >
-      <Grid container spacing={2}>
+      <Grid2 container spacing={2}>
 
-        <Grid item xs={12}>
+        <Grid2 size={12}>
           <TextFieldRHF
-            name={modelObj.orderNumber}
-            label={labelObj.orderNumber}
+            name={modelObj.tieuDe}
+            label={labelObj.tieuDe}
             disabled={isLoading}
             required
           />
-        </Grid>
+        </Grid2>
+        <Grid2 size={12}>
+          <TextFieldRHF
+            name={modelObj.moTa}
+            label={labelObj.moTa}
+            disabled={isLoading}
+            required
+          />
+        </Grid2>
 
-        <Grid item xs={12}>
+        <Grid2 size={6}>
           <TextFieldRHF
-            name={modelObj.name}
-            label={labelObj.name}
+            name={modelObj.soPhutGoi}
+            label={labelObj.soPhutGoi}
             disabled={isLoading}
+            type="number"
             required
           />
-        </Grid>
+        </Grid2>
 
-        <Grid item xs={12}>
+        <Grid2 size={6}>
           <TextFieldRHF
-            name={modelObj.url}
-            label={labelObj.url}
+            name={modelObj.soGiayGoi}
+            label={labelObj.soGiayGoi}
+            disabled={isLoading}
+            type="number"
+            required
+          />
+        </Grid2>
+        <Grid2 size={12}>
+          <DateTimePickerRHF
+            name={modelObj.ngayBatDau}
+            label={labelObj.ngayBatDau}
             disabled={isLoading}
             required
           />
-        </Grid>
-        <Grid item xs={12}>
-          <TextFieldRHF
-            name={modelObj.icon}
-            label={labelObj.icon}
-            disabled={isLoading}
-            required
-          />
-        </Grid>
-        <Grid item xs={12}>
-        <label>{labelObj.isAcTive}</label>
+        </Grid2>
+        <Grid2 size={6}>
+                <AutocompleteRHF
+                  name={modelObj.loaiCuocGoiId}
+                  label={labelObj.loaiCuocGoiId}
+                  isGetOnlyId
+                  disabled={isLoading}
+                  data={commonMapDataAutocomplete(loaiCuocGoiData, "name")}
+                  skeletonLoading={isGetCuocGoiFetching}
+                />
+              </Grid2>
+              <Grid2 size={6}>
+                <AutocompleteRHF
+                  name={modelObj.ketQuaCuocGoiId}
+                  label={labelObj.ketQuaCuocGoiId}
+                  isGetOnlyId
+                  disabled={isLoading}
+                  data={commonMapDataAutocomplete(KetQuaCuocGoiData, "name")}
+                  skeletonLoading={isGetKetQuaCuocGoiFetching}
+                />
+              </Grid2>
+        <Grid2 size={12}>
+        <label>{labelObj.isHoanThanh}</label>
           <SwitchRHF
-            name={modelObj.isAcTive}
-            label={labelObj.isAcTive}
+            name={modelObj.isHoanThanh}
+            label={labelObj.isHoanThanh}
             disabled={isLoading}
             required
           />
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
     </RHFDrawer>
   );
 };

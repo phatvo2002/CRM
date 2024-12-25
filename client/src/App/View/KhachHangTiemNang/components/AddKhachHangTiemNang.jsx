@@ -26,9 +26,9 @@ import {
   useGetAllNganhNgheByLinhVucIdQuery,
   useGetAllNguonGocKhachHangQuery,
   useGetAllPhongBanKhachHangQuery,
-} from "App/Api/GetDataApi";
+} from "src/App/Api/GetDataApi";
 import { toast } from "react-toastify";
-import { useAddKhachHangTiemNangMutation } from "App/Api/KhachHangTiemNangApi";
+import { useAddKhachHangTiemNangMutation } from "src/App/Api/KhachHangTiemNangApi";
 //
 const modelObj = {
     nguoiDungId: "nguoiDungId",

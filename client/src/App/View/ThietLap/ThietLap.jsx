@@ -13,7 +13,7 @@ import ModalUpdateRole from "./Modal/ModalUpdateRole";
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import { useGetUserAllQuery } from "../../Api/UserApi";
 import ModalUpdateDepartment from "./Modal/ModalUpdateDepartment";
-import CustomDatagrid from "App/Components/DataGrid/CustomDatagrid";
+import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Tooltip from '@mui/material/Tooltip';
 const ThietLap = () => {
   const navigate = useNavigate();

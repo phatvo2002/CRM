@@ -2,7 +2,7 @@ import { string, date, number, object, mixed, ref, array } from "yup";
 import { dateFormat, monthFormat } from "./format";
 
 const errorMessage = {
-  string: "Vui lòng nhập (chọn) dữ liệu vào ô phía trên",
+  string: "Dữ liệu không được để trống",
   date: "Vui lòng nhập (chọn) ngày đúng định dạng (dd/mm/yyyy)",
   yearOfBirthMax: "Vui lòng nhập lại năm sinh (nhỏ hơn năm hiện tại)",
   yearOfBirthMin: "Vui lòng nhập lại năm sinh (từ năm 1900 đến năm hiện tại)",

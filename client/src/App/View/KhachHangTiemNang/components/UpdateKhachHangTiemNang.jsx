@@ -24,8 +24,8 @@ import {
     useGetAllNganhNgheByLinhVucIdQuery,
     useGetAllNguonGocKhachHangQuery,
     useGetAllPhongBanKhachHangQuery,
-  } from "App/Api/GetDataApi";
-import { useUpdateKhachHangTiemNangMutation } from "App/Api/KhachHangTiemNangApi";
+  } from "src/App/Api/GetDataApi";
+import { useUpdateKhachHangTiemNangMutation } from "src/App/Api/KhachHangTiemNangApi";
 // ------ Form Config ------ //
 const modelObj = {
     nguoiDungId: "nguoiDungId",

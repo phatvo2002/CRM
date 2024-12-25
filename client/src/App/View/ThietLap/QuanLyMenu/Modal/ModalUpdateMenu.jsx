@@ -8,7 +8,7 @@ import { TYPE_MODAL } from "../../../../Until/constant";
 import * as yup from "yup";
 import {useUpdatePhongBanMutation } from "../../../../Api/Phongban";
 import { toast } from "react-toastify";
-import { useUpdateMenuMutation } from "App/Api/MenuApi";
+import { useUpdateMenuMutation } from "src/App/Api/MenuApi";
 // ------ Form Config ------ //
 const modelObj = {
     orderNumber: "orderNumber",

@@ -6,7 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import CustomDatagrid from "App/Components/DataGrid/CustomDatagrid";
+import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
 import { TYPE_MODAL } from '../../Until/constant';
@@ -16,7 +16,7 @@ import {
   useGetKhachHangTiemNangByNguoiDungIdQuery,
   useGetKhachHangTiemNangByPhongBanIdQuery,
   useGetTemplatesQuery,
-} from "App/Api/KhachHangTiemNangApi";
+} from "src/App/Api/KhachHangTiemNangApi";
 import UpdateKhachHangTiemNang from "./components/UpdateKhachHangTiemNang";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";

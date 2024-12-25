@@ -4,8 +4,7 @@ import { v4 as uuid } from "uuid";
 import "./CheckBoxRHF.styles.scss";
 import { string, node, bool } from "prop-types";
 import { Checkbox } from "@mui/material";
-import PSCInputSkeleton from "src/components/PSCInputSkeleton";
-import { deepCompareObj } from "src/ultis/common";
+import PSCInputSkeleton from "../../PSCInputSkeleton";
 
 const CheckBoxRHF = (props) => {
   const component = "CheckBoxRHFWrapper",
@@ -52,4 +51,4 @@ CheckBoxRHF.defaultProps = {
   skeletonLoading: false,
 };
 
-export default memo(CheckBoxRHF, deepCompareObj);
+export default memo(CheckBoxRHF);

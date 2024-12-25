@@ -1,7 +1,6 @@
 import { Radio } from "@mui/material";
 import React, { memo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { deepCompareObj } from "src/ultis/common";
 
 const RadioSingleRHF = ({
   name,
@@ -36,4 +35,4 @@ const RadioSingleRHF = ({
   );
 };
 
-export default memo(RadioSingleRHF, deepCompareObj);
+export default memo(RadioSingleRHF);

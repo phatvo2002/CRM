@@ -7,10 +7,10 @@ import { TYPE_MODAL } from '../../../Until/constant';
 import { useNavigate } from 'react-router-dom';
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
 import Swal from 'sweetalert2';
-import CustomDatagrid from 'App/Components/DataGrid/CustomDatagrid';
+import CustomDatagrid from 'src/App/Components/DataGrid/CustomDatagrid';
 import ModalAddMenu from './Modal/ModalAddMenu';
 import ModalUpdateMenu from './Modal/ModalUpdateMenu';
-import { useDeleteMenuMutation, useGetAllMenuQuery } from 'App/Api/MenuApi';
+import { useDeleteMenuMutation, useGetAllMenuQuery } from 'src/App/Api/MenuApi';
 const QuanLyMenu = () => {
   const columns = [
     { field: "orderNumber", headerName: "Số thứ tự", width: 200, flex: 1 },

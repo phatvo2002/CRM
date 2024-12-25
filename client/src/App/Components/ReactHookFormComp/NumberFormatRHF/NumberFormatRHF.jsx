@@ -2,10 +2,10 @@ import { NumericFormat } from "react-number-format";
 import { Controller, useFormContext } from "react-hook-form";
 import { useEffect } from "react";
 import { string, bool, oneOf } from "prop-types";
-import { getError, getErrorMessage } from "src/ultis/common";
+import { getErrorMessage ,getError} from "src/App/Until/common";
 import { TextField } from "@mui/material";
 import { forwardRef } from "react";
-import PSCInputSkeleton from "src/components/PSCInputSkeleton";
+import PSCInputSkeleton from "../../PSCInputSkeleton";
 import "./NumberFormatRHF.styles.scss";
 
 const X = forwardRef(function X(props, ref) {

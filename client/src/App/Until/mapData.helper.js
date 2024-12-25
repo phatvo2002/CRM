@@ -13,7 +13,7 @@ const commonMapDataAutocomplete = (data, label) => {
     return {
       ...ele,
       value: ele?.id ?? ele?.oid,
-      label: ele?.name ?? ele?.tenPhongban ?? ele?.tenNguonGoc?? ele?.tenLoaiTiemNang ?? ele?.tenLoaiHinh ?? ele?.tenLinhVuc ?? ele?.tenNganhNghe ?? ele?.tenDoanhThu,
+      label: ele?.name ?? ele?.tenPhongban ?? ele?.tenNguonGoc?? ele?.tenLoaiTiemNang ?? ele?.tenLoaiHinh ?? ele?.tenLinhVuc ?? ele?.tenNganhNghe ?? ele?.tenDoanhThu ?? ele?.tenCuocGoi,
     };
   });
   return tempData?.filter((x) => x);

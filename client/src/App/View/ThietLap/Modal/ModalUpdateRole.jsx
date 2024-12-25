@@ -108,9 +108,9 @@ const ModalUpdateRole = (props) => {
     >
       <DialogTitle>Phân quyền </DialogTitle>
       <DialogContent>
-        {role.map((item )=>{
+        {role.map((item ,index )=>{
             return (
-                <Grid>
+                <Grid key={index}>
                     <Checkbox
                      checked={checkedRoleId && checkedRoleId.includes(item.id)}
                     onChange={(e) => handleCheckboxChange(e, item.id , item.tenChucVu)}

@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { apiPhongban } from '../Api/Phongban';
-import { apiUser } from 'App/Api/UserApi';
-import { apiMenu } from 'App/Api/MenuApi';
-import { apiGetData } from 'App/Api/GetDataApi';
-import { apiKhachHangTiemNang } from 'App/Api/KhachHangTiemNangApi';
-import { apiCuocGoi } from 'App/Api/CuocGoiApi';
-import { apiNhiemVu } from 'App/Api/NhiemVuApi';
-import { apiLichHen } from 'App/Api/LichhenApi';
+import { apiUser } from 'src/App/Api/UserApi';
+import { apiMenu } from 'src/App/Api/MenuApi';
+import { apiGetData } from 'src/App/Api/GetDataApi';
+import { apiKhachHangTiemNang } from 'src/App/Api/KhachHangTiemNangApi';
+import { apiCuocGoi } from 'src/App/Api/CuocGoiApi';
+import { apiNhiemVu } from 'src/App/Api/NhiemVuApi';
+import { apiLichHen } from 'src/App/Api/LichhenApi';
 
 const apis = [
   apiPhongban,

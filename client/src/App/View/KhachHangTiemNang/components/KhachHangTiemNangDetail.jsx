@@ -7,7 +7,7 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { useParams } from "react-router-dom";
-import { useGetKhachHangTiemNangByIdQuery } from "App/Api/KhachHangTiemNangApi";
+import { useGetKhachHangTiemNangByIdQuery } from "src/App/Api/KhachHangTiemNangApi";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ThongTInChiTietTab from "./Tab/ThongTInChiTietTab";

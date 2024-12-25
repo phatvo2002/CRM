@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
-    "paths": {
-      "@Until/*": ["App/Until/*"]
-    }
-
+    "baseUrl": "."
   },
   "include": ["src"]
 }

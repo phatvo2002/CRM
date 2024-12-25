@@ -1,6 +1,6 @@
 import { Autocomplete, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material'
-import { useGetPhongBanQuery } from 'App/Api/Phongban'
-import { useUpdateUserDepartmentMutation } from 'App/Api/UserApi'
+import { useGetPhongBanQuery } from 'src/App/Api/Phongban'
+import { useUpdateUserDepartmentMutation } from 'src/App/Api/UserApi'
 import React, { useState } from 'react'
 import { toast } from 'react-toastify'
 
