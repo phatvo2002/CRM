@@ -9,8 +9,10 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
-import { TYPE_MODAL } from '../../Until/constant';
-import ScreenShareIcon from "@mui/icons-material/ScreenShare";
+import { TYPE_MODAL } from "../../Until/constant";
+import EmailIcon from '@mui/icons-material/Email';
+import SendAndArchiveIcon from '@mui/icons-material/SendAndArchive';
+import PhoneIcon from '@mui/icons-material/Phone';
 import {
   useDeleteKhachHangTiemNangMutation,
   useGetKhachHangTiemNangByNguoiDungIdQuery,
@@ -27,7 +29,9 @@ const KhachHangTiemNang = () => {
   const gotoLink = () => {
     navigate("/tiemnang/themmoikhachhangtiemnang");
   };
-
+  const gotoLinkImport = () => {
+    navigate("/tiemnang/uploadkhachhang");
+  }
 
   const columns = [
     {
@@ -45,18 +49,26 @@ const KhachHangTiemNang = () => {
           }}
         >
           <Tooltip title="Sửa thông tin ">
-            <IconButton disabled={selectedRow.length === 0} style={{}} onClick={onOpenModalUpdateKhachHang}>
+            <IconButton
+              disabled={selectedRow.length === 0}
+              style={{}}
+              onClick={onOpenModalUpdateKhachHang}
+            >
               <EditIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Xóa">
-            <IconButton disabled={selectedRow.length === 0} style={{}} onClick={()=> handleDeletePhongBan(params?.id)}>
+            <IconButton
+              disabled={selectedRow.length === 0}
+              style={{}}
+              onClick={() => handleDeletePhongBan(params?.id)}
+            >
               <DeleteIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Bàn giao công việc">
             <IconButton disabled={selectedRow.length === 0} style={{}}>
-              <ScreenShareIcon />
+              <SendAndArchiveIcon />
             </IconButton>
           </Tooltip>
         </div>
@@ -68,16 +80,27 @@ const KhachHangTiemNang = () => {
       headerName: "Họ và tên",
       width: 200,
       renderCell: (params) => (
-        <div
-        >
-          <Link to={`/tiemnang/${params.id}`} style={{textDecoration:"none"}}>
+        <div>
+          <Link
+            to={`/tiemnang/${params.id}`}
+            style={{ textDecoration: "none" }}
+          >
             {params.value}
           </Link>
         </div>
       ),
-    },    
-     { field: "diaChi", headerName: "Địa Chỉ", width: 200},
-    { field: "soDienThoai", headerName: "Số điện thoại di động", width: 200 },
+    },
+    { field: "diaChi", headerName: "Địa Chỉ", width: 200 },
+    {
+      field: "soDienThoai",
+      headerName: "Số điện thoại cá nhân",
+      width: 200,
+      renderCell: (params) => (
+        <div>
+          {params.value ?  <div><PhoneIcon/>{params.value}</div> : <div></div>}
+        </div>
+      ),
+    },
     {
       field: "soDienThoaiCoQuan",
       headerName: "Số điện thoại cơ quan",
@@ -92,41 +115,46 @@ const KhachHangTiemNang = () => {
 
   const userData = JSON.parse(localStorage.getItem("authorizationData"));
   const [rows, setRows] = useState([]);
-  const [openModalUpdate , setOpenModalUpdate] = useState(false);
+  const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [typeModal, setTypeModal] = useState("");
-  const [loading ,setLoading] = useState(false);
-  const {data : getTemplate} = useGetTemplatesQuery({path:"Templates/ThongTinTiemNang.xlsx",filename:"ThongTinTiemNang"})
+  const [loading, setLoading] = useState(false);
+  const { data: getTemplate } = useGetTemplatesQuery({
+    path: "Templates/ThongTinTiemNang.xlsx",
+    filename: "ThongTinTiemNang",
+  });
   const { data: dataKhachHangByNguoiDung } =
-  useGetKhachHangTiemNangByNguoiDungIdQuery(userData?.response?.id, {
-    skip:
-      userData?.response.checkIsTruongPhong === true ||
-      userData?.response.checkIsGiamDoc === true,
-  });
-const { data: dataKhachHangPhongBan ,refetch} =
-  useGetKhachHangTiemNangByPhongBanIdQuery(userData?.response?.phongBan?.id, {
-    skip:
-      userData?.response.checkIsTruongPhong === false &&
-      userData?.response.checkIsGiamDoc === false,
-  });
-  const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation()
+    useGetKhachHangTiemNangByNguoiDungIdQuery(userData?.response?.id, {
+      skip:
+        userData?.response.checkIsTruongPhong === true ||
+        userData?.response.checkIsGiamDoc === true,
+    });
+  const { data: dataKhachHangPhongBan, refetch } =
+    useGetKhachHangTiemNangByPhongBanIdQuery(userData?.response?.phongBan?.id, {
+      skip:
+        userData?.response.checkIsTruongPhong === false &&
+        userData?.response.checkIsGiamDoc === false,
+    });
+  const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation();
   const onOpenModalUpdateKhachHang = () => {
-    setOpenModalUpdate(true)
-    setTypeModal(TYPE_MODAL.UPDATE)
-  }
-  const onCloseModalUpdateKhachHang = ()=>{
-    setOpenModalUpdate(false)
+    setOpenModalUpdate(true);
+    setTypeModal(TYPE_MODAL.UPDATE);
+  };
+  const onCloseModalUpdateKhachHang = () => {
+    setOpenModalUpdate(false);
     setTypeModal("");
-  }
+  };
 
   const handleDeletePhongBan = async (id) => {
     if (
-      !userData?.response.checkIsTruongPhong && 
-      userData?.response.maChucVu !== "6840b4ed-39ce-4d32-8c69-835d3356de42" 
+      !userData?.response.checkIsTruongPhong &&
+      userData?.response.maChucVu !== "6840b4ed-39ce-4d32-8c69-835d3356de42"
     ) {
-      toast.warning("Chỉ trưởng phòng hoặc nhân viên quản trị hệ thống mới có quyền xóa khách hàng.");
+      toast.warning(
+        "Chỉ trưởng phòng hoặc nhân viên quản trị hệ thống mới có quyền xóa khách hàng."
+      );
       return;
     }
-  
+
     Swal.fire({
       title: "Bạn có muốn xóa khách hàng này?",
       icon: "warning",
@@ -136,25 +164,27 @@ const { data: dataKhachHangPhongBan ,refetch} =
       confirmButtonText: "Có",
     }).then(async (result) => {
       if (result.isConfirmed) {
-          await deleteNguoiDung(id);
-          Swal.fire({
-            title: "Xóa thành công",
-            icon: "success",
-          });
+        await deleteNguoiDung(id);
+        Swal.fire({
+          title: "Xóa thành công",
+          icon: "success",
+        });
       }
     });
   };
   const handleGetTemplates = () => {
     if (getTemplate) {
-      const blob = new Blob([getTemplate], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-      
+      const blob = new Blob([getTemplate], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+
       const url = window.URL.createObjectURL(blob);
-  
+
       const a = document.createElement("a");
       a.href = url;
-      a.download = "ThongTinTiemNang.xlsx"; 
+      a.download = "ThongTinTiemNang.xlsx";
       a.click();
-  
+
       // Sau khi tải xong, giải phóng URL
       window.URL.revokeObjectURL(url);
     } else {
@@ -162,14 +192,13 @@ const { data: dataKhachHangPhongBan ,refetch} =
     }
   };
 
-
   useEffect(() => {
     if (userData?.response?.checkIsTruongPhong === true) {
       setRows(dataKhachHangPhongBan);
     } else {
       setRows(dataKhachHangByNguoiDung);
     }
-  }, [dataKhachHangByNguoiDung, dataKhachHangPhongBan,userData]);
+  }, [dataKhachHangByNguoiDung, dataKhachHangPhongBan, userData]);
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
@@ -194,6 +223,7 @@ const { data: dataKhachHangPhongBan ,refetch} =
               color="warning"
               sx={{ marginLeft: 1 }}
               startIcon={<FileDownloadDoneIcon />}
+              onClick={gotoLinkImport}
             >
               IMPORT
             </Button>
@@ -218,23 +248,23 @@ const { data: dataKhachHangPhongBan ,refetch} =
             onRowSelectionChange={handleRowSelectionChange}
           />
         </Grid>
+       
 
         {/* Bảng dữ liệu khách hàng */}
-          <UpdateKhachHangTiemNang
-    selectedItem={selectedRow} 
-    closeModal={onCloseModalUpdateKhachHang}   
-    typeModal={typeModal}
-    setTypeModal={setTypeModal}
-    showModal={openModalUpdate}
-    setLoading={setLoading}
-    refetch = {refetch}
-  />
+        <UpdateKhachHangTiemNang
+          selectedItem={selectedRow}
+          closeModal={onCloseModalUpdateKhachHang}
+          typeModal={typeModal}
+          setTypeModal={setTypeModal}
+          showModal={openModalUpdate}
+          setLoading={setLoading}
+          refetch={refetch}
+        />
       </div>
 
       {/* Phần lịch sử giao dịch */}
       <ActionComponents />
     </div>
-    
   );
 };
 

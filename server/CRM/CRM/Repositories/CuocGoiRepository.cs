@@ -112,7 +112,7 @@ namespace CRM.Repositories
 
         public async Task<List<CuocGoiDTO>> GetCuocGoiByKhachHangTiemNangId(Guid Id)
         {
-            var db = await _context.CuocGois.Where(r => r.KhachHangTiemNangId == Id).ToListAsync();
+            var db = await _context.CuocGois.Where(r => r.KhachHangTiemNangId == Id).Include(r=> r.LoaiCuocGoi).ToListAsync();
             return _mapper.Map<List<CuocGoiDTO>>(db);
         }
     }

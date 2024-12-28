@@ -1,12 +1,16 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
 using CRM.Entities;
+using CRM.Extensions;
 using CRM.Helper;
 using CRM.Modal;
 using CRM.Services.Interfaces;
+using ExcelDataReader;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Globalization;
 
 namespace CRM.Controllers
 {
@@ -16,10 +20,12 @@ namespace CRM.Controllers
     {
         private readonly IKhachHangTiemNangServices _khachHangTiemNangServices;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public KhachHangTiemNangController(IKhachHangTiemNangServices khachHangTiemNangServices , IWebHostEnvironment webHostEnvironment)
+        private readonly CrmDbContext _dbContext;
+        public KhachHangTiemNangController(IKhachHangTiemNangServices khachHangTiemNangServices , IWebHostEnvironment webHostEnvironment , CrmDbContext dbContext)
         {
             _khachHangTiemNangServices = khachHangTiemNangServices;
             _webHostEnvironment = webHostEnvironment;
+            _dbContext = dbContext;
         }
         [HttpGet("getallkhachhangtiemnang")]
         [JwtAuthorize]
@@ -123,6 +129,221 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost("ImportKhachHang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UploadExcel([FromForm] IFormFile file)
+        {
+            Guid userId = HttpContext.GetUserId();
+            Guid phongBanId = HttpContext.GetPhongBanId();
+            try
+            {
+                if (file == null || file.Length == 0)
+                {
+                    return BadRequest("Không tìm thấy file");
+                }
+                var uploadFolder = $"{_webHostEnvironment.WebRootPath}\\UploadFiles";
+
+                var filePath = Path.Combine(uploadFolder, file.FileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                using (var stream = System.IO.File.Open(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    using (var reader = ExcelReaderFactory.CreateReader(stream))
+                    {
+                        do
+                        {
+                            int rowIndex = 0;
+                            while (reader.Read())
+                            {
+                                rowIndex++;
+                                if (rowIndex == 1)
+                                    continue;
+                                KhachHangTiemNang khachHangTiemNang = new KhachHangTiemNang();
+                                khachHangTiemNang.Id = Guid.NewGuid();
+                                var tenKhacHang = !string.IsNullOrEmpty(reader.GetValue(0)?.ToString()) ? reader.GetValue(0).ToString() : null;
+                                khachHangTiemNang.TenKhachHang = tenKhacHang;
+                                var phongBanKhachHang = !string.IsNullOrEmpty(reader.GetValue(1)?.ToString()) ? reader.GetValue(1).ToString() : null;
+                                switch (phongBanKhachHang)
+                                {
+                                    case "Phòng giám đốc":
+                                        khachHangTiemNang.MaPhongbanKhachHang = 1;
+                                        break;
+                                    case "Phòng tài chính":
+                                        khachHangTiemNang.MaPhongbanKhachHang = 2;
+                                        break;
+                                    case "Phòng nhân sự":
+                                        khachHangTiemNang.MaPhongbanKhachHang = 3;
+                                        break;
+                                    case "Phòng marketing":
+                                        khachHangTiemNang.MaPhongbanKhachHang = 4;
+                                        break;
+                                    case "Phòng chăm sóc khách hàng ":
+                                        khachHangTiemNang.MaPhongbanKhachHang = 5;
+                                        break;
+                                    case "Phòng kinh doanh ":
+                                        khachHangTiemNang.MaPhongbanKhachHang = 6;
+                                        break;
+                                    default:
+                                        khachHangTiemNang.MaPhongbanKhachHang = null;
+                                        break;
+                                }
+                                var sdtDiDong = !string.IsNullOrEmpty(reader.GetValue(2)?.ToString()) ? reader.GetValue(2).ToString() : null;
+                                khachHangTiemNang.SoDienThoaiDiDong = sdtDiDong;
+
+                                khachHangTiemNang.SoDienThoaiCoQuan = !string.IsNullOrEmpty(reader.GetValue(3)?.ToString()) ? reader.GetValue(3).ToString() : null;
+                                var nguonGocKhachHang = !string.IsNullOrEmpty(reader.GetValue(4)?.ToString()) ? reader.GetValue(4).ToString() : null;
+                                switch (nguonGocKhachHang)
+                                {
+                                    case "Nhân viên kinh doanh tự tìm kiếm":
+                                        khachHangTiemNang.MaNguonGocKhachHang = 1;
+                                        break;
+                                    case "Khách hàng hoặc đối tác giới thiệu":
+                                        khachHangTiemNang.MaNguonGocKhachHang = 2;
+                                        break;
+                                    case "Thông qua sự kiện hội thảo , tập huấn":
+                                        khachHangTiemNang.MaNguonGocKhachHang = 3;
+                                        break;
+                                    case "Khách hàng tự tìm đến":
+                                        khachHangTiemNang.MaNguonGocKhachHang = 4;
+                                        break;
+                                    case "Marketing":
+                                        khachHangTiemNang.MaNguonGocKhachHang = 5;
+                                        break;
+                                    case "Khác":
+                                        khachHangTiemNang.MaNguonGocKhachHang = 6;
+                                        break;
+                                    default:
+                                        khachHangTiemNang.MaNguonGocKhachHang = null;
+                                        break;
+                                }
+                                var loaiTiemNang = !string.IsNullOrEmpty(reader.GetValue(5)?.ToString()) ? reader.GetValue(5).ToString() : null;
+                                switch (loaiTiemNang)
+                                {
+                                    case "Khách hàng bán lẻ":
+                                        khachHangTiemNang.MaLoaiTiemNang = 1;
+                                        break;
+                                    case "Khách hàng doanh nghiệp":
+                                        khachHangTiemNang.MaLoaiTiemNang = 2;
+                                        break;
+                                    default:
+                                        khachHangTiemNang.MaNguonGocKhachHang = null;
+                                        break;
+                                }
+                                khachHangTiemNang.SoZalo = !string.IsNullOrEmpty(reader.GetValue(6)?.ToString()) ? reader.GetValue(6).ToString() : null;
+                                khachHangTiemNang.EmailCaNhan = !string.IsNullOrEmpty(reader.GetValue(7)?.ToString()) ? reader.GetValue(7).ToString() : null;
+                                khachHangTiemNang.EmailCoQuan = !string.IsNullOrEmpty(reader.GetValue(8)?.ToString()) ? reader.GetValue(8).ToString() : null;
+                                khachHangTiemNang.MaSoThue = !string.IsNullOrEmpty(reader.GetValue(9)?.ToString()) ? reader.GetValue(9).ToString() : null;
+                                khachHangTiemNang.TenToChuc = !string.IsNullOrEmpty(reader.GetValue(10)?.ToString()) ? reader.GetValue(10).ToString() : null;
+                                var loaiHinhNgheNghiep = !string.IsNullOrEmpty(reader.GetValue(11)?.ToString()) ? reader.GetValue(11).ToString() : null;
+                                switch (loaiHinhNgheNghiep)
+                                {
+                                    case "Doanh nghiệp":
+                                        khachHangTiemNang.MaLoaiHinhNgheNghiep = 1;
+                                        break;
+                                    case "Cá nhân":
+                                        khachHangTiemNang.MaLoaiHinhNgheNghiep = 2;
+                                        break;
+                                    case "Khác":
+                                        khachHangTiemNang.MaLoaiHinhNgheNghiep = 3;
+                                        break;
+                                    default:
+                                        khachHangTiemNang.MaLoaiHinhNgheNghiep = null;
+                                        break;
+                                }
+                                var linhVucNgheNghiep = !string.IsNullOrEmpty(reader.GetValue(12)?.ToString()) ? reader.GetValue(12).ToString() : null;
+                                switch (loaiHinhNgheNghiep)
+                                {
+                                    case "Thương mại":
+                                        khachHangTiemNang.MaLinhVuc = 1;
+                                        break;
+                                    default:
+                                        khachHangTiemNang.MaLinhVuc = null;
+                                        break;
+                                }
+                                var nganhNghe = !string.IsNullOrEmpty(reader.GetValue(13)?.ToString()) ? reader.GetValue(13).ToString() : null;
+                                switch (nganhNghe)
+                                {
+                                    case "Kinh doanh thực phẩm":
+                                        khachHangTiemNang.MaNganhNghe = 1;
+                                        break;
+                                    case "Kinh doanh hóa mĩ phẩm ":
+                                        khachHangTiemNang.MaNganhNghe = 2;
+                                        break;
+                                    case "Kinh doanh điện tử điện lạnh":
+                                        khachHangTiemNang.MaNganhNghe = 3;
+                                        break;
+                                    case "Kinh doanh đồ gỗ , thiết bị nội thất":
+                                        khachHangTiemNang.MaNganhNghe = 4;
+                                        break;
+                                    case "Kinh doanh hàng gia dụng":
+                                        khachHangTiemNang.MaNganhNghe = 5;
+                                        break;
+                                    case "Kinh doanh nông lâm sản":
+                                        khachHangTiemNang.MaNganhNghe = 6;
+                                        break;
+                                    case "Kinh doanh sắt thép":
+                                        khachHangTiemNang.MaNganhNghe = 7;
+                                        break;
+                                    case "Kinh doanh thương mại khác":
+                                        khachHangTiemNang.MaNganhNghe = 8;
+                                        break;
+                                    default:
+                                        khachHangTiemNang.MaNganhNghe = null;
+                                        break;
+                                }
+                                var doanhThu = !string.IsNullOrEmpty(reader.GetValue(14)?.ToString()) ? reader.GetValue(14).ToString() : null;
+                                switch (doanhThu)
+                                {
+                                    case "Dưới 1 tỉ đồng":
+                                        khachHangTiemNang.MaDoanhThu = 1;
+                                        break;
+                                    case "Từ 1 tỉ đồng đến 3 tỉ đồng":
+                                        khachHangTiemNang.MaDoanhThu = 2;
+                                        break;
+                                    case "Từ 3 tỉ đến 5 tỉ đồng":
+                                        khachHangTiemNang.MaDoanhThu = 3;
+                                        break;
+                                    case "Trên 5 tỉ đồng":
+                                        khachHangTiemNang.MaDoanhThu = 4;
+                                        break;
+                                    default:
+                                        khachHangTiemNang.MaDoanhThu = null;
+                                        break;
+                                }
+                                string ngayThanhLap = !string.IsNullOrEmpty(reader.GetValue(15)?.ToString()) ? reader.GetValue(15).ToString() : null;
+                                if (ngayThanhLap == null)
+                                    khachHangTiemNang.NgayThanhLap = null;
+                                else
+                                {
+                                    DateTime dateValue = DateTime.ParseExact(ngayThanhLap, "M/d/yyyy h:mm:ss tt", CultureInfo.InvariantCulture);
+                                    khachHangTiemNang.NgayThanhLap = dateValue;
+                                }
+
+                                khachHangTiemNang.DiaChi = !string.IsNullOrEmpty(reader.GetValue(16)?.ToString()) ? reader.GetValue(16).ToString() : null;
+                                khachHangTiemNang.ThongTinMoTa = !string.IsNullOrEmpty(reader.GetValue(17)?.ToString()) ? reader.GetValue(17).ToString() : null;
+                                khachHangTiemNang.PhongBanId = phongBanId;
+                                khachHangTiemNang.NguoiDungId = userId;
+                                khachHangTiemNang.IsDungChung = false;
+                                khachHangTiemNang.CreateAt = DateTime.Now;
+                                khachHangTiemNang.IsDeleted = false;
+                                _dbContext.KhachHangTiemNangs.Add(khachHangTiemNang);
+                                await _dbContext.SaveChangesAsync();
+
+                            };
+                        } while (reader.NextResult());
+                    }
+                }
+
+                return Ok(new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPut("updatekhachhangtiemnang")]
         [JwtAuthorize]
         public async Task<IActionResult> UpdateKhachHangTiemNang(KhachHangTiemNangModel model)
@@ -152,6 +373,7 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
+  
     }
 }
 

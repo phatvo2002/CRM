@@ -42,6 +42,17 @@ export const apiKhachHangTiemNang = createApi({
           body: data,
         }),
       }),
+      ImportKhachHang: builder.mutation({
+        query: (file) => {
+          const formData = new FormData();
+          formData.append('file', file); 
+          return {
+            url: '/KhachHangTiemNang/ImportKhachHang',
+            method: 'POST',
+            body: formData,
+          };
+        },
+      }),
       updateKhachHangTiemNang: builder.mutation({
         query: (data) => ({
           url: '/KhachHangTiemNang/updatekhachhangtiemnang',
@@ -65,6 +76,7 @@ export const apiKhachHangTiemNang = createApi({
     useGetTemplatesQuery,
     useAddKhachHangTiemNangMutation,
     useUpdateKhachHangTiemNangMutation,
+    useImportKhachHangMutation,
     useDeleteKhachHangTiemNangMutation,
   } = apiKhachHangTiemNang;
 
