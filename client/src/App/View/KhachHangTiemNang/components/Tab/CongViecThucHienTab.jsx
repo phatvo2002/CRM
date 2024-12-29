@@ -1,4 +1,4 @@
-import { Button, Grid2, IconButton, Switch } from "@mui/material";
+import { Button, CircularProgress, Grid2, IconButton, Switch } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import PermPhoneMsgIcon from "@mui/icons-material/PermPhoneMsg";
 import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
@@ -9,39 +9,54 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import ModlaAddCuocGoi from "./Modal/ModalAddCuocGoi";
 import ModalUpdateCuocGoi from "./Modal/ModalUpdateCuocGoi";
+import ModalAddLichHen from "./Modal/ModalAddLichHen";
+import ModalUpdateLichHen from "./Modal/ModalUpdateLichHen";
 import { TYPE_MODAL } from "src/App/Until/constant";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import TabPanel from "@mui/lab/TabPanel";
 import { useParams } from "react-router-dom";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useDeleteCuocGoiMutation, useGetCuocGoiByKhachHangTiemNangIdQuery } from "src/App/Api/CuocGoiApi";
+import {
+  useDeleteCuocGoiMutation,
+  useGetCuocGoiByKhachHangTiemNangIdQuery,
+} from "src/App/Api/CuocGoiApi";
 import Swal from "sweetalert2";
+import { useDeleteLichHenMutation, useGetLichHenByKhachHangTiemNangIdQuery } from "src/App/Api/LichhenApi";
 const CongViecThucHienTab = () => {
-  
   const columnsCuocGoi = [
-       {
+    {
       field: "action",
       headerName: "Thao tác",
-      flex:1,
+      flex: 1,
       renderCell: () => (
-        <div style={{alignItems : "center"}}>
-        <IconButton style={{}} disabled={selectedRowCuocGoi.length === 0}  onClick={onOpenModalUpdateCuocGoi} >
-            <CreateIcon ></CreateIcon>
-        </IconButton>
-          <IconButton style={{ margin:"0 10px"}} disabled={selectedRowCuocGoi.length === 0} onClick={handelDeleteCuocGoi}>
-            <DeleteIcon  ></DeleteIcon>
+        <div style={{ alignItems: "center" }}>
+          <IconButton
+            style={{}}
+            disabled={selectedRowCuocGoi.length === 0}
+            onClick={onOpenModalUpdateCuocGoi}
+          >
+            <CreateIcon></CreateIcon>
+          </IconButton>
+          <IconButton
+            style={{ margin: "0 10px" }}
+            disabled={selectedRowCuocGoi.length === 0}
+            onClick={handelDeleteCuocGoi}
+          >
+            <DeleteIcon></DeleteIcon>
           </IconButton>
         </div>
       ),
     },
     { field: "tieuDe", headerName: "Tiêu đề", width: 200, flex: 1 },
     { field: "moTa", headerName: "Mô tả", width: 200, flex: 1 },
-    { field: "", headerName: "Ngày bắt đầu", width: 200, flex: 1 ,
+    {
+      field: "",
+      headerName: "Ngày bắt đầu",
+      width: 200,
+      flex: 1,
       renderCell: (params) => (
-        <div style={{ alignItems: "center" }}>
-          {params?.row?.ngayBatDau}
-        </div>
+        <div style={{ alignItems: "center" }}>{params?.row?.ngayBatDau}</div>
       ),
     },
     {
@@ -63,32 +78,118 @@ const CongViecThucHienTab = () => {
       renderCell: (params) => (
         <div>
           {params?.row?.isHoanThanh === false ? (
-            <span style={{backgroundColor:"#ff1744" , textAlign:"center",padding:2 , borderRadius : 10 , color :"white"}}>Chưa hoàn thành</span>
+            <span
+              style={{
+                backgroundColor: "#ff1744",
+                textAlign: "center",
+                padding: 2,
+                borderRadius: 10,
+                color: "white",
+              }}
+            >
+              Chưa hoàn thành
+            </span>
           ) : (
-            <span style={{backgroundColor:"#76ff03" , textAlign:"center",padding:2 , borderRadius : 10 , color :"white"}}>Đã hoàn thành</span>
+            <span
+              style={{
+                backgroundColor: "#76ff03",
+                textAlign: "center",
+                padding: 2,
+                borderRadius: 10,
+                color: "white",
+              }}
+            >
+              Đã hoàn thành
+            </span>
           )}
         </div>
-      )
+      ),
     },
     { field: "createAt", headerName: "Ngày tạo", width: 200, flex: 1 },
- 
   ];
-  const {id} = useParams()
+  const columnsLichHen = [
+    {
+      field: "action",
+      headerName: "Thao tác",
+      width:100,
+      renderCell: () => (
+        <div style={{ alignItems: "center" }}>
+          <IconButton
+            style={{}}
+            disabled={selectedRowLichHen.length === 0}
+            onClick={handleOpenModalUpdateLichHen}
+          >
+            <CreateIcon></CreateIcon>
+          </IconButton>
+          <IconButton
+            style={{ margin: "0 10px" }}
+            disabled={selectedRowLichHen.length === 0}
+            onClick={handelDeleteLichHen}
+          >
+            <DeleteIcon></DeleteIcon>
+          </IconButton>
+        </div>
+      ),
+    },
+    { field: "tieuDe", headerName: "Tiêu đề", width: 200, flex: 1 },
+    { field: "moTa", headerName: "Mô tả", width: 200, flex: 1 },
+    {
+      field: "",
+      headerName: "Ngày bắt đầu",
+      width: 200,
+      flex: 1,
+      renderCell: (params) => (
+        <div style={{ alignItems: "center" }}>{params?.row?.ngayBatDau}</div>
+      ),
+    },
+    {
+      field: "",
+      headerName: "Ngày kết thúc",
+      width: 200,
+      flex: 1,
+      renderCell: (params) => (
+        <div style={{ alignItems: "center" }}>{params?.row?.ngayKetThuc}</div>
+      ),
+    },
+    //  {
+    //    field: "isHoanThanh",
+    //    headerName: "Đã hoàn thành",
+    //    width: 200,
+    //    flex: 1,
+    //    renderCell: (params) => (
+    //      <div>
+    //        {params?.row?.isHoanThanh === false ? (
+    //          <span style={{backgroundColor:"#ff1744" , textAlign:"center",padding:2 , borderRadius : 10 , color :"white"}}>Chưa hoàn thành</span>
+    //        ) : (
+    //          <span style={{backgroundColor:"#76ff03" , textAlign:"center",padding:2 , borderRadius : 10 , color :"white"}}>Đã hoàn thành</span>
+    //        )}
+    //      </div>
+    //    )
+    //  },
+    { field: "createAt", headerName: "Ngày tạo", width: 200, flex: 1 },
+  ];
+  const { id } = useParams();
   const [value, setValue] = useState("1"),
     [modalAddCuocGoi, setModalAddCuocGoi] = useState(false),
     [modalUpdateCuocGoi, setModalUpdateCuocGoi] = useState(false),
+    [modalAddLichHen, setModalAddLichHen] = useState(false),
+    [modalUpdataLichHen, setModalUpdateLichHen] = useState(false),
     [typeModal, setTypeModal] = useState(""),
     [isLoading, setIsLoading] = useState(false),
     [rows, setRows] = useState([]),
-    [selectedRowCuocGoi, setSelectedRowCuocGoi] = useState([]);
+    [rowLichHen, setRowLichHen] = useState([]),
+    [selectedRowCuocGoi, setSelectedRowCuocGoi] = useState([]),
+    [selectedRowLichHen, setSelectedRowLichHen] = useState([]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-
-  const { data: cuocGoiByKhachHangId , refetch } =
+  const { data: cuocGoiByKhachHangId, refetch } =
     useGetCuocGoiByKhachHangTiemNangIdQuery(id);
-  const [deleteCuocGoi] = useDeleteCuocGoiMutation()
+  const { data: lichHenByKhachHangTiemNangId, isLoading: isLichHenFetching , refetch : isLichHenRefetch } =
+    useGetLichHenByKhachHangTiemNangIdQuery(id);
+  const [deleteCuocGoi] = useDeleteCuocGoiMutation();
+  const [deleteLichHen] = useDeleteLichHenMutation();
 
   const handelModalAddCuocGoi = () => {
     setModalAddCuocGoi(true);
@@ -102,33 +203,70 @@ const CongViecThucHienTab = () => {
     setModalUpdateCuocGoi(true);
     setTypeModal(TYPE_MODAL.UPDATE);
   };
-
   const onCloseModalUpdateCuocGoi = () => {
     setModalUpdateCuocGoi(false);
     setTypeModal("");
   };
-  const handelDeleteCuocGoi = () => 
-  {
-     Swal.fire({
-         title: "Bạn có muốn xóa dữ liệu này",
-         icon: "warning",
-         showCancelButton: true,
-         confirmButtonColor: "#3085d6",
-         cancelButtonColor: "#d33",
-         confirmButtonText: "Có"
-       }).then(async (result) =>  {
-         if (result.isConfirmed) {
-            await deleteCuocGoi(selectedRowCuocGoi[0]?.id)
-             Swal.fire({
-               title: "Xóa thành công",
-               icon: "success",
-             });
-             refetch()
-         }
-       });
-  }
+
+  const handleOpenModalAddLichHen = () => {
+    setModalAddLichHen(true);
+    setTypeModal(TYPE_MODAL.INSERT);
+  };
+  const handleCloseModalAddLichHen = () => {
+    setTypeModal("");
+    setModalAddLichHen(false);
+  };
+  const handleOpenModalUpdateLichHen = () => {
+    setModalUpdateLichHen(true);
+    setTypeModal(TYPE_MODAL.UPDATE);
+  };
+  const handleCloseModalUpdateLichHen = () => {
+    setTypeModal("");
+    setModalUpdateLichHen(false);
+  };
+  const handelDeleteCuocGoi = () => {
+    Swal.fire({
+      title: "Bạn có muốn xóa dữ liệu này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteCuocGoi(selectedRowCuocGoi[0]?.id);
+        Swal.fire({
+          title: "Xóa thành công",
+          icon: "success",
+        });
+        refetch();
+      }
+    });
+  };
+  const handelDeleteLichHen = () => {
+    Swal.fire({
+      title: "Bạn có muốn xóa lịch hẹn này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteLichHen(selectedRowLichHen[0]?.id);
+        Swal.fire({
+          title: "Xóa thành công",
+          icon: "success",
+        });
+        isLichHenRefetch();
+      }
+    });
+  };
   const handleRowCuocGoiSelectionChange = (selectedRows) => {
     setSelectedRowCuocGoi(selectedRows);
+  };
+  const handleRowLichHenSelectionChange = (selectedRows) => {
+    setSelectedRowLichHen(selectedRows);
   };
 
   useEffect(() => {
@@ -136,6 +274,11 @@ const CongViecThucHienTab = () => {
       setRows(cuocGoiByKhachHangId);
     }
   }, [cuocGoiByKhachHangId]);
+  useEffect(() => {
+    if (lichHenByKhachHangTiemNangId) {
+      setRowLichHen(lichHenByKhachHangTiemNangId);
+    }
+  }, [lichHenByKhachHangTiemNangId]);
   return (
     <>
       <Grid2 container spacing={2}>
@@ -150,19 +293,21 @@ const CongViecThucHienTab = () => {
           </Button>
           <Button
             variant="outlined"
+            sx={{ marginLeft: 1 }}
+            startIcon={<TodayIcon />}
+            onClick={handleOpenModalAddLichHen}
+          >
+            Thêm lịch hẹn
+          </Button>
+          <Button
+            variant="outlined"
             color="error"
             sx={{ marginLeft: 1 }}
             startIcon={<PermContactCalendarIcon />}
           >
             Thêm nhiệm vụ
           </Button>
-          <Button
-            variant="outlined"
-            sx={{ marginLeft: 1 }}
-            startIcon={<TodayIcon />}
-          >
-            Thêm lịch hẹn
-          </Button>
+         
         </Grid2>
         <Grid2 size={12}>
           <Box sx={{ width: "100%", typography: "body1" }}>
@@ -177,8 +322,8 @@ const CongViecThucHienTab = () => {
                 <TabList onChange={handleChange} aria-label="lab">
                   <Tab label="Cuộc gọi" value="1" />
 
-                  <Tab label="Nhiệm vụ" value="2" />
-                  <Tab label="Lịch hẹn" value="3" />
+                  <Tab label="Lịch hẹn" value="2" />
+                  <Tab label="Nhiệm vụ" value="3" />
                 </TabList>
               </Box>
               <TabPanel value="1">
@@ -192,7 +337,25 @@ const CongViecThucHienTab = () => {
                   onRowSelectionChange={handleRowCuocGoiSelectionChange}
                 />
               </TabPanel>
-              <TabPanel value="2"></TabPanel>
+              <TabPanel value="2">
+                {isLichHenFetching? (
+                  <div style={{ textAlign: "center", marginTop: "20px" }}>
+                    <CircularProgress />
+                  </div>
+                ) : (
+                  <div>
+                    <CustomDatagrid
+                      rows={rowLichHen}
+                      columns={columnsLichHen}
+                      pageSizeOptions={[10, 25, 50]}
+                      initialPageSize={25}
+                      checkboxSelection={false}
+                      showTopToolbar={true}
+                      onRowSelectionChange={handleRowLichHenSelectionChange}
+                    />
+                  </div>
+                )}
+              </TabPanel>
               <TabPanel value="3"></TabPanel>
             </TabContext>
           </Box>
@@ -204,17 +367,37 @@ const CongViecThucHienTab = () => {
           typeModal={typeModal}
           setTypeModal={setTypeModal}
           setLoading={setIsLoading}
-          refetch = {refetch}
+          refetch={refetch}
         />
         {/* Modal update cuộc gọi  */}
-        <ModalUpdateCuocGoi 
-        selectedItem={selectedRowCuocGoi} 
-        closeModal={onCloseModalUpdateCuocGoi}   
-        typeModal={typeModal}
-        setTypeModal={setTypeModal}
-        showModal={modalUpdateCuocGoi}
-        setLoading={setIsLoading}
-        refetch = {refetch}
+        <ModalUpdateCuocGoi
+          selectedItem={selectedRowCuocGoi}
+          closeModal={onCloseModalUpdateCuocGoi}
+          typeModal={typeModal}
+          setTypeModal={setTypeModal}
+          showModal={modalUpdateCuocGoi}
+          setLoading={setIsLoading}
+          refetch={refetch}
+        />
+        {/* Modal add Lịch hẹn */}
+        <ModalAddLichHen
+          selectedItem={selectedRowLichHen}
+          closeModal={handleCloseModalAddLichHen}
+          typeModal={typeModal}
+          setTypeModal={setTypeModal}
+          showModal={modalAddLichHen}
+          setLoading={setIsLoading}
+          refetch={isLichHenRefetch}
+        />
+        {/* Modal update lịch hẹn  */}
+        <ModalUpdateLichHen
+          selectedItem={selectedRowLichHen}
+          closeModal={handleCloseModalUpdateLichHen}
+          typeModal={typeModal}
+          setTypeModal={setTypeModal}
+          showModal={modalUpdataLichHen}
+          setLoading={setIsLoading}
+          refetch={isLichHenRefetch}
         />
       </Grid2>
     </>

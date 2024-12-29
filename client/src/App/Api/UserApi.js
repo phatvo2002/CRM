@@ -26,6 +26,9 @@ export const apiUser = createApi({
     getUserById: builder.query({
       query: () => `/User/getUserById`,
     }),
+    getUserByPhongBanId: builder.query({
+      query: () => `/User/getuserbyphongbanid`,
+    }),
     // Add a new user
     addUser: builder.mutation({
       query: (data) => ({
@@ -61,6 +64,7 @@ export const apiUser = createApi({
 export const { 
   useGetUserAllQuery, 
   useGetUserByIdQuery, 
+  useGetUserByPhongBanIdQuery,
   useAddUserMutation, 
   useDeleteUserMutation,
   useUpdateUserPermissionMutation,

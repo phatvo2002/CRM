@@ -51,6 +51,21 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getuserbyphongbanid")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetUserByPhongBanId()
+        {
+            try
+            {
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                List<UserDTO> result = await _userService.GetUserByPhongBanId(phongBanId);
+                return Ok(result);
+            }catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);  
+            }
+        }
+
         [HttpPost("createUser")]
         [JwtAuthorize]
         public async Task<IActionResult> CreateUser(UserModal modal)

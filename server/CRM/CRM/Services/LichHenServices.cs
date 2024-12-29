@@ -1,9 +1,10 @@
 ﻿using CRM.DTO;
 using CRM.Modal;
 using CRM.Repositories.Interfaces;
+using CRM.Services.Interfaces;
 using System.Security.Principal;
 
-namespace CRM.Services.Interfaces
+namespace CRM.Services
 {
     public class LichHenServices : ILichHenServices
     {
@@ -15,7 +16,7 @@ namespace CRM.Services.Interfaces
 
         public async Task<ResultModal> CreateLichHen(LichHenModal modal, Guid nguoiDungId, Guid phongBanId)
         {
-           return await _lichHenRepository.CreateLichHen(modal ,nguoiDungId ,phongBanId);
+            return await _lichHenRepository.CreateLichHen(modal, nguoiDungId, phongBanId);
         }
 
         public async Task<ResultModal> DeleteLichHen(Guid Id)
@@ -43,9 +44,9 @@ namespace CRM.Services.Interfaces
             return await _lichHenRepository.GetLichHenByNguoiDungId(NguoiDungId);
         }
 
-        public Task<ResultModal> UpdateLichHen(LichHenModal modal, Guid nguoiDungId, Guid phongBanId)
+        public async Task<ResultModal> UpdateLichHen(LichHenModal modal, Guid nguoiDungId, Guid phongBanId)
         {
-            throw new NotImplementedException();
+            return await _lichHenRepository.UpdateLichHen(modal ,nguoiDungId ,phongBanId);
         }
     }
 }

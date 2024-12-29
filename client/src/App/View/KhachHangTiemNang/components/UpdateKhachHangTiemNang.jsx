@@ -254,7 +254,6 @@ const UpdateKhachHangTiemNang = (props) => {
       schema={schema}
       ref={modalRef}
       fullScreen={true}
-      
     >
      <Grid2 container spacing={2}>
               <Grid2 size={6}>

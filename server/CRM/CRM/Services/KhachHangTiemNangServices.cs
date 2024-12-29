@@ -13,6 +13,11 @@ namespace CRM.Services
             _khachHangTiemNang = khachHangTiemNang;
         }
 
+        public async Task<ResultModal> BanGiaoKhachHangTiemNang(Guid id, Guid userId)
+        {
+            return await _khachHangTiemNang.BanGiaoKhachHangTiemNang(id, userId);
+        }
+
         public async Task<ResultModal> ChinhSuaKhachHangTiemNangAsync(KhachHangTiemNangModel model)
         {
             return await _khachHangTiemNang.ChinhSuaKhachHangTiemNangAsync(model);

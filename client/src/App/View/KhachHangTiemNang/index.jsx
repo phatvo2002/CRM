@@ -20,6 +20,7 @@ import {
   useGetTemplatesQuery,
 } from "src/App/Api/KhachHangTiemNangApi";
 import UpdateKhachHangTiemNang from "./components/UpdateKhachHangTiemNang";
+import ModalBanGiaoKhachHang from "./Modal/ModalBanGiaoKhachHang";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
@@ -67,7 +68,9 @@ const KhachHangTiemNang = () => {
             </IconButton>
           </Tooltip>
           <Tooltip title="Bàn giao công việc">
-            <IconButton disabled={selectedRow.length === 0} style={{}}>
+            <IconButton disabled={selectedRow.length === 0} style={{}}
+              onClick={() => handleOpenModalBanGiaoKhachHang()}
+            >
               <SendAndArchiveIcon />
             </IconButton>
           </Tooltip>
@@ -118,6 +121,7 @@ const KhachHangTiemNang = () => {
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [typeModal, setTypeModal] = useState("");
   const [loading, setLoading] = useState(false);
+  const [openModalBanGiao,setOpenModalBanGiao] = useState(false);
   const { data: getTemplate } = useGetTemplatesQuery({
     path: "Templates/ThongTinTiemNang.xlsx",
     filename: "ThongTinTiemNang",
@@ -143,6 +147,14 @@ const KhachHangTiemNang = () => {
     setOpenModalUpdate(false);
     setTypeModal("");
   };
+  const handleOpenModalBanGiaoKhachHang = () => {
+    setOpenModalBanGiao(true);
+    setTypeModal(TYPE_MODAL.UPDATE);
+  }
+  const handleCloseModalBanGiaoKhachHang = () => {
+    setOpenModalBanGiao(false);
+    setTypeModal("");
+  }
 
   const handleDeletePhongBan = async (id) => {
     if (
@@ -177,20 +189,17 @@ const KhachHangTiemNang = () => {
       const blob = new Blob([getTemplate], {
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
-
       const url = window.URL.createObjectURL(blob);
-
       const a = document.createElement("a");
       a.href = url;
       a.download = "ThongTinTiemNang.xlsx";
       a.click();
-
-      // Sau khi tải xong, giải phóng URL
       window.URL.revokeObjectURL(url);
     } else {
       console.error("Không có dữ liệu để tải file.");
     }
   };
+  
 
   useEffect(() => {
     if (userData?.response?.checkIsTruongPhong === true) {
@@ -259,6 +268,14 @@ const KhachHangTiemNang = () => {
           showModal={openModalUpdate}
           setLoading={setLoading}
           refetch={refetch}
+        />
+        <ModalBanGiaoKhachHang
+           selectedItem={selectedRow}
+           closeModal={handleCloseModalBanGiaoKhachHang}
+           typeModal={typeModal}
+           setTypeModal={setTypeModal}
+           showModal={openModalBanGiao}
+           setLoading={setLoading}
         />
       </div>
 

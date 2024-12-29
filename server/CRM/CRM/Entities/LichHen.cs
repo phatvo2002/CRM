@@ -12,5 +12,6 @@
         public Guid KhachHangTiemNangId { get; set; }
         public virtual TrangThaiThucHien? TrangThaiThucHien { get; set; }
         public virtual KhachHangTiemNang? KhachHangTiemNang { get; set; }
+
     }
 }

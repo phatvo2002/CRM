@@ -124,6 +124,12 @@ namespace CRM.Repositories
             return _mapper.Map<UserDTO>(data);
         }
 
+        public async Task<List<UserDTO>> GetUserByPhongBanId(Guid id)
+        {
+            var data = await _context.Nguoidungs.Where(r => r.MaPhongBan == id).ToListAsync();
+            return _mapper.Map<List<UserDTO>>(data);
+        }
+
         public async  Task<List<UserDTO>> GetUsers()
         {
               var data = await _context.Nguoidungs.Include(r => r.PhongBan).Include(r=> r.ChucVu).ToListAsync();

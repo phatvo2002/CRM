@@ -14,6 +14,8 @@ namespace CRM.Repositories.Interfaces
 
         Task<List<UserDTO>> GetUsers();
 
+        Task<List<UserDTO>> GetUserByPhongBanId(Guid id);
+
         Task<ResultModal> DeleteUser(Guid id);
 
         Task<UserDTO> GetUserById(Guid id);

@@ -132,5 +132,21 @@ namespace CRM.Repositories
             }
             return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = true };
         }
+
+        public async Task<ResultModal> BanGiaoKhachHangTiemNang(Guid id , Guid userId)
+        {
+            var db = _context.KhachHangTiemNangs.Where(r=>r.Id == id).FirstOrDefault();
+            if(db != null)
+            {
+                db.NguoiDungId = userId;
+                _context.KhachHangTiemNangs.Update(db);
+                await _context.SaveChangesAsync();
+                return new ResultModal() { Status =200 , Message="Bàn giao khách hàng thành công" , Success = true };
+            }
+            else
+            {
+                return new ResultModal() { Status = 202, Message = "Không tìm thấy khách hàng", Success = false };
+            }    
+        }
     }
 }

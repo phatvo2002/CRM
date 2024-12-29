@@ -62,18 +62,6 @@ const ImportKhachHang = () => {
       <Button style={{ margin: 10 }} variant="contained" onClick={handleSubmit}>
         Import khách hàng
       </Button>
-      {/* <DropzoneAreaBase
-    fileObjects={files}
-    onAdd={handleAdd}
-    onDelete={handleDelete}
-    acceptedFiles={[".xls", ".xlsx"]}
-    maxFileSize={10000000} // 10MB
-    filesLimit={1}
-    showPreviews
-    showPreviewsInDropzone
-    dropzoneText={"Kéo và thả file hoặc click để chọn (Kích thước tối đa 10 MB ...)"}
-  />
-  <Button style={{ margin : 10 }} variant="contained" onClick={handleSubmit}>Import khách hàng</Button> */}
     </div>
   );
 };

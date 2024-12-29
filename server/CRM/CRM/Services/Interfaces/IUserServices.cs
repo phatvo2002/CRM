@@ -10,6 +10,7 @@ namespace CRM.Services.Interfaces
         Task<ResultModal> CreateUser(UserModal userModal);
 
         Task<List<UserDTO>> GetUsers();
+        Task<List<UserDTO>> GetUserByPhongBanId(Guid id);
 
         Task<ResultModal> DeleteUser(Guid id);
 

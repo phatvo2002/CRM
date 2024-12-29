@@ -12,6 +12,7 @@ namespace CRM.Repositories.Interfaces
        Task<ResultModal> ThemMoiKhachHangTiemNangAsync(KhachHangTiemNangModel model);
        Task<ResultModal> ChinhSuaKhachHangTiemNangAsync(KhachHangTiemNangModel model);
        Task<ResultModal> XoaKhachHangTiemNangAsync(Guid id);
+       Task<ResultModal> BanGiaoKhachHangTiemNang(Guid id , Guid userId);
       
       
     }

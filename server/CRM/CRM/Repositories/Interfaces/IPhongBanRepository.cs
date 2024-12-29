@@ -5,14 +5,13 @@ namespace CRM.Repositories.Interfaces
 {
     public interface IPhongBanRepository
     {
-        public Task<ResultModal> CreatePhongBan(PhongBanModel model);
+         Task<ResultModal> CreatePhongBan(PhongBanModel model);
 
-        public Task<List<PhongBanDTO>> GetAllPhongBan();
+         Task<List<PhongBanDTO>> GetAllPhongBan();
+         Task<PhongBanDTO> GetPhongBanById(Guid id);
 
-        public Task<PhongBanDTO> GetPhongBanById(Guid id);
+         Task<ResultModal> UpdatePhongBan(PhongBanModel model , Guid phongBanId);
 
-        public Task<ResultModal> UpdatePhongBan(PhongBanModel model , Guid phongBanId);
-
-        public Task<ResultModal> DeletePhongBan(Guid id);
+         Task<ResultModal> DeletePhongBan(Guid id);
     }
 }

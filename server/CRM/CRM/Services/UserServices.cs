@@ -61,5 +61,10 @@ namespace CRM.Services
         {
             return await _userRepository.UserDepartment(userId, departmentId);
         }
+
+        public async Task<List<UserDTO>> GetUserByPhongBanId(Guid id)
+        {
+            return await _userRepository.GetUserByPhongBanId(id);
+        }
     }
 }

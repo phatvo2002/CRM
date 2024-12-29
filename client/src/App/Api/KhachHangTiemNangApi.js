@@ -60,6 +60,12 @@ export const apiKhachHangTiemNang = createApi({
           body: data,
         }),
       }),
+      bangiaoKhachHangTiemNang: builder.mutation({
+        query: ({ id, userId }) => ({
+          url: `/KhachHangTiemNang/bangiaokhachhangtiemnang?id=${id}&userId=${userId}`,
+          method: 'PUT',
+        }),
+      }),
       deleteKhachHangTiemNang: builder.mutation({
         query: (id) => ({
           url: `/KhachHangTiemNang/deletekhachhangtiemnang/${id}`,
@@ -76,6 +82,7 @@ export const apiKhachHangTiemNang = createApi({
     useGetTemplatesQuery,
     useAddKhachHangTiemNangMutation,
     useUpdateKhachHangTiemNangMutation,
+    useBangiaoKhachHangTiemNangMutation,
     useImportKhachHangMutation,
     useDeleteKhachHangTiemNangMutation,
   } = apiKhachHangTiemNang;

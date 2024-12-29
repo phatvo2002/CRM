@@ -373,7 +373,22 @@ namespace CRM.Controllers
                 return BadRequest(ex.Message);
             }
         }
-  
+
+        [HttpPut("bangiaokhachhangtiemnang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> BanGiaoKhachHangTiemNang(Guid id , Guid userId)
+        {
+            try
+            {
+                ResultModal result = await _khachHangTiemNangServices.BanGiaoKhachHangTiemNang(id, userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
 
