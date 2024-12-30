@@ -21,12 +21,13 @@ namespace CRM.Repositories
         }
         public async Task<ResultModal> CreateNhiemVu(NhiemVuModal modal, Guid nguoiDungId, Guid phongBanId)
         {
-            var db = _context.LichHens.FirstOrDefault(r => r.Id == modal.Id);
+            var db = _context.NhiemVus.FirstOrDefault(r => r.Id == modal.Id);
             try
             {
                 if (db == null)
                 {
                     NhiemVu nhiemVu = new NhiemVu();
+                    nhiemVu.Id = Guid.NewGuid();
                     nhiemVu.TieuDe = modal.TieuDe;
                     nhiemVu.MoTa = modal.MoTa;
                     nhiemVu.HanHoanThanh = modal.HanHoanThanh;
@@ -80,7 +81,7 @@ namespace CRM.Repositories
 
         public async Task<List<NhiemVuDTO>> GetNhiemVuByKhachHangTiemNangId(Guid id)
         {
-            var db = await _context.NhiemVus.Where(r => r.KhachHangTiemNangId == id).ToListAsync();
+            var db = await _context.NhiemVus.Where(r => r.KhachHangTiemNangId == id).Include(r=> r.MucDoUuTien).Include(r=> r.TrangThaiThucHien).ToListAsync();
             return _mapper.Map<List<NhiemVuDTO>>(db);
         }
 
