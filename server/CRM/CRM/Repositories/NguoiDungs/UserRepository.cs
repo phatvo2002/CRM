@@ -2,13 +2,11 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using CRM.Helper;
 
 namespace CRM.Repositories.NguoiDungs
 {

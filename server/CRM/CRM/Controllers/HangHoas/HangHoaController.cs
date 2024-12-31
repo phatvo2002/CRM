@@ -29,7 +29,7 @@ namespace CRM.Controllers.HangHoas
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("gethanghoabyid{id}")]
+        [HttpGet("gethanghoabyid/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> GetHangHoaById(string id)
         {

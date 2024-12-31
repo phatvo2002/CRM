@@ -1,6 +1,6 @@
 ﻿namespace CRM.Modal
 {
-    public class CuocGoiModal : BaseModel
+    public class CuocGoiModal
     {
         public Guid Id { get; set; }
         public string? TieuDe { get; set; }
