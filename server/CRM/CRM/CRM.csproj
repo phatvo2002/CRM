@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Services\Interfaces\" />
     <Folder Include="wwwroot\files\UploadFiles\" />
     <Folder Include="wwwroot\UploadFiles\Files\" />
     <Folder Include="wwwroot\UploadFiles\Images\" />

@@ -186,8 +186,6 @@ const AddKhachHangTiemNang = () => {
       [modelObj.maNganhNghe]: data[modelObj.maNganhNghe],
       [modelObj.maDoanhThu]: data[modelObj.maDoanhThu],
       [modelObj.isDungChung]: data[modelObj.isDungChung],
-      [modelObj.nguoiDungId]: userData?.response?.id,  
-      [modelObj.phongBanId]: userData?.response?.phongBan?.id,
     };
     if(userData?.response?.phongBan?.id == null || userData?.response?.phongBan?.id === undefined) {
        toast.warning("Bạn chưa được phân phòng ban nên chưa thể thực hiện thao tác này")

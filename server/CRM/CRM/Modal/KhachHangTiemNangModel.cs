@@ -1,6 +1,6 @@
 ﻿namespace CRM.Modal
 {
-    public class KhachHangTiemNangModel 
+    public class KhachHangTiemNangModel
     {
         public Guid? Id { get; set; }
         public string? TenKhachHang { get; set; }
@@ -26,7 +26,6 @@
         public Guid? NguoiDungId { get; set; }
         public Guid? PhongBanId { get; set; }
         public DateTime? CreateAt { get; set; }
-
         public bool? IsDeleted { get; set; }
     }
 }

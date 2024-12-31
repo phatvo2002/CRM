@@ -10,8 +10,14 @@
 
         public bool? IsDeleted { get; set; }
 
-        public virtual Nguoidung? Nguoidung {  get; set; }
+        public virtual Nguoidung? Nguoidung { get; set; }
 
-        public virtual PhongBan? PhongBan { get; set; } 
+        public virtual PhongBan? PhongBan { get; set; }
+
+        public BaseNguoiDung()
+        {
+            IsDeleted = false;
+            CreateAt = DateTime.Now;
+        }
     }
 }

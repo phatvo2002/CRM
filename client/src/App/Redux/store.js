@@ -7,6 +7,8 @@ import { apiKhachHangTiemNang } from 'src/App/Api/KhachHangTiemNangApi';
 import { apiCuocGoi } from 'src/App/Api/CuocGoiApi';
 import { apiNhiemVu } from 'src/App/Api/NhiemVuApi';
 import { apiLichHen } from 'src/App/Api/LichhenApi';
+import { apiDonViTinh } from 'src/App/Api/DonViTinh';
+import { apiLoaiHangHoa } from '../Api/LoaiHangHoa';
 
 const apis = [
   apiPhongban,
@@ -16,7 +18,9 @@ const apis = [
   apiKhachHangTiemNang,
   apiCuocGoi,
   apiNhiemVu,
-  apiLichHen
+  apiLichHen,
+  apiDonViTinh,
+  apiLoaiHangHoa
 ];
 
 const store = configureStore({

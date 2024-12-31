@@ -1,22 +1,24 @@
 ﻿using AutoMapper;
 using CRM.DTO;
 using CRM.Entities;
+using CRM.Modal;
 
 namespace CRM.Helper
 {
     public class AutoMapper : Profile
     {
-        public AutoMapper() { 
+        public AutoMapper()
+        {
 
             //dto
             CreateMap<Nguoidung, LoginDTO>();
-            CreateMap<Nguoidung , UserDTO>();
-            CreateMap<ChucVu ,ChucVuDTO>();
-            CreateMap<TinhTrang , TinhTrangDTO>();
+            CreateMap<Nguoidung, UserDTO>();
+            CreateMap<ChucVu, ChucVuDTO>();
+            CreateMap<TinhTrang, TinhTrangDTO>();
             CreateMap<KetQuaCuocGoi, KetQuaCuocGoiDTO>();
-            CreateMap<Menu ,MenuDTO>();
-            CreateMap<MenuRole ,MenuRoleDTO>();
-            CreateMap<PhongBan , PhongBanDTO>();
+            CreateMap<Menu, MenuDTO>();
+            CreateMap<MenuRole, MenuRoleDTO>();
+            CreateMap<PhongBan, PhongBanDTO>();
             CreateMap<KhachHangTiemNang, KhachHangTiemNangDTO>();
             CreateMap<PhongBanKhachHang, PhongBanKhachHangDTO>();
             CreateMap<NguonGocKhachHang, NguonGocKhachHangDTO>();
@@ -28,9 +30,16 @@ namespace CRM.Helper
             CreateMap<LoaiCuocGoi, LoaiCuocGoiDTO>();
             CreateMap<TrangThaiThucHien, TrangThaiThucHienDTO>();
             CreateMap<MucDoUuTien, MucDoUuTienDTO>();
-            CreateMap<CuocGoi, CuocGoiDTO>();    
+            CreateMap<CuocGoi, CuocGoiDTO>();
             CreateMap<LichHen, LichHenDTO>();
-            CreateMap<NhiemVu,NhiemVuDTO>();
+            CreateMap<NhiemVu, NhiemVuDTO>();
+            CreateMap<LoaiHangHoa, LoaiHangHoaDTO>();
+            CreateMap<LoaiHangHoaModal, LoaiHangHoa>().ReverseMap();
+            CreateMap<DonViTinh, DonViTinhDTO>();
+            CreateMap<DonViTinhModal, DonViTinh>().ReverseMap();
+            CreateMap<HangHoa, HangHoaDTO>();
+            CreateMap<HangHoaModal, HangHoa>().ReverseMap();
+
         }
     }
 }
