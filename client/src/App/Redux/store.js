@@ -9,7 +9,7 @@ import { apiNhiemVu } from 'src/App/Api/NhiemVuApi';
 import { apiLichHen } from 'src/App/Api/LichhenApi';
 import { apiDonViTinh } from 'src/App/Api/DonViTinh';
 import { apiLoaiHangHoa } from '../Api/LoaiHangHoa';
-
+import { apiHangHoa } from '../Api/HangHoa';
 const apis = [
   apiPhongban,
   apiUser,
@@ -20,7 +20,8 @@ const apis = [
   apiNhiemVu,
   apiLichHen,
   apiDonViTinh,
-  apiLoaiHangHoa
+  apiLoaiHangHoa,
+  apiHangHoa
 ];
 
 const store = configureStore({

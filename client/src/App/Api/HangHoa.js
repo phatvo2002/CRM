@@ -23,12 +23,19 @@ export const apiHangHoa = createApi({
         query: (id) => `/HangHoa/gethanghoabyid/${id}`,
       }),
       addHangHoa: builder.mutation({
-        query: (data) => ({
-          url: '/HangHoa/creathanghoa',
-          method: 'POST',
-          body: data,
-        }),
-      }),
+        query: (data) => {
+          const formData = new FormData();
+          Object.keys(data).forEach((key) => {
+            formData.append(key, data[key]);
+          });
+      
+          return {
+            url: '/HangHoa/creathanghoa',
+            method: 'POST',
+            body: formData,
+          };
+        },
+      }),      
       deleteHangHoa: builder.mutation({
         query: (id) => ({
           url: `/HangHoa/deletehanghoa/${id}`,

@@ -11,6 +11,8 @@ import DevicesIcon from "@mui/icons-material/Devices";
 import ModalLoaiHangHoa from "./Modal/ModalLoaiHangHoa";
 import ModalDonViTinh from "./Modal/ModalDonViTinh";
 import { useGetAllHangHoaQuery } from "src/App/Api/HangHoa";
+import { TYPE_MODAL } from "src/App/Until/constant";
+import ModalAddhangHoa from "./Modal/ModalAddhangHoa";
 const index = () => {
   const columns = [
     {
@@ -57,6 +59,7 @@ const index = () => {
     [modalImport, setModalImport] = useState(false),
     [modalUpdate, setModalUpdate] = useState(false),
     [selectedRow, setSelectedRow] = useState([]),
+    [typeModal ,setTypeModal] = useState(""),
     [modalLoaiHangHoa, setModalLoaiHangHoa] = useState(false),
     [modalDonViTinh, setModalDonViTinh] = useState(false),
     [row, setRows] = useState([]);
@@ -76,6 +79,14 @@ const index = () => {
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
+  const handleOpenModalAddHangHoa = () => {
+    setModalAddHangHoa(true)
+    setTypeModal(TYPE_MODAL.INSERT)
+  }
+  const handlecloseModalAddHangHoa = () => {
+    setModalAddHangHoa(false)
+    setTypeModal("")
+  }
   useEffect(() => {
     if (hangHoa) {
       setRows(hangHoa);
@@ -103,6 +114,7 @@ const index = () => {
             variant="outlined"
             sx={{ marginLeft: 1 }}
             startIcon={<Inventory2Icon />}
+            onClick={handleOpenModalAddHangHoa}
           >
             Thêm hàng hóa
           </Button>
@@ -138,6 +150,15 @@ const index = () => {
       <ModalDonViTinh
         modalDoViTinh={modalDonViTinh}
         handleCloseModalDonViTinh={handleCloseModalDonViTinh}
+      />
+      {/* Hàng hóa */}
+      <ModalAddhangHoa
+        selectedItem={selectedRow}
+        closeModal={handlecloseModalAddHangHoa}
+        typeModal={typeModal}
+        setTypeModal={setTypeModal}
+        showModal={modalAddHangHoa}
+        refetch={isloadinghanghoa}
       />
     </div>
   );
