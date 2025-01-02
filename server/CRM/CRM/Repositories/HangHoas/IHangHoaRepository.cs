@@ -6,6 +6,6 @@ namespace CRM.Repositories.HangHoas
 {
     public interface IHangHoaRepository : IBaseRepository<HangHoa, HangHoaModal, Guid, HangHoaDTO>
     {
-
+        Task<ResultModal> CreateHangHoa(HangHoaModal modal);
     }
 }

@@ -14,10 +14,5 @@
 
         public virtual PhongBan? PhongBan { get; set; }
 
-        public BaseNguoiDung()
-        {
-            IsDeleted = false;
-            CreateAt = DateTime.Now;
-        }
     }
 }

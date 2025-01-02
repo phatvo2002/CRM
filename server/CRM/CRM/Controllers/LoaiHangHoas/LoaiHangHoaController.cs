@@ -72,7 +72,7 @@ namespace CRM.Controllers.LoaiHangHoas
         }
         [HttpDelete("deleteloaihanghoa/{id}")]
         [JwtAuthorize]
-        public async Task<IActionResult> DeleteLoaiHangHoa(Guid id)
+        public async Task<IActionResult> DeleteLoaiHangHoa(int id)
         {
             try
             {

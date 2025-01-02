@@ -218,7 +218,7 @@ const KhachHangTiemNang = () => {
           <Grid>
             <h2>Khách hàng tiềm năng</h2>
           </Grid>
-          <Grid sx={{ marginLeft: 20 }}>
+          <Grid sx={{ marginLeft: 30 }}>
             <Button
               variant="outlined"
               color="success"

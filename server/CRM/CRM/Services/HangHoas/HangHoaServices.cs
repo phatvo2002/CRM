@@ -12,5 +12,10 @@ namespace CRM.Services.HangHoas
         {
             _hangHoaRepository = repository;
         }
+
+        public async Task<ResultModal> CreateHangHoa(HangHoaModal modal)
+        {
+            return await _hangHoaRepository.CreateHangHoa(modal);
+        }
     }
 }

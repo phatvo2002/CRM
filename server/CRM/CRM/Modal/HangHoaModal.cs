@@ -10,5 +10,6 @@
         public decimal? DonGia { get; set; }
         public int MaLoaiHangHoa { get; set; }
         public int MaDonViTinh { get; set; }
+        public IFormFile? File { get; set; }
     }
 }

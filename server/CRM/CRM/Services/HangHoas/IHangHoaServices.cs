@@ -6,6 +6,6 @@ namespace CRM.Services.HangHoas
 {
     public interface IHangHoaServices : IBaseServices<HangHoa, HangHoaModal, Guid, HangHoaDTO>
     {
-
+        Task<ResultModal> CreateHangHoa(HangHoaModal modal);
     }
 }

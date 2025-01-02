@@ -45,11 +45,11 @@ namespace CRM.Controllers.HangHoas
         }
         [HttpPost("creathanghoa")]
         [JwtAuthorize]
-        public async Task<IActionResult> CreateHangHoa(HangHoaModal modal)
+        public async Task<IActionResult> CreateHangHoa([FromForm] HangHoaModal modal)
         {
             try
             {
-                var result = await _hangHoaServices.Create(modal);
+                var result = await _hangHoaServices.CreateHangHoa(modal);
                 return Ok(result);
             }
             catch (Exception ex)

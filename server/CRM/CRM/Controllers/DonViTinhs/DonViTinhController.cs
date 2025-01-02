@@ -73,7 +73,7 @@ namespace CRM.Controllers.DonViTinhs
         }
         [HttpDelete("deletedonvitinh/{id}")]
         [JwtAuthorize]
-        public async Task<IActionResult> DeleteDonViTinh(Guid id)
+        public async Task<IActionResult> DeleteDonViTinh(int id)
         {
             try
             {
