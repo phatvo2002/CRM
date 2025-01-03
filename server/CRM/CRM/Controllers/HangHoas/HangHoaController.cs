@@ -59,11 +59,11 @@ namespace CRM.Controllers.HangHoas
         }
         [HttpPut("updatehanghoa")]
         [JwtAuthorize]
-        public async Task<IActionResult> UpdateDonViTinh(HangHoaModal modal)
+        public async Task<IActionResult> UpdateHangHoa([FromForm] HangHoaModal modal)
         {
             try
             {
-                var result = await _hangHoaServices.Update(modal);
+                var result = await _hangHoaServices.UpdateHangHoa(modal);
                 return Ok(result);
             }
             catch (Exception ex)

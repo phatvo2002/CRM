@@ -80,5 +80,27 @@ namespace CRM.Helper
                 return "";
             }
         }
+
+        public static bool DeleteFile(string fileName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(fileName))
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
+
+                    if (System.IO.File.Exists(filePath))
+                        System.IO.File.Delete(filePath);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception exp)
+            {
+                string message = $"file / upload failed! + {exp.Message}";
+                return false;
+            }
+
+        }
     }
 }

@@ -1,15 +1,12 @@
 import { Grid, Grid2 } from "@mui/material";
 import { useEffect, useRef } from "react";
-import SwitchRHF from "../../../../Components/ReactHookFormComp/SwitchRHF/SwitchRHF";
 import { validateString } from "../../../../Until/validateYup";
 import TextFieldRHF from "../../../../Components/ReactHookFormComp/TextFieldRHF/TextFieldRHF";
 import RHFDrawer from "../../../../Components/ReactHookFormComp/RHFDrawer/RHFDrawer";
 import { TYPE_MODAL } from "../../../../Until/constant";
 import * as yup from "yup";
-import { useUpdatePhongBanMutation } from "../../../../Api/Phongban";
 import { toast } from "react-toastify";
-import { useUpdateMenuMutation } from "src/App/Api/MenuApi";
-import { useUpdateLoaiHangHoaMutation } from "src/App/Api/LoaiHangHoa";
+
 import { useUpdateDonViTinhMutation } from "src/App/Api/DonViTinh";
 // ------ Form Config ------ //
 const modelObj = {

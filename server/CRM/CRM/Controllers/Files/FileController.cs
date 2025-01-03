@@ -1,11 +1,10 @@
-﻿using CRM.Helper;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using CRM.Attributes;
+using CRM.Helper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers.Files
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class FileController : ControllerBase
     {
@@ -15,6 +14,7 @@ namespace CRM.Controllers.Files
             _webHostEnvironment = webHostEnvironment;
         }
         [HttpGet("file")]
+        [JwtAuthorize]
         public IActionResult GetFile(string path, string filename)
         {
             try
@@ -49,6 +49,28 @@ namespace CRM.Controllers.Files
                 return BadRequest(new { ex.Message });
             }
 
+        }
+        [HttpGet("image")]
+        //[JwtAuthorize]
+        public IActionResult GetImage(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return Ok(new { Messages = "Vui lòng nhập đường dẫn file." });
+            string extension;
+            extension = Path.GetExtension(path);
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, path);
+
+            if (System.IO.File.Exists(filePath))
+            {
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+                var contentType = Until.GetmimeType(extension);
+                if (extension == ".png" || extension == ".jpg" || extension == ".jpeg")
+                {
+                    return File(fileBytes, contentType);
+                }
+            }
+
+            return Ok(null);
         }
     }
 }

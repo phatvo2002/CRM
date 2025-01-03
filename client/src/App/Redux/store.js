@@ -10,6 +10,7 @@ import { apiLichHen } from 'src/App/Api/LichhenApi';
 import { apiDonViTinh } from 'src/App/Api/DonViTinh';
 import { apiLoaiHangHoa } from '../Api/LoaiHangHoa';
 import { apiHangHoa } from '../Api/HangHoa';
+import { apiFile } from '../Api/FileApi';
 const apis = [
   apiPhongban,
   apiUser,
@@ -21,7 +22,8 @@ const apis = [
   apiLichHen,
   apiDonViTinh,
   apiLoaiHangHoa,
-  apiHangHoa
+  apiHangHoa,
+  apiFile
 ];
 
 const store = configureStore({

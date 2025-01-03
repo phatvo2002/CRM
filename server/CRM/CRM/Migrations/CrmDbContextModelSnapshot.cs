@@ -152,7 +152,7 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Entities.HangHoa", b =>
                 {
-                    b.Property<string>("MaHangHoa")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal?>("DonGia")
@@ -180,7 +180,7 @@ namespace CRM.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("MaHangHoa")
+                    b.HasKey("Id")
                         .HasName("PK_HangHoaId");
 
                     b.HasIndex("MaDonViTinh");

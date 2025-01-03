@@ -2,7 +2,7 @@
 {
     public class HangHoaDTO
     {
-        public string? MaHangHoa { get; set; }
+        public string? Id { get; set; }
         public string? TenHangHoa { get; set; }
         public string? DuongDanHinhAnh { get; set; }
         public string? MoTa { get; set; }

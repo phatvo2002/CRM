@@ -43,11 +43,17 @@ export const apiHangHoa = createApi({
         }),
       }),
       updateHangHoa: builder.mutation({
-        query: (data) => ({
-          url: `/HangHoa/updatehanghoa`, 
-          method: 'PUT', 
-          body: data, 
-        }),
+        query: (data) => {
+          const formData = new FormData();
+          Object.keys(data).forEach((key) => {
+            formData.append(key, data[key]);
+          });     
+          return {
+            url: `/HangHoa/updatehanghoa`, 
+             method: 'PUT', 
+            body: formData, 
+          };
+        },
       }),
     }),
   });
