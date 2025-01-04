@@ -11,6 +11,7 @@ namespace CRM.Modal
         public string? TenLienHe { get; set; }
         public string? XungHo { get; set; }
         public string? Email { get; set; }
+        public string? SoDienThoai { get; set; }
         public Guid? KhachHangTiemNangId { get; set; }
         public string? KhachHangId { get; set; }
     }

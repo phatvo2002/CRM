@@ -1,6 +1,6 @@
-﻿namespace CRM.Entities
+﻿namespace CRM.Modal
 {
-    public partial class HangHoaQuanTam
+    public class HangHoaQuanTamModal
     {
         public Guid Id { get; set; }
         public string? MaHangHoaId { get; set; }
@@ -11,6 +11,5 @@
         public int SoLuong { get; set; }
         public decimal ThanhTien { get; set; }
         public decimal TongTien { get; set; }
-        public virtual HangHoa? HangHoa { get; set; }
     }
 }

@@ -61,7 +61,7 @@ namespace CRM.Entities
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
         //=> optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
         //Local connection :
-       => optionsBuilder.UseSqlServer("Server=DESKTOP-7IV23S1;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
+        => optionsBuilder.UseSqlServer("Server=DESKTOP-7IV23S1;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -430,7 +430,7 @@ namespace CRM.Entities
                 entity.HasOne(d => d.MucDoUuTien).WithMany(r => r.NhiemVus)
                 .HasForeignKey(r => r.MucDoUuTienId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_MucDoUuTien_NhiemVu"); ;
+                .HasConstraintName("FK_MucDoUuTien_NhiemVu");
                 entity.HasOne(d => d.KhachHangTiemNang).WithMany(r => r.NhiemVus)
                 .HasForeignKey(r => r.KhachHangTiemNangId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -441,10 +441,10 @@ namespace CRM.Entities
                 .HasConstraintName("FK_KhachHangMucTieu_NhiemVu");
                 entity.HasOne(d => d.Nguoidung).WithMany(r => r.NhiemVus).HasForeignKey(r => r.NguoiDungId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_NguoiDung_NhiemVu"); ;
+                .HasConstraintName("FK_NguoiDung_NhiemVu");
                 entity.HasOne(d => d.PhongBan).WithMany(r => r.NhiemVus).HasForeignKey(r => r.PhongBanId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_PhongBan_NhiemVu"); ;
+                .HasConstraintName("FK_PhongBan_NhiemVu");
             });
             // hàng hóa
             modelBuilder.Entity<LoaiHangHoa>(entity =>
@@ -468,6 +468,9 @@ namespace CRM.Entities
                 entity.Property(e => e.SoLuong).HasColumnType("int");
                 entity.Property(e => e.ThanhTien).HasColumnType("decimal");
                 entity.Property(e => e.TongTien).HasColumnType("decimal");
+                entity.HasOne(d => d.HangHoa).WithMany(r => r.HangHoaQuanTams).HasForeignKey(r => r.MaHangHoaId)
+              .OnDelete(DeleteBehavior.ClientSetNull)
+              .HasConstraintName("FK_HangHoa_HangHoaQuanTam");
             });
             modelBuilder.Entity<DonViTinh>(entity =>
             {
@@ -505,6 +508,7 @@ namespace CRM.Entities
                 entity.Property(e => e.TenLienHe).HasMaxLength(50);
                 entity.Property(e => e.XungHo).HasMaxLength(50);
                 entity.Property(e => e.Email).HasMaxLength(50);
+                entity.Property(e => e.SoDienThoai).HasMaxLength(11);
                 entity.Property(e => e.KhachHangTiemNangId).HasColumnType("uniqueidentifier");
                 entity.Property(e => e.KhachHangId).HasMaxLength(100);
                 entity.Property(e => e.IsDeleted).HasColumnType("bit");

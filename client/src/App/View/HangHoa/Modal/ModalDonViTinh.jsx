@@ -103,7 +103,6 @@ const ModalDonViTinh = ({ modalDoViTinh, handleCloseModalDonViTinh }) => {
       await deleteDonViTinh(selectedRow[0]?.id);
       toast.success("Xóa thành công");
       isLoadingdonvitinh();
-   
   };
   return (
     <div>

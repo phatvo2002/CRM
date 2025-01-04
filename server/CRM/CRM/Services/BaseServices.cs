@@ -6,10 +6,12 @@ namespace CRM.Services
     public class BaseServices<TEntity, TModal, TId, TDto> : IBaseServices<TEntity, TModal, TId, TDto> where TEntity : class where TDto : class
     {
         protected readonly IBaseRepository<TEntity, TModal, TId, TDto> _repository;
+
         public BaseServices(IBaseRepository<TEntity, TModal, TId, TDto> repository)
         {
             _repository = repository;
         }
+
 
         public async Task<ResultModal> Create(TModal modal)
         {

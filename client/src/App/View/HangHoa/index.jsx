@@ -11,11 +11,12 @@ import DevicesIcon from "@mui/icons-material/Devices";
 import ModalLoaiHangHoa from "./Modal/ModalLoaiHangHoa";
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import ModalDonViTinh from "./Modal/ModalDonViTinh";
-import { useGetAllHangHoaQuery } from "src/App/Api/HangHoa";
+import { useDeleteHangHoaMutation, useGetAllHangHoaQuery } from "src/App/Api/HangHoa";
 import { TYPE_MODAL } from "src/App/Until/constant";
 import ModalAddhangHoa from "./Modal/ModalAddhangHoa";
 import ModalUpdateHangHoa from "./Modal/ModalUpdateHangHoa";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
+import Swal from "sweetalert2";
 const index = () => {
   const url = process.env.REACT_APP_API_URL
   const columns = [
@@ -46,7 +47,7 @@ const index = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-            // onClick={handleDeleteLoaiHangHoa}
+            onClick={handleDeleteHangHoa}
             >
               <DeleteIcon />
             </IconButton>
@@ -85,6 +86,7 @@ const index = () => {
     [modalDonViTinh, setModalDonViTinh] = useState(false),
     [row, setRows] = useState([]);
   const { data: hangHoa, refetch: isloadinghanghoa } = useGetAllHangHoaQuery();
+  const [deleteHangHoa] = useDeleteHangHoaMutation()
   const handleOpenModalLoaiHangHoa = () => {
     setModalLoaiHangHoa(true);
   };
@@ -133,6 +135,26 @@ const index = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+ const handleDeleteHangHoa = async () =>{
+   Swal.fire({
+     title: "Bạn có muốn xóa hàng hóa này",
+     icon: "warning",
+     showCancelButton: true,
+     confirmButtonColor: "#3085d6",
+     cancelButtonColor: "#d33",
+     confirmButtonText: "Có"
+   }).then(async (result) =>  {
+     if (result.isConfirmed) {
+        await deleteHangHoa(selectedRow[0]?.id)
+         Swal.fire({
+           title: "Xóa thành công",
+           icon: "success",
+         });
+         isloadinghanghoa()
+     }
+   });
+ }
   return (
     <div>
       <Grid2 container spacing={2}>
