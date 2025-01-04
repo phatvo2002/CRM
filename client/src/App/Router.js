@@ -35,6 +35,12 @@ const KhachHangTiemNang = lazy(() =>
 const ThemMoiKhachHangTiemNang = lazy(() => import("./View/KhachHangTiemNang/components/AddKhachHangTiemNang"));
 
 const KhachHangTiemNangDetail = lazy(() => import("./View/KhachHangTiemNang/components/KhachHangTiemNangDetail"));
+const ImportKhachHangTiemNang =  lazy(() => import("./View/KhachHangTiemNang/components/ImportKhachHang"));
+
+// Hàng hóa
+const HangHoa  = lazy(() =>
+  import("./View/HangHoa/index")
+)
 const RouteChild = [
   {
     path: "/banlamviec",
@@ -142,6 +148,23 @@ const RouteChild = [
       element: (
         <Suspense fallback={<div>Loading...</div>}>
            <KhachHangTiemNangDetail />
+        </Suspense>
+      ),
+    },
+    {
+      path: "/tiemnang/uploadkhachhang",
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+           <ImportKhachHangTiemNang />
+        </Suspense>
+      ),
+    },
+    // hàng hóa
+    {
+      path: "/hanghoa",
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+           <HangHoa />
         </Suspense>
       ),
     },

@@ -1,0 +1,17 @@
+﻿using CRM.Modal;
+
+namespace CRM.Repositories
+{
+    public interface IBaseRepository<TEntity, TModal, TId, Tdto> where TEntity : class
+    {
+        Task<List<Tdto>> GetAll();
+        Task<TEntity> GetById(TId id);
+        Task<TEntity> GetById(int id);
+        Task<TEntity> GetById(string id);
+        Task<ResultModal> Create(TModal modal);
+        Task<ResultModal> Update(TModal modal);
+        Task<ResultModal> DeleteById(TId id);
+        Task<ResultModal> DeleteById(int id);
+        Task<ResultModal> DeleteById(string id);
+    }
+}

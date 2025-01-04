@@ -42,11 +42,28 @@ export const apiKhachHangTiemNang = createApi({
           body: data,
         }),
       }),
+      ImportKhachHang: builder.mutation({
+        query: (file) => {
+          const formData = new FormData();
+          formData.append('file', file); 
+          return {
+            url: '/KhachHangTiemNang/ImportKhachHang',
+            method: 'POST',
+            body: formData,
+          };
+        },
+      }),
       updateKhachHangTiemNang: builder.mutation({
         query: (data) => ({
           url: '/KhachHangTiemNang/updatekhachhangtiemnang',
           method: 'PUT',
           body: data,
+        }),
+      }),
+      bangiaoKhachHangTiemNang: builder.mutation({
+        query: ({ id, userId }) => ({
+          url: `/KhachHangTiemNang/bangiaokhachhangtiemnang?id=${id}&userId=${userId}`,
+          method: 'PUT',
         }),
       }),
       deleteKhachHangTiemNang: builder.mutation({
@@ -65,6 +82,8 @@ export const apiKhachHangTiemNang = createApi({
     useGetTemplatesQuery,
     useAddKhachHangTiemNangMutation,
     useUpdateKhachHangTiemNangMutation,
+    useBangiaoKhachHangTiemNangMutation,
+    useImportKhachHangMutation,
     useDeleteKhachHangTiemNangMutation,
   } = apiKhachHangTiemNang;
 

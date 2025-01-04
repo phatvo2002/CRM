@@ -12,8 +12,10 @@
         public Guid? LoaiCuocGoiId { get; set; }
         public Guid? KhachHangTiemNangId { get; set; }
         public Guid? KetQuaCuocGoiId { get; set; }
+        public string? KhachHangMucTieuId {  get; set; }
         public virtual LoaiCuocGoi? LoaiCuocGoi { get;set; }
         public virtual KetQuaCuocGoi? KetQuaCuocGoi { get; set; }
         public virtual KhachHangTiemNang? KhachHangTiemNang { get; set; }
+        public virtual KhachHangMucTieu? KhachHangMucTieu { get; set; }
     }
 }

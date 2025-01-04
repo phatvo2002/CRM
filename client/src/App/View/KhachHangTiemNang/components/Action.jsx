@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-import "../khachhangtiemnang.css"; // CSS riêng cho component
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import { Tabs, Typography } from "@mui/material";
+import { Tabs, Typography, useTheme } from "@mui/material";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TaskIcon from '@mui/icons-material/Task';
@@ -15,8 +14,21 @@ export const ActionComponents = () => {
     const handleTabChange = (event, newValue) => {
       setActiveTab(newValue);
     };
+    const theme = useTheme();
   return (
-    <div className="transaction-history">
+    <Box sx={{
+      position: "fixed",
+      top: 0,
+      right: 0,
+      width: "300px",
+      height: "100%",
+      backgroundColor: theme.palette.background.default, // Sử dụng theme
+      color: theme.palette.text.primary, // Đồng bộ màu chữ
+      boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.1)",
+      padding: "16px",
+      overflowY: "auto",
+      zIndex: 1000,
+    }}>
       <h3>Lịch sử giao dịch</h3>
       {/* Tabs */}
       <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable">
@@ -55,7 +67,7 @@ export const ActionComponents = () => {
           </Typography>
         )}
       </Box>
-    </div>
+    </Box>
   );
 };
 

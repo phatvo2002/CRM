@@ -37,9 +37,11 @@
         public virtual TinhTrang? TinhTrang { get; set; }
 
         public virtual ICollection<KhachHangTiemNang> KhachHangTiemNangs { get; set; } = new List<KhachHangTiemNang>();
+        public virtual ICollection<KhachHangMucTieu> KhachHangMucTieus { get; set; } = new List<KhachHangMucTieu>();
         public virtual ICollection<CuocGoi> CuocGois { get; set; } = new List<CuocGoi>();
         public virtual ICollection<LichHen> LichHens { get; set; } = new List<LichHen>();
         public virtual ICollection<NhiemVu> NhiemVus { get; set; } = new List<NhiemVu>();
+        public virtual ICollection<LienHe> LienHes { get; set; } = new List<LienHe>();
 
     }
 }

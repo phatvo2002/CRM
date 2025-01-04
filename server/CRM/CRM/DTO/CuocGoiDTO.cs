@@ -11,5 +11,7 @@
         public Guid? LoaiCuocGoiId { get; set; }
         public Guid? KhachHangTiemNangId { get; set; }
         public Guid? KetQuaCuocGoiId { get; set; }
+        public DateTime CreateAt { get; set; }
+        public LoaiCuocGoiDTO? LoaiCuocGoi { get; set; }
     }
 }

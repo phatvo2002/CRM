@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace CRM.Helper
@@ -15,6 +16,12 @@ namespace CRM.Helper
                 sBuilder.Append(data[i].ToString("x2"));
             }
             return sBuilder.ToString();
+        }
+        public static string CheckEmty(string data)
+        {
+            if (data.IsNullOrEmpty()) 
+             return "Null";
+            return data;
         }
     }
 }

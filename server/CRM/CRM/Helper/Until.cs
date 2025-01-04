@@ -1,4 +1,7 @@
-﻿namespace CRM.Helper
+﻿
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+namespace CRM.Helper
 {
     public static class Until
     {
@@ -36,6 +39,68 @@
                     break;
             }
             return mimeType;
+        }
+        public static string UploadFileImage(IFormFile file)
+        {
+            try
+            {
+                string folder = $"UploadFiles/Images/{DateTime.Now.ToString("yyyyMMdd")}/";
+                // full path to file in temp location
+                var filePath = Path.Combine(
+                    Directory.GetCurrentDirectory(), "wwwroot",
+                    folder);
+
+                bool folderExists = Directory.Exists(filePath);
+                if (!folderExists)
+                    Directory.CreateDirectory(filePath);
+
+                var url = "";
+
+                var id = Guid.NewGuid();
+                var fullpath = filePath + $"{id}_{file.FileName.Replace(" ", "")}";
+                using (var image = Image.Load(file.OpenReadStream()))
+                {
+                    int width = image.Width;
+                    if (image.Width > 800)
+                    {
+                        width = 800;
+                    }
+                    image.Mutate(x => x
+                         .Resize(width, 0)
+                     );
+
+                    image.Save(fullpath);
+                    url = url + folder + $"{id}_{file.FileName.Replace(" ", "")}";
+                }
+                return url;
+            }
+            catch (Exception exp)
+            {
+                string message = $"file / upload failed! + {exp.Message}";
+                return "";
+            }
+        }
+
+        public static bool DeleteFile(string fileName)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(fileName))
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", fileName);
+
+                    if (System.IO.File.Exists(filePath))
+                        System.IO.File.Delete(filePath);
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception exp)
+            {
+                string message = $"file / upload failed! + {exp.Message}";
+                return false;
+            }
+
         }
     }
 }

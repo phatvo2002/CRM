@@ -14,7 +14,6 @@
         public string? MaSoThue { get; set; }
         public DateTime? NgayThanhLap { get; set; }
         public string? DiaChi {  get; set; }
-  
         public string? ThongTinMoTa { get; set; }
         public int? MaPhongbanKhachHang { get; set; }
         public int? MaNguonGocKhachHang { get; set; }
@@ -30,8 +29,7 @@
         public virtual LoaiHinhNgheNghiep? LoaiHinhNgheNghiep{get; set;}
         public virtual NganhNghe? NganhNghe{get; set;}
         public virtual LinhVucNgheNghiep? LinhVucNgheNghiep { get; set;}
-        public virtual DoanhThu? DoanhThu{get; set; }
-
+        public virtual DoanhThu? DoanhThu {get; set; }
         public virtual ICollection<CuocGoi> CuocGois { get; set;} = new List<CuocGoi>();
         public virtual ICollection<LichHen> LichHens { get; set;} = new List<LichHen>();
         public virtual ICollection<NhiemVu> NhiemVus { get; set; } = new List<NhiemVu>();

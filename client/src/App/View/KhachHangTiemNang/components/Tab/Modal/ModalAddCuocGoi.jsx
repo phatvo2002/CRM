@@ -9,7 +9,6 @@ import * as yup from "yup";
 import { SwitchRHF } from "src/App/Components/ReactHookFormComp";
 import { useParams } from "react-router-dom";
 import {toast} from 'react-toastify';
-import { useAddMenuMutation } from "src/App/Api/MenuApi";
 import { validateDatePicker } from "../../../../../Until/validateYup";
 import AutocompleteRHF from "src/App/Components/ReactHookFormComp/AutocompleteRHF";
 import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
@@ -68,11 +67,11 @@ const getHeader = (typeModal) => {
 };
 
 const ModlaAddCuocGoi = (props) => {
-  const { showModal, closeModal, typeModal, setTypeModal ,setLoading} =
+  const { showModal, closeModal, typeModal, setTypeModal ,setLoading ,refetch} =
     props,
     _isMounted = useRef(false),
     modalRef = useRef(null),
-    {id}= useParams,
+    {id}= useParams(),
     isLoading = false,
     header = getHeader(typeModal);
 
@@ -88,6 +87,7 @@ const ModlaAddCuocGoi = (props) => {
       [modelObj.ngayBatDau]: data[modelObj.ngayBatDau],
       [modelObj.ketQuaCuocGoiId]: data[modelObj.ketQuaCuocGoiId],
       [modelObj.loaiCuocGoiId]: data[modelObj.loaiCuocGoiId],
+      [modelObj.isHoanThanh] : data[modelObj.isHoanThanh],
       [modelObj.khachHangTiemNangId] : id
     };
 
@@ -96,6 +96,7 @@ const ModlaAddCuocGoi = (props) => {
   },
     callApiInsert = async (data) => {
       try {
+        console.log(data);
         await addCuocGoi(data).unwrap();
         toast.success("Thêm mới thành công!", {
           position: "top-right",
@@ -106,8 +107,7 @@ const ModlaAddCuocGoi = (props) => {
           draggable: true,
           progress: undefined,
       });
-
-      
+        refetch();
         closeModalWithOtherFunc() 
       } catch (error) {
         toast.error("Đã có lỗi khi xảy ra!", {

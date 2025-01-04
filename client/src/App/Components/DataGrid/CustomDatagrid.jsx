@@ -85,6 +85,7 @@ const CustomDatagrid = ({
   columns ,
   pageSizeOptions = [10, 25, 50, 100],
   initialPageSize = 25,
+  getRowId,
   checkboxSelection = false,
   disableMultipleSelection = false,
   disableRowSelectionOnClick = false,

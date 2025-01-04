@@ -1,20 +1,40 @@
-﻿using CRM;
-using CRM.Entities;
+﻿using CRM.Entities;
 using CRM.Entities.StoreProcedure;
 using CRM.Filters;
-using CRM.Helper;
-using CRM.Repositories;
-using CRM.Repositories.Interfaces;
-using CRM.Services;
-using CRM.Services.Interfaces;
+using CRM.Repositories.ChucVus;
+using CRM.Repositories.CuocGois;
+using CRM.Repositories.DonViTinhs;
+using CRM.Repositories.GetDatas;
+using CRM.Repositories.HangHoas;
+using CRM.Repositories.KhachHangTiemNangs;
+using CRM.Repositories.LichHens;
+using CRM.Repositories.LienHes;
+using CRM.Repositories.LoaiHangHoas;
+using CRM.Repositories.Menus;
+using CRM.Repositories.NguoiDungs;
+using CRM.Repositories.NhiemVus;
+using CRM.Repositories.PhongBans;
+using CRM.Repositories.TinhTrangs;
+using CRM.Services.ChucVus;
+using CRM.Services.CuocGois;
+using CRM.Services.DonViTinhs;
+using CRM.Services.GetDatas;
+using CRM.Services.HangHoas;
+using CRM.Services.KhahHangTiemNangs;
+using CRM.Services.LichHens;
+using CRM.Services.LienHes;
+using CRM.Services.LoaiHangHoas;
+using CRM.Services.Menus;
+using CRM.Services.NguoiDungs;
+using CRM.Services.NhiemVus;
+using CRM.Services.PhongBans;
+using CRM.Services.TinhTrangs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.MSSqlServer;
-using Serilog;
-using System.Text;
 using System.Text.Json.Serialization;
 
 
@@ -52,10 +72,10 @@ builder.Services.AddControllers()
 builder.Services.AddControllers();
 // Add services to the container.
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<IUserServices ,UserServices>();
+builder.Services.AddScoped<IUserServices, UserServices>();
 
 builder.Services.AddScoped<IChucVuRepository, ChucVuRepository>();
-builder.Services.AddScoped<IChucVuServices ,ChucVuServices>();
+builder.Services.AddScoped<IChucVuServices, ChucVuServices>();
 
 
 builder.Services.AddScoped<IMenuRepository, MenuRepository>();
@@ -82,6 +102,16 @@ builder.Services.AddScoped<INhiemVuServices, NhiemVuServices>();
 builder.Services.AddScoped<ICuocGoiRepository, CuocGoiRepository>();
 builder.Services.AddScoped<ICuocGoiServices, CuocGoiServices>();
 
+builder.Services.AddScoped<ILoaiHangHoaRepository, LoaiHangHoaRepository>();
+builder.Services.AddScoped<ILoaiHangHoaServices, LoaiHangHoaServices>();
+
+builder.Services.AddScoped<IDonViTinhRepository, DonViTinhRepository>();
+builder.Services.AddScoped<IDonViTinhServices, DonViTinhServices>();
+
+builder.Services.AddScoped<IHangHoaRepository, HangHoaRepository>();
+builder.Services.AddScoped<IHangHoaServices, HangHoaServices>();
+builder.Services.AddScoped<ILienHeRepository, LienHeRepository>();
+builder.Services.AddScoped<ILienHeServices, LienHeService>();
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
 
@@ -132,12 +162,13 @@ builder.Services.AddSwaggerGen(opt =>
             new string[]{}
         }
     });
+
 });
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment()) 
+if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
@@ -146,7 +177,7 @@ app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"));
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-app.UseAuthentication(); 
+app.UseAuthentication();
 
 app.MapControllers();
 
