@@ -7,6 +7,7 @@ using CRM.Repositories.DonViTinhs;
 using CRM.Repositories.GetDatas;
 using CRM.Repositories.HangHoaQuanTams;
 using CRM.Repositories.HangHoas;
+using CRM.Repositories.KhachhangMucTieus;
 using CRM.Repositories.KhachHangTiemNangs;
 using CRM.Repositories.LichHens;
 using CRM.Repositories.LienHes;
@@ -22,6 +23,7 @@ using CRM.Services.DonViTinhs;
 using CRM.Services.GetDatas;
 using CRM.Services.HangHoaQuanTams;
 using CRM.Services.HangHoas;
+using CRM.Services.KhachHangMucTieus;
 using CRM.Services.KhahHangTiemNangs;
 using CRM.Services.LichHens;
 using CRM.Services.LienHes;
@@ -114,6 +116,9 @@ builder.Services.AddScoped<IHangHoaRepository, HangHoaRepository>();
 builder.Services.AddScoped<IHangHoaServices, HangHoaServices>();
 builder.Services.AddScoped<ILienHeRepository, LienHeRepository>();
 builder.Services.AddScoped<ILienHeServices, LienHeService>();
+
+builder.Services.AddScoped<IKhachHangMucTieuRepository, KhachHangMucTieuRepository>();
+builder.Services.AddScoped<IKhacHangMucTieuServices, KhachHangMucTieuServices>();
 
 builder.Services.AddScoped<ILienHeServices, LienHeService>();
 builder.Services.AddScoped<JwtAuthorizeFilter>();

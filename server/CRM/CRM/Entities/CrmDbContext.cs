@@ -61,7 +61,7 @@ namespace CRM.Entities
         {
             /*optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");*/
             //Local connection :
-            optionsBuilder.UseSqlServer("Server=DESKTOP-7IV23S1;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
+            optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
         }
 
 

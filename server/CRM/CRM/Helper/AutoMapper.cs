@@ -44,6 +44,9 @@ namespace CRM.Helper
             CreateMap<HangHoaQuanTam ,HangHoaQuanTamDTO>();
             CreateMap<HangHoaQuanTamModal, HangHoaQuanTam>().ReverseMap();
 
+            CreateMap<KhachHangMucTieu, KhachHangMucTieuDTO>();
+            CreateMap<KhachHangMucTieuModal, KhachHangMucTieu>().ReverseMap();
+
         }
     }
 }

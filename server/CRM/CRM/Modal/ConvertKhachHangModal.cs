@@ -24,6 +24,6 @@
         public int? MaLinhVuc { get; set; }
         public int? MaDoanhThu { get; set; }
 
-        public List<HangHoaQuanTamModal>? HangHoaQuan { get; set; }
+        public List<HangHoaQuanTamModal>? HangHoaQuanTam { get; set; }
     }
 }

@@ -4,6 +4,7 @@
     {
         public Guid Id { get; set; }
         public string? TieuDe { get; set; }
+        public string? MoTa { get; set; }
         public DateTime? NgayBatDau { get; set; }
         public int? SoPhutGoi { get; set; }
         public int? SoGiayGoi { get; set; }
@@ -13,5 +14,6 @@
         public Guid? KetQuaCuocGoiId { get; set; }
         public DateTime CreateAt { get; set; }
         public LoaiCuocGoiDTO? LoaiCuocGoi { get; set; }
+        public KhachHangTiemNangDTO? KhachHangTiemNang { get; set; }
     }
 }

@@ -6,6 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
@@ -244,6 +245,14 @@ const KhachHangTiemNang = () => {
             >
               Thêm mới
             </Button>
+            <Button
+              variant="outlined"
+              sx={{ marginLeft: 1 }}
+              startIcon={<AutoDeleteIcon />}
+              color="error"
+            >
+              Thùng rác
+            </Button>
           </Grid>
         </Grid>
         <Grid>
@@ -280,7 +289,7 @@ const KhachHangTiemNang = () => {
       </div>
 
       {/* Phần lịch sử giao dịch */}
-      <ActionComponents />
+      <ActionComponents selectedItem={selectedRow}/>
     </div>
   );
 };
