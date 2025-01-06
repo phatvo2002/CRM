@@ -12,6 +12,8 @@ namespace CRM.Repositories.LienHes
         {
         }
 
+     
+
         public async Task<List<LienHeDTO>> GetLienHeByKhachHangTiemNangId(Guid id)
         {
             var db = await _crmDbContext.LienHes.Where(r => r.KhachHangTiemNangId == id).ToListAsync();

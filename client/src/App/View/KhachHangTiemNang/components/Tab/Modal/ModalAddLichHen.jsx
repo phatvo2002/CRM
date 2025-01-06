@@ -6,15 +6,12 @@ import { TYPE_MODAL } from "src/App/Until/constant";
 import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 import { validateString } from "../../../../../Until/validateYup";
 import * as yup from "yup";
-import { SwitchRHF } from "src/App/Components/ReactHookFormComp";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { validateDatePicker } from "../../../../../Until/validateYup";
 import AutocompleteRHF from "src/App/Components/ReactHookFormComp/AutocompleteRHF";
 import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
 import {
-  useGetAllKetQuaCuocGoiQuery,
-  useGetAllLoaiCuocGoiQuery,
   useGetAllTrangThaiThucHienQuery,
 } from "src/App/Api/GetDataApi";
 import { useAddCuocGoiMutation } from "src/App/Api/CuocGoiApi";

@@ -7,13 +7,14 @@ import { Tooltip } from 'recharts';
 import { Button, Grid2, IconButton } from '@mui/material';
 import CustomDatagrid from 'src/App/Components/DataGrid/CustomDatagrid';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
+import ModalAddNguoiDaiDien from './Modal/ModalAddNguoiDaiDien';
 const NguoiDaiDienTab = () => {
   const { id } = useParams()
   const [modalAdd, setModalAdd] = useState(false),
     [rows, setRows] = useState([]),
     [selectedRow, setSelectedRow] = useState([]),
     [modalUpdate, setModalUpdate] = useState(false);
-  const { data: dataLienHe } = useGetLienHeByKhachHangTiemNangIdQuery(id)
+  const { data: dataLienHe , refetch : retchLienHe } = useGetLienHeByKhachHangTiemNangIdQuery(id)
 
   const columns = [
     {
@@ -79,7 +80,7 @@ const NguoiDaiDienTab = () => {
                   sx={{ marginLeft: 1 }}
                   startIcon={<PermContactCalendarIcon />}
                   color="inherit"
-                  // onClick={handleOpenModalAddDonViTinh}
+                  onClick={handleOpenModalAdd}
                 >
                   Thêm liên hệ
                 </Button>
@@ -95,6 +96,11 @@ const NguoiDaiDienTab = () => {
           onRowSelectionChange={handleRowSelectionChange}
         />
       </Grid2>
+      <ModalAddNguoiDaiDien
+         showModal={modalAdd}
+         closeModal={handleCloseModalAdd}
+         refetch ={retchLienHe}
+      />
     </Grid2>
   )
 }

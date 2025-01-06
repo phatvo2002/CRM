@@ -5,6 +5,7 @@ using CRM.Repositories.ChucVus;
 using CRM.Repositories.CuocGois;
 using CRM.Repositories.DonViTinhs;
 using CRM.Repositories.GetDatas;
+using CRM.Repositories.HangHoaQuanTams;
 using CRM.Repositories.HangHoas;
 using CRM.Repositories.KhachHangTiemNangs;
 using CRM.Repositories.LichHens;
@@ -19,6 +20,7 @@ using CRM.Services.ChucVus;
 using CRM.Services.CuocGois;
 using CRM.Services.DonViTinhs;
 using CRM.Services.GetDatas;
+using CRM.Services.HangHoaQuanTams;
 using CRM.Services.HangHoas;
 using CRM.Services.KhahHangTiemNangs;
 using CRM.Services.LichHens;
@@ -112,7 +114,12 @@ builder.Services.AddScoped<IHangHoaRepository, HangHoaRepository>();
 builder.Services.AddScoped<IHangHoaServices, HangHoaServices>();
 builder.Services.AddScoped<ILienHeRepository, LienHeRepository>();
 builder.Services.AddScoped<ILienHeServices, LienHeService>();
+
+builder.Services.AddScoped<ILienHeServices, LienHeService>();
 builder.Services.AddScoped<JwtAuthorizeFilter>();
+
+builder.Services.AddScoped<IHangHoaQuanTamRepository, HangHoaQuanTamRepository>();
+builder.Services.AddScoped<IHangHoaQuanTamServices, HangHoaQuanTamServices>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -122,6 +129,7 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
+builder.Services.AddHttpContextAccessor();
 // Đăng ký dịch vụ phân quyền
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(options =>

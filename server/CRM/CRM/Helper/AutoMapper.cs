@@ -41,6 +41,8 @@ namespace CRM.Helper
             CreateMap<HangHoaModal, HangHoa>().ReverseMap();
             CreateMap<LienHe, LienHeDTO>();
             CreateMap<LienHeModal, LienHe>().ReverseMap();
+            CreateMap<HangHoaQuanTam ,HangHoaQuanTamDTO>();
+            CreateMap<HangHoaQuanTamModal, HangHoaQuanTam>().ReverseMap();
 
         }
     }

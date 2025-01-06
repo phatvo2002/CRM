@@ -89,7 +89,7 @@ namespace CRM.Controllers.HangHoaQuanTams
         }
         [HttpDelete("deletehanghoaquantam/{id}")]
         [JwtAuthorize]
-        public async Task<IActionResult> DeleteHangHoaQuanTam(int id)
+        public async Task<IActionResult> DeleteHangHoaQuanTam(Guid id)
         {
             try
             {

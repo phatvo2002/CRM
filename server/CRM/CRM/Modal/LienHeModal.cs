@@ -1,8 +1,12 @@
 ﻿
+
 namespace CRM.Modal
 {
     public class LienHeModal : BaseModel
     {
+        public LienHeModal() : base(null)
+        {
+        }
         public LienHeModal(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
         {
         }

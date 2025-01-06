@@ -145,7 +145,7 @@ namespace CRM.Repositories
             var entity = _mapper.Map<TEntity>(modal);
             _crmDbContext.Set<TEntity>().Update(entity);
             await _crmDbContext.SaveChangesAsync();
-            return new ResultModal { Success = true, Message = "Xóa dữ liệu thành công" };
+            return new ResultModal { Success = true, Message = "Chỉnh sửa dữ liệu thành công" , Status=200 };
         }
     }
 }
