@@ -14,12 +14,12 @@ const NguoiDaiDienTab = () => {
     [rows, setRows] = useState([]),
     [selectedRow, setSelectedRow] = useState([]),
     [modalUpdate, setModalUpdate] = useState(false);
-  const { data: dataLienHe , refetch : retchLienHe } = useGetLienHeByKhachHangTiemNangIdQuery(id)
+  const { data: dataLienHe, refetch: retchLienHe } = useGetLienHeByKhachHangTiemNangIdQuery(id)
 
   const columns = [
     {
       field: "action",
-      width: 200,
+      width: 120,
       headerName: "Thao tác",
       renderCell: (params) => (
         <div
@@ -52,10 +52,11 @@ const NguoiDaiDienTab = () => {
         </div>
       ),
     },
-    { field: "id", headerName: "Mã Liên Hệ", width: 200 ,flex: 1},
-    { field: "tenLienHe", headerName: "Tên Liên Hệ", width: 200 ,flex: 1 },
+    { field: "id", headerName: "Mã Liên Hệ", width: 200, flex: 1 },
+    { field: "tenLienHe", headerName: "Tên Liên Hệ", width: 200, flex: 1 },
     { field: "email", headerName: "Địa chỉ Email", width: 200 },
     { field: "soDienThoai", headerName: "Số Điện Thoại", width: 200 },
+   
   ]
 
   const handleOpenModalAdd = () => {
@@ -74,17 +75,17 @@ const NguoiDaiDienTab = () => {
   };
   return (
     <Grid2 container spacing={2}>
-       <Grid2 size={12}>
-                <Button
-                  variant="outlined"
-                  sx={{ marginLeft: 1 }}
-                  startIcon={<PermContactCalendarIcon />}
-                  color="inherit"
-                  onClick={handleOpenModalAdd}
-                >
-                  Thêm liên hệ
-                </Button>
-              </Grid2>
+      <Grid2 size={12}>
+        <Button
+          variant="outlined"
+          sx={{ marginLeft: 1 }}
+          startIcon={<PermContactCalendarIcon />}
+          color="inherit"
+          onClick={handleOpenModalAdd}
+        >
+          Thêm liên hệ
+        </Button>
+      </Grid2>
       <Grid2 size={12}>
         <CustomDatagrid
           rows={rows}
@@ -97,9 +98,9 @@ const NguoiDaiDienTab = () => {
         />
       </Grid2>
       <ModalAddNguoiDaiDien
-         showModal={modalAdd}
-         closeModal={handleCloseModalAdd}
-         refetch ={retchLienHe}
+        showModal={modalAdd}
+        closeModal={handleCloseModalAdd}
+        refetch={retchLienHe}
       />
     </Grid2>
   )

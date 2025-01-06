@@ -13,6 +13,11 @@ namespace CRM.Services.LienHes
             _lienHeRepository = repository;
         }
 
+        public async Task<ResultModal> CreateLienHe(LienHeModal modal, Guid nguoiDungId, Guid phongBanId)
+        {
+            return await _lienHeRepository.CreateLienHe(modal, nguoiDungId, phongBanId);
+        }
+
         public async Task<List<LienHeDTO>> GetLienHeByKhachHangTiemNangId(Guid id)
         {
             return await _lienHeRepository.GetLienHeByKhachHangTiemNangId(id);

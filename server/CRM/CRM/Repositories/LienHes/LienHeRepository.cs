@@ -12,7 +12,36 @@ namespace CRM.Repositories.LienHes
         {
         }
 
-     
+        public async Task<ResultModal> CreateLienHe(LienHeModal modal, Guid nguoiDungId, Guid phongBanId)
+        {
+            var db = _crmDbContext.LienHes.FirstOrDefault(r => r.Id == modal.Id);
+            try
+            {
+                if (db == null)
+                {
+                    LienHe lienHe = new LienHe();
+                    lienHe.Id = modal.Id;
+                    lienHe.TenLienHe = modal.TenLienHe;
+                    lienHe.XungHo = modal.XungHo;
+                    lienHe.Email = modal.Email;
+                    lienHe.SoDienThoai = modal.SoDienThoai;
+                    lienHe.KhachHangTiemNangId = modal.KhachHangTiemNangId;
+                    lienHe.KhachHangId = modal.KhachHangId;
+                    lienHe.IsDeleted = false;
+                    lienHe.CreateAt = DateTime.Now;
+                    lienHe.PhongBanId = phongBanId;
+                    lienHe.NguoiDungId = nguoiDungId;
+                    _crmDbContext.LienHes.Add(lienHe);
+                    await _crmDbContext.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Thêm mới liên hệ thành công", Success = true };
+                }
+                return new ResultModal() { Status = 202, Message = "Dữ liệu đã tồn tại trong hệ thống", Success = false };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = true };
+            }
+        }
 
         public async Task<List<LienHeDTO>> GetLienHeByKhachHangTiemNangId(Guid id)
         {

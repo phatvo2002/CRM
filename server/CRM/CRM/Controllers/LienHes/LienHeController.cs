@@ -1,5 +1,6 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
+using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.LienHes;
 using Microsoft.AspNetCore.Mvc;
@@ -64,7 +65,9 @@ namespace CRM.Controllers.LienHes
         {
             try
             {
-                var result = await _lienHeServices.Create(modal);
+                Guid nguoiDungId = HttpContext.GetUserId();
+                Guid phongBanid = HttpContext.GetPhongBanId();
+                var result = await _lienHeServices.CreateLienHe(modal, nguoiDungId, phongBanid);
                 return Ok(result);
             }
             catch (Exception ex)
