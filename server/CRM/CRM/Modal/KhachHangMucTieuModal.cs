@@ -10,6 +10,7 @@
         public string? Email { get; set; }
         public string? TaiKhoanNganHang { get; set; }
         public string? Website { get; set; }
+        public DateTime? NgayThanhLap { get; set; }
         public string? MoTa { get; set; }
         public bool? IsDungChung { get; set; }
         public bool? IsKhachHangCaNhan { get; set; }

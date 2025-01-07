@@ -21,6 +21,7 @@ const KhachHangTiemNangDetail = () => {
   const { id } = useParams();
   const { data: dataKhachHangById, isLoading } =
     useGetKhachHangTiemNangByIdQuery(id);
+  const [modalConvert, setOpenModalConvert] = useState(false)
 
   const gotoLink = () => {
     navigate(-1);
@@ -30,6 +31,12 @@ const KhachHangTiemNangDetail = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const handleOpenModalConvert = () => {
+     setOpenModalConvert(true);
+  }
+  const handleCloseModalConvert = () => {
+     setOpenModalConvert(false);
+  }
   if (isLoading) {
     return <div>Loading...</div>;
   }

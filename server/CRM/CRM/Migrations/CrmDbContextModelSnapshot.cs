@@ -299,6 +299,9 @@ namespace CRM.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<DateTime?>("NgayThanhLap")
+                        .HasColumnType("date");
+
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 

@@ -19,6 +19,11 @@ namespace CRM.Services.KhachHangMucTieus
             return await _khachHangMucTieuRepository.ConvertKhachHangMucTieu(modal , nguoiDungId , phongBanId);
         }
 
+        public async Task<ResultModal> CreateKhachHangMucTieu(KhachHangMucTieuModal modal, Guid nguoiDungId, Guid phongBanId)
+        {
+            return await _khachHangMucTieuRepository.CreateKhachHangMucTieu(modal, nguoiDungId, phongBanId);
+        }
+
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId)
         {
             return await _khachHangMucTieuRepository.GetKhachHangMucTieuByNguoiDungId(NguoiDungId);

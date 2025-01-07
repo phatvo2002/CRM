@@ -7,6 +7,7 @@
         public string? TenVietTat { get; set; }
         public string? MaSoThue { get; set; }
         public string? SoDienThoai { get; set; }
+        public DateTime NgayThanhLap { get; set; }
         public string? Email { get; set; }
         public string? TaiKhoanNganHang { get; set; }
         public string? Website { get; set; }

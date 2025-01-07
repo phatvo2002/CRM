@@ -59,7 +59,7 @@ namespace CRM.Entities
         public virtual DbSet<KhachHangMucTieu> KhachHangMucTieus { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            /*optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");*/
+            //optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             //Local connection :
             optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
         }
@@ -533,6 +533,7 @@ namespace CRM.Entities
                 entity.Property(e => e.SoDienThoai).HasMaxLength(50);
                 entity.Property(e => e.Email).HasMaxLength(50);
                 entity.Property(e => e.TaiKhoanNganHang).HasMaxLength(50);
+                entity.Property(e => e.NgayThanhLap).HasColumnType("date");
                 entity.Property(e => e.Website).HasMaxLength(50);
                 entity.Property(e => e.MoTa).HasMaxLength(50);
                 entity.Property(e => e.IsDungChung).HasColumnType("bit");
