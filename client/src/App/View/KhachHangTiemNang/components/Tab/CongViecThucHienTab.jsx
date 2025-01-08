@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Grid2, IconButton, Switch } from "@mui/material";
+import { Button, CircularProgress, Typography, Grid2, IconButton, Switch } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import PermPhoneMsgIcon from "@mui/icons-material/PermPhoneMsg";
 import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
@@ -12,12 +12,14 @@ import ModalUpdateCuocGoi from "./Modal/ModalUpdateCuocGoi";
 import ModalAddLichHen from "./Modal/ModalAddLichHen";
 import ModalUpdateLichHen from "./Modal/ModalUpdateLichHen";
 import ModalAddNhiemVu from "./Modal/ModalAddNhiemVu";
+import ModalUpdateNhiemVu from "./Modal/ModalUpdateNhiemVu";
 import { TYPE_MODAL } from "src/App/Until/constant";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import TabPanel from "@mui/lab/TabPanel";
 import { useParams } from "react-router-dom";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Moment from "react-moment";
 import {
   useDeleteCuocGoiMutation,
   useGetCuocGoiByKhachHangTiemNangIdQuery,
@@ -58,7 +60,7 @@ const CongViecThucHienTab = () => {
       width: 200,
       flex: 1,
       renderCell: (params) => (
-        <div style={{ alignItems: "center" }}>{params?.row?.ngayBatDau}</div>
+        <div style={{ alignItems: "center" }}> <Moment format="DD/MM/YYYY HH:SS">{new Date(params?.row?.ngayBatDau)}</Moment></div>
       ),
     },
     {
@@ -107,13 +109,22 @@ const CongViecThucHienTab = () => {
         </div>
       ),
     },
-    { field: "createAt", headerName: "Ngày tạo", width: 200, flex: 1 },
+    {
+      field: "",
+      headerName: "Ngày tạo",
+      width: 200,
+      flex: 1,
+      renderCell: (params) => (
+        <div style={{ alignItems: "center" }}> <Moment format="DD/MM/YYYY HH:SS">{new Date(params?.row?.createAt)}</Moment></div>
+      ),
+    },
+
   ];
   const columnsLichHen = [
     {
       field: "action",
       headerName: "Thao tác",
-      width:100,
+      width: 100,
       renderCell: () => (
         <div style={{ alignItems: "center" }}>
           <IconButton
@@ -136,21 +147,53 @@ const CongViecThucHienTab = () => {
     { field: "tieuDe", headerName: "Tiêu đề", width: 200, flex: 1 },
     { field: "moTa", headerName: "Mô tả", width: 200, flex: 1 },
     {
-      field: "",
+      field: "ngayBatDau",
       headerName: "Ngày bắt đầu",
       width: 200,
       flex: 1,
       renderCell: (params) => (
-        <div style={{ alignItems: "center" }}>{params?.row?.ngayBatDau}</div>
+        <div style={{ alignItems: "center" }}>
+          <Moment format="DD/MM/YYYY ">{new Date(params?.row?.ngayBatDau)}</Moment>
+        </div>
       ),
     },
     {
-      field: "",
+      field: "ngayKetThuc",
       headerName: "Ngày kết thúc",
       width: 200,
       flex: 1,
       renderCell: (params) => (
-        <div style={{ alignItems: "center" }}>{params?.row?.ngayKetThuc}</div>
+        <div style={{ alignItems: "center" }}>
+          <Moment format="DD/MM/YYYY">{new Date(params?.row?.ngayKetThuc)}</Moment>
+        </div>
+      ),
+    },
+    {
+      field: "",
+      headerName: "Trạng thái thực hiện",
+      width: 200,
+      flex: 1,
+      renderCell: (params) => (
+        <div style={{ alignItems: "center" }}>
+          <div>
+            {params?.row?.trangThaiThucHien?.name.trim() === "Chưa thực hiện" ? (
+              <Typography style={{ backgroundColor: "red", color: "white", textAlign: "center", padding: 3, borderRadius: 50, marginTop: 10 }}>
+                Chưa thực hiện
+              </Typography>
+            ) : params?.row?.trangThaiThucHien?.name.trim() === "Đang thực hiện" ? (
+              <Typography style={{ backgroundColor: "yellow", color: "black", textAlign: "center", padding: 3, borderRadius: 50, marginTop: 10 }}>
+                Đang thực hiện
+              </Typography>
+            ) : params?.row?.trangThaiThucHien?.name.trim() === "Hoàn thành" ? (
+              <Typography style={{ backgroundColor: "green", color: "white", textAlign: "center", padding: 3, borderRadius: 50, marginTop: 10 }}>
+                Hoàn thành
+              </Typography>
+            ) : (
+              <div>Trạng thái không xác định</div>
+            )}
+          </div>
+
+        </div>
       ),
     },
     //  {
@@ -174,23 +217,23 @@ const CongViecThucHienTab = () => {
     {
       field: "action",
       headerName: "Thao tác",
-      width:100,
+      width: 100,
       renderCell: () => (
         <div style={{ alignItems: "center" }}>
           <IconButton
             style={{}}
-            disabled={selectedRowLichHen.length === 0}
-            onClick={handleOpenModalUpdateLichHen}
+            disabled={selectedRowNhiemVu.length === 0}
+            onClick={handleOpenModalUpdateNhiemVu}
           >
             <CreateIcon></CreateIcon>
           </IconButton>
-          <IconButton
+          {/* <IconButton
             style={{ margin: "0 10px" }}
-            disabled={selectedRowLichHen.length === 0}
+            disabled={selectedRowNhiemVu.length === 0}
             onClick={handelDeleteLichHen}
           >
             <DeleteIcon></DeleteIcon>
-          </IconButton>
+          </IconButton> */}
         </div>
       ),
     },
@@ -205,18 +248,18 @@ const CongViecThucHienTab = () => {
         <div style={{ alignItems: "center" }}>{params?.row?.hanHoanThanh}</div>
       ),
     },
-    //  {
-    //    field: "",
-    //    headerName: "Mức độ ưu tiên",
-    //    width: 200,
-    //    flex: 1,
-    //    renderCell: (params) => (
-    //      <div>
-    //         {params?.row?.mucDoUuTien?.name}
-    //      </div>
-    //    )
-    //  },
-    { field: "createAt", headerName: "Ngày tạo", width: 200, flex: 1 },
+     {
+       field: "mucDoUuTien",
+       headerName: "Mức độ ưu tiên",
+       width: 200,
+       flex: 1,
+       renderCell: (params) => (
+         <div>
+            {params?.row?.mucDoUuTien?.name}
+         </div>
+       )
+     },
+    // { field: "createAt", headerName: "Ngày tạo", width: 200, flex: 1 },
   ];
   const { id } = useParams();
   const [value, setValue] = useState("1"),
@@ -230,7 +273,7 @@ const CongViecThucHienTab = () => {
     [isLoading, setIsLoading] = useState(false),
     [rows, setRows] = useState([]),
     [rowLichHen, setRowLichHen] = useState([]),
-    [rowNhiemVu,setRowNhiemVu] = useState([]),
+    [rowNhiemVu, setRowNhiemVu] = useState([]),
     [selectedRowCuocGoi, setSelectedRowCuocGoi] = useState([]),
     [selectedRowLichHen, setSelectedRowLichHen] = useState([]),
     [selectedRowNhiemVu, setSelectedRowNhiemVu] = useState([]);
@@ -240,9 +283,9 @@ const CongViecThucHienTab = () => {
 
   const { data: cuocGoiByKhachHangId, refetch } =
     useGetCuocGoiByKhachHangTiemNangIdQuery(id);
-  const { data: lichHenByKhachHangTiemNangId, isLoading: isLichHenFetching , refetch : isLichHenRefetch } =
+  const { data: lichHenByKhachHangTiemNangId, isLoading: isLichHenFetching, refetch: isLichHenRefetch } =
     useGetLichHenByKhachHangTiemNangIdQuery(id);
-  const {data : nhiemVuByKhachHangTiemNangId , refetch : isNhiemVuRefetch}= useGetNhiemVuByKhachHangTiemNangIdQuery(id)
+  const { data: nhiemVuByKhachHangTiemNangId, refetch: isNhiemVuRefetch } = useGetNhiemVuByKhachHangTiemNangIdQuery(id)
   const [deleteCuocGoi] = useDeleteCuocGoiMutation();
   const [deleteLichHen] = useDeleteLichHenMutation();
 
@@ -334,6 +377,25 @@ const CongViecThucHienTab = () => {
       }
     });
   };
+  // const handelDeleteNhiemVu = () => {
+  //   Swal.fire({
+  //     title: "Bạn có muốn xóa nhiệm vụ này",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Có",
+  //   }).then(async (result) => {
+  //     if (result.isConfirmed) {
+  //       await deleteLichHen(selectedRowLichHen[0]?.id);
+  //       Swal.fire({
+  //         title: "Xóa thành công",
+  //         icon: "success",
+  //       });
+  //       isLichHenRefetch();
+  //     }
+  //   });
+  // };
   const handleRowCuocGoiSelectionChange = (selectedRows) => {
     setSelectedRowCuocGoi(selectedRows);
   };
@@ -388,7 +450,7 @@ const CongViecThucHienTab = () => {
           >
             Thêm nhiệm vụ
           </Button>
-         
+
         </Grid2>
         <Grid2 size={12}>
           <Box sx={{ width: "100%", typography: "body1" }}>
@@ -419,30 +481,30 @@ const CongViecThucHienTab = () => {
                 />
               </TabPanel>
               <TabPanel value="2">
-                  <div>
-                    <CustomDatagrid
-                      rows={rowLichHen}
-                      columns={columnsLichHen}
-                      pageSizeOptions={[10, 25, 50]}
-                      initialPageSize={25}
-                      checkboxSelection={false}
-                      showTopToolbar={true}
-                      onRowSelectionChange={handleRowLichHenSelectionChange}
-                    />
-                  </div>
+                <div>
+                  <CustomDatagrid
+                    rows={rowLichHen}
+                    columns={columnsLichHen}
+                    pageSizeOptions={[10, 25, 50]}
+                    initialPageSize={25}
+                    checkboxSelection={false}
+                    showTopToolbar={true}
+                    onRowSelectionChange={handleRowLichHenSelectionChange}
+                  />
+                </div>
               </TabPanel>
               <TabPanel value="3">
-              <div>
-                    <CustomDatagrid
-                      rows={rowNhiemVu}
-                      columns={columnsNhiemVu}
-                      pageSizeOptions={[10, 25, 50]}
-                      initialPageSize={25}
-                      checkboxSelection={false}
-                      showTopToolbar={true}
-                      onRowSelectionChange={handleRowNhiemVuSelectionChange}
-                    />
-                  </div>
+                <div>
+                  <CustomDatagrid
+                    rows={rowNhiemVu}
+                    columns={columnsNhiemVu}
+                    pageSizeOptions={[10, 25, 50]}
+                    initialPageSize={25}
+                    checkboxSelection={false}
+                    showTopToolbar={true}
+                    onRowSelectionChange={handleRowNhiemVuSelectionChange}
+                  />
+                </div>
               </TabPanel>
             </TabContext>
           </Box>
@@ -488,13 +550,23 @@ const CongViecThucHienTab = () => {
         />
         {/* modal add nhiệm vụ */}
         <ModalAddNhiemVu
-         selectedItem={selectedRowNhiemVu}
-         closeModal={handleCloseModalAddNhiemVu}
-         typeModal={typeModal}
-         setTypeModal={setTypeModal}
-         showModal={modalAddNhiemVu}
-         setLoading={setIsLoading}
-         refetch={isNhiemVuRefetch}
+          selectedItem={selectedRowNhiemVu}
+          closeModal={handleCloseModalAddNhiemVu}
+          typeModal={typeModal}
+          setTypeModal={setTypeModal}
+          showModal={modalAddNhiemVu}
+          setLoading={setIsLoading}
+          refetch={isNhiemVuRefetch}
+        />
+        {/* modal update nhiệm vụ */}
+        <ModalUpdateNhiemVu
+           selectedItem={selectedRowNhiemVu}
+           closeModal={handleCloseModalUpdateNhiemVu}
+           typeModal={typeModal}
+           setTypeModal={setTypeModal}
+           showModal={modalUpdateNhiemVu}
+           setLoading={setIsLoading}
+           refetch={isNhiemVuRefetch}
         />
       </Grid2>
     </>

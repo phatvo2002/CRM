@@ -5,10 +5,11 @@ import Card from "@mui/material/Card";
 import { CardActionArea } from "@mui/material";
 import { Typography, Box, Avatar } from "@mui/material";
 import CallIcon from "@mui/icons-material/Call";
+import Moment from "react-moment";
 const TabCuocGoi = ({ selectedItem }) => {
   const [selectedCard, setSelectedCard] = useState(0);
   const { data: getcuocGoiData } = useGetCuocGoiByKhachHangTiemNangIdQuery(
-    selectedItem[0]?.id
+    selectedItem[0]?.id , {skip : selectedItem[0]?.id == null || undefined}
   );
   return (
     <div>
@@ -52,7 +53,7 @@ const TabCuocGoi = ({ selectedItem }) => {
                     {item.contactPerson}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    {item?.ngayBatDau}
+                    <Moment format="DD/MM/YYYY ">{new Date(item?.ngayBatDau)}</Moment>
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {item?.isHoanThanh == true ? (
@@ -76,7 +77,7 @@ const TabCuocGoi = ({ selectedItem }) => {
         ))
       ) : (
         <Typography variant="body2" color="text.secondary">
-           Không có cuộc gọi nào gần đây
+          Không có cuộc gọi nào gần đây
         </Typography>
       )}
     </div>

@@ -29,14 +29,15 @@ const QuanLyMenu = lazy(() =>
 const DashBoardThietLap = lazy(() =>
   import("./View/ThietLap/DashBoardThietLap")
 );
+// khách hàng tiềm năng
 const KhachHangTiemNang = lazy(() =>
   import("./View/KhachHangTiemNang/index")
 )
 const ThemMoiKhachHangTiemNang = lazy(() => import("./View/KhachHangTiemNang/components/AddKhachHangTiemNang"));
-
 const KhachHangTiemNangDetail = lazy(() => import("./View/KhachHangTiemNang/components/KhachHangTiemNangDetail"));
 const ImportKhachHangTiemNang =  lazy(() => import("./View/KhachHangTiemNang/components/ImportKhachHang"));
-
+// Khách hàng mục tiêu 
+const KhachHangMucTieu = lazy(()=> import("./View/KhachHangMucTieu/index"))
 // Hàng hóa
 const HangHoa  = lazy(() =>
   import("./View/HangHoa/index")
@@ -156,6 +157,15 @@ const RouteChild = [
       element: (
         <Suspense fallback={<div>Loading...</div>}>
            <ImportKhachHangTiemNang />
+        </Suspense>
+      ),
+    },
+    // Khách hàng mục tiêu
+    {
+      path: "/khachhang",
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+           <KhachHangMucTieu />
         </Suspense>
       ),
     },

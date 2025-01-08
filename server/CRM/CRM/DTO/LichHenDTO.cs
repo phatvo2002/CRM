@@ -11,5 +11,6 @@
         public Guid TrangThaiThucHienId { get; set; }
         public Guid KhachHangTiemNangId { get; set; }
         public DateTime? CreateAt { get; set; }
+        public TrangThaiThucHienDTO? TrangThaiThucHien { get; set; }
     }
 }

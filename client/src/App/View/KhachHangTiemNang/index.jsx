@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ActionComponents } from "./components/Action";
-import { Button, Grid, IconButton } from "@mui/material";
+import { Button, Grid, IconButton, Paper } from "@mui/material";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import AddIcon from "@mui/icons-material/Add";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
 import { TYPE_MODAL } from "../../Until/constant";
 import EmailIcon from '@mui/icons-material/Email';
+import ThreePIcon from '@mui/icons-material/ThreeP';
 import SendAndArchiveIcon from '@mui/icons-material/SendAndArchive';
 import PhoneIcon from '@mui/icons-material/Phone';
 import {
@@ -68,11 +69,11 @@ const KhachHangTiemNang = () => {
               <DeleteIcon />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Bàn giao công việc">
+          <Tooltip title="Bàn giao tiềm năng">
             <IconButton disabled={selectedRow.length === 0} style={{}}
               onClick={() => handleOpenModalBanGiaoKhachHang()}
             >
-              <SendAndArchiveIcon />
+              <ThreePIcon />
             </IconButton>
           </Tooltip>
         </div>
@@ -187,19 +188,17 @@ const KhachHangTiemNang = () => {
   };
   const handleGetTemplates = () => {
     if (getTemplate) {
-      const blob = new Blob([getTemplate], {
-        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      });
-      const url = window.URL.createObjectURL(blob);
+      const url = window.URL.createObjectURL(getTemplate); 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "ThongTinTiemNang.xlsx";
+      a.download = "ThongTinTiemNang.xlsx"; 
       a.click();
-      window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(url); 
     } else {
       console.error("Không có dữ liệu để tải file.");
     }
   };
+  
   
 
   useEffect(() => {
@@ -255,6 +254,7 @@ const KhachHangTiemNang = () => {
             </Button>
           </Grid>
         </Grid>
+        <Paper>
         <Grid>
           <CustomDatagrid
             rows={rows}
@@ -266,6 +266,7 @@ const KhachHangTiemNang = () => {
             onRowSelectionChange={handleRowSelectionChange}
           />
         </Grid>
+        </Paper>
        
 
         {/* Bảng dữ liệu khách hàng */}

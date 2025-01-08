@@ -1,54 +1,55 @@
 import { Grid2 } from "@mui/material";
-import { useEffect, useRef } from "react";
-import TextFieldRHF from "../../../../../Components/ReactHookFormComp/TextFieldRHF/TextFieldRHF";
+import { useEffect, useRef, useState } from "react";
+import TextFieldRHF from "src/App/Components/ReactHookFormComp/TextFieldRHF";
 import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
 import { TYPE_MODAL } from "src/App/Until/constant";
 import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
-import { validateString } from "../../../../../Until/validateYup";
+import { validateString } from "src/App/Until/validateYup";
 import * as yup from "yup";
 import { SwitchRHF } from "src/App/Components/ReactHookFormComp";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { validateDatePicker } from "../../../../../Until/validateYup";
+import { validateDatePicker } from "src/App/Until/validateYup";
 import AutocompleteRHF from "src/App/Components/ReactHookFormComp/AutocompleteRHF";
 import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
 import {
   useGetAllDoanhThuQuery,
-  useGetAllKetQuaCuocGoiQuery,
   useGetAllLinhVucNgheNghiepQuery,
-  useGetAllLoaiCuocGoiQuery,
   useGetAllLoaiHinhNgheNghiepQuery,
   useGetAllLoaiTiemNangQuery,
   useGetAllNganhNgheByLinhVucIdQuery,
   useGetAllNguonGocKhachHangQuery,
   useGetAllPhongBanKhachHangQuery,
 } from "src/App/Api/GetDataApi";
-import { useUpdateCuocGoiMutation } from "src/App/Api/CuocGoiApi";
+import TextAreaRHF from "src/App/Components/ReactHookFormComp/TextAreaRHF";
+import { useConvertKhachHangMucTieuMutation } from "src/App/Api/KhachHangMucTieuApi";
+import { useGetHangHoaQuanTamByKhachHangTiemNangIdQuery } from "src/App/Api/HangHoaQuanTam";
 // ------ Form Config ------ //
 const modelObj = {
-    id: "id",
-    tenKhachHang: "tenKhachHang",
-    tenVietTat: "tenVietTat",
-    maSoThue: "maSoThue",
-    soDienThoai: "soDienThoai",
-    taiKhoanNganHang: "taiKhoanNganHang",
-    ngayThanhLap: "ngayThanhLap",
-    email: "email",
-    website: "website",
-    moTa: "moTa",
-    isDungChung: "isDungChung",
-    isKhachHangCaNhan: "isKhachHangCaNhan",
-    isNhaPhanPhoi: "isNhaPhanPhoi",
-    thongTinHoaDon: "thongTinHoaDon",
-    thongTinGiaoHang: "thongTinGiaoHang",
-    maPhongbanKhachHang: "maPhongbanKhachHang",
-    maNguonGocKhachHang: "maNguonGocKhachHang",
-    maLoaiTiemNang: "maLoaiTiemNang",
-    maLoaiHinhNgheNghiep: "maLoaiHinhNgheNghiep",
-    maNganhNghe: "maNganhNghe",
-    maLinhVuc: "maLinhVuc",
-    maDoanhThu: "maDoanhThu",
-  },
+  id: "id",
+  tenKhachHang: "tenKhachHang",
+  tenVietTat: "tenVietTat",
+  maSoThue: "maSoThue",
+  soDienThoai: "soDienThoai",
+  taiKhoanNganHang: "taiKhoanNganHang",
+  ngayThanhLap: "ngayThanhLap",
+  email: "email",
+  website: "website",
+  moTa: "moTa",
+  isDungChung: "isDungChung",
+  isKhachHangCaNhan: "isKhachHangCaNhan",
+  isNhaPhanPhoi: "isNhaPhanPhoi",
+  thongTinHoaDon: "thongTinHoaDon",
+  thongTinGiaoHang: "thongTinGiaoHang",
+  maPhongbanKhachHang: "maPhongbanKhachHang",
+  maNguonGocKhachHang: "maNguonGocKhachHang",
+  maLoaiTiemNang: "maLoaiTiemNang",
+  maLoaiHinhNgheNghiep: "maLoaiHinhNgheNghiep",
+  maNganhNghe: "maNganhNghe",
+  maLinhVuc: "maLinhVuc",
+  maDoanhThu: "maDoanhThu",
+  hangHoaQuanTam:"hangHoaQuanTam"
+},
   labelObj = {
     id: "Mã khách hàng",
     tenKhachHang: "Tên khách hàng",
@@ -56,7 +57,7 @@ const modelObj = {
     maSoThue: "Mã số thuế",
     soDienThoai: "Số điện thoại",
     taiKhoanNganHang: "Tài khoản ngân hàng",
-    ngayThanhLap :"Ngày thành lập / Ngày sinh",
+    ngayThanhLap: "Ngày thành lập / Ngày sinh",
     email: "Email",
     website: "WebSite",
     moTa: "Mô tả",
@@ -82,8 +83,8 @@ const modelObj = {
     [modelObj.email]: "",
     [modelObj.website]: "",
     [modelObj.moTa]: "",
-    [modelObj.taiKhoanNganHang]:"",
-    [modelObj.ngayThanhLap]:"",
+    [modelObj.taiKhoanNganHang]: "",
+    [modelObj.ngayThanhLap]: "",
     [modelObj.isDungChung]: false,
     [modelObj.isKhachHangCaNhan]: false,
     [modelObj.isNhaPhanPhoi]: false,
@@ -106,20 +107,23 @@ const modelObj = {
 
 const ModalConvertKhachHangTiemNang = (props) => {
   const {
-      showModal,
-      closeModal,
-      typeModal,
-      setLoading,
-      selectedItem,
-      setTypeModal,
-      refetch,
-    } = props,
+    showModal,
+    closeModal,
+    typeModal,
+    setLoading,
+    selectedItem,
+    setTypeModal,
+    refetch,
+  } = props,
     _isMounted = useRef(false),
     modalRef = useRef(null),
+    [linhVucId, setLinhVucId] = useState(""),
     { id } = useParams(),
-    [updateCuocGoi, { isLoading: isUpdateCuocGoi }] =
-      useUpdateCuocGoiMutation(),
     header = "Chuyển đổi tiềm năng thành khách hàng",
+    {
+      data: dataHangHoaQuanTam,
+      isFetching: { ishangHoaQuanTamFetching },
+    } = useGetHangHoaQuanTamByKhachHangTiemNangIdQuery(selectedItem?.id , {skip:selectedItem?.id == null}),
     {
       data: dataPhongBanKhachHang,
       isFetching: { isGetPhongBanKhachHangFetching },
@@ -149,49 +153,54 @@ const ModalConvertKhachHangTiemNang = (props) => {
     {
       data: dataLoaiDoanhThu,
       isFetching: { isGetDoanhThuFetching },
-    } = useGetAllDoanhThuQuery();
-  const isLoading =
-    isUpdateCuocGoi || isGetCuocGoiFetching || isGetKetQuaCuocGoiFetching;
+    } = useGetAllDoanhThuQuery(),
+    [convertKhachHang] = useConvertKhachHangMucTieuMutation();
+  const isLoading = false;
+  const generateRandomSequence = (length) => {
+    let result = "";
+    for (let i = 0; i < length; i++) {
+      result += Math.floor(Math.random() * 10); // Tạo số ngẫu nhiên từ 0 đến 9
+    }
+    return result;
+  }
   const submitForm = (data) => {
-      const tempData = {
-        [modelObj.id]: "KH" + Math.floor(Math.random() * 6),
-        [modelObj.tenKhachHang]: data[modelObj.tenKhachHang],
-        [modelObj.tenVietTat]: data[modelObj.tenVietTat],
-        [modelObj.maSoThue]: data[modelObj.maSoThue],
-        [modelObj.soDienThoai]: data[modelObj.soDienThoai],
-        [modelObj.email]: data[modelObj.email],
-        [modelObj.website]: data[modelObj.website],
-        [modelObj.moTa]: data[modelObj.moTa],
-        [modelObj.isDungChung]: data[modelObj.isDungChung],
-        [modelObj.isKhachHangCaNhan]: data[modelObj.isKhachHangCaNhan],
-        [modelObj.isNhaPhanPhoi]: data[modelObj.isNhaPhanPhoi],
-        [modelObj.thongTinHoaDon]: data[modelObj.thongTinHoaDon],
-        [modelObj.thongTinGiaoHang]: data[modelObj.thongTinGiaoHang],
-        [modelObj.maPhongbanKhachHang]: data[modelObj.maPhongbanKhachHang],
-        [modelObj.maNguonGocKhachHang]: data[modelObj.maNguonGocKhachHang],
-        [modelObj.maLoaiTiemNang]: data[modelObj.maLoaiTiemNang],
-        [modelObj.maLoaiHinhNgheNghiep]: data[modelObj.maLoaiHinhNgheNghiep],
-        [modelObj.maNganhNghe]: data[modelObj.maNganhNghe],
-        [modelObj.maLinhVuc]: data[modelObj.maLinhVuc],
-        [modelObj.maDoanhThu]: data[modelObj.maDoanhThu],
-      };
+    const tempData = {
+      [modelObj.id]: "KH" + generateRandomSequence(6),
+      [modelObj.tenKhachHang]: data[modelObj.tenKhachHang],
+      [modelObj.tenVietTat]: data[modelObj.tenVietTat],
+      [modelObj.maSoThue]: data[modelObj.maSoThue],
+      [modelObj.soDienThoai]: data[modelObj.soDienThoai],
+      [modelObj.email]: data[modelObj.email],
+      [modelObj.website]: data[modelObj.website],
+      [modelObj.moTa]: data[modelObj.moTa],
+      [modelObj.isDungChung]: data[modelObj.isDungChung],
+      [modelObj.isKhachHangCaNhan]: data[modelObj.isKhachHangCaNhan],
+      [modelObj.isNhaPhanPhoi]: data[modelObj.isNhaPhanPhoi],
+      [modelObj.thongTinHoaDon]: data[modelObj.thongTinHoaDon],
+      [modelObj.thongTinGiaoHang]: data[modelObj.thongTinGiaoHang],
+      [modelObj.maPhongbanKhachHang]: data[modelObj.maPhongbanKhachHang],
+      [modelObj.maNguonGocKhachHang]: data[modelObj.maNguonGocKhachHang],
+      [modelObj.maLoaiTiemNang]: data[modelObj.maLoaiTiemNang],
+      [modelObj.maLoaiHinhNgheNghiep]: data[modelObj.maLoaiHinhNgheNghiep],
+      [modelObj.maNganhNghe]: data[modelObj.maNganhNghe],
+      [modelObj.maLinhVuc]: data[modelObj.maLinhVuc],
+      [modelObj.maDoanhThu]: data[modelObj.maDoanhThu],
+      [modelObj.hangHoaQuanTam] :dataHangHoaQuanTam
 
-      typeModal === TYPE_MODAL.UPDATE && callApiUpdate(tempData);
-    },
+    };
+
+    callApiUpdate(tempData);
+  },
     callApiUpdate = async (paramData) => {
       try {
-        await updateCuocGoi(paramData).unwrap();
-        toast.success("Chỉnh sửa thành công thành công");
-        refetch();
+        await convertKhachHang(paramData).unwrap();
+        toast.success("Chuyển đổi khách hàng thành công");
         closeModalWithOtherFunc();
       } catch (error) {
         toast.error("Đã có lỗi xảy ra vui lòng liên hệ bộ phận");
-      } finally {
-        setLoading(false);
-      }
+      } 
     },
     closeModalWithOtherFunc = () => {
-      setTypeModal("");
       modalRef.current.reset(initialFormState);
       closeModal();
     },
@@ -199,29 +208,31 @@ const ModalConvertKhachHangTiemNang = (props) => {
       modalRef.current?.reset(
         {
           ...selectedItem,
-          id: selectedItem?.id,
-          [modelObj.tieuDe]: selectedItem[modelObj.tieuDe],
-          [modelObj.moTa]: selectedItem[modelObj.moTa],
-          [modelObj.ngayBatDau]: selectedItem[modelObj.ngayBatDau]
-            ? new Date(selectedItem[modelObj.ngayBatDau])
-            : null,
-          [modelObj.isHoanThanh]: selectedItem[modelObj.isHoanThanh],
-          [modelObj.ketQuaCuocGoiId]: selectedItem[modelObj.ketQuaCuocGoiId],
-          [modelObj.khachHangTiemNangId]:
-            selectedItem[modelObj.khachHangTiemNangId],
-          [modelObj.soPhutGoi]: selectedItem[modelObj.soPhutGoi],
-          [modelObj.soGiayGoi]: selectedItem[modelObj.soGiayGoi],
+          [modelObj.tenKhachHang]: selectedItem[modelObj.tenKhachHang],
+          [modelObj.soDienThoai]: selectedItem?.soDienThoaiDiDong,
+          [modelObj.email]: selectedItem?.emailCaNhan,
+          [modelObj.ngayThanhLap]: selectedItem[modelObj.ngayThanhLap],
+          [modelObj.thongTinMoTa]: selectedItem[modelObj.thongTinMoTa],
+          [modelObj.thongTinGiaoHang]: selectedItem?.diaChi,
+          [modelObj.maNguonGocKhachHang]: selectedItem[modelObj.maNguonGocKhachHang],
+          [modelObj.maPhongbanKhachHang]: selectedItem[modelObj.maPhongbanKhachHang],
+          [modelObj.maLoaiTiemNang]: selectedItem[modelObj.maLoaiTiemNang],
+          [modelObj.maLoaiHinhNgheNghiep]: selectedItem[modelObj.maLoaiHinhNgheNghiep],
+          [modelObj.maNganhNghe]: selectedItem[modelObj.maNganhNghe],
+          [modelObj.maDoanhThu]: selectedItem[modelObj.maDoanhThu],
+          [modelObj.maLinhVuc]: selectedItem[modelObj.maLinhVuc],
+          [modelObj.isDungChung]: selectedItem[modelObj.isDungChung],
+          
         },
         { keepDirty: true }
       );
     };
 
-  console.log(selectedItem[0]?.ngayBatDau);
   useEffect(() => {
-    if (selectedItem[0] && typeModal === TYPE_MODAL.UPDATE) {
-      getInitialStateFromApiToUpdate(selectedItem[0]);
+    if (selectedItem) {
+      getInitialStateFromApiToUpdate(selectedItem);
     }
-  }, [selectedItem[0], typeModal]);
+  }, [selectedItem]);
 
   useEffect(() => {
     _isMounted.current = true;
@@ -236,17 +247,22 @@ const ModalConvertKhachHangTiemNang = (props) => {
       submitForm={submitForm}
       isOpen={showModal}
       header={header}
+      submitName={"Chuyển đổi"}
       type={typeModal}
       loading={isLoading}
+      fullScreen={true}
       initialFormState={initialFormState}
       schema={schema}
       ref={modalRef}
     >
       <Grid2 container spacing={2}>
-        <h3>I. Thông tin chung</h3>
-        <Grid2 size={6}>
-          <TextFieldRHF label={labelObj.id} disabled={true} />
+        <Grid2 size={12}>
+          <h3>I. Thông tin chung</h3>
         </Grid2>
+        {/* <Grid2 size={6}>
+          <TextFieldRHF label={labelObj.id}
+           disabled={true} />
+        </Grid2> */}
         <Grid2 size={6}>
           <TextFieldRHF
             name={modelObj.tenKhachHang}
@@ -260,7 +276,6 @@ const ModalConvertKhachHangTiemNang = (props) => {
             name={modelObj.tenVietTat}
             label={labelObj.tenVietTat}
             disabled={isLoading}
-            required
           />
         </Grid2>
         <Grid2 size={6}>
@@ -268,7 +283,6 @@ const ModalConvertKhachHangTiemNang = (props) => {
             name={modelObj.maSoThue}
             label={labelObj.maSoThue}
             disabled={isLoading}
-            required
           />
         </Grid2>
         <Grid2 size={6}>
@@ -276,7 +290,6 @@ const ModalConvertKhachHangTiemNang = (props) => {
             name={modelObj.soDienThoai}
             label={labelObj.soDienThoai}
             disabled={isLoading}
-            required
           />
         </Grid2>
         <Grid2 size={6}>
@@ -317,7 +330,18 @@ const ModalConvertKhachHangTiemNang = (props) => {
             skeletonLoading={isGetLoaiHinhFetching}
           />
         </Grid2>
-          <Grid2 size={6}>
+        <Grid2 size={6}>
+          <AutocompleteRHF
+            name={modelObj.maLinhVuc}
+            label={labelObj.maLinhVuc}
+            isGetOnlyId
+            // disabled={isLoading}
+            data={commonMapDataAutocomplete(dataLinhVuc, "name")}
+            onChangeCallback={(v) => setLinhVucId(v)}
+            skeletonLoading={isGetLinhVucFetching}
+          />
+        </Grid2>
+        <Grid2 size={6}>
           <AutocompleteRHF
             name={modelObj.maNganhNghe}
             label={labelObj.maNganhNghe}
@@ -335,7 +359,6 @@ const ModalConvertKhachHangTiemNang = (props) => {
             name={modelObj.taiKhoanNganHang}
             label={labelObj.taiKhoanNganHang}
             disabled={isLoading}
-            required
           />
         </Grid2>
         <Grid2 size={6}>
@@ -343,7 +366,6 @@ const ModalConvertKhachHangTiemNang = (props) => {
             name={modelObj.website}
             label={labelObj.website}
             disabled={isLoading}
-            required
           />
         </Grid2>
         <Grid2 size={6}>
@@ -351,11 +373,9 @@ const ModalConvertKhachHangTiemNang = (props) => {
             name={modelObj.ngayThanhLap}
             label={labelObj.ngayThanhLap}
             disabled={isLoading}
-            required
           />
         </Grid2>
-        </Grid2>
-          <Grid2 size={6}>
+        <Grid2 size={6}>
           <AutocompleteRHF
             name={modelObj.maDoanhThu}
             label={labelObj.maDoanhThu}
@@ -368,86 +388,58 @@ const ModalConvertKhachHangTiemNang = (props) => {
         <Grid2 size={12}>
           <h3>3. Thông địa chỉ</h3>
         </Grid2>
-        <Grid2 size={6}>
-          <TextFieldRHF
+        <Grid2 size={12}>
+          <TextAreaRHF
             name={modelObj.thongTinGiaoHang}
             label={labelObj.thongTinGiaoHang}
             disabled={isLoading}
-            required
           />
         </Grid2>
-        <Grid2 size={6}>
-          <TextFieldRHF
+        <Grid2 size={12}>
+          <TextAreaRHF
             name={modelObj.thongTinHoaDon}
             label={labelObj.thongTinHoaDon}
             disabled={isLoading}
-            required
           />
         </Grid2>
-         <Grid2 size={12}>
+        <Grid2 size={12}>
           <h3>4. Thông liên hệ (Dành cho khách hàng là doanh nghiệp)</h3>
         </Grid2>
 
-         <Grid2 size={12}>
+        <Grid2 size={12}>
+          <TextAreaRHF
+            name={modelObj.moTa}
+            label={labelObj.moTa}
+            disabled={isLoading}
+          />
+        </Grid2>
+
+        <Grid2 size={12}>
           <label>{labelObj.isDungChung}</label>
           <SwitchRHF
             name={modelObj.isDungChung}
             label={labelObj.isDungChung}
             disabled={isLoading}
-            required
           />
         </Grid2>
-         <Grid2 size={12}>
+        <Grid2 size={12}>
           <label>{labelObj.isKhachHangCaNhan}</label>
           <SwitchRHF
             name={modelObj.isKhachHangCaNhan}
             label={labelObj.isKhachHangCaNhan}
             disabled={isLoading}
-            required
           />
         </Grid2>
-          <Grid2 size={12}>
+        <Grid2 size={12}>
           <label>{labelObj.isNhaPhanPhoi}</label>
           <SwitchRHF
             name={modelObj.isNhaPhanPhoi}
             label={labelObj.isNhaPhanPhoi}
             disabled={isLoading}
-            required
           />
         </Grid2>
+      </Grid2>
 
-
-      
-        {/* <Grid2 size={6}>
-            
-          <AutocompleteRHF
-            name={modelObj.loaiCuocGoiId}
-            label={labelObj.loaiCuocGoiId}
-            isGetOnlyId
-            disabled={isLoading}
-            data={commonMapDataAutocomplete(loaiCuocGoiData, "name")}
-            skeletonLoading={isGetCuocGoiFetching}
-          />
-        </Grid2> */}
-        {/* <Grid2 size={6}>
-          <AutocompleteRHF
-            name={modelObj.ketQuaCuocGoiId}
-            label={labelObj.ketQuaCuocGoiId}
-            isGetOnlyId
-            disabled={isLoading}
-            data={commonMapDataAutocomplete(KetQuaCuocGoiData, "name")}
-            skeletonLoading={isGetKetQuaCuocGoiFetching}
-          />
-        </Grid2>
-        <Grid2 size={12}>
-          <label>{labelObj.isHoanThanh}</label>
-          <SwitchRHF
-            name={modelObj.isHoanThanh}
-            label={labelObj.isHoanThanh}
-            disabled={isLoading}
-            required
-          />
-        </Grid2> */}
     </RHFDrawer>
   );
 };

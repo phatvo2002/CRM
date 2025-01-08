@@ -10,7 +10,7 @@ import {
 import { styled } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
-
+import "../DataGrid/CustomDatagrid.css"
 function customCheckbox(theme) {
   return {
     '& .MuiCheckbox-root svg': {
@@ -70,9 +70,14 @@ function CustomPagination() {
       color="primary"
       variant="outlined"
       shape="rounded"
+      showFirstButton 
+      showLastButton
       page={page + 1}
+      sx={{
+        display: "flex",
+        paddingRight: "50%",
+      }}
       count={pageCount}
-      // @ts-expect-error
       renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
       onChange={(event, value) => apiRef.current.setPage(value - 1)}
     />
@@ -125,6 +130,13 @@ const CustomDatagrid = ({
         pageSizeOptions={pageSizeOptions}
         showCellVerticalBorder={true}
         style={{ marginTop: '10px' }}
+        componentsProps={{
+          pagination: {
+            sx: {
+              justifyContent: "flex-start", 
+            },
+          },
+        }}
         onRowSelectionModelChange={handleRowSelectionChange}
         slots={{
           pagination: CustomPagination,

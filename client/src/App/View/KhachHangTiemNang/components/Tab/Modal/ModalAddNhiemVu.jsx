@@ -42,7 +42,6 @@ const modelObj = {
   },
   schema = yup.object().shape({
     [modelObj.tieuDe]: validateString(),
-    [modelObj.moTa]: validateString(),
     [modelObj.hanHoanThanh]: validateDatePicker(),
     [modelObj.mucDoUuTienId]: validateString(),
     [modelObj.trangThaiThucHienId]: validateString(),

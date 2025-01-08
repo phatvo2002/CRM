@@ -17,7 +17,7 @@ namespace CRM.Repositories.KhachhangMucTieus
             var db = _crmDbContext.KhachHangMucTieus.FirstOrDefault(r => r.Id == modal.Id);
             try
             {
-                if (db != null)
+                if (db == null)
                 {
                     KhachHangMucTieu khachHangMucTieu = new KhachHangMucTieu();
                     khachHangMucTieu.Id = modal.Id;
@@ -46,7 +46,6 @@ namespace CRM.Repositories.KhachhangMucTieus
                     khachHangMucTieu.PhongBanId = phongBanId;
                     khachHangMucTieu.IsDeleted = false;
                     khachHangMucTieu.CreateAt = DateTime.Now;
-
                     foreach (var h in modal.HangHoaQuanTam)
                     {
                         var hangHoa = _crmDbContext.HangHoaQuanTams.FirstOrDefault(r => r.Id == h.Id);
@@ -74,7 +73,7 @@ namespace CRM.Repositories.KhachhangMucTieus
                 }
                 else
                 {
-                    return new ResultModal() { Status = 202, Message = "Chuyển đổi khách hàng thành công", Success = false };
+                    return new ResultModal() { Status = 202, Message = "Tiềm năng này đã được chuyển đổi thành khách hàng", Success = false };
                 }
             }
             catch (Exception ex)
@@ -121,26 +120,26 @@ namespace CRM.Repositories.KhachhangMucTieus
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm khách hàng thành công", Success = true };
                 }
-                    return new ResultModal() { Status = 202, Message = "Khách hàng đã tồn tại trong hệ thống", Success = false };
-                
+                return new ResultModal() { Status = 202, Message = "Khách hàng đã tồn tại trong hệ thống", Success = false };
+
             }
             catch (Exception ex)
             {
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
-            
+
             throw new NotImplementedException();
         }
 
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId)
         {
-            var db = await _crmDbContext.KhachHangMucTieus.Where(r=> r.NguoiDungId ==  NguoiDungId).ToListAsync();  
+            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.NguoiDungId == NguoiDungId).Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
 
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByPhongBanId(Guid PhongBanId)
         {
-           var db = await _crmDbContext.KhachHangMucTieus.Where(r=> r.PhongBanId == PhongBanId).ToListAsync();
+            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.PhongBanId == PhongBanId).Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
     }

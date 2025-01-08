@@ -3,17 +3,16 @@ using CRM.DTO;
 using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.KhachHangMucTieus;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers.KhachHangMucTieus
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class KhachHangMucTieuController : ControllerBase
     {
         private readonly IKhacHangMucTieuServices _khacHangMucTieuServices;
-        public KhachHangMucTieuController(IKhacHangMucTieuServices khacHangMucTieuServices) 
+        public KhachHangMucTieuController(IKhacHangMucTieuServices khacHangMucTieuServices)
         {
             _khacHangMucTieuServices = khacHangMucTieuServices;
         }
@@ -26,7 +25,8 @@ namespace CRM.Controllers.KhachHangMucTieus
             {
                 var result = await _khacHangMucTieuServices.GetAll();
                 return Ok(result);
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -114,7 +114,7 @@ namespace CRM.Controllers.KhachHangMucTieus
         {
             try
             {
-                var result= await _khacHangMucTieuServices.DeleteById(id);
+                var result = await _khacHangMucTieuServices.DeleteById(id);
                 return Ok(result);
             }
             catch (Exception ex)

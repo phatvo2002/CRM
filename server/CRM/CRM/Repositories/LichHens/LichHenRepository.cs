@@ -81,7 +81,7 @@ namespace CRM.Repositories.LichHens
 
         public async Task<List<LichHenDTO>> GetLichHenByKhachHangTiemNangId(Guid id)
         {
-            var db = await _context.LichHens.Where(r => r.KhachHangTiemNangId == id).ToListAsync();
+            var db = await _context.LichHens.Where(r => r.KhachHangTiemNangId == id).Include(r => r.TrangThaiThucHien).ToListAsync();
             return _mapper.Map<List<LichHenDTO>>(db);
         }
 

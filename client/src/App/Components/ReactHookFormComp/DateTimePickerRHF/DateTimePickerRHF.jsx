@@ -64,9 +64,9 @@ const DateTimePickerRHF = (props) => {
               renderInput={(params) => (
                 <TextField
                   {...params}
+                  fullWidth={true}
                   error={!!getError(errors, name)}
                   helperText={getErrorMessage(errors, name)}
-                  fullWidth
                   onBlur={onBlur}
                   inputProps={{
                     ...params.inputProps,

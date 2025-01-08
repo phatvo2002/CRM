@@ -48,9 +48,16 @@ const ModalAddNguoiDaiDien = (props) => {
     isLoading = false,
     header = "Thêm mới liên hệ";
   const [addLienHe] = useAddLienHeMutation();
+  const generateRandomSequence = (length) => {
+    let result = "";
+    for (let i = 0; i < length; i++) {
+      result += Math.floor(Math.random() * 10);
+    }
+    return result;
+  }
   const submitForm = (data) => {
       const tempData = {
-        [modelObj.id]: "LH" + Math.random().toString(36).slice(2, 7),
+        [modelObj.id]: "LH" + generateRandomSequence(6),
         [modelObj.tenLienHe]: data[modelObj.tenLienHe],
         [modelObj.xungHo]: data[modelObj.xungHo],
         [modelObj.email]: data[modelObj.email],

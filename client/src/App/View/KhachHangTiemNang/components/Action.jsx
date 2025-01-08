@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import { CardActionArea, Tabs, Typography, useTheme } from "@mui/material";
+import { Tabs, Typography, useTheme } from "@mui/material";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TaskIcon from '@mui/icons-material/Task';
 import EmailIcon from '@mui/icons-material/Email';
 import SmsIcon from '@mui/icons-material/Sms';
-import { useGetCuocGoiByKhachHangTiemNangIdQuery } from "src/App/Api/CuocGoiApi";
 import TabCuocGoi from "./TabAction/TabCuocGoi";
+import TabLichHen from "./TabAction/TabLichHen";
 export const ActionComponents = ({selectedItem}) => {
     const [activeTab, setActiveTab] = useState(0);
     const [selectedCard, setSelectedCard] = useState(0);
@@ -23,7 +23,7 @@ export const ActionComponents = ({selectedItem}) => {
       position: "fixed",
       top: 0,
       right: 0,
-      width: "300px",
+      width: "320px",
       height: "100%",
       backgroundColor: theme.palette.background.default, // Sử dụng theme
       color: theme.palette.text.primary, // Đồng bộ màu chữ
@@ -48,9 +48,7 @@ export const ActionComponents = ({selectedItem}) => {
            <TabCuocGoi selectedItem={selectedItem}/>
         )}
         {activeTab === 1 && (
-          <Typography variant="body1" className="tab-panel">
-            Lịch hẹn đã lên lịch
-          </Typography>
+          <TabLichHen selectedItem={selectedItem}/>
         )}
         {activeTab === 2 && (
           <Typography variant="body1" className="tab-panel">

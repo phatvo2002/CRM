@@ -91,7 +91,7 @@ namespace CRM.Controllers.LienHes
         }
         [HttpDelete("deletelienhe/{id}")]
         [JwtAuthorize]
-        public async Task<IActionResult> DeleteDonViTinh(int id)
+        public async Task<IActionResult> DeleteLienHe(string id)
         {
             try
             {

@@ -35,6 +35,7 @@ export const apiKhachHangTiemNang = createApi({
           responseHandler: (response) => response.blob(), 
         }),
       }),
+     
       addKhachHangTiemNang: builder.mutation({
         query: (data) => ({
           url: '/KhachHangTiemNang/createkhachhangtiemnang',
