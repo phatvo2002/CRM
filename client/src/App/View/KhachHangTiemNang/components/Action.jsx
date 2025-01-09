@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
-import { Tabs, Typography, useTheme } from "@mui/material";
+import { Button, Tabs, Typography, useTheme } from "@mui/material";
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import TaskIcon from '@mui/icons-material/Task';
@@ -9,7 +9,8 @@ import EmailIcon from '@mui/icons-material/Email';
 import SmsIcon from '@mui/icons-material/Sms';
 import TabCuocGoi from "./TabAction/TabCuocGoi";
 import TabLichHen from "./TabAction/TabLichHen";
-export const ActionComponents = ({selectedItem}) => {
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+export const ActionComponents = ({selectedItem , isOpen,onClose}) => {
     const [activeTab, setActiveTab] = useState(0);
     const [selectedCard, setSelectedCard] = useState(0);
     // Xử lý thay đổi tab
@@ -23,16 +24,22 @@ export const ActionComponents = ({selectedItem}) => {
       position: "fixed",
       top: 0,
       right: 0,
-      width: "320px",
+      width: "350px",
       height: "100%",
       backgroundColor: theme.palette.background.default, // Sử dụng theme
       color: theme.palette.text.primary, // Đồng bộ màu chữ
       boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.1)",
-      padding: "16px",
+      padding: "20px",
       overflowY: "auto",
       zIndex: 1000,
     }}>
-      <h3>Lịch sử giao dịch</h3>
+      <h3 style={{marginTop:80}}>
+      <Button onClick={onClose}   className={`action-component ${isOpen ? "open" : "close"}`} >
+        <ArrowBackIcon  sx={{ fontSize:"2rem"}}/>
+      </Button>
+      Hoạt động tương tác
+      </h3>
+      
       {/* Tabs */}
       <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable">
         <Tab icon={<LocalPhoneIcon/>} />
@@ -41,9 +48,11 @@ export const ActionComponents = ({selectedItem}) => {
         <Tab icon={<EmailIcon/>} />
         <Tab icon={<SmsIcon/>} />
       </Tabs>
-
+      
       {/* Nội dung của các tab */}
+      
       <Box className="tab-content">
+        
         {activeTab === 0 && (
            <TabCuocGoi selectedItem={selectedItem}/>
         )}

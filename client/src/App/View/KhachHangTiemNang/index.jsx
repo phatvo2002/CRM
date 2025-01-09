@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ActionComponents } from "./components/Action";
-import { Button, Grid, IconButton, Paper } from "@mui/material";
+import { Button, Grid, Grid2, IconButton, Menu, MenuItem, Paper } from "@mui/material";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import AddIcon from "@mui/icons-material/Add";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
@@ -14,6 +14,8 @@ import { TYPE_MODAL } from "../../Until/constant";
 import EmailIcon from '@mui/icons-material/Email';
 import ThreePIcon from '@mui/icons-material/ThreeP';
 import SendAndArchiveIcon from '@mui/icons-material/SendAndArchive';
+import UpdateIcon from '@mui/icons-material/Update';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PhoneIcon from '@mui/icons-material/Phone';
 import {
   useDeleteKhachHangTiemNangMutation,
@@ -28,6 +30,10 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isActionOpen, setIsActionOpen] = useState(false);
+  const handleOpen = () => setIsActionOpen(true);
+  const handleClose = () => setIsActionOpen(false);
   const navigate = useNavigate();
   const gotoLink = () => {
     navigate("/tiemnang/themmoikhachhangtiemnang");
@@ -102,7 +108,7 @@ const KhachHangTiemNang = () => {
       width: 200,
       renderCell: (params) => (
         <div>
-          {params.value ?  <div><PhoneIcon/>{params.value}</div> : <div></div>}
+          {params.value ? <div><PhoneIcon />{params.value}</div> : <div></div>}
         </div>
       ),
     },
@@ -117,13 +123,19 @@ const KhachHangTiemNang = () => {
     { field: "linhVuc", headerName: "Lĩnh vực", width: 200 },
     { field: "nghenghiep", headerName: "Nghề nghiệp", width: 200 },
   ];
-
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseDrop = () => {
+    setAnchorEl(null);
+  };
   const userData = JSON.parse(localStorage.getItem("authorizationData"));
   const [rows, setRows] = useState([]);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [typeModal, setTypeModal] = useState("");
   const [loading, setLoading] = useState(false);
-  const [openModalBanGiao,setOpenModalBanGiao] = useState(false);
+  const [openModalBanGiao, setOpenModalBanGiao] = useState(false);
   const { data: getTemplate } = useGetTemplatesQuery({
     path: "Templates/ThongTinTiemNang.xlsx",
     filename: "ThongTinTiemNang",
@@ -188,18 +200,18 @@ const KhachHangTiemNang = () => {
   };
   const handleGetTemplates = () => {
     if (getTemplate) {
-      const url = window.URL.createObjectURL(getTemplate); 
+      const url = window.URL.createObjectURL(getTemplate);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "ThongTinTiemNang.xlsx"; 
+      a.download = "ThongTinTiemNang.xlsx";
       a.click();
-      window.URL.revokeObjectURL(url); 
+      window.URL.revokeObjectURL(url);
     } else {
       console.error("Không có dữ liệu để tải file.");
     }
   };
-  
-  
+
+
 
   useEffect(() => {
     if (userData?.response?.checkIsTruongPhong === true) {
@@ -214,28 +226,10 @@ const KhachHangTiemNang = () => {
   return (
     <div className="customer-page">
       <div>
-        <Grid container alignItems="center" spacing={2}>
-          <Grid>
+        <Grid2 container alignItems="center" spacing={2}>
+          <Grid2 size={12}>
             <h2>Khách hàng tiềm năng</h2>
-          </Grid>
-          <Grid sx={{ marginLeft: 30 }}>
-            <Button
-              variant="outlined"
-              color="success"
-              startIcon={<GetAppIcon />}
-              onClick={handleGetTemplates}
-            >
-              Xuất Template
-            </Button>
-            <Button
-              variant="outlined"
-              color="warning"
-              sx={{ marginLeft: 1 }}
-              startIcon={<FileDownloadDoneIcon />}
-              onClick={gotoLinkImport}
-            >
-              IMPORT
-            </Button>
+
             <Button
               variant="outlined"
               sx={{ marginLeft: 1 }}
@@ -245,29 +239,76 @@ const KhachHangTiemNang = () => {
               Thêm mới
             </Button>
             <Button
+              id="basic-button"
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+              sx={{ marginLeft: 1, width: "200px" }}
               variant="outlined"
-              sx={{ marginLeft: 1 }}
-              startIcon={<AutoDeleteIcon />}
-              color="error"
+              startIcon={<OpenInNewIcon />}
             >
-              Thùng rác
+              Mở rộng
             </Button>
-          </Grid>
-        </Grid>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleCloseDrop}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={handleCloseDrop}>
+                <Button
+                  variant="outlined"
+                  color="warning"
+                  sx={{ marginLeft: 1, width: "200px" }}
+                  startIcon={<FileDownloadDoneIcon />}
+                  onClick={gotoLinkImport}
+                >
+                  IMPORT
+                </Button>
+              </MenuItem>
+              <MenuItem onClick={handleCloseDrop}>
+                <Button
+                  variant="outlined"
+                  color="success"
+                  sx={{ marginLeft: 1, width: "200px" }}
+                  startIcon={<GetAppIcon />}
+                  onClick={handleGetTemplates}
+                >
+                  Xuất Template
+                </Button>
+              </MenuItem>
+              <MenuItem onClick={handleCloseDrop}>
+                <Button
+                  variant="outlined"
+                  sx={{ marginLeft: 1, width: "200px" }}
+                  startIcon={<AutoDeleteIcon />}
+                  color="error"
+                >
+                  Thùng rác
+                </Button>
+              </MenuItem>
+            </Menu>
+            <Button onClick={handleOpen} sx={{ marginLeft: 1 }} variant="outlined" color="inherit" startIcon={<UpdateIcon/>}>Lịch sử tương tác</Button>
+          </Grid2>
+        </Grid2>
         <Paper>
-        <Grid>
-          <CustomDatagrid
-            rows={rows}
-            columns={columns}
-            pageSizeOptions={[10, 25, 50]}
-            initialPageSize={25}
-            checkboxSelection={false}
-            showTopToolbar={true}
-            onRowSelectionChange={handleRowSelectionChange}
-          />
-        </Grid>
+          <Grid2 size={12}>
+            <CustomDatagrid
+              rows={rows}
+              columns={columns}
+              pageSizeOptions={[10, 25, 50]}
+              initialPageSize={25}
+              checkboxSelection={false}
+              showTopToolbar={true}
+              onRowSelectionChange={handleRowSelectionChange}
+            />
+          </Grid2>
         </Paper>
-       
+
 
         {/* Bảng dữ liệu khách hàng */}
         <UpdateKhachHangTiemNang
@@ -280,17 +321,23 @@ const KhachHangTiemNang = () => {
           refetch={refetch}
         />
         <ModalBanGiaoKhachHang
-           selectedItem={selectedRow}
-           closeModal={handleCloseModalBanGiaoKhachHang}
-           typeModal={typeModal}
-           setTypeModal={setTypeModal}
-           showModal={openModalBanGiao}
-           setLoading={setLoading}
+          selectedItem={selectedRow}
+          closeModal={handleCloseModalBanGiaoKhachHang}
+          typeModal={typeModal}
+          setTypeModal={setTypeModal}
+          showModal={openModalBanGiao}
+          setLoading={setLoading}
         />
       </div>
 
       {/* Phần lịch sử giao dịch */}
-      <ActionComponents selectedItem={selectedRow}/>
+      {isActionOpen && (
+        <ActionComponents
+          selectedItem={selectedRow}
+          onClose={handleClose}
+          isOpen={isActionOpen}
+        />
+      )}
     </div>
   );
 };

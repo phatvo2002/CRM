@@ -10,10 +10,18 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import { useGetKhachHangMucTieuByNguoiDungIdQuery, useGetKhachHangMucTieuByPhongBanIdQuery } from 'src/App/Api/KhachHangMucTieuApi';
 import CustomDatagrid from 'src/App/Components/DataGrid/CustomDatagrid';
 import ThreePIcon from '@mui/icons-material/ThreeP';
+import { ActionComponents } from './Components/Action';
+import UpdateIcon from '@mui/icons-material/Update';
+import { useNavigate } from 'react-router-dom';
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [rows, setRows] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate()
+  const [isActionOpen, setIsActionOpen] = useState(false);
+  const handleOpen = () => setIsActionOpen(true);
+  const handleCloseAction = () => setIsActionOpen(false)
+
   const columns = [
     {
       field: "action",
@@ -112,7 +120,9 @@ const KhachHangMucTieu = () => {
       )
     },
   ];
-
+  const gotoLink = () => {
+    navigate("/khachhang/themmoikhachhang")
+  }
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -148,32 +158,13 @@ const KhachHangMucTieu = () => {
     <>
       <Grid2 container spacing={2}>
         <Grid2 container alignItems="center" spacing={2}>
-          <Grid2>
+          <Grid2 size={12}>
             <h2>Khách hàng </h2>
-          </Grid2>
-          <Grid2 sx={{ marginLeft: 5 }}>
-            {/* <Button
-              variant="outlined"
-              color="success"
-              startIcon={<GetAppIcon />}
-            // onClick={handleGetTemplates}
-            >
-              Xuất Template
-            </Button>
-            <Button
-              variant="outlined"
-              color="warning"
-              sx={{ marginLeft: 1 }}
-              startIcon={<FileDownloadDoneIcon />}
-            // onClick={gotoLinkImport}
-            >
-              IMPORT
-            </Button> */}
             <Button
               variant="outlined"
               sx={{ marginLeft: 1 }}
               startIcon={<AddIcon />}
-            // onClick={gotoLink}
+              onClick={gotoLink}
             >
               Thêm mới
             </Button>
@@ -183,9 +174,9 @@ const KhachHangMucTieu = () => {
               aria-haspopup="true"
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClick}
-              sx={{ marginLeft: 1 , width:"200px"}}
+              sx={{ marginLeft: 1, width: "200px" }}
               variant="outlined"
-              startIcon={<OpenInNewIcon/>}
+              startIcon={<OpenInNewIcon />}
             >
               Mở rộng
             </Button>
@@ -203,7 +194,7 @@ const KhachHangMucTieu = () => {
                   variant="outlined"
                   color="success"
                   startIcon={<GetAppIcon />}
-                  sx={{ marginLeft: 1 , width:"200px"}}
+                  sx={{ marginLeft: 1, width: "200px" }}
                 // onClick={handleGetTemplates}
                 >
                   Xuất Template
@@ -213,7 +204,7 @@ const KhachHangMucTieu = () => {
                 <Button
                   variant="outlined"
                   color="warning"
-                  sx={{ marginLeft: 1 , width:"200px"}}
+                  sx={{ marginLeft: 1, width: "200px" }}
                   startIcon={<FileDownloadDoneIcon />}
                 // onClick={gotoLinkImport}
                 >
@@ -223,7 +214,7 @@ const KhachHangMucTieu = () => {
               <MenuItem onClick={handleClose}>
                 <Button
                   variant="outlined"
-                  sx={{ marginLeft: 1  ,width:"200px"}}
+                  sx={{ marginLeft: 1, width: "200px" }}
                   startIcon={<AutoDeleteIcon />}
                   color="error"
                 >
@@ -231,6 +222,7 @@ const KhachHangMucTieu = () => {
                 </Button>
               </MenuItem>
             </Menu>
+            <Button onClick={handleOpen} sx={{ marginLeft: 1 }} variant="outlined" color="inherit" startIcon={<UpdateIcon />}>Lịch sử tương tác</Button>
 
             {/* <Button
               variant="outlined"
@@ -240,6 +232,7 @@ const KhachHangMucTieu = () => {
             >
               Thùng rác
             </Button> */}
+
           </Grid2>
           <Grid2 size={12}>
             <Paper>
@@ -255,7 +248,16 @@ const KhachHangMucTieu = () => {
             </Paper>
           </Grid2>
         </Grid2>
+        <ActionComponents selectedItem={selectedRow} />
+        {isActionOpen && (
+          <ActionComponents
+            selectedItem={selectedRow}
+            onCloseAction={handleCloseAction}
+            isOpen={isActionOpen}
+          />
+        )}
       </Grid2>
+
     </>
   )
 }

@@ -198,7 +198,6 @@ const AddKhachHangTiemNang = () => {
   };
   const callApiAddData = async (data) => {
        const response = await createKhachHangTiemNang(data)
-       console.log(response)
        if(response?.data?.status === 200)
        {
          toast.success("Tạo thành công")
