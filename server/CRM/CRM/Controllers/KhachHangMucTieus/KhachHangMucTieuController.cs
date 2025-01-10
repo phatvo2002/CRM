@@ -107,6 +107,22 @@ namespace CRM.Controllers.KhachHangMucTieus
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("updatekhachhangmuctieu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> CupdateKhachHangMucTieu(KhachHangMucTieuModal modal)
+        {
+            try
+            {
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                Guid nguoiDungId = HttpContext.GetUserId();
+                ResultModal result = await _khacHangMucTieuServices.UpdateKhachHangMucTieu(modal, nguoiDungId, phongBanId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpDelete("deletekhachhangmuctieu")]
         [JwtAuthorize]

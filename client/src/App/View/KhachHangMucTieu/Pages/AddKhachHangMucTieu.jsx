@@ -72,8 +72,6 @@ const modelObj = {
     [modelObj.website]: null,
     [modelObj.tenToChuc]: null,
     [modelObj.ngayThanhLap]: null,
-    [modelObj.website]: null,
-    [modelObj.ngayThanhLap]: null,
     [modelObj.moTa]: null,
     [modelObj.isDungChung]: false,
     [modelObj.isKhachHangCaNhan]: false,
@@ -85,7 +83,6 @@ const modelObj = {
     [modelObj.maNganhNghe]: null,
     [modelObj.maDoanhThu]: null,
     [modelObj.maLinhVuc]: null,
-    [modelObj.isDungChung]: false,
   };
 const AddKhachHangMucTieu = () => {
   const userData = JSON.parse(localStorage.getItem('authorizationData'));
@@ -149,27 +146,37 @@ const AddKhachHangMucTieu = () => {
       reset,
       formState: { isDirty, isValid },
     } = methods;
+    const generateRandomSequence = (length) => {
+      let result = "";
+      for (let i = 0; i < length; i++) {
+        result += Math.floor(Math.random() * 10); // Tạo số ngẫu nhiên từ 0 đến 9
+      }
+      return result;
+    }
   const submitForm = (data) => {
     const tempData = {
+      [modelObj.id]: "KH" + generateRandomSequence(6),
       [modelObj.tenKhachHang]: data[modelObj.tenKhachHang],
-      [modelObj.soDienThoaiDiDong]: data[modelObj.soDienThoaiDiDong],
-      [modelObj.soDienThoaiCoQuan]: data[modelObj.soDienThoaiCoQuan],
-      [modelObj.chucDanh]: data[modelObj.chucDanh],
-      [modelObj.soZalo]: data[modelObj.soZalo],
-      [modelObj.emailCaNhan]: data[modelObj.emailCaNhan],
-      [modelObj.emailCoQuan]: data[modelObj.emailCoQuan],
-      [modelObj.orderNumber]: data[modelObj.orderNumber],
-      [modelObj.tenToChuc]: data[modelObj.tenToChuc],
+      [modelObj.tenVietTat]: data[modelObj.tenVietTat],
       [modelObj.maSoThue]: data[modelObj.maSoThue],
+      [modelObj.soDienThoai]: data[modelObj.soDienThoai],
+      [modelObj.email]: data[modelObj.email],
+      [modelObj.taiKhoanNganHang]: data[modelObj.taiKhoanNganHang],
+      [modelObj.website]: data[modelObj.website],
       [modelObj.ngayThanhLap]: data[modelObj.ngayThanhLap],
-      [modelObj.diaChi]: data[modelObj.diaChi],
-      [modelObj.thongTinMoTa]: data[modelObj.thongTinMoTa],
+      [modelObj.moTa]: data[modelObj.moTa],
+      [modelObj.isDungChung]: data[modelObj.isDungChung],
+      [modelObj.isKhachHangCaNhan]: data[modelObj.isKhachHangCaNhan],
+      [modelObj.isNhaPhanPhoi]: data[modelObj.isNhaPhanPhoi],
+      [modelObj.thongTinHoaDon]: data[modelObj.thongTinHoaDon],
+      [modelObj.thongTinGiaoHang]: data[modelObj.thongTinGiaoHang],
       [modelObj.maPhongbanKhachHang]: data[modelObj.maPhongbanKhachHang],
+      [modelObj.maNguonGocKhachHang]: data[modelObj.maNguonGocKhachHang],
       [modelObj.maLoaiTiemNang]: data[modelObj.maLoaiTiemNang],
+      [modelObj.maLoaiHinhNgheNghiep]: data[modelObj.maLoaiHinhNgheNghiep],
       [modelObj.maLinhVuc]: data[modelObj.maLinhVuc],
       [modelObj.maNganhNghe]: data[modelObj.maNganhNghe],
       [modelObj.maDoanhThu]: data[modelObj.maDoanhThu],
-      [modelObj.isDungChung]: data[modelObj.isDungChung],
     };
     if (userData?.response?.phongBan?.id == null || userData?.response?.phongBan?.id === undefined) {
       toast.warning("Bạn chưa được phân phòng ban nên chưa thể thực hiện thao tác này")
@@ -182,7 +189,7 @@ const AddKhachHangMucTieu = () => {
   const callApiAddData = async (data) => {
     const response = await createKhachHangMucTieu(data)
     if (response?.data?.status === 200) {
-      toast.success("Tạo thành công")
+      toast.success("Thêm khách hàng thành công")
       navigate(-1)
       reset(initialFormState);
     }
@@ -211,12 +218,19 @@ const AddKhachHangMucTieu = () => {
                     <TextFieldRHF
                       name={modelObj.id}
                       label={labelObj.id}
-                      // disabled={isLoading}
+                     disabled={true}
                     />
                   </Grid2>
                   <Grid2 size={6}>
                     <TextFieldRHF
                       name={modelObj.tenKhachHang}
+                      label={labelObj.tenKhachHang}
+                      // disabled={isLoading}
+                    />
+                  </Grid2>
+                  <Grid2 size={6}>
+                    <TextFieldRHF
+                      name={modelObj.tenVietTat}
                       label={labelObj.tenVietTat}
                       // disabled={isLoading}
                     />

@@ -33,5 +33,10 @@ namespace CRM.Services.KhachHangMucTieus
         {
             return await _khachHangMucTieuRepository.GetKhachHangMucTieuByPhongBanId(PhongBanId);
         }
+
+        public async Task<ResultModal> UpdateKhachHangMucTieu(KhachHangMucTieuModal modal, Guid nguoiDungId, Guid phongBanId)
+        {
+            return await _khachHangMucTieuRepository.UpdateKhachHangMucTieu(modal, nguoiDungId, phongBanId);
+        }
     }
 }

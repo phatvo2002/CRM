@@ -20,6 +20,7 @@ using CRM.Repositories.PhanLoaiDuBaos;
 using CRM.Repositories.PhongBans;
 using CRM.Repositories.ThongBaos;
 using CRM.Repositories.TinhTrangs;
+using CRM.Services;
 using CRM.Services.ChucVus;
 using CRM.Services.CuocGois;
 using CRM.Services.DonViTinhs;

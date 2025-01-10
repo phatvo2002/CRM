@@ -100,6 +100,7 @@ namespace CRM.Repositories.KhachhangMucTieus
                     khachHangMucTieu.TaiKhoanNganHang = modal.TaiKhoanNganHang;
                     khachHangMucTieu.Website = modal.Website;
                     khachHangMucTieu.MoTa = modal.MoTa;
+                    khachHangMucTieu.NgayThanhLap = modal.NgayThanhLap;
                     khachHangMucTieu.IsKhachHangCaNhan = modal.IsKhachHangCaNhan;
                     khachHangMucTieu.IsDungChung = modal.IsDungChung;
                     khachHangMucTieu.IsNhaPhanPhoi = modal.IsNhaPhanPhoi;
@@ -141,6 +142,48 @@ namespace CRM.Repositories.KhachhangMucTieus
         {
             var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.PhongBanId == PhongBanId).Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
+        }
+
+        public async Task<ResultModal> UpdateKhachHangMucTieu(KhachHangMucTieuModal modal, Guid nguoiDungId, Guid phongBanId)
+        {
+            var db =  _crmDbContext.KhachHangMucTieus.FirstOrDefault(r => r.Id == modal.Id);
+            try
+            {
+                if (db != null)
+                {
+                    db.TenKhachHang = modal.TenKhachHang;
+                    db.TenVietTat = modal.TenVietTat;
+                    db.MaSoThue = modal.MaSoThue;
+                    db.SoDienThoai = modal.SoDienThoai;
+                    db.Email = modal.Email;
+                    db.TaiKhoanNganHang = modal.TaiKhoanNganHang;
+                    db.Website = modal.Website;
+                    db.MoTa = modal.MoTa;
+                    db.NgayThanhLap = modal.NgayThanhLap;
+                    db.IsKhachHangCaNhan = modal.IsKhachHangCaNhan;
+                    db.IsNhaPhanPhoi = modal.IsNhaPhanPhoi;
+                    db.IsDungChung = modal.IsDungChung;
+                    db.ThongTinGiaoHang = modal.ThongTinGiaoHang;
+                    db.ThongTinHoaDon = modal.ThongTinHoaDon;
+                    db.MaPhongbanKhachHang = modal.MaPhongbanKhachHang;
+                    db.MaNguonGocKhachHang = modal.MaNguonGocKhachHang;
+                    db.MaLoaiTiemNang = modal.MaLoaiTiemNang;
+                    db.MaLinhVuc = modal.MaLinhVuc;
+                    db.MaNganhNghe = modal.MaNganhNghe;
+                    db.MaDoanhThu = modal.MaDoanhThu;
+                    db.NguoiDungId = nguoiDungId;
+                    db.PhongBanId = phongBanId;
+                    _crmDbContext.KhachHangMucTieus.Update(db);
+                    await _crmDbContext.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Chỉnh sửa dữ liệu thành công", Success = true };
+                }
+                return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+            }
+            catch(Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+
         }
     }
 }

@@ -46,6 +46,12 @@ namespace CRM.Helper
 
             CreateMap<KhachHangMucTieu, KhachHangMucTieuDTO>();
             CreateMap<KhachHangMucTieuModal, KhachHangMucTieu>().ReverseMap();
+            CreateMap<LoaiDuBao, ClassDTO>();
+            CreateMap<ClassModal, LoaiDuBao>().ReverseMap();
+            CreateMap<PhanLoaiDuBao, ClassDTO>();
+            CreateMap<ClassModal, PhanLoaiDuBao>().ReverseMap();
+            CreateMap<GiaiDoanBanHang, GiaiDoanBanHangDTO>();
+            CreateMap<GIaiDoanBanhangModal, GiaiDoanBanHang>().ReverseMap();
 
         }
     }
