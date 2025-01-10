@@ -150,6 +150,38 @@ namespace CRM.Migrations
                     b.ToTable("DonViTinh", (string)null);
                 });
 
+            modelBuilder.Entity("CRM.Entities.GiaiDoanBanHang", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("MaLoaiDuBao")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("MaPhanLoaiDuBao")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Stt")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenGiaiDoan")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("TiLeThanhCong")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_GiaiDoanBanHang");
+
+                    b.HasIndex("MaLoaiDuBao");
+
+                    b.HasIndex("MaPhanLoaiDuBao");
+
+                    b.ToTable("GiaiDoanBanhang", (string)null);
+                });
+
             modelBuilder.Entity("CRM.Entities.HangHoa", b =>
                 {
                     b.Property<string>("Id")
@@ -615,6 +647,24 @@ namespace CRM.Migrations
                     b.ToTable("LoaiCuocGoi", (string)null);
                 });
 
+            modelBuilder.Entity("CRM.Entities.LoaiDuBao", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_LoaiDuBao");
+
+                    b.ToTable("LoaiDuBao", (string)null);
+                });
+
             modelBuilder.Entity("CRM.Entities.LoaiHangHoa", b =>
                 {
                     b.Property<int>("Id")
@@ -910,6 +960,24 @@ namespace CRM.Migrations
                     b.ToTable("NhiemVu", (string)null);
                 });
 
+            modelBuilder.Entity("CRM.Entities.PhanLoaiDuBao", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_PhanLoaiDuBao");
+
+                    b.ToTable("PhanLoaiDuBao", (string)null);
+                });
+
             modelBuilder.Entity("CRM.Entities.PhongBan", b =>
                 {
                     b.Property<Guid>("Id")
@@ -953,6 +1021,45 @@ namespace CRM.Migrations
                         .HasName("PK_PhongBanKhachhang");
 
                     b.ToTable("PhongBanKhachHang", (string)null);
+                });
+
+            modelBuilder.Entity("CRM.Entities.ThongBao", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("CreateAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DuongDan")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool?>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsRead")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("NguoiDungId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("NoiDung")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("TieuDe")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_ThongBao");
+
+                    b.ToTable("ThongBao", (string)null);
                 });
 
             modelBuilder.Entity("CRM.Entities.TinhTrang", b =>
@@ -1028,6 +1135,23 @@ namespace CRM.Migrations
                     b.Navigation("Nguoidung");
 
                     b.Navigation("PhongBan");
+                });
+
+            modelBuilder.Entity("CRM.Entities.GiaiDoanBanHang", b =>
+                {
+                    b.HasOne("CRM.Entities.LoaiDuBao", "LoaiDuBao")
+                        .WithMany("GiaiDoanBanHangs")
+                        .HasForeignKey("MaLoaiDuBao")
+                        .HasConstraintName("FK_LoaiDuBao_GiaiDoanBanHang");
+
+                    b.HasOne("CRM.Entities.PhanLoaiDuBao", "PhanLoaiDuBao")
+                        .WithMany("GiaiDoanBanHangs")
+                        .HasForeignKey("MaPhanLoaiDuBao")
+                        .HasConstraintName("FK_PhanLoaiDuBao_GiaiDoanBanHang");
+
+                    b.Navigation("LoaiDuBao");
+
+                    b.Navigation("PhanLoaiDuBao");
                 });
 
             modelBuilder.Entity("CRM.Entities.HangHoa", b =>
@@ -1408,6 +1532,11 @@ namespace CRM.Migrations
                     b.Navigation("CuocGois");
                 });
 
+            modelBuilder.Entity("CRM.Entities.LoaiDuBao", b =>
+                {
+                    b.Navigation("GiaiDoanBanHangs");
+                });
+
             modelBuilder.Entity("CRM.Entities.LoaiHangHoa", b =>
                 {
                     b.Navigation("HangHoas");
@@ -1464,6 +1593,11 @@ namespace CRM.Migrations
                     b.Navigation("KhachHangMucTieus");
 
                     b.Navigation("KhachHangTiemNangs");
+                });
+
+            modelBuilder.Entity("CRM.Entities.PhanLoaiDuBao", b =>
+                {
+                    b.Navigation("GiaiDoanBanHangs");
                 });
 
             modelBuilder.Entity("CRM.Entities.PhongBan", b =>

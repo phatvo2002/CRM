@@ -13,11 +13,13 @@ import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
-import { Link as RouterLink} from "react-router-dom";
-import { Breadcrumbs, Fab, Grid, Link, Stack } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import { Breadcrumbs, Fab, Grid, Link, Stack , Popover, ListItem, ListItemText, ListItemIcon } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from "@mui/icons-material/Menu";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ErrorIcon from '@mui/icons-material/Error';
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import ListItems from "../Dashbroad/listItems"
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -26,6 +28,7 @@ import { AuthContext } from "../../Context/AuthContext";
 import PersonIcon from "@mui/icons-material/Person";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { CustomNotification } from "src/App/Components/CustomNotification/CustomNotification";
 // import Chart from "./Chart";
 import MenuApi, { useGetMenuRoleByIdQuery } from "../../Api/MenuApi";
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
@@ -33,28 +36,28 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import panner from "../../Assets/image/banner.png"
 function Copyright(props) {
   return (
-    <Grid 
-  sx={{
-    position: "fixed",
-    bottom: 0,
-    left: 0,
-    width: "100%",
-    marginTop :100,
-    backgroundColor: "background.paper",
-    height: "50px",
-    textAlign: "center"
-  }}
->
-  {/* Footer content */}
-  <Typography variant="body2" color="text.secondary" sx={{ lineHeight: "50px" }}>
-    {"Copyright © "}
-    <Link color="inherit" href="">
-      LP CRM
-    </Link>{" "}
-    {new Date().getFullYear()}
-    {"."}
-  </Typography>
-</Grid>
+    <Grid
+      sx={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        width: "100%",
+        marginTop: 100,
+        backgroundColor: "background.paper",
+        height: "50px",
+        textAlign: "center"
+      }}
+    >
+      {/* Footer content */}
+      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: "50px" }}>
+        {"Copyright © "}
+        <Link color="inherit" href="">
+          LP CRM
+        </Link>{" "}
+        {new Date().getFullYear()}
+        {"."}
+      </Typography>
+    </Grid>
 
   );
 }
@@ -114,7 +117,7 @@ export default function RootLayout() {
   const { logout } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [menu ,setMenu] = React.useState([]);
+  const [menu, setMenu] = React.useState([]);
   const opens = Boolean(anchorEl);
   const navigate = useNavigate()
   const [darkMode, setDarkMode] = React.useState(false);
@@ -128,7 +131,7 @@ export default function RootLayout() {
           mode: darkMode ? 'dark' : 'light',
         },
       }),
-    [darkMode] 
+    [darkMode]
   );
 
   const handleClick = (event) => {
@@ -140,8 +143,8 @@ export default function RootLayout() {
     setAnchorEl(null);
   };
 
-  const gotoLink  = ()=>{
-      navigate("/doimatkhau")
+  const gotoLink = () => {
+    navigate("/doimatkhau")
   }
 
   const toggleDrawer = () => {
@@ -150,46 +153,55 @@ export default function RootLayout() {
   const roleId = localStorage.getItem("roleId")
 
   const { data: menuRoleData, error, isLoading } = useGetMenuRoleByIdQuery(roleId, {
-    skip: !roleId, 
-});
-React.useEffect(() => {
-  if (menuRoleData) {
+    skip: !roleId,
+  });
+  React.useEffect(() => {
+    if (menuRoleData) {
       if (menuRoleData.length > 0) {
-          setMenu(menuRoleData);
+        setMenu(menuRoleData);
       } else {
-          setMenu([]);
+        setMenu([]);
       }
-  }
-}, [menuRoleData]);
+    }
+  }, [menuRoleData]);
 
-//   const gotoLinkThietLap  = ()=>{
-//     navigate("/thietlap")
-// }
+  //   const gotoLinkThietLap  = ()=>{
+  //     navigate("/thietlap")
+  // }
 
+  //handle noti
+  const [openNoti, setOpenNoti] = React.useState(null);
+  const handleOpenNoti = (event) => {
+    setOpenNoti(event.currentTarget);
+  };
+  const handleCloseNoti = () => {
+    setOpenNoti(null);
+  };
+  const intitialNoti = Boolean(openNoti);
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{
-          display: 'flex',
-          bgcolor: 'background.default',
-          color: 'text.primary',
-          fontFamily: "inherit",
-        }} >
-          
+        display: 'flex',
+        bgcolor: 'background.default',
+        color: 'text.primary',
+        fontFamily: "inherit",
+      }} >
+
         <CssBaseline />
         <AppBar
-           overflow={"auto"}
-           height="50px"
+          overflow={"auto"}
+          height="50px"
           position="absolute"
           open={open}
           sx={{ backgroundColor: 'background.paper' }}
         >
-          
+
           <Toolbar
             sx={{
               pr: "24px",
             }}
-          > 
-            
+          >
+
             <IconButton
               edge="start"
               color="black"
@@ -203,21 +215,21 @@ React.useEffect(() => {
               <MenuIcon />
             </IconButton>
             <Breadcrumbs maxItems={2} aria-label="breadcrumb">
-      {pathParts.map((item, index) => {
-        const href = '/' + pathParts.slice(0, index + 1).join('/');
+              {pathParts.map((item, index) => {
+                const href = '/' + pathParts.slice(0, index + 1).join('/');
 
-        return (
-          <Link
-            key={index}
-            underline="hover"
-            color="Highlight"
-            href={href}
-          >
-            {item.charAt(0).toUpperCase() + item.slice(1)} 
-          </Link>
-        );
-      })}
-    </Breadcrumbs>
+                return (
+                  <Link
+                    key={index}
+                    underline="hover"
+                    color="Highlight"
+                    href={href}
+                  >
+                    {item.charAt(0).toUpperCase() + item.slice(1)}
+                  </Link>
+                );
+              })}
+            </Breadcrumbs>
             <Typography
               component="h6"
               variant="caption"
@@ -225,25 +237,26 @@ React.useEffect(() => {
               sx={{ flexGrow: 1 }}
             ></Typography>
             <IconButton>
-            <IconButton  onClick={toggleTheme}>
-                {darkMode ? <WbSunnyIcon style={{color:"white"}}/> : <DarkModeIcon style={{color:"black"}}/>} 
-             </IconButton>
+              <IconButton onClick={toggleTheme}>
+                {darkMode ? <WbSunnyIcon style={{ color: "white" }} /> : <DarkModeIcon style={{ color: "black" }} />}
+              </IconButton>
             </IconButton>
             <IconButton color="black">
               <SettingsIcon
-                // id="basic-button"
-                // onClick={gotoLinkThietLap}
-                // aria-expanded={open ? "true" : undefined}
-                // aria-controls={open ? "basic-menu" : undefined}
-                // aria-haspopup="true"
+              // id="basic-button"
+              // onClick={gotoLinkThietLap}
+              // aria-expanded={open ? "true" : undefined}
+              // aria-controls={open ? "basic-menu" : undefined}
+              // aria-haspopup="true"
               ></SettingsIcon>
             </IconButton>
-            <IconButton color="black">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton style={{border:"1px solid" , padding: 10 , marginLeft:"20px"}}>
+            <CustomNotification 
+            openNoti={openNoti}
+            handleOpenNoti={handleOpenNoti}
+            handleClose={handleCloseNoti}
+            intitialNoti={intitialNoti}
+            />
+            <IconButton style={{ border: "1px solid", padding: 10, marginLeft: "20px" }}>
               <PersonIcon
                 id="basic-button"
                 aria-controls={open ? "basic-menu" : undefined}
@@ -267,7 +280,7 @@ React.useEffect(() => {
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
             </IconButton>
-         
+
           </Toolbar>
           {/* <Toolbar style={{height:"10px"}}>
           {menu.map((item, index)=>{
@@ -288,10 +301,10 @@ React.useEffect(() => {
           })}
           </Toolbar> */}
 
-         
+
         </AppBar>
-        <Drawer variant="permanent"  open={open} > 
-          
+        <Drawer variant="permanent" open={open} >
+
           <Toolbar
             sx={{
               display: "flex",
@@ -300,17 +313,17 @@ React.useEffect(() => {
               px: [1],
             }}
           >
-          <img src={panner} style={{width:"100%" ,paddingLeft:"30px"}}></img>
-            <IconButton onClick={toggleDrawer} sx={{color:"black"}}>
+            <img src={panner} style={{ width: "100%", paddingLeft: "30px" }}></img>
+            <IconButton onClick={toggleDrawer} sx={{ color: "black" }}>
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
           <Divider />
           <List component="nav" >
-            <ListItems listMenu={menu}/>
+            <ListItems listMenu={menu} />
             <Divider sx={{ my: 1 }} />
           </List>
-         
+
         </Drawer>
         <Box
           component="main"
@@ -325,19 +338,19 @@ React.useEffect(() => {
           }}
         >
           <Toolbar />
-          <Container maxWidth="100%" sx={{ mt: 4, mb: 4 ,marginBottom:10}}>
+          <Container maxWidth="100%" sx={{ mt: 4, mb: 4, marginBottom: 10 }}>
             <Outlet />
           </Container>
           <Copyright />
-            
-          <Fab color="secondary" aria-label="edit" style={{position:"fixed" ,top:"90%" ,left:"95%"}}>
+
+          <Fab color="secondary" aria-label="edit" style={{ position: "fixed", top: "90%", left: "95%" }}>
             <EditIcon />
-         </Fab>
+          </Fab>
         </Box>
-       
+
       </Box>
-          
-       
+
+
     </ThemeProvider>
   );
 }

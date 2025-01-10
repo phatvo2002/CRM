@@ -11,11 +11,14 @@ using CRM.Repositories.KhachhangMucTieus;
 using CRM.Repositories.KhachHangTiemNangs;
 using CRM.Repositories.LichHens;
 using CRM.Repositories.LienHes;
+using CRM.Repositories.LoaiDuBaos;
 using CRM.Repositories.LoaiHangHoas;
 using CRM.Repositories.Menus;
 using CRM.Repositories.NguoiDungs;
 using CRM.Repositories.NhiemVus;
+using CRM.Repositories.PhanLoaiDuBaos;
 using CRM.Repositories.PhongBans;
+using CRM.Repositories.ThongBaos;
 using CRM.Repositories.TinhTrangs;
 using CRM.Services.ChucVus;
 using CRM.Services.CuocGois;
@@ -27,11 +30,14 @@ using CRM.Services.KhachHangMucTieus;
 using CRM.Services.KhahHangTiemNangs;
 using CRM.Services.LichHens;
 using CRM.Services.LienHes;
+using CRM.Services.LoaiDuBaos;
 using CRM.Services.LoaiHangHoas;
 using CRM.Services.Menus;
 using CRM.Services.NguoiDungs;
 using CRM.Services.NhiemVus;
+using CRM.Services.PhanLoaiDuBaos;
 using CRM.Services.PhongBans;
+using CRM.Services.ThongBaos;
 using CRM.Services.TinhTrangs;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -120,11 +126,21 @@ builder.Services.AddScoped<ILienHeServices, LienHeService>();
 builder.Services.AddScoped<IKhachHangMucTieuRepository, KhachHangMucTieuRepository>();
 builder.Services.AddScoped<IKhacHangMucTieuServices, KhachHangMucTieuServices>();
 
+builder.Services.AddScoped<IHangHoaQuanTamRepository, HangHoaQuanTamRepository>();
+builder.Services.AddScoped<IHangHoaQuanTamServices, HangHoaQuanTamServices>();
+
+builder.Services.AddScoped<IThongBaoRepository, ThongBaoRepository>();
+builder.Services.AddScoped<IThongBaoServices, ThongBaoServices>();
+
+builder.Services.AddScoped<ILoaiDuBaoRepository, LoaiDuBaoRepository>();
+builder.Services.AddScoped<ILoaiDuBaoServices, LoaiDuBaoServices>();
+
+builder.Services.AddScoped<IPhanLoaiDuBaoRepository, PhanLoaiDuBaoRepository>();
+builder.Services.AddScoped<IPhanLoaiDuBaoServices, PhanLoaiDuBaoServices>();
+
 builder.Services.AddScoped<ILienHeServices, LienHeService>();
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
-builder.Services.AddScoped<IHangHoaQuanTamRepository, HangHoaQuanTamRepository>();
-builder.Services.AddScoped<IHangHoaQuanTamServices, HangHoaQuanTamServices>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

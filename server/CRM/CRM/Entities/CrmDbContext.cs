@@ -38,6 +38,7 @@ namespace CRM.Entities
         public virtual DbSet<LinhVucNgheNghiep> LinhVucNgheNghieps { get; set; }
 
         public virtual DbSet<DoanhThu> DoanhThus { get; set; }
+        public virtual DbSet<ThongBao> ThongBaos { get; set; }
 
         //Hoạt động 
         public virtual DbSet<CuocGoi> CuocGois { get; set; }
@@ -57,6 +58,12 @@ namespace CRM.Entities
         // Khách hàng 
         public virtual DbSet<LienHe> LienHes { get; set; }
         public virtual DbSet<KhachHangMucTieu> KhachHangMucTieus { get; set; }
+
+        // Giai đoạn bán hàng 
+        public virtual DbSet<LoaiDuBao> LoaiDuBaos { get; set; }
+        public virtual DbSet<PhanLoaiDuBao> PhanLoaiDuBaos { get; set; }
+        public virtual DbSet<GiaiDoanBanHang> GiaiDoanBanHangs { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
@@ -67,6 +74,22 @@ namespace CRM.Entities
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ThongBao>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_ThongBao");
+
+                entity.ToTable("ThongBao");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.TieuDe).HasMaxLength(100);
+                entity.Property(e => e.NoiDung).HasMaxLength(300);
+                entity.Property(e => e.Type).HasMaxLength(300);
+                entity.Property(e => e.DuongDan).HasMaxLength(300);
+                entity.Property(e => e.IsDelete).HasColumnType("bit");
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+                entity.Property(e => e.NguoiDungId).HasColumnType("uniqueidentifier");
+
+            });
             modelBuilder.Entity<ChucVu>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_ChucVu");
@@ -579,6 +602,41 @@ namespace CRM.Entities
                 .HasForeignKey(d => d.MaDoanhThu)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DoanhThu_KhachHangMucTieu");
+            });
+
+            // Bảng giai đoạn bán hàng 
+            modelBuilder.Entity<LoaiDuBao>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_LoaiDuBao");
+                entity.ToTable("LoaiDuBao");
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+            });
+            modelBuilder.Entity<PhanLoaiDuBao>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_PhanLoaiDuBao");
+                entity.ToTable("PhanLoaiDuBao");
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+            });
+            modelBuilder.Entity<GiaiDoanBanHang>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_GiaiDoanBanHang");
+                entity.ToTable("GiaiDoanBanhang");
+                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.Stt).HasColumnType("int");
+                entity.Property(e => e.TenGiaiDoan).HasMaxLength(100);
+                entity.Property(e => e.TiLeThanhCong).HasMaxLength(100);
+                entity.HasOne(d => d.LoaiDuBao).WithMany(p => p.GiaiDoanBanHangs)
+               .HasForeignKey(d => d.MaLoaiDuBao)
+               .OnDelete(DeleteBehavior.ClientSetNull)
+               .HasConstraintName("FK_LoaiDuBao_GiaiDoanBanHang");
+                entity.HasOne(d => d.PhanLoaiDuBao).WithMany(p => p.GiaiDoanBanHangs)
+             .HasForeignKey(d => d.MaPhanLoaiDuBao)
+             .OnDelete(DeleteBehavior.ClientSetNull)
+             .HasConstraintName("FK_PhanLoaiDuBao_GiaiDoanBanHang");
             });
 
         }
