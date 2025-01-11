@@ -1,9 +1,11 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
+using CRM.Entities;
 using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.KhachHangMucTieus;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Controllers.KhachHangMucTieus
 {
@@ -12,9 +14,11 @@ namespace CRM.Controllers.KhachHangMucTieus
     public class KhachHangMucTieuController : ControllerBase
     {
         private readonly IKhacHangMucTieuServices _khacHangMucTieuServices;
-        public KhachHangMucTieuController(IKhacHangMucTieuServices khacHangMucTieuServices)
+        private readonly CrmDbContext _context;
+        public KhachHangMucTieuController(IKhacHangMucTieuServices khacHangMucTieuServices , CrmDbContext context)
         {
             _khacHangMucTieuServices = khacHangMucTieuServices;
+            _context = context;
         }
 
         [HttpGet("getallkhachhangmuctieu")]
@@ -52,29 +56,39 @@ namespace CRM.Controllers.KhachHangMucTieus
             try
             {
                 Guid nguoiDungId = HttpContext.GetUserId();
-                List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByNguoiDungId(nguoiDungId);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet("getkhachhangmuctieubyphongbanid")]
-        [JwtAuthorize]
-        public async Task<IActionResult> GetKhachHangMucTieuByPhongBanId()
-        {
-            try
-            {
                 Guid phongBanId = HttpContext.GetPhongBanId();
-                List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByPhongBanId(phongBanId);
-                return Ok(result);
+                var db = await _context.Nguoidungs.Where(r=> r.Id == nguoiDungId && r.MaPhongBan == phongBanId).FirstOrDefaultAsync();
+                if(db?.CheckIsTruongPhong == true)
+                {
+                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByPhongBanId(phongBanId);
+                    return Ok(result);
+                }    
+                else
+                {
+                   List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByNguoiDungId(nguoiDungId);
+                    return Ok(result);
+                }    
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
+        //[HttpGet("getkhachhangmuctieubyphongbanid")]
+        //[JwtAuthorize]
+        //public async Task<IActionResult> GetKhachHangMucTieuByPhongBanId()
+        //{
+        //    try
+        //    {
+        //        Guid phongBanId = HttpContext.GetPhongBanId();
+        //        List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByPhongBanId(phongBanId);
+        //        return Ok(result);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
         [HttpPost("convertkhachhangmuctieu")]
         [JwtAuthorize]
         public async Task<IActionResult> ConvertKhachHangMucTieu(ConvertKhachHangModal modal)

@@ -214,7 +214,7 @@ namespace CRM.Repositories.NguoiDungs
                         db.MaChucVu = roleId;
                         db.CheckIsGiamDoc = true;
                         db.CheckIsTruongPhong = false;
-                        _context.Update(db);
+                        _context.Nguoidungs.Update(db);
                         await _context.SaveChangesAsync();
                         return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };
                     }
@@ -223,7 +223,7 @@ namespace CRM.Repositories.NguoiDungs
                         db.MaChucVu = roleId;
                         db.CheckIsTruongPhong = true;
                         db.CheckIsGiamDoc = false;
-                        _context.Update(db);
+                        _context.Nguoidungs.Update(db);
                         await _context.SaveChangesAsync();
                         return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };
                     }
@@ -232,7 +232,7 @@ namespace CRM.Repositories.NguoiDungs
                         db.MaChucVu = roleId;
                         db.CheckIsGiamDoc = false;
                         db.CheckIsTruongPhong = false;
-                        _context.Update(db);
+                        _context.Nguoidungs.Update(db);
                         await _context.SaveChangesAsync();
                         return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };
                     }

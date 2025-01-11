@@ -25,7 +25,7 @@ import {
   useGetAllNguonGocKhachHangQuery,
   useGetAllPhongBanKhachHangQuery,
 } from "src/App/Api/GetDataApi";
-import { useUpdateKhachHangTiemNangMutation } from "src/App/Api/KhachHangTiemNangApi";
+import { useUpdateKhachHangTiemNangMucTieuMutation } from "src/App/Api/KhachHangMucTieuApi";
 // ------ Form Config ------ //
 const modelObj = {
   id: "id",
@@ -101,26 +101,19 @@ const modelObj = {
   schema = yup.object().shape({
     [modelObj.tenKhachHang]: validateString(),
     [modelObj.soDienThoai]: validateString(),
+    [modelObj.maLoaiTiemNang]: validateString(),
     [modelObj.email]: validateString(),
     [modelObj.thongTinGiaoHang]: validateString(),
   });
 // ------ End Of Form Config ------ //
 const userData = JSON.parse(localStorage.getItem('authorizationData'));
-const getHeader = (typeModal) => {
-  const title = {
-    [TYPE_MODAL.UPDATE]: "Chỉnh sửa khách hàng mục tiêu",
-  };
-  return title[typeModal] ?? "";
-};
-
 const ModalUpdateKHMucTieu = (props) => {
   const [linhVucId, setLinhVucId] = useState("");
-  const { showModal, closeModal, typeModal, setLoading, selectedItem, setTypeModal, refetch } =
+  const { showModal, closeModal, typeModal, selectedItem, refetch } =
     props,
     _isMounted = useRef(false),
     modalRef = useRef(null),
-
-    header = getHeader(typeModal),
+    header ="Chỉnh sửa khách hàng",
     {
       data: dataPhongBanKhachHang,
       isFetching: { isGetPhongBanKhachHangFetching },
@@ -151,7 +144,7 @@ const ModalUpdateKHMucTieu = (props) => {
       data: dataLoaiDoanhThu,
       isFetching: { isGetDoanhThuFetching },
     } = useGetAllDoanhThuQuery(),
-    [updateKhachHangTiemNang] = useUpdateKhachHangTiemNangMutation();
+    [updateKhachHangMucTieu] = useUpdateKhachHangTiemNangMucTieuMutation();
   const isLoading = isGetNganhNgheFetching || isGetLinhVucFetching || isGetLoaiHinhFetching || isGetLoaiTiemNangFetching || isGetNguonGocKhachHangFetching || isGetPhongBanKhachHangFetching;
 
   const submitForm = (data) => {
@@ -180,23 +173,20 @@ const ModalUpdateKHMucTieu = (props) => {
       [modelObj.maDoanhThu]: data[modelObj.maDoanhThu],
     };
 
-    typeModal === TYPE_MODAL.UPDATE && callApiUpdate(tempData);
+     callApiUpdate(tempData);
   },
 
     callApiUpdate = async (paramData) => {
       try {
-        await updateKhachHangTiemNang(paramData).unwrap();
+        await updateKhachHangMucTieu(paramData).unwrap();
         toast.success("Chỉnh sửa thành công thành công")
         refetch();
         closeModalWithOtherFunc()
       } catch (error) {
         toast.error("Đã có lỗi xảy ra vui lòng liên hệ bộ phận quản trị hệ thống để được hỗ trợ");
-      } finally {
-        setLoading(false);
       }
     },
     closeModalWithOtherFunc = () => {
-      setTypeModal("");
       modalRef.current.reset(initialFormState);
       closeModal();
     },
@@ -210,18 +200,21 @@ const ModalUpdateKHMucTieu = (props) => {
           id: selectedItem?.id,
           [modelObj.tenKhachHang]: selectedItem[modelObj.tenKhachHang],
           [modelObj.tenVietTat]: selectedItem[modelObj.tenVietTat],
-          [modelObj.soDienThoaiCoQuan]: selectedItem[modelObj.soDienThoaiCoQuan],
-          [modelObj.chucDanh]: selectedItem[modelObj.chucDanh],
-          [modelObj.soZalo]: selectedItem[modelObj.soZalo],
-          [modelObj.emailCaNhan]: selectedItem[modelObj.emailCaNhan],
-          [modelObj.emailCoQuan]: selectedItem[modelObj.emailCoQuan],
-          [modelObj.tenToChuc]: selectedItem[modelObj.tenToChuc],
+          [modelObj.maSoThue]: selectedItem[modelObj.maSoThue],
+          [modelObj.soDienThoai]: selectedItem[modelObj.soDienThoai],
+          [modelObj.email]: selectedItem[modelObj.email],
+          [modelObj.taiKhoanNganHang]: selectedItem[modelObj.taiKhoanNganHang],
+          [modelObj.website]: selectedItem[modelObj.website],
+          [modelObj.ngayThanhLap]: selectedItem[modelObj.ngayThanhLap],
           [modelObj.maSoThue]: selectedItem[modelObj.maSoThue],
           [modelObj.ngayThanhLap]: selectedItem[modelObj.ngayThanhLap],
-          [modelObj.diaChi]: selectedItem[modelObj.diaChi],
-          [modelObj.thongTinMoTa]: selectedItem[modelObj.thongTinMoTa],
+          [modelObj.moTa]: selectedItem[modelObj.moTa],
+          [modelObj.isDungChung]: selectedItem[modelObj.isDungChung],
+          [modelObj.isKhachHangCaNhan]: selectedItem[modelObj.isKhachHangCaNhan],
+          [modelObj.isNhaPhanPhoi]: selectedItem[modelObj.isNhaPhanPhoi],
+          [modelObj.thongTinGiaoHang]: selectedItem[modelObj.thongTinGiaoHang],
+          [modelObj.thongTinHoaDon]: selectedItem[modelObj.thongTinHoaDon],
           [modelObj.maNguonGocKhachHang]: selectedItem[modelObj.maNguonGocKhachHang],
-          [modelObj.maPhongbanKhachHang]: selectedItem[modelObj.maPhongbanKhachHang],
           [modelObj.maLoaiTiemNang]: selectedItem[modelObj.maLoaiTiemNang],
           [modelObj.maLoaiHinhNgheNghiep]: selectedItem[modelObj.maLoaiHinhNgheNghiep],
           [modelObj.maNganhNghe]: selectedItem[modelObj.maNganhNghe],
@@ -233,10 +226,10 @@ const ModalUpdateKHMucTieu = (props) => {
       );
     };
   useEffect(() => {
-    if (selectedItem[0] && typeModal === TYPE_MODAL.UPDATE) {
+    if (selectedItem[0] ) {
       getInitialStateFromApiToUpdate(selectedItem[0]);
     }
-  }, [selectedItem[0], typeModal]);
+  }, [selectedItem[0]]);
 
   useEffect(() => {
     _isMounted.current = true;

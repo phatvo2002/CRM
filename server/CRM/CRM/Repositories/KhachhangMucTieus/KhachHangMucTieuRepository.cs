@@ -134,13 +134,13 @@ namespace CRM.Repositories.KhachhangMucTieus
 
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId)
         {
-            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.NguoiDungId == NguoiDungId).Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang).ToListAsync();
+            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.NguoiDungId == NguoiDungId && r.IsDeleted == false).Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
 
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByPhongBanId(Guid PhongBanId)
         {
-            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.PhongBanId == PhongBanId).Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang).ToListAsync();
+            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.PhongBanId == PhongBanId && r.IsDeleted == false).Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
 

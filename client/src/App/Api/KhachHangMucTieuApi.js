@@ -60,13 +60,13 @@ export const apiKhachHangMucTieu = createApi({
     //       };
     //     },
     //   }),
-    //   updateKhachHangTiemNangMucTieu: builder.mutation({
-    //     query: (data) => ({
-    //       url: '/KhachHangTiemNang/updatekhachhangtiemnang',
-    //       method: 'PUT',
-    //       body: data,
-    //     }),
-    //   }),
+      updateKhachHangTiemNangMucTieu: builder.mutation({
+        query: (data) => ({
+          url: '/KhachHangMucTieu/updatekhachhangmuctieu',
+          method: 'PUT',
+          body: data,
+        }),
+      }),
     //   bangiaoKhachHangMucTieu: builder.mutation({
     //     query: ({ id, userId }) => ({
     //       url: `/KhachHangTiemNang/bangiaokhachhangtiemnang?id=${id}&userId=${userId}`,
@@ -87,6 +87,7 @@ export const apiKhachHangMucTieu = createApi({
     useGetKhachHangMucTieuByNguoiDungIdQuery,
     useGetKhachHangMucTieuByPhongBanIdQuery,
     useAddKhachHangMucTieuMutation,
+    useUpdateKhachHangTiemNangMucTieuMutation,
     useConvertKhachHangMucTieuMutation,
     useDeleteKhachHangMucTieuMutation
   } = apiKhachHangMucTieu;

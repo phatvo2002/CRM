@@ -34,6 +34,7 @@ export const AuthProvider = ({ children }) => {
           title: "Đăng nhập thành công!",
           icon: "success",
         });
+        window.location.reload();
       } else {
         Swal.fire({
           title: "Tài khoản chưa được kích hoạt !",

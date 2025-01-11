@@ -13,15 +13,16 @@ import ThreePIcon from '@mui/icons-material/ThreeP';
 import { ActionComponents } from './Components/Action';
 import UpdateIcon from '@mui/icons-material/Update';
 import { useNavigate } from 'react-router-dom';
+import ModalUpdateKHMucTieu from './Modal/ModalUpdateKHMucTieu';
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [rows, setRows] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false)
   const navigate = useNavigate()
   const [isActionOpen, setIsActionOpen] = useState(false);
   const handleOpen = () => setIsActionOpen(true);
   const handleCloseAction = () => setIsActionOpen(false)
-
   const columns = [
     {
       field: "action",
@@ -41,7 +42,7 @@ const KhachHangMucTieu = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-            // onClick={onOpenModalUpdateKhachHang}
+             onClick={handleOpenModalUpdateKhachHang}
             >
               <EditIcon />
             </IconButton>
@@ -131,29 +132,21 @@ const KhachHangMucTieu = () => {
     setAnchorEl(null);
   };
   const userData = JSON.parse(localStorage.getItem("authorizationData"));
-  const { data: dataKhachHangByNguoiDung } =
-    useGetKhachHangMucTieuByNguoiDungIdQuery({
-      skip:
-        userData?.response.checkIsTruongPhong === true ||
-        userData?.response.checkIsGiamDoc === true,
-    });
-  const { data: dataKhachHangPhongBan, refetch } =
-    useGetKhachHangMucTieuByPhongBanIdQuery({
-      skip:
-        userData?.response.checkIsTruongPhong === false &&
-        userData?.response.checkIsGiamDoc === false,
-    });
+  const { data: dataKhachHangByNguoiDung ,refetch } =
+    useGetKhachHangMucTieuByNguoiDungIdQuery();
   useEffect(() => {
-    if (userData?.response?.checkIsTruongPhong === true) {
-      setRows(dataKhachHangPhongBan);
-    } else {
       setRows(dataKhachHangByNguoiDung);
-    }
-  }, [dataKhachHangByNguoiDung, dataKhachHangPhongBan, userData]);
+  }, [dataKhachHangByNguoiDung]);
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
 
+  const handleOpenModalUpdateKhachHang = () => {
+     setModalUpdateKhachHang(true)
+  }
+  const handleCloseModalUpdateKhachHang = () => {
+     setModalUpdateKhachHang(false)
+  }
   return (
     <>
       <Grid2 container spacing={2}>
@@ -257,7 +250,13 @@ const KhachHangMucTieu = () => {
           />
         )}
       </Grid2>
-
+       {/* Modal Khách hàng mục tiêu */}
+       <ModalUpdateKHMucTieu
+         showModal={modalUpdateKhachHang}
+         closeModal={handleCloseModalUpdateKhachHang}
+         selectedItem={selectedRow}
+         refetch={refetch}
+       />
     </>
   )
 }
