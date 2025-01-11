@@ -36,14 +36,18 @@ const DateTimePickerRHF = (props) => {
   const watchingMaxDateRaw = useWatch({ control, name: maxDate });
 
   // Ensure minDate and maxDate are valid Date objects
-  const watchingMinDate = minDate ? new Date(watchingMinDateRaw || MIN_DATE) : MIN_DATE;
-  const watchingMaxDate = maxDate ? new Date(watchingMaxDateRaw || MAX_DATE) : MAX_DATE;
+  const watchingMinDate = minDate
+    ? new Date(watchingMinDateRaw || MIN_DATE)
+    : MIN_DATE;
+  const watchingMaxDate = maxDate
+    ? new Date(watchingMaxDateRaw || MAX_DATE)
+    : MAX_DATE;
 
   return (
     <Controller
       name={name}
       control={control}
-      render={({ field: { ref, onBlur, onChange, value ,...rest} }) => (
+      render={({ field: { ref, onBlur, onChange, value, ...rest } }) => (
         <PSCInputSkeleton loading={skeletonLoading}>
           <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={vi}>
             <DateTimePicker
@@ -52,7 +56,7 @@ const DateTimePickerRHF = (props) => {
               className={componentID}
               label="Ngày bắt đầu"
               inputFormat="dd/MM/yyyy HH:mm"
-              value={value || null} // Ensure a default value
+              value={value ? new Date(value) : null} // Ensure value is a Date object
               onChange={(x) => {
                 if (x instanceof Date && !isNaN(x)) {
                   onChange(x);

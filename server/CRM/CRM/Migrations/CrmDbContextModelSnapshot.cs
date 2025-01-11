@@ -916,6 +916,9 @@ namespace CRM.Migrations
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("IsThongBao")
+                        .HasColumnType("bit");
+
                     b.Property<string>("KhachHangMucTieuId")
                         .HasColumnType("nvarchar(450)");
 

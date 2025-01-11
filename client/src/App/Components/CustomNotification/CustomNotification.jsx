@@ -1,23 +1,32 @@
-import { Breadcrumbs, Fab, Grid, Link, Stack, Popover, ListItem, ListItemText, ListItemIcon, Divider, List } from "@mui/material";
+import { Popover, ListItem, ListItemText, ListItemIcon, Divider, List, Button } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ErrorIcon from '@mui/icons-material/Error';
 import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
-import { useState } from "react";
+import NotificationImportantIcon from '@mui/icons-material/NotificationImportant';
+import { useEffect, useState } from "react";
+import { useCheckThongBaoMutation, useGetThongBaoByNguoiDungIdQuery } from "src/App/Api/ThongBaoApi";
 export const CustomNotification = ({ openNoti, handleOpenNoti, handleClose, intitialNoti }) => {
-    const notifications = [
-        { id: 1, title: 'Thông báo 1', message: 'Nội dung thông báo 1', type: 'success' },
-        { id: 2, title: 'Thông báo 2', message: 'Nội dung thông báo 2', type: 'error' },
-        { id: 3, title: 'Thông báo 3', message: 'Nội dung thông báo 3', type: 'success' },
-        { id: 4, title: 'Thông báo 4', message: 'Nội dung thông báo 4', type: 'info' },
-    ];
-    const[listNoti , setListNoti] = useState("")
+ 
+    const {data: dataNoti} = useGetThongBaoByNguoiDungIdQuery()
+    const [CheckDeadline, { data, error }] = useCheckThongBaoMutation();
+    useEffect(() => {
+        const interval = setInterval(() => {
+            CheckDeadline()
+            .then((response) => {
+              console.log('Checked deadlines:', response.data);
+            })
+            .catch((err) => {
+              console.error('Error checking deadlines:', err);
+            });
+        }, 600000);
+        return () => clearInterval(interval);
+      }, [CheckDeadline])
     return (
         <>
             <IconButton color="primary" onClick={handleOpenNoti}>
-                <Badge badgeContent={notifications.length} color="primary">
+                <Badge badgeContent={dataNoti.length} color="primary">
                     <NotificationsIcon />
                 </Badge>
             </IconButton>
@@ -34,21 +43,26 @@ export const CustomNotification = ({ openNoti, handleOpenNoti, handleClose, inti
                     horizontal: 'right',
                 }}
             >
-                <List sx={{ width: '300px', maxHeight: '400px', overflow: 'auto' }}>
-                    {notifications.map((noti) => (
+                <List sx={{ width: '400px', maxHeight: '400px', overflow: 'auto' }}>
+                    {dataNoti.map((noti) => (
                         <div key={noti.id}>
                             <ListItem button>
                                 <ListItemIcon>
-                                    {noti.type === 'success' && <CheckCircleIcon color="success" />}
-                                    {noti.type === 'error' && <ErrorIcon color="error" />}
-                                    {noti.type === 'info' && <NotificationsIcon color="primary" />}
+                                    {noti.type === 'Success' && <CheckCircleIcon color="success" />}
+                                    {noti.type === 'Error' && <ErrorIcon color="error" />}
+                                    {noti.type === 'Info' && <NotificationsIcon color="primary" />}
+                                    {noti.type === 'Warning' && <NotificationImportantIcon color="warning" />}
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={noti.title}
-                                    secondary={noti.message}
+                                    primary={noti.tieuDe}
+                                    secondary={noti.noiDung}
                                 />
+                              
                             </ListItem>
                             <Divider />
+                            <Button style={{alignItems:"center", padding: 10}}>
+                                    Xem tất cả
+                            </Button>
                         </div>
                     ))}
                 </List>

@@ -16,6 +16,7 @@ import {
 } from "src/App/Api/GetDataApi";
 import { useAddCuocGoiMutation } from "src/App/Api/CuocGoiApi";
 import { useAddLichHenMutation } from "src/App/Api/LichhenApi";
+import moment from "moment";
 // ------ Form Config ------ //
 const modelObj = {
     tieuDe: "tieuDe",
@@ -37,8 +38,8 @@ const modelObj = {
   initialFormState = {
     [modelObj.tieuDe]: "",
     [modelObj.moTa]: "",
-    [modelObj.ngayBatDau]: "",
-    [modelObj.ngayKetThuc]: "",
+    [modelObj.ngayBatDau]: new Date(),
+    [modelObj.ngayKetThuc]: new Date(),
     [modelObj.diaDiem]: "",
     [modelObj.trangThaiThucHienId]: "",
     [modelObj.khachHangTiemNangId]: "",
@@ -82,8 +83,8 @@ const ModalAddLichHen = (props) => {
       const tempData = {
         [modelObj.tieuDe]: data[modelObj.tieuDe],
         [modelObj.moTa]: data[modelObj.moTa],
-        [modelObj.ngayBatDau]: data[modelObj.ngayBatDau],
-        [modelObj.ngayKetThuc]: data[modelObj.ngayKetThuc],
+        [modelObj.ngayBatDau]: moment(data[modelObj.ngayBatDau]).format(),
+        [modelObj.ngayKetThuc]: moment(data[modelObj.ngayKetThuc]).format(),
         [modelObj.diaDiem]: data[modelObj.diaDiem],
         [modelObj.trangThaiThucHienId]: data[modelObj.trangThaiThucHienId],
         [modelObj.khachHangTiemNangId]: id,

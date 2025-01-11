@@ -7,6 +7,7 @@ import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePick
 import { validateString } from "../../../../../Until/validateYup";
 import * as yup from "yup";
 import { SwitchRHF } from "src/App/Components/ReactHookFormComp";
+import moment from "moment";
 import { useParams } from "react-router-dom";
 import {toast} from 'react-toastify';
 import { validateDatePicker } from "../../../../../Until/validateYup";
@@ -39,7 +40,7 @@ const modelObj = {
   initialFormState = {
     [modelObj.tieuDe]: "",
     [modelObj.moTa]: "",
-    [modelObj.ngayBatDau]: "",
+    [modelObj.ngayBatDau]: new Date(),
     [modelObj.soPhutGoi]: 0,
     [modelObj.soGiayGoi]: 0,
     [modelObj.isHoanThanh]: false,
@@ -90,7 +91,7 @@ const ModalUpdateCuocGoi = (props) => {
         [modelObj.moTa]: data[modelObj.moTa],
         [modelObj.soPhutGoi]: data[modelObj.soPhutGoi],
         [modelObj.soGiayGoi]: data[modelObj.soGiayGoi],
-        [modelObj.ngayBatDau]: data[modelObj.ngayBatDau],
+        [modelObj.ngayBatDau]: moment(data[modelObj.ngayBatDau]).format(),
         [modelObj.ketQuaCuocGoiId]: data[modelObj.ketQuaCuocGoiId],
         [modelObj.loaiCuocGoiId]: data[modelObj.loaiCuocGoiId],
         [modelObj.isHoanThanh]: data[modelObj.isHoanThanh],

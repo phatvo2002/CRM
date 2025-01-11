@@ -19,6 +19,7 @@ import {
 } from "src/App/Api/GetDataApi";
 import { useUpdateCuocGoiMutation } from "src/App/Api/CuocGoiApi";
 import { useUpdateLichHenMutation } from "src/App/Api/LichhenApi";
+import moment from "moment";
 // ------ Form Config ------ //
 const modelObj = {
     tieuDe: "tieuDe",
@@ -88,8 +89,8 @@ const ModalUpdateLichHen = (props) => {
         id: data.id,
         [modelObj.tieuDe]: data[modelObj.tieuDe],
         [modelObj.moTa]: data[modelObj.moTa],
-        [modelObj.ngayBatDau]: data[modelObj.ngayBatDau],
-        [modelObj.ngayKetThuc]: data[modelObj.ngayKetThuc],
+        [modelObj.ngayBatDau]:moment(data[modelObj.ngayBatDau]).format(),
+        [modelObj.ngayKetThuc]: moment(data[modelObj.ngayKetThuc]).format(),
         [modelObj.diaDiem]: data[modelObj.diaDiem],
         [modelObj.trangThaiThucHienId]: data[modelObj.trangThaiThucHienId],
         [modelObj.khachHangTiemNangId]: id,

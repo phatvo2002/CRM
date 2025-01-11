@@ -5,6 +5,7 @@ import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
 import { TYPE_MODAL } from "src/App/Until/constant";
 import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 import { validateString } from "../../../../../Until/validateYup";
+import moment from "moment";
 import * as yup from "yup";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -35,7 +36,7 @@ const modelObj = {
   initialFormState = {
     [modelObj.tieuDe]: "",
     [modelObj.moTa]: "",
-    [modelObj.hanHoanThanh]: "",
+    [modelObj.hanHoanThanh]: new Date(),
     [modelObj.mucDoUuTienId]: "",
     [modelObj.trangThaiThucHienId]: "",
     [modelObj.khachHangTiemNangId]: "",
@@ -79,7 +80,7 @@ const ModalAddNhiemVu = (props) => {
       const tempData = {
         [modelObj.tieuDe]: data[modelObj.tieuDe],
         [modelObj.moTa]: data[modelObj.moTa],
-        [modelObj.hanHoanThanh]: data[modelObj.hanHoanThanh],
+        [modelObj.hanHoanThanh]: moment(data[modelObj.hanHoanThanh]).format(),
         [modelObj.mucDoUuTienId]: data[modelObj.mucDoUuTienId],
         [modelObj.trangThaiThucHienId]: data[modelObj.trangThaiThucHienId],
         [modelObj.khachHangTiemNangId]: id,

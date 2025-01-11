@@ -14,6 +14,7 @@ import AutocompleteRHF from "src/App/Components/ReactHookFormComp/AutocompleteRH
 import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
 import { useGetAllKetQuaCuocGoiQuery, useGetAllLoaiCuocGoiQuery } from "src/App/Api/GetDataApi";
 import { useAddCuocGoiMutation } from "src/App/Api/CuocGoiApi";
+import moment from "moment";
 // ------ Form Config ------ //
 const modelObj = {
   tieuDe: "tieuDe",
@@ -40,7 +41,7 @@ const modelObj = {
   initialFormState = {
     [modelObj.tieuDe]: "",
     [modelObj.moTa]: "",
-    [modelObj.ngayBatDau]: "",
+    [modelObj.ngayBatDau]: new Date(),
     [modelObj.soPhutGoi]: 0,
     [modelObj.soGiayGoi]: 0,
     [modelObj.isHoanThanh]:false,
@@ -84,7 +85,7 @@ const ModlaAddCuocGoi = (props) => {
       [modelObj.moTa]: data[modelObj.moTa],
       [modelObj.soPhutGoi]: data[modelObj.soPhutGoi],
       [modelObj.soGiayGoi]: data[modelObj.soGiayGoi],
-      [modelObj.ngayBatDau]: data[modelObj.ngayBatDau],
+      [modelObj.ngayBatDau]: moment(data[modelObj.ngayBatDau]).format(),
       [modelObj.ketQuaCuocGoiId]: data[modelObj.ketQuaCuocGoiId],
       [modelObj.loaiCuocGoiId]: data[modelObj.loaiCuocGoiId],
       [modelObj.isHoanThanh] : data[modelObj.isHoanThanh],

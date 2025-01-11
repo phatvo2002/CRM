@@ -1,8 +1,6 @@
 ﻿using CRM.Attributes;
 using CRM.Modal;
-using CRM.Services;
-using CRM.Services.LoaiDuBaos;
-using Microsoft.AspNetCore.Http;
+using CRM.Services.PhanLoaiDuBaos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers.PhanLoaiDuBaos

@@ -68,7 +68,7 @@ namespace CRM.Entities
         {
             //optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             //Local connection :
-            optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-7IV23S1;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
         }
 
 
@@ -446,6 +446,7 @@ namespace CRM.Entities
                 entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e => e.TieuDe).HasMaxLength(100);
                 entity.Property(e => e.MoTa).HasMaxLength(300);
+                entity.Property(e => e.IsThongBao).HasColumnType("bit");
                 entity.Property(e => e.HanHoanThanh).HasColumnType("datetime");
                 entity.HasOne(d => d.TrangThaiThucHien).WithMany(r => r.NhiemVus).
                 HasForeignKey(r => r.TrangThaiThucHienId).

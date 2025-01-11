@@ -8,6 +8,7 @@ import { validateString } from "../../../../../Until/validateYup";
 import * as yup from "yup";
 import { useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
+import moment from "moment";
 import { validateDatePicker } from "../../../../../Until/validateYup";
 import AutocompleteRHF from "src/App/Components/ReactHookFormComp/AutocompleteRHF";
 import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
@@ -32,7 +33,7 @@ const modelObj = {
   initialFormState = {
     [modelObj.tieuDe]: "",
     [modelObj.moTa]: "",
-    [modelObj.hanHoanThanh]: "",
+    [modelObj.hanHoanThanh]: new Date(),
     [modelObj.mucDoUuTienId]: "",
     [modelObj.trangThaiThucHienId]: "",
     [modelObj.khachHangTiemNangId]: "",
@@ -77,7 +78,7 @@ const ModalUpdateNhiemVu = (props) => {
       id: data.id,
       [modelObj.tieuDe]: data[modelObj.tieuDe],
       [modelObj.moTa]: data[modelObj.moTa],
-      [modelObj.hanHoanThanh]: data[modelObj.hanHoanThanh],
+      [modelObj.hanHoanThanh]: moment(data[modelObj.hanHoanThanh]).format(),
       [modelObj.mucDoUuTienId]: data[modelObj.mucDoUuTienId],
       [modelObj.trangThaiThucHienId]: data[modelObj.trangThaiThucHienId],
       [modelObj.khachHangTiemNangId]: id,
@@ -109,9 +110,7 @@ const ModalUpdateNhiemVu = (props) => {
           id: selectedItem?.id,
           [modelObj.tieuDe]: selectedItem[modelObj.tieuDe],
           [modelObj.moTa]: selectedItem[modelObj.moTa],
-          [modelObj.hanHoanThanh]: selectedItem[modelObj.hanHoanThanh]
-            ? new Date(selectedItem[modelObj.hanHoanThanh])
-            : null,
+          [modelObj.hanHoanThanh]: selectedItem[modelObj.hanHoanThanh],
           [modelObj.mucDoUuTienId]: selectedItem[modelObj.mucDoUuTienId],
           [modelObj.trangThaiThucHienId]: selectedItem[modelObj.trangThaiThucHienId],
           [modelObj.khachHangTiemNangId]: selectedItem[modelObj.khachHangTiemNangId],

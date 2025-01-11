@@ -28,20 +28,21 @@ import {
 import { useUpdateKhachHangTiemNangMutation } from "src/App/Api/KhachHangTiemNangApi";
 // ------ Form Config ------ //
 const modelObj = {
-  nguoiDungId: "nguoiDungId",
-  phongBanId: "phongBanId",
+  id: "id",
   tenKhachHang: "tenKhachHang",
-  soDienThoaiDiDong: "soDienThoaiDiDong",
-  soDienThoaiCoQuan: "soDienThoaiCoQuan",
-  chucDanh: "chucDanh",
-  soZalo: "soZalo",
-  emailCaNhan: "emailCaNhan",
-  emailCoQuan: "emailCoQuan",
-  tenToChuc: "tenToChuc",
+  tenVietTat: "tenVietTat",
   maSoThue: "maSoThue",
+  soDienThoai: "soDienThoai",
+  email: "email",
+  taiKhoanNganHang: "taiKhoanNganHang",
+  website: "website",
   ngayThanhLap: "ngayThanhLap",
-  diaChi: "diaChi",
-  thongTinMoTa: "thongTinMoTa",
+  moTa: "moTa",
+  isDungChung: "isDungChung",
+  isKhachHangCaNhan: "isKhachHangCaNhan",
+  isNhaPhanPhoi: "isNhaPhanPhoi",
+  thongTinHoaDon: "thongTinHoaDon",
+  thongTinGiaoHang: "thongTinGiaoHang",
   maPhongbanKhachHang: "maPhongbanKhachHang",
   maNguonGocKhachHang: "maNguonGocKhachHang",
   maLoaiTiemNang: "maLoaiTiemNang",
@@ -49,21 +50,23 @@ const modelObj = {
   maNganhNghe: "maNganhNghe",
   maLinhVuc: "maLinhVuc",
   maDoanhThu: "maDoanhThu",
-  isDungChung: "isDungChung",
 },
   labelObj = {
+    id: "Mã Khách hàng",
     tenKhachHang: "Tên Khách hàng",
-    soDienThoaiDiDong: "Số điện thoại di động",
-    soDienThoaiCoQuan: "Số điện thoại cơ quan",
-    chucDanh: "Chức danh",
-    soZalo: "Số zalo ",
-    emailCaNhan: "Email cá nhân",
-    emailCoQuan: "Email cơ quan",
-    tenToChuc: "Tên công ty",
+    tenVietTat: "Tên viết tắt",
     maSoThue: "Mã số thuế",
+    soDienThoai: "Số điện thoại",
+    email: "Email",
+    taiKhoanNganHang: "Tài khoản ngân hàng",
+    website: "Website",
     ngayThanhLap: "Ngày thành lập",
-    diaChi: "Địa chỉ",
-    thongTinMoTa: "Thông tin mô tả",
+    moTa: "Mô tả",
+    isDungChung: "Khách hàng dùng chung",
+    isKhachHangCaNhan: "Khách hàng cá nhân",
+    isNhaPhanPhoi: "Nhà phân phối",
+    thongTinHoaDon: "Thông tin hóa đơn",
+    thongTinGiaoHang: "Thông tin giao hàng",
     maPhongbanKhachHang: "Phòng ban khách hàng",
     maNguonGocKhachHang: "Nguồn gốc khách hàng",
     maLoaiTiemNang: "Loại tiềm năng",
@@ -73,38 +76,39 @@ const modelObj = {
     maDoanhThu: "Doanh thu",
   },
   initialFormState = {
-    [modelObj.nguoiDungId]: null,
-    [modelObj.phongBanId]: null,
+    [modelObj.id]: null,
     [modelObj.tenKhachHang]: null,
-    [modelObj.soDienThoaiDiDong]: null,
-    [modelObj.chucDanh]: null,
-    [modelObj.soZalo]: null,
-    [modelObj.emailCaNhan]: null,
-    [modelObj.emailCoQuan]: null,
-    [modelObj.tenToChuc]: null,
+    [modelObj.tenVietTat]: null,
     [modelObj.maSoThue]: null,
+    [modelObj.soDienThoai]: null,
+    [modelObj.email]: null,
+    [modelObj.taiKhoanNganHang]: null,
+    [modelObj.website]: null,
+    [modelObj.tenToChuc]: null,
     [modelObj.ngayThanhLap]: null,
-    [modelObj.diaChi]: null,
-    [modelObj.thongTinMoTa]: null,
-    [modelObj.maPhongbanKhachHang]: null,
+    [modelObj.moTa]: null,
+    [modelObj.isDungChung]: false,
+    [modelObj.isKhachHangCaNhan]: false,
+    [modelObj.isNhaPhanPhoi]: false,
+    [modelObj.thongTinHoaDon]: null,
+    [modelObj.thongTinGiaoHang]: null,
     [modelObj.maLoaiTiemNang]: null,
     [modelObj.maLoaiHinhNgheNghiep]: null,
     [modelObj.maNganhNghe]: null,
     [modelObj.maDoanhThu]: null,
     [modelObj.maLinhVuc]: null,
-    [modelObj.isDungChung]: false,
   },
   schema = yup.object().shape({
     [modelObj.tenKhachHang]: validateString(),
-    [modelObj.soDienThoaiDiDong]: validateString(),
-    [modelObj.emailCaNhan]: validateString(),
-    [modelObj.diaChi]: validateString(),
+    [modelObj.soDienThoai]: validateString(),
+    [modelObj.email]: validateString(),
+    [modelObj.thongTinGiaoHang]: validateString(),
   });
 // ------ End Of Form Config ------ //
 const userData = JSON.parse(localStorage.getItem('authorizationData'));
 const getHeader = (typeModal) => {
   const title = {
-    [TYPE_MODAL.UPDATE]: "Chỉnh sửa khách hàng tiềm năng",
+    [TYPE_MODAL.UPDATE]: "Chỉnh sửa khách hàng mục tiêu",
   };
   return title[typeModal] ?? "";
 };
@@ -154,27 +158,26 @@ const ModalUpdateKHMucTieu = (props) => {
     const tempData = {
       id: data.id,
       [modelObj.tenKhachHang]: data[modelObj.tenKhachHang],
-      [modelObj.soDienThoaiDiDong]: data[modelObj.soDienThoaiDiDong],
-      [modelObj.soDienThoaiCoQuan]: data[modelObj.soDienThoaiCoQuan],
-      [modelObj.chucDanh]: data[modelObj.chucDanh],
-      [modelObj.soZalo]: data[modelObj.soZalo],
-      [modelObj.emailCaNhan]: data[modelObj.emailCaNhan],
-      [modelObj.emailCoQuan]: data[modelObj.emailCoQuan],
-      [modelObj.orderNumber]: data[modelObj.orderNumber],
-      [modelObj.tenToChuc]: data[modelObj.tenToChuc],
+      [modelObj.tenVietTat]: data[modelObj.tenVietTat],
       [modelObj.maSoThue]: data[modelObj.maSoThue],
+      [modelObj.soDienThoai]: data[modelObj.soDienThoai],
+      [modelObj.email]: data[modelObj.email],
+      [modelObj.taiKhoanNganHang]: data[modelObj.taiKhoanNganHang],
+      [modelObj.website]: data[modelObj.website],
       [modelObj.ngayThanhLap]: data[modelObj.ngayThanhLap],
-      [modelObj.diaChi]: data[modelObj.diaChi],
-      [modelObj.thongTinMoTa]: data[modelObj.thongTinMoTa],
-      [modelObj.maNguonGocKhachHang]: data[modelObj.maNguonGocKhachHang],
+      [modelObj.moTa]: data[modelObj.moTa],
+      [modelObj.isDungChung]: data[modelObj.isDungChung],
+      [modelObj.isKhachHangCaNhan]: data[modelObj.isKhachHangCaNhan],
+      [modelObj.isNhaPhanPhoi]: data[modelObj.isNhaPhanPhoi],
+      [modelObj.thongTinHoaDon]: data[modelObj.thongTinHoaDon],
+      [modelObj.thongTinGiaoHang]: data[modelObj.thongTinGiaoHang],
       [modelObj.maPhongbanKhachHang]: data[modelObj.maPhongbanKhachHang],
+      [modelObj.maNguonGocKhachHang]: data[modelObj.maNguonGocKhachHang],
       [modelObj.maLoaiTiemNang]: data[modelObj.maLoaiTiemNang],
+      [modelObj.maLoaiHinhNgheNghiep]: data[modelObj.maLoaiHinhNgheNghiep],
       [modelObj.maLinhVuc]: data[modelObj.maLinhVuc],
       [modelObj.maNganhNghe]: data[modelObj.maNganhNghe],
       [modelObj.maDoanhThu]: data[modelObj.maDoanhThu],
-      [modelObj.isDungChung]: data[modelObj.isDungChung],
-      [modelObj.nguoiDungId]: userData?.response?.id,
-      [modelObj.phongBanId]: userData?.response?.phongBan?.id,
     };
 
     typeModal === TYPE_MODAL.UPDATE && callApiUpdate(tempData);
@@ -206,7 +209,7 @@ const ModalUpdateKHMucTieu = (props) => {
           ...selectedItem,
           id: selectedItem?.id,
           [modelObj.tenKhachHang]: selectedItem[modelObj.tenKhachHang],
-          [modelObj.soDienThoaiDiDong]: selectedItem[modelObj.soDienThoaiDiDong],
+          [modelObj.tenVietTat]: selectedItem[modelObj.tenVietTat],
           [modelObj.soDienThoaiCoQuan]: selectedItem[modelObj.soDienThoaiCoQuan],
           [modelObj.chucDanh]: selectedItem[modelObj.chucDanh],
           [modelObj.soZalo]: selectedItem[modelObj.soZalo],
@@ -265,30 +268,31 @@ const ModalUpdateKHMucTieu = (props) => {
           />
         </Grid2>
         <Grid2 size={6}>
-          <AutocompleteRHF
-            name={modelObj.maPhongbanKhachHang}
-            label={labelObj.maPhongbanKhachHang}
-            isGetOnlyId
-            // disabled={isLoading}
-            data={commonMapDataAutocomplete(
-              dataPhongBanKhachHang,
-              "name"
-            )}
-            skeletonLoading={isGetPhongBanKhachHangFetching}
+          <TextFieldRHF
+            name={modelObj.tenVietTat}
+            label={labelObj.tenVietTat}
+          // disabled={isLoading}
           />
         </Grid2>
         <Grid2 size={6}>
           <TextFieldRHF
-            name={modelObj.soDienThoaiDiDong}
-            label={labelObj.soDienThoaiDiDong}
+            name={modelObj.maSoThue}
+            label={labelObj.maSoThue}
             // disabled={isLoading}
             required
           />
         </Grid2>
         <Grid2 size={6}>
           <TextFieldRHF
-            name={modelObj.soDienThoaiCoQuan}
-            label={labelObj.soDienThoaiCoQuan}
+            name={modelObj.soDienThoai}
+            label={labelObj.soDienThoai}
+          // disabled={isLoading}
+          />
+        </Grid2>
+        <Grid2 size={6}>
+          <TextFieldRHF
+            name={modelObj.email}
+            label={labelObj.email}
           // disabled={isLoading}
           />
         </Grid2>
@@ -298,10 +302,7 @@ const ModalUpdateKHMucTieu = (props) => {
             label={labelObj.maNguonGocKhachHang}
             isGetOnlyId
             // disabled={isLoading}
-            data={commonMapDataAutocomplete(
-              dataNguonGocKhachHang,
-              "name"
-            )}
+            data={commonMapDataAutocomplete(dataNguonGocKhachHang, "name")}
             skeletonLoading={isGetNguonGocKhachHangFetching}
           />
         </Grid2>
@@ -315,56 +316,7 @@ const ModalUpdateKHMucTieu = (props) => {
             skeletonLoading={isGetLoaiTiemNangFetching}
           />
         </Grid2>
-        <Grid2 size={6}>
-          <TextFieldRHF
-            name={modelObj.soZalo}
-            label={labelObj.soZalo}
-          // disabled={isLoading}
-          />
-        </Grid2>
-        <Grid2 size={6}>
-          <TextFieldRHF
-            name={modelObj.emailCaNhan}
-            label={labelObj.emailCaNhan}
-            // disabled={isLoading}
-            required
-          />
-        </Grid2>
-        <Grid2 size={6}>
-          <TextFieldRHF
-            name={modelObj.emailCoQuan}
-            label={labelObj.emailCoQuan}
-          // disabled={isLoading}
-          />
-        </Grid2>
-        <Grid2 size={6}>
-          <TextFieldRHF
-            name={modelObj.maSoThue}
-            label={labelObj.maSoThue}
-          // disabled={isLoading}
-          />
-        </Grid2>
-        <Grid2 size={12}>
-          <h4 style={{ padding: 2 }}>2. Thông tin công ty</h4>
-        </Grid2>
-        <Grid2 size={6}>
-          <TextFieldRHF
-            name={modelObj.tenToChuc}
-            label={labelObj.tenToChuc}
-          // disabled={isLoading}
-          />
-        </Grid2>
 
-        <Grid2 size={6}>
-          <AutocompleteRHF
-            name={modelObj.maLoaiHinhNgheNghiep}
-            label={labelObj.maLoaiHinhNgheNghiep}
-            isGetOnlyId
-            // disabled={isLoading}
-            data={commonMapDataAutocomplete(dataLoaiHinh, "name")}
-            skeletonLoading={isGetLoaiHinhFetching}
-          />
-        </Grid2>
         <Grid2 size={6}>
           <AutocompleteRHF
             name={modelObj.maLinhVuc}
@@ -386,6 +338,21 @@ const ModalUpdateKHMucTieu = (props) => {
             skeletonLoading={isGetNganhNgheFetching}
           />
         </Grid2>
+        <Grid2 size={12}>
+          <h4>2. Thông tin bổ sung</h4>
+        </Grid2>
+        <Grid2 size={6}>
+          <TextFieldRHF
+            name={modelObj.taiKhoanNganHang}
+            label={labelObj.taiKhoanNganHang}
+          // disabled={isLoading}
+          />
+        </Grid2>
+        <DatePickerRHF
+          name={modelObj.ngayThanhLap}
+          label={labelObj.ngayThanhLap}
+          maxDate={modelObj.ngayThanhLap}
+        />
         <Grid2 size={6}>
           <AutocompleteRHF
             name={modelObj.maDoanhThu}
@@ -396,29 +363,43 @@ const ModalUpdateKHMucTieu = (props) => {
             skeletonLoading={isGetDoanhThuFetching}
           />
         </Grid2>
-        <DatePickerRHF
-          name={modelObj.ngayThanhLap}
-          label={labelObj.ngayThanhLap}
-          maxDate={modelObj.ngayThanhLap}
-        />
+        <Grid2 size={6}>
+          <TextFieldRHF
+            name={modelObj.website}
+            label={labelObj.website}
+          // disabled={isLoading}
+          />
+        </Grid2>
         <Grid2 size={12}>
           <h4 style={{ padding: 2 }}>3. Thông tin địa chỉ</h4>
         </Grid2>
         <Grid2 size={12}>
           <TextAreaRHF
-            name={modelObj.diaChi}
-            label={labelObj.diaChi}
+            name={modelObj.thongTinGiaoHang}
+            label={labelObj.thongTinGiaoHang}
           />
         </Grid2>
         <Grid2 size={12}>
           <TextAreaRHF
-            name={modelObj.thongTinMoTa}
-            label={labelObj.thongTinMoTa}
+            name={modelObj.thongTinHoaDon}
+            label={labelObj.thongTinHoaDon}
           />
+        </Grid2>
+
+        <Grid2 size={12}>
+          <h4 style={{ padding: 2 }}>4. Thông tin dữ liệu</h4>
         </Grid2>
         <p>Là khách hàng dùng chung</p>
         <SwitchRHF
           name={modelObj.isDungChung}
+        />
+        <p>Là khách hàng cá nhân</p>
+        <SwitchRHF
+          name={modelObj.isKhachHangCaNhan}
+        />
+        <p>Là khách hàng nhà phân phối</p>
+        <SwitchRHF
+          name={modelObj.isNhaPhanPhoi}
         />
       </Grid2>
     </RHFDrawer>

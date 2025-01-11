@@ -33,6 +33,7 @@ namespace CRM.Repositories.NhiemVus
                     nhiemVu.KhachHangTiemNangId = modal.KhachHangTiemNangId;
                     nhiemVu.MucDoUuTienId = modal.MucDoUuTienId;
                     nhiemVu.TrangThaiThucHienId = modal.TrangThaiThucHienId;
+                    nhiemVu.IsThongBao = false;
                     nhiemVu.IsDeleted = false;
                     nhiemVu.NguoiDungId = nguoiDungId;
                     nhiemVu.PhongBanId = phongBanId;
