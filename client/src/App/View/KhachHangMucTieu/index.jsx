@@ -1,28 +1,42 @@
-import { Button, Grid2, Paper, Tooltip, IconButton, MenuItem, Menu } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import {
+  Button,
+  Grid2,
+  Paper,
+  Tooltip,
+  IconButton,
+  MenuItem,
+  Menu,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import AddIcon from "@mui/icons-material/Add";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { useGetKhachHangMucTieuByNguoiDungIdQuery, useGetKhachHangMucTieuByPhongBanIdQuery } from 'src/App/Api/KhachHangMucTieuApi';
-import CustomDatagrid from 'src/App/Components/DataGrid/CustomDatagrid';
-import ThreePIcon from '@mui/icons-material/ThreeP';
-import { ActionComponents } from './Components/Action';
-import UpdateIcon from '@mui/icons-material/Update';
-import { useNavigate } from 'react-router-dom';
-import ModalUpdateKHMucTieu from './Modal/ModalUpdateKHMucTieu';
+import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import {
+  useGetKhachHangMucTieuByNguoiDungIdQuery,
+  useGetKhachHangMucTieuByPhongBanIdQuery,
+} from "src/App/Api/KhachHangMucTieuApi";
+import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
+import ThreePIcon from "@mui/icons-material/ThreeP";
+import { ActionComponents } from "./Components/Action";
+import UpdateIcon from "@mui/icons-material/Update";
+import { useNavigate } from "react-router-dom";
+import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
+import { useGetTemplatesQuery } from "src/App/Api/KhachHangTiemNangApi";
+import ModalImportKhachHang from "./Modal/ModalImportKhachHang";
 const KhachHangMucTieu = () => {
-  const [selectedRow, setSelectedRow] = useState([]);
-  const [rows, setRows] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false)
-  const navigate = useNavigate()
-  const [isActionOpen, setIsActionOpen] = useState(false);
-  const handleOpen = () => setIsActionOpen(true);
-  const handleCloseAction = () => setIsActionOpen(false)
+  const [selectedRow, setSelectedRow] = useState([]),
+   [rows, setRows] = useState([]),
+   [anchorEl, setAnchorEl] = useState(null),
+   [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false),
+   [modalImportKhachHangMucTeu , setModalImportKhachHangMucTeu] = useState(false),
+   navigate = useNavigate(),
+   [isActionOpen, setIsActionOpen] = useState(false),
+   handleOpen = () => setIsActionOpen(true),
+   handleCloseAction = () => setIsActionOpen(false);
   const columns = [
     {
       field: "action",
@@ -42,7 +56,7 @@ const KhachHangMucTieu = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-             onClick={handleOpenModalUpdateKhachHang}
+              onClick={handleOpenModalUpdateKhachHang}
             >
               <EditIcon />
             </IconButton>
@@ -51,14 +65,16 @@ const KhachHangMucTieu = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-            // onClick={() => handleDeletePhongBan(params?.id)}
+              // onClick={() => handleDeletePhongBan(params?.id)}
             >
               <DeleteIcon />
             </IconButton>
           </Tooltip>
           <Tooltip title="Bàn giao khách hàng">
-            <IconButton disabled={selectedRow.length === 0} style={{}}
-            // onClick={() => handleOpenModalBanGiaoKhachHang()}
+            <IconButton
+              disabled={selectedRow.length === 0}
+              style={{}}
+              // onClick={() => handleOpenModalBanGiaoKhachHang()}
             >
               <ThreePIcon />
             </IconButton>
@@ -103,27 +119,25 @@ const KhachHangMucTieu = () => {
     },
     { field: "email", headerName: "Email", width: 200 },
     {
-      field: "nguongoc", headerName: "Nguồn gốc khách hàng", width: 200,
-      renderCell: (params) =>
-      (
-        <div>
-          {params?.row?.nguonGocKhachHang?.tenNguonGoc}
-        </div>
-      )
+      field: "nguongoc",
+      headerName: "Nguồn gốc khách hàng",
+      width: 200,
+      renderCell: (params) => (
+        <div>{params?.row?.nguonGocKhachHang?.tenNguonGoc}</div>
+      ),
     },
     {
-      field: "tiemnang", headerName: "Loại khách hàng", width: 200,
-      renderCell: (params) =>
-      (
-        <div>
-          {params?.row?.loaiTiemNang?.tenLoaiTiemNang}
-        </div>
-      )
+      field: "tiemnang",
+      headerName: "Loại khách hàng",
+      width: 200,
+      renderCell: (params) => (
+        <div>{params?.row?.loaiTiemNang?.tenLoaiTiemNang}</div>
+      ),
     },
   ];
   const gotoLink = () => {
-    navigate("/khachhang/themmoikhachhang")
-  }
+    navigate("/khachhang/themmoikhachhang");
+  };
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -132,21 +146,45 @@ const KhachHangMucTieu = () => {
     setAnchorEl(null);
   };
   const userData = JSON.parse(localStorage.getItem("authorizationData"));
-  const { data: dataKhachHangByNguoiDung ,refetch } =
+  const { data: dataKhachHangByNguoiDung, refetch } =
     useGetKhachHangMucTieuByNguoiDungIdQuery();
+  const { data: getTemplate } = useGetTemplatesQuery({
+    path: "Templates/ThongTinKhachHang.xlsx",
+    filename: "ThongTinKhachHang",
+  });
+  const handleGetTemplates = () => {
+    if (getTemplate) {
+      const url = window.URL.createObjectURL(getTemplate);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "ThongTinKhachHang.xlsx";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } else {
+      console.error("Không có dữ liệu để tải file.");
+    }
+  };
+
   useEffect(() => {
-      setRows(dataKhachHangByNguoiDung);
+    setRows(dataKhachHangByNguoiDung);
   }, [dataKhachHangByNguoiDung]);
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
 
   const handleOpenModalUpdateKhachHang = () => {
-     setModalUpdateKhachHang(true)
-  }
+    setModalUpdateKhachHang(true);
+  };
   const handleCloseModalUpdateKhachHang = () => {
-     setModalUpdateKhachHang(false)
+    setModalUpdateKhachHang(false);
+  };
+  const handleOpenModalImportKhachHang = () => {
+    setModalImportKhachHangMucTeu(true);
   }
+  const handleCloseOpenModalImportKhachHang = () => {
+    setModalImportKhachHangMucTeu(false);
+  }
+
   return (
     <>
       <Grid2 container spacing={2}>
@@ -163,9 +201,9 @@ const KhachHangMucTieu = () => {
             </Button>
             <Button
               id="basic-button"
-              aria-controls={open ? 'basic-menu' : undefined}
+              aria-controls={open ? "basic-menu" : undefined}
               aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
+              aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
               sx={{ marginLeft: 1, width: "200px" }}
               variant="outlined"
@@ -179,7 +217,7 @@ const KhachHangMucTieu = () => {
               open={open}
               onClose={handleClose}
               MenuListProps={{
-                'aria-labelledby': 'basic-button',
+                "aria-labelledby": "basic-button",
               }}
             >
               <MenuItem onClick={handleClose}>
@@ -188,7 +226,7 @@ const KhachHangMucTieu = () => {
                   color="success"
                   startIcon={<GetAppIcon />}
                   sx={{ marginLeft: 1, width: "200px" }}
-                // onClick={handleGetTemplates}
+                  onClick={handleGetTemplates}
                 >
                   Xuất Template
                 </Button>
@@ -199,7 +237,7 @@ const KhachHangMucTieu = () => {
                   color="warning"
                   sx={{ marginLeft: 1, width: "200px" }}
                   startIcon={<FileDownloadDoneIcon />}
-                // onClick={gotoLinkImport}
+                  onClick={handleOpenModalImportKhachHang}
                 >
                   IMPORT
                 </Button>
@@ -215,7 +253,15 @@ const KhachHangMucTieu = () => {
                 </Button>
               </MenuItem>
             </Menu>
-            <Button onClick={handleOpen} sx={{ marginLeft: 1 }} variant="outlined" color="inherit" startIcon={<UpdateIcon />}>Lịch sử tương tác</Button>
+            <Button
+              onClick={handleOpen}
+              sx={{ marginLeft: 1 }}
+              variant="outlined"
+              color="inherit"
+              startIcon={<UpdateIcon />}
+            >
+              Lịch sử tương tác
+            </Button>
 
             {/* <Button
               variant="outlined"
@@ -225,7 +271,6 @@ const KhachHangMucTieu = () => {
             >
               Thùng rác
             </Button> */}
-
           </Grid2>
           <Grid2 size={12}>
             <Paper>
@@ -250,15 +295,21 @@ const KhachHangMucTieu = () => {
           />
         )}
       </Grid2>
-       {/* Modal Khách hàng mục tiêu */}
-       <ModalUpdateKHMucTieu
-         showModal={modalUpdateKhachHang}
-         closeModal={handleCloseModalUpdateKhachHang}
-         selectedItem={selectedRow}
+      {/* Modal Khách hàng mục tiêu */}
+      <ModalUpdateKHMucTieu
+        showModal={modalUpdateKhachHang}
+        closeModal={handleCloseModalUpdateKhachHang}
+        selectedItem={selectedRow}
+        refetch={refetch}
+      />
+      {/* Modal import khách hàng */}
+         <ModalImportKhachHang
+         showModal={modalImportKhachHangMucTeu}
+         closeModal={handleCloseOpenModalImportKhachHang}
          refetch={refetch}
-       />
+      />
     </>
-  )
-}
+  );
+};
 
-export default KhachHangMucTieu
+export default KhachHangMucTieu;

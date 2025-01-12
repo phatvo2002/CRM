@@ -256,7 +256,7 @@ namespace CRM.Controllers.KhachHangTiemnangs
                                         break;
                                 }
                                 var linhVucNgheNghiep = !string.IsNullOrEmpty(reader.GetValue(12)?.ToString()) ? reader.GetValue(12).ToString() : null;
-                                switch (loaiHinhNgheNghiep)
+                                switch (linhVucNgheNghiep)
                                 {
                                     case "Thương mại":
                                         khachHangTiemNang.MaLinhVuc = 1;

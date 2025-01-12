@@ -30,6 +30,7 @@ export const CustomNotification = ({
     const interval = setInterval(() => {
       CheckDeadline()
         .then((response) => {
+          window.location.reload();
           console.log("Checked deadlines:", response.data);
         })
         .catch((err) => {

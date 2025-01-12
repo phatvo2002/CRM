@@ -49,17 +49,17 @@ export const apiKhachHangMucTieu = createApi({
           body: data,
         }),
       }),
-    //   ImportKhachHangMucTieu: builder.mutation({
-    //     query: (file) => {
-    //       const formData = new FormData();
-    //       formData.append('file', file); 
-    //       return {
-    //         url: '/KhachHangTiemNang/ImportKhachHang',
-    //         method: 'POST',
-    //         body: formData,
-    //       };
-    //     },
-    //   }),
+      ImportKhachHangMucTieu: builder.mutation({
+        query: (file) => {
+          const formData = new FormData();
+          formData.append('file', file); 
+          return {
+            url: '/KhachHangMucTieu/UploadExcel',
+            method: 'POST',
+            body: formData,
+          };
+        },
+      }),
       updateKhachHangTiemNangMucTieu: builder.mutation({
         query: (data) => ({
           url: '/KhachHangMucTieu/updatekhachhangmuctieu',
@@ -86,6 +86,7 @@ export const apiKhachHangMucTieu = createApi({
     useGetKhachHangMucTieuByIdQuery,
     useGetKhachHangMucTieuByNguoiDungIdQuery,
     useGetKhachHangMucTieuByPhongBanIdQuery,
+    useImportKhachHangMucTieuMutation,
     useAddKhachHangMucTieuMutation,
     useUpdateKhachHangTiemNangMucTieuMutation,
     useConvertKhachHangMucTieuMutation,

@@ -37,6 +37,7 @@ namespace CRM.Repositories.NhiemVus
                     nhiemVu.IsDeleted = false;
                     nhiemVu.NguoiDungId = nguoiDungId;
                     nhiemVu.PhongBanId = phongBanId;
+                    nhiemVu.IsThongBao = false;
                     nhiemVu.CreateAt = DateTime.Now;
                     _context.NhiemVus.Add(nhiemVu);
                     await _context.SaveChangesAsync();
