@@ -39,6 +39,7 @@ const ImportKhachHangTiemNang =  lazy(() => import("./View/KhachHangTiemNang/com
 // Khách hàng mục tiêu 
 const KhachHangMucTieu = lazy(()=> import("./View/KhachHangMucTieu/index"))
 const ThemMoiKhachHangMucTieu =  lazy(()=> import("./View/KhachHangMucTieu/Pages/AddKhachHangMucTieu"))
+const KhachHangMucTieuDetail = lazy(()=> import("./View/KhachHangMucTieu/Pages/KhachHangMucTieuDetail"))
 // Hàng hóa
 const HangHoa  = lazy(() =>
   import("./View/HangHoa/index")
@@ -175,6 +176,14 @@ const RouteChild = [
       element: (
         <Suspense fallback={<div>Loading...</div>}>
            <ThemMoiKhachHangMucTieu />
+        </Suspense>
+      ),
+    },
+    {
+      path: "/khachhang/:id",
+      element: (
+        <Suspense fallback={<div>Loading...</div>}>
+           <KhachHangMucTieuDetail />
         </Suspense>
       ),
     },

@@ -16,6 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
+  useDeleteKhachHangMucTieuMutation,
   useGetKhachHangMucTieuByNguoiDungIdQuery,
   useGetKhachHangMucTieuByPhongBanIdQuery,
 } from "src/App/Api/KhachHangMucTieuApi";
@@ -27,6 +28,9 @@ import { useNavigate } from "react-router-dom";
 import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
 import { useGetTemplatesQuery } from "src/App/Api/KhachHangTiemNangApi";
 import ModalImportKhachHang from "./Modal/ModalImportKhachHang";
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]),
    [rows, setRows] = useState([]),
@@ -65,7 +69,7 @@ const KhachHangMucTieu = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-              // onClick={() => handleDeletePhongBan(params?.id)}
+              onClick={() => handleDeleteKhachHang(params?.id)}
             >
               <DeleteIcon />
             </IconButton>
@@ -89,13 +93,12 @@ const KhachHangMucTieu = () => {
       width: 200,
       renderCell: (params) => (
         <div>
-          {params.value}
-          {/* <Link
-            to={`/tiemnang/${params.id}`}
-            style={{ textDecoration: "none" }}
+          <Link
+            to={`/khachhang/${params.id}`}
+            style={{ textDecoration: "none" ,color:"text.primary" }}
           >
             {params.value}
-          </Link> */}
+          </Link>
         </div>
       ),
     },
@@ -152,6 +155,35 @@ const KhachHangMucTieu = () => {
     path: "Templates/ThongTinKhachHang.xlsx",
     filename: "ThongTinKhachHang",
   });
+  const [deleteNguoiDung] =useDeleteKhachHangMucTieuMutation()
+   const handleDeleteKhachHang = async (id) => {
+      if (
+        !userData?.response.checkIsTruongPhong 
+      ) {
+        toast.warning(
+          "Chỉ trưởng phòng mới có quyền xóa khách hàng."
+        );
+        return;
+      }
+  
+      Swal.fire({
+        title: "Bạn có muốn xóa khách hàng này?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await deleteNguoiDung(id);
+          Swal.fire({
+            title: "Xóa thành công",
+            icon: "success",
+          });
+          refetch()
+        }
+      });
+    };
   const handleGetTemplates = () => {
     if (getTemplate) {
       const url = window.URL.createObjectURL(getTemplate);

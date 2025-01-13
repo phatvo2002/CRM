@@ -98,7 +98,7 @@ namespace CRM.Repositories
                 if (entity != null)
                 {
                     var propertyInfo = typeof(TEntity).GetProperty("IsDeleted");
-                    if (propertyInfo != null && propertyInfo.PropertyType == typeof(bool))
+                    if (propertyInfo != null)
                     {
                         propertyInfo.SetValue(entity, true);
                         _crmDbContext.Set<TEntity>().Update(entity);

@@ -45,7 +45,7 @@ const ModalImportKhachHang = (props) => {
       if (response.status === 200) {
         toast.success(response.message);
         closeModalWithOtherFunc()
-        refetch
+        refetch()
       }
     } catch (error) {
       toast.error(

@@ -132,7 +132,7 @@ namespace CRM.Controllers.KhachHangMucTieus
         {
             Guid userId = HttpContext.GetUserId();
             Guid phongBanId = HttpContext.GetPhongBanId();
-            Random random = new Random();
+        
             try
             {
                 if (file == null || file.Length == 0)
@@ -153,14 +153,25 @@ namespace CRM.Controllers.KhachHangMucTieus
                     {
                         do
                         {
+                            Random random = new Random();
                             int rowIndex = 0;
                             while (reader.Read())
                             {
+                                bool isRowEmpty = true;
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    if (!string.IsNullOrWhiteSpace(reader.GetValue(i)?.ToString()))
+                                    {
+                                        isRowEmpty = false;
+                                        break;
+                                    }
+                                }
+                                if (isRowEmpty) continue;
                                 rowIndex++;
                                 if (rowIndex == 1)
                                     continue;
                                 KhachHangMucTieu khachHangMucTieu = new KhachHangMucTieu();
-                                khachHangMucTieu.Id = random.Next(100000, 1000000).ToString();
+                                khachHangMucTieu.Id = $"KH{random.Next(100000, 1000000)}";
                                 var tenKhacHang = !string.IsNullOrEmpty(reader.GetValue(0)?.ToString()) ? reader.GetValue(0).ToString() : null;
                                 khachHangMucTieu.TenKhachHang = tenKhacHang;
                                 var tenVietTat = !string.IsNullOrEmpty(reader.GetValue(1)?.ToString()) ? reader.GetValue(1).ToString() : null;
@@ -172,30 +183,16 @@ namespace CRM.Controllers.KhachHangMucTieus
                                 var email = !string.IsNullOrEmpty(reader.GetValue(4)?.ToString()) ? reader.GetValue(4).ToString() : null;
                                 khachHangMucTieu.Email = email;
                                 var nguonGocKhachHang = !string.IsNullOrEmpty(reader.GetValue(5)?.ToString()) ? reader.GetValue(5).ToString() : null;
-                                switch (nguonGocKhachHang)
+                                khachHangMucTieu.MaNguonGocKhachHang = nguonGocKhachHang switch
                                 {
-                                    case "Nhân viên kinh doanh tự tìm kiếm":
-                                        khachHangMucTieu.MaNguonGocKhachHang = 1;
-                                        break;
-                                    case "Khách hàng hoặc đối tác giới thiệu":
-                                        khachHangMucTieu.MaNguonGocKhachHang = 2;
-                                        break;
-                                    case "Thông qua sự kiện hội thảo , tập huấn":
-                                        khachHangMucTieu.MaNguonGocKhachHang = 3;
-                                        break;
-                                    case "Khách hàng tự tìm đến":
-                                        khachHangMucTieu.MaNguonGocKhachHang = 4;
-                                        break;
-                                    case "Marketing":
-                                        khachHangMucTieu.MaNguonGocKhachHang = 5;
-                                        break;
-                                    case "Khác":
-                                        khachHangMucTieu.MaNguonGocKhachHang = 6;
-                                        break;
-                                    default:
-                                        khachHangMucTieu.MaNguonGocKhachHang = null;
-                                        break;
-                                }
+                                    "Nhân viên kinh doanh tự tìm kiếm" => 1,
+                                    "Khách hàng hoặc đối tác giới thiệu" => 2,
+                                    "Thông qua sự kiện hội thảo , tập huấn" => 3,
+                                    "Khách hàng tự tìm đến" => 4,
+                                    "Marketing" => 5,
+                                    "Khác" => 6,
+                                    _ => null,
+                                };
                                 var loaiTiemNang = !string.IsNullOrEmpty(reader.GetValue(6)?.ToString()) ? reader.GetValue(6).ToString() : null;
                                 switch (loaiTiemNang)
                                 {
@@ -210,67 +207,35 @@ namespace CRM.Controllers.KhachHangMucTieus
                                         break;
                                 }
                                 var linhVucNgheNghiep = !string.IsNullOrEmpty(reader.GetValue(7)?.ToString()) ? reader.GetValue(7).ToString() : null;
-                                switch (linhVucNgheNghiep)
+                                khachHangMucTieu.MaLinhVuc = linhVucNgheNghiep switch
                                 {
-                                    case "Thương mại":
-                                        khachHangMucTieu.MaLinhVuc = 1;
-                                        break;
-                                    default:
-                                        khachHangMucTieu.MaLinhVuc = null;
-                                        break;
-                                }
+                                    "Thương mại" => 1,
+                                    _ => null,
+                                };
                                 var nganhNghe = !string.IsNullOrEmpty(reader.GetValue(8)?.ToString()) ? reader.GetValue(8).ToString() : null;
-                                switch (nganhNghe)
+                                khachHangMucTieu.MaNganhNghe = nganhNghe switch
                                 {
-                                    case "Kinh doanh thực phẩm":
-                                        khachHangMucTieu.MaNganhNghe = 1;
-                                        break;
-                                    case "Kinh doanh hóa mĩ phẩm ":
-                                        khachHangMucTieu.MaNganhNghe = 2;
-                                        break;
-                                    case "Kinh doanh điện tử điện lạnh":
-                                        khachHangMucTieu.MaNganhNghe = 3;
-                                        break;
-                                    case "Kinh doanh đồ gỗ , thiết bị nội thất":
-                                        khachHangMucTieu.MaNganhNghe = 4;
-                                        break;
-                                    case "Kinh doanh hàng gia dụng":
-                                        khachHangMucTieu.MaNganhNghe = 5;
-                                        break;
-                                    case "Kinh doanh nông lâm sản":
-                                        khachHangMucTieu.MaNganhNghe = 6;
-                                        break;
-                                    case "Kinh doanh sắt thép":
-                                        khachHangMucTieu.MaNganhNghe = 7;
-                                        break;
-                                    case "Kinh doanh thương mại khác":
-                                        khachHangMucTieu.MaNganhNghe = 8;
-                                        break;
-                                    default:
-                                        khachHangMucTieu.MaNganhNghe = null;
-                                        break;
-                                }
+                                    "Kinh doanh thực phẩm" => 1,
+                                    "Kinh doanh hóa mĩ phẩm " => 2,
+                                    "Kinh doanh điện tử điện lạnh" => 3,
+                                    "Kinh doanh đồ gỗ , thiết bị nội thất" => 4,
+                                    "Kinh doanh hàng gia dụng" => 5,
+                                    "Kinh doanh nông lâm sản" => 6,
+                                    "Kinh doanh sắt thép" => 7,
+                                    "Kinh doanh thương mại khác" => 8,
+                                    _ => null,
+                                };
                                 var taiKhoanNganHang = !string.IsNullOrEmpty(reader.GetValue(9)?.ToString()) ? reader.GetValue(9).ToString() : null;
                                 khachHangMucTieu.TaiKhoanNganHang = taiKhoanNganHang;
                                 var doanhThu = !string.IsNullOrEmpty(reader.GetValue(10)?.ToString()) ? reader.GetValue(10).ToString() : null;
-                                switch (doanhThu)
+                                khachHangMucTieu.MaDoanhThu = doanhThu switch
                                 {
-                                    case "Dưới 1 tỉ đồng":
-                                        khachHangMucTieu.MaDoanhThu = 1;
-                                        break;
-                                    case "Từ 1 tỉ đồng đến 3 tỉ đồng":
-                                        khachHangMucTieu.MaDoanhThu = 2;
-                                        break;
-                                    case "Từ 3 tỉ đến 5 tỉ đồng":
-                                        khachHangMucTieu.MaDoanhThu = 3;
-                                        break;
-                                    case "Trên 5 tỉ đồng":
-                                        khachHangMucTieu.MaDoanhThu = 4;
-                                        break;
-                                    default:
-                                        khachHangMucTieu.MaDoanhThu = null;
-                                        break;
-                                }
+                                    "Dưới 1 tỉ đồng" => 1,
+                                    "Từ 1 tỉ đồng đến 3 tỉ đồng" => 2,
+                                    "Từ 3 tỉ đến 5 tỉ đồng" => 3,
+                                    "Trên 5 tỉ đồng" => 4,
+                                    _ => null,
+                                };
                                 string ngayThanhLap = !string.IsNullOrEmpty(reader.GetValue(11)?.ToString()) ? reader.GetValue(11).ToString() : null;
                                 if (ngayThanhLap == null)
                                     khachHangMucTieu.NgayThanhLap = null;
@@ -286,52 +251,33 @@ namespace CRM.Controllers.KhachHangMucTieus
                                 var thongTinHoaDon = !string.IsNullOrEmpty(reader.GetValue(14)?.ToString()) ? reader.GetValue(14).ToString() : null;
                                 khachHangMucTieu.ThongTinHoaDon = thongTinHoaDon;
                                 var khachHangDungChung = !string.IsNullOrEmpty(reader.GetValue(15)?.ToString()) ? reader.GetValue(15).ToString() : null;
-                                switch (khachHangDungChung)
+                                khachHangMucTieu.IsDungChung = khachHangDungChung switch
                                 {
-                                    case "1":
-                                        khachHangMucTieu.IsDungChung = true;
-                                        break;
-                                    case "0":
-                                        khachHangMucTieu.IsDungChung = false;
-                                        break;
-                                    default:
-                                        khachHangMucTieu.IsDungChung = false;
-                                        break;
-                                }
+                                    "1" => true,
+                                    "0" => false,
+                                    _ => (bool?)false,
+                                };
                                 var khachHangPhanPhoi = !string.IsNullOrEmpty(reader.GetValue(16)?.ToString()) ? reader.GetValue(16).ToString() : null;
-                                switch (khachHangPhanPhoi)
+                                khachHangMucTieu.IsNhaPhanPhoi = khachHangPhanPhoi switch
                                 {
-                                    case "1":
-                                        khachHangMucTieu.IsNhaPhanPhoi = true;
-                                        break;
-                                    case "0":
-                                        khachHangMucTieu.IsNhaPhanPhoi = false;
-                                        break;
-                                    default:
-                                        khachHangMucTieu.IsNhaPhanPhoi = false;
-                                        break;
-                                }
+                                    "1" => true,
+                                    "0" => false,
+                                    _ => (bool?)false,
+                                };
                                 var khachHangCaNhan = !string.IsNullOrEmpty(reader.GetValue(17)?.ToString()) ? reader.GetValue(17).ToString() : null;
-                                switch (khachHangPhanPhoi)
+                                khachHangMucTieu.IsKhachHangCaNhan = khachHangPhanPhoi switch
                                 {
-                                    case "1":
-                                        khachHangMucTieu.IsKhachHangCaNhan = true;
-                                        break;
-                                    case "0":
-                                        khachHangMucTieu.IsKhachHangCaNhan = false;
-                                        break;
-                                    default:
-                                        khachHangMucTieu.IsKhachHangCaNhan = false;
-                                        break;
-                                }
+                                    "1" => true,
+                                    "0" => false,
+                                    _ => (bool?)false,
+                                };
                                 khachHangMucTieu.IsDeleted = false;
                                 khachHangMucTieu.CreateAt = DateTime.Now;
                                 khachHangMucTieu.NguoiDungId = userId;
                                 khachHangMucTieu.PhongBanId = phongBanId;
                                 _context.KhachHangMucTieus.Add(khachHangMucTieu);
-                                await _context.SaveChangesAsync();
-
                             };
+                             await _context.SaveChangesAsync();
                         } while (reader.NextResult());
                     }
                 }
@@ -361,7 +307,7 @@ namespace CRM.Controllers.KhachHangMucTieus
             }
         }
 
-        [HttpDelete("deletekhachhangmuctieu")]
+        [HttpDelete("deletekhachhangmuctieu/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> DeleteKhachHangMucTieu(string id)
         {
