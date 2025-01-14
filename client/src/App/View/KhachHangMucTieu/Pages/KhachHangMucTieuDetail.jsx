@@ -180,8 +180,8 @@ const KhachHangMucTieuDetail = () => {
             }}
           >
             {/* Tabs */}
-            <Paper>
-              <Box sx={{ width: "90vh", height :"100vh", typography: "body1" }}>
+            <Paper style={{width: "100%"}}>
+              <Box sx={{height :"100vh", typography: "body1" }}>
                 <TabContext value={value} >
                   <Box
                     sx={{ border: 0, borderColor: "Highlight", fontFamily: "inherit", boxShadow: 3 }}

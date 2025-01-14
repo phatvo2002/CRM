@@ -43,6 +43,12 @@ namespace CRM.Repositories.LienHes
             }
         }
 
+        public async Task<List<LienHeDTO>> GetLienHeByKhachHangMucTieuId(string id)
+        {
+            var db = await _crmDbContext.LienHes.Where(r=> r.KhachHangId == id).ToListAsync();
+            return _mapper.Map<List<LienHeDTO>>(db);
+        }
+
         public async Task<List<LienHeDTO>> GetLienHeByKhachHangTiemNangId(Guid id)
         {
             var db = await _crmDbContext.LienHes.Where(r => r.KhachHangTiemNangId == id).ToListAsync();

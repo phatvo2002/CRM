@@ -59,6 +59,20 @@ namespace CRM.Controllers.LienHes
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getlienhebykhachhangmuctieuid/{id}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetLienheByKhachHangMucTieuId(string id)
+        {
+            try
+            {
+                List<LienHeDTO> result = await _lienHeServices.GetLienHeByKhachHangMucTieuId(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost("creatlienhe")]
         [JwtAuthorize]
         public async Task<IActionResult> CreateLienHe(LienHeModal modal)

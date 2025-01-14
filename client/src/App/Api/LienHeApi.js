@@ -25,6 +25,9 @@ export const apiLienHe = createApi({
       getLienHeByKhachHangTiemNangId: builder.query({
         query: (id) => `/LienHe/getlienhebykhachhangtiemnangid/${id}`,
       }),
+      getLienHeByKhachHangMucTieuId: builder.query({
+        query: (id) => `/LienHe/getlienhebykhachhangmuctieuid/${id}`,
+      }),
       addLienHe: builder.mutation({
         query: (data) => ({
           url: '/LienHe/creatlienhe',
@@ -51,6 +54,7 @@ export const apiLienHe = createApi({
     useGetAllLienHeQuery,
     useGetLienHeByIdQuery,
     useGetLienHeByKhachHangTiemNangIdQuery,
+    useGetLienHeByKhachHangMucTieuIdQuery,
     useAddLienHeMutation,
     useUpdateLienHeMutation,
     useDeleteLienHeMutation

@@ -8,5 +8,6 @@ namespace CRM.Repositories.LienHes
     {
         Task<ResultModal> CreateLienHe(LienHeModal modal, Guid nguoiDungId, Guid phongBanId);
         Task<List<LienHeDTO>> GetLienHeByKhachHangTiemNangId(Guid id);
+        Task<List<LienHeDTO>> GetLienHeByKhachHangMucTieuId(string id);
     }
 }
