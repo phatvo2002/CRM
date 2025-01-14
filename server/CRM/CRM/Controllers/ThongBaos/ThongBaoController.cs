@@ -106,9 +106,7 @@ namespace CRM.Controllers.ThongBaos
         [JwtAuthorize]
         public async Task CheckDocThongBao(Guid thongBaoId)
         {
-
             await _thongBaoServices.CheckDocThongBao(thongBaoId);
-
         }
         [HttpDelete("deletethongbao/{id}")]
         [JwtAuthorize]
