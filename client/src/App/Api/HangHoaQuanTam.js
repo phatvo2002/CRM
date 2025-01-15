@@ -25,6 +25,9 @@ export const apiHangHoaQuanTam = createApi({
       getHangHoaQuanTamByKhachHangTiemNangId: builder.query({
         query: (id) => `/HangHoaQuanTam/gethanghoaquantambykhachhangtiemnangid/${id}`,
       }),
+      getHangHoaQuanTamByKhachHangId: builder.query({
+        query: (id) => `/HangHoaQuanTam/gethanghoaquantambykhachhangid/${id}`,
+      }),
       addHangHoaQuanTam: builder.mutation({
         query: (data) => ({
           url: '/HangHoaQuanTam/creathanghoaquantam',
@@ -51,6 +54,7 @@ export const apiHangHoaQuanTam = createApi({
    useGetAllHangHoaQuanTamQuery,
    useGetHangHoaQuanTamByIdQuery,
    useGetHangHoaQuanTamByKhachHangTiemNangIdQuery,
+   useGetHangHoaQuanTamByKhachHangIdQuery,
    useAddHangHoaQuanTamMutation,
    useUpdateHangHoaQuanTamMutation,
    useDeleteHangHoaQuanTamMutation

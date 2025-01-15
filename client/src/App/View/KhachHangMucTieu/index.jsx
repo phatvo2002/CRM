@@ -13,6 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Person2Icon from '@mui/icons-material/Person2';
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
@@ -64,7 +65,7 @@ const KhachHangMucTieu = () => {
               style={{}}
               onClick={handleOpenModalUpdateKhachHang}
             >
-              <EditIcon />
+              <EditIcon color="success" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Xóa">
@@ -73,7 +74,7 @@ const KhachHangMucTieu = () => {
               style={{}}
               onClick={() => handleDeleteKhachHang(params?.id)}
             >
-              <DeleteIcon />
+              <DeleteIcon color="error" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Bàn giao khách hàng">
@@ -82,7 +83,7 @@ const KhachHangMucTieu = () => {
               style={{}}
             // onClick={() => handleOpenModalBanGiaoKhachHang()}
             >
-              <ThreePIcon />
+              <ThreePIcon color="primary" />
             </IconButton>
           </Tooltip>
         </div>
@@ -97,9 +98,18 @@ const KhachHangMucTieu = () => {
         <div>
           <Link
             to={`/khachhang/${params.id}`}
-            style={{ textDecoration: "none", color: "text.primary" }}
+            style={{
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "inherit", 
+            }}
           >
-            {params.value}
+             <Person2Icon style={{ color: "#1976d2" }} />
+             <span style={{  fontWeight: "500" }}>
+              {params.value}
+            </span>
           </Link>
         </div>
       ),

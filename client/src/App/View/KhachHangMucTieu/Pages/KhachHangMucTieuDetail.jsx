@@ -35,10 +35,13 @@ import TabLienHe from "./Tabs/TabLienHe";
 import TabBanHang from "./Tabs/TabBanHang";
 import TabHoatDong from "./Tabs/TabHoatDong";
 import TabLichSuMuaHang from "./Tabs/TabLichSuMuaHang";
+import { useGetKhachHangMucTieuByIdQuery } from "src/App/Api/KhachHangMucTieuApi";
 const KhachHangMucTieuDetail = () => {
   const [activeTab, setActiveTab] = React.useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const { id } = useParams();
+  const {data: KhachhangData} = useGetKhachHangMucTieuByIdQuery(id)
+  console.log(KhachhangData)
   const navigate = useNavigate();
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -59,6 +62,7 @@ const KhachHangMucTieuDetail = () => {
   };
 
 
+
   return (
     <>
       <Grid2 container spacing={2} sx={{ padding: 2 }}>
@@ -67,7 +71,6 @@ const KhachHangMucTieuDetail = () => {
             <ArrowBackIcon />
           </IconButton>
         </Grid2>
-
         <Grid2 size={8}>
           <Button
             variant="outlined"
@@ -136,11 +139,11 @@ const KhachHangMucTieuDetail = () => {
                   sx={{ width: 80, height: 80, margin: "0 auto", marginTop: 3 }}
                 />
                 <Typography variant="h6" mt={2}>
-                  Phat
+                  {KhachhangData?.tenKhachHang}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Mã số thuế: - <br />
-                  Điện thoại: -
+                  Mã số thuế: - {KhachhangData?.maSoThue ? <span>{KhachhangData?.maSoThue}</span> : <span></span>} <br />
+                  Điện thoại: - {KhachhangData?.soDienThoai ? <span>{KhachhangData?.soDienThoai}</span> : <span></span>}
                 </Typography>
               </Box>
               <Divider />
@@ -181,7 +184,7 @@ const KhachHangMucTieuDetail = () => {
           >
             {/* Tabs */}
             <Paper style={{width: "100%"}}>
-              <Box sx={{height :"100vh", typography: "body1" }}>
+              <Box sx={{height :"100vh", typography: "body1" ,width:"100%" }}>
                 <TabContext value={value} >
                   <Box
                     sx={{ border: 0, borderColor: "Highlight", fontFamily: "inherit", boxShadow: 3 }}

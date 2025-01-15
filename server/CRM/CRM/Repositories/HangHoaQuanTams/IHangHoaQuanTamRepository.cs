@@ -7,5 +7,6 @@ namespace CRM.Repositories.HangHoaQuanTams
     public interface IHangHoaQuanTamRepository : IBaseRepository<HangHoaQuanTam, HangHoaQuanTamModal, Guid, HangHoaQuanTamDTO>
     {
         Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangTiemNangId(Guid id);
+        Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangId(string id);
     }
 }

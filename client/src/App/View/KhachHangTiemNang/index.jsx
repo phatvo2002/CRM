@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { TYPE_MODAL } from "../../Until/constant";
 import EmailIcon from '@mui/icons-material/Email';
 import ThreePIcon from '@mui/icons-material/ThreeP';
-import SendAndArchiveIcon from '@mui/icons-material/SendAndArchive';
+import Person2Icon from '@mui/icons-material/Person2';
 import UpdateIcon from '@mui/icons-material/Update';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PhoneIcon from '@mui/icons-material/Phone';
@@ -63,7 +63,7 @@ const KhachHangTiemNang = () => {
               style={{}}
               onClick={onOpenModalUpdateKhachHang}
             >
-              <EditIcon />
+              <EditIcon color="success" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Xóa">
@@ -72,14 +72,14 @@ const KhachHangTiemNang = () => {
               style={{}}
               onClick={() => handleDeletePhongBan(params?.id)}
             >
-              <DeleteIcon />
+              <DeleteIcon  color="error"/>
             </IconButton>
           </Tooltip>
           <Tooltip title="Bàn giao tiềm năng">
             <IconButton disabled={selectedRow.length === 0} style={{}}
               onClick={() => handleOpenModalBanGiaoKhachHang()}
             >
-              <ThreePIcon />
+              <ThreePIcon color="primary"/>
             </IconButton>
           </Tooltip>
         </div>
@@ -94,23 +94,37 @@ const KhachHangTiemNang = () => {
         <div>
           <Link
             to={`/tiemnang/${params.id}`}
-            style={{ textDecoration: "none" }}
+            style={{
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              color: "inherit",
+            }}
           >
-            {params.value}
+            <Person2Icon style={{ color: "#1976d2" }} />
+            <span style={{  fontWeight: "500" }}>
+              {params.value}
+            </span>
           </Link>
         </div>
-      ),
+      ),      
     },
     { field: "diaChi", headerName: "Địa Chỉ", width: 200 },
     {
-      field: "soDienThoai",
+      field: "soDienThoaiDiDong",
       headerName: "Số điện thoại cá nhân",
       width: 200,
-      renderCell: (params) => (
-        <div>
-          {params.value ? <div><PhoneIcon />{params.value}</div> : <div></div>}
-        </div>
-      ),
+      renderCell: (params) => {
+        return params.value ? (
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <PhoneIcon style={{ padding: 2 }} color="success" />
+            <span>{params.value}</span>
+          </div>
+        ) : (
+          <div></div>
+        );
+      }
     },
     {
       field: "soDienThoaiCoQuan",

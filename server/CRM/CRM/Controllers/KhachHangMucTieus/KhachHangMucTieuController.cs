@@ -40,7 +40,7 @@ namespace CRM.Controllers.KhachHangMucTieus
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("getkhachhangmuctieubyid")]
+        [HttpGet("getkhachhangmuctieubyid/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> GetKhachHangMucTieuById(string id)
         {
