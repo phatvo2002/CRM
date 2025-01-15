@@ -4,11 +4,16 @@ import { Box, styled } from "@mui/system";
 // import { GoogleLogin } from "@react-oauth/google";
 import { AuthContext } from "../../Context/AuthContext";
 import { Formik } from "formik";
-import { useState, useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { useState, useContext, useRef, useEffect } from "react";
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import * as Yup from "yup";
 import logo from "../../Assets/image/logo.png";
 import { keyframes } from "@mui/system";
+import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
+import { toast } from "react-toastify";
 const FlexBox = styled(Box)(() => ({ display: "flex", alignItems: "center" }));
 
 const JustifyBox = styled(FlexBox)(() => ({ justifyContent: "center" }));
@@ -47,7 +52,9 @@ const JWTRoot = styled(JustifyBox)(() => ({
     borderRadius: 12,
     alignItems: "center",
   },
-}));
+}
+
+));
 
 // inital login credentials
 const initialValues = {
@@ -66,24 +73,67 @@ const validationSchema = Yup.object().shape({
 
 const JwtLogin = () => {
 
-
+  const captchaInputRef = useRef(null);
+  // const userCaptcha = captchaInputRef.current?.value || '';
+  const [userCaptcha, setUserCaptcha] = useState("");
   const { login } = useContext(AuthContext);
-
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   const [loading, setLoading] = useState(false);
 
+  // const handleFormSubmit = async (values) => {
+  //   if (validateCaptcha(userCaptcha) === true) {
+  //     loadCaptchaEnginge(6)
+  //     captchaInputRef.current.value = '';
+  //     setLoading(true);
+  //     try {
+  //       await login(values.UserName, values.password);
+  //       // navigate("/user/profile");
+  //       // Swal.fire({
+  //       //   title: "Đăng nhập thành công!",
+  //       //   icon: "success",
+  //       // });
+  //     } catch (e) {
+  //       setLoading(false);
+  //     }
+  //   }
+  //   else {
+  //     toast.error("Mã kiểm tra không đúng")
+  //     if (captchaInputRef.current) {
+  //       captchaInputRef.current.value = '';
+  //     }
+  //   }
+  // };
   const handleFormSubmit = async (values) => {
-    setLoading(true);
-    try {
-      await login(values.UserName, values.password);
-      // navigate("/user/profile");
-      // Swal.fire({
-      //   title: "Đăng nhập thành công!",
-      //   icon: "success",
-      // });
-    } catch (e) {
-      setLoading(false);
+    if (validateCaptcha(userCaptcha)) { 
+      loadCaptchaEnginge(6); 
+      captchaInputRef.current.value = ""; 
+      setUserCaptcha("");
+      setLoading(true);
+      try {
+        await login(values.UserName, values.password);
+        // navigate("/user/profile");
+        // Swal.fire({
+        //   title: "Đăng nhập thành công!",
+        //   icon: "success",
+        // });
+      } catch (e) {
+        setLoading(false);
+      }
+    } else {
+      toast.error("Mã kiểm tra không đúng");
+      if (captchaInputRef.current) {
+        captchaInputRef.current.value = ""; 
+      }
+      setUserCaptcha(""); 
     }
   };
+  useEffect(() => {
+    loadCaptchaEnginge(6);
+  }, []);
 
   return (
     <JWTRoot>
@@ -130,15 +180,32 @@ const JwtLogin = () => {
                     <TextField
                       fullWidth
                       name="password"
-                      type="password"
+                      // type="password"
                       label="Mật khẩu"
                       variant="outlined"
                       onBlur={handleBlur}
                       value={values.password}
                       onChange={handleChange}
+                      type={'password' && showPassword ? 'text' : 'password'}
                       helperText={touched.password && errors.password}
                       error={Boolean(errors.password && touched.password)}
                       sx={{ mb: 1.5 }}
+                      InputProps={{
+                        ...('password' && {
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="toggle password visibility"
+                                onClick={handleClickShowPassword}
+                                onMouseDown={handleMouseDownPassword}
+                                edge="end"
+                              >
+                                {showPassword ? <VisibilityOff /> : <Visibility />}
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }),
+                      }}
                     />
                     <FlexBox justifyContent="space-between">
                       {/* <FlexBox gap={1}>
@@ -152,14 +219,27 @@ const JwtLogin = () => {
 
                         <Paragraph>Remember Me</Paragraph>
                       </FlexBox> */}
-
+                      {/* 
                       <NavLink
                         to="/session/forgot-password"
                         style={{ color: "black" }}
                       >
                         Quên mật khẩu?
-                      </NavLink>
+                      </NavLink> */}
                     </FlexBox>
+                    <div style={{ textAlign: 'center' }}>
+                      <LoadCanvasTemplate reloadText="Reload Captcha" reloadColor="red" />
+                    </div>
+
+                    <TextField
+                      id="user_captcha_input"
+                      label="Nhập mã kiểm tra"
+                      fullWidth
+                      name="user_captcha_input"
+                      type="text"
+                      inputRef={captchaInputRef}
+                      onChange={(e) => setUserCaptcha(e.target.value)}
+                    />
                     <LoadingButton
                       type="submit"
                       // color="#70ad56"

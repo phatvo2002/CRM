@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AuthApi from "../Api/AuthApi";
 import toastr from "toastr";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -30,11 +31,10 @@ export const AuthProvider = ({ children }) => {
         setAuthState(response.token);
         setIsAuthenticated(true)
         navigate("/user/profile");
-        Swal.fire({
-          title: "Đăng nhập thành công!",
-          icon: "success",
-        });
-        window.location.reload();
+        toast.success("Đăng nhập thành công")
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         Swal.fire({
           title: "Tài khoản chưa được kích hoạt !",
@@ -46,7 +46,6 @@ export const AuthProvider = ({ children }) => {
         setTimeout(() => {
           window.location.reload();
         }, 1500);
-
         navigate("/login");
       }
       //   const userData = await AuthApi.getUserData(token);
@@ -60,6 +59,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.clear()
     setUser(null);
     navigate("/login");
+    toast.success("Đăng xuất thành công")
   };
 
   return (

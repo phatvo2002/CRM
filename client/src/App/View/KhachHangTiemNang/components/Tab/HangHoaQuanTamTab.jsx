@@ -77,7 +77,6 @@ const HangHoaQuanTamTab = () => {
       // setHangHoa((prev) =>
       //   prev.map((row) => (row.id === id ? { ...updatedRow } : row))
       // );
-      console.log(updatedRow)
       toast.success("Lưu dữ liệu thành công!");
   };
   

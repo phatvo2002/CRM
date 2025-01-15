@@ -24,6 +24,7 @@ import {
 import TextAreaRHF from "src/App/Components/ReactHookFormComp/TextAreaRHF";
 import { useConvertKhachHangMucTieuMutation } from "src/App/Api/KhachHangMucTieuApi";
 import { useGetHangHoaQuanTamByKhachHangTiemNangIdQuery } from "src/App/Api/HangHoaQuanTam";
+import { useGetLienHeByKhachHangTiemNangIdQuery } from "src/App/Api/LienHeApi";
 // ------ Form Config ------ //
 const modelObj = {
   id: "id",
@@ -48,7 +49,8 @@ const modelObj = {
   maNganhNghe: "maNganhNghe",
   maLinhVuc: "maLinhVuc",
   maDoanhThu: "maDoanhThu",
-  hangHoaQuanTam:"hangHoaQuanTam"
+  hangHoaQuanTam:"hangHoaQuanTam",
+  LienHe:"LienHe"
 },
   labelObj = {
     id: "Mã khách hàng",
@@ -73,6 +75,7 @@ const modelObj = {
     maNganhNghe: "Ngành nghề",
     maLinhVuc: "Lĩnh vực",
     maDoanhThu: "Doanh thu",
+    LienHe:"LienHe"
   },
   initialFormState = {
     [modelObj.id]: "",
@@ -97,6 +100,8 @@ const modelObj = {
     [modelObj.maNganhNghe]: 0,
     [modelObj.maLinhVuc]: 0,
     [modelObj.maDoanhThu]: 0,
+    [modelObj.hangHoaQuanTam] :[],
+    [modelObj.LienHe] :[]
   },
   schema = yup.object().shape({
     [modelObj.soDienThoai]: validateString(),
@@ -124,6 +129,10 @@ const ModalConvertKhachHangTiemNang = (props) => {
       data: dataHangHoaQuanTam,
       isFetching: { ishangHoaQuanTamFetching },
     } = useGetHangHoaQuanTamByKhachHangTiemNangIdQuery(selectedItem?.id , {skip:selectedItem?.id == null}),
+    {
+      data: dataLienHe,
+      isFetching: { isdataLienheFetching },
+    } = useGetLienHeByKhachHangTiemNangIdQuery(selectedItem?.id , {skip:selectedItem?.id == null}),
     {
       data: dataPhongBanKhachHang,
       isFetching: { isGetPhongBanKhachHangFetching },
@@ -185,8 +194,8 @@ const ModalConvertKhachHangTiemNang = (props) => {
       [modelObj.maNganhNghe]: data[modelObj.maNganhNghe],
       [modelObj.maLinhVuc]: data[modelObj.maLinhVuc],
       [modelObj.maDoanhThu]: data[modelObj.maDoanhThu],
-      [modelObj.hangHoaQuanTam] :dataHangHoaQuanTam
-
+      [modelObj.hangHoaQuanTam] :dataHangHoaQuanTam,
+      [modelObj.LienHe] : dataLienHe,
     };
 
     callApiUpdate(tempData);
@@ -222,7 +231,6 @@ const ModalConvertKhachHangTiemNang = (props) => {
           [modelObj.maDoanhThu]: selectedItem[modelObj.maDoanhThu],
           [modelObj.maLinhVuc]: selectedItem[modelObj.maLinhVuc],
           [modelObj.isDungChung]: selectedItem[modelObj.isDungChung],
-          
         },
         { keepDirty: true }
       );

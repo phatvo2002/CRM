@@ -2,9 +2,8 @@
 
 namespace CRM.Modal
 {
-    public class LienHeModal : BaseModel
+    public class LienHeModal
     {
-
         public string? Id { get; set; }
         public string? TenLienHe { get; set; }
         public string? XungHo { get; set; }

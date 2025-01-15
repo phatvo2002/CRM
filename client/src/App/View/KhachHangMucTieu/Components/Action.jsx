@@ -8,7 +8,7 @@ import TaskIcon from '@mui/icons-material/Task';
 import EmailIcon from '@mui/icons-material/Email';
 import SmsIcon from '@mui/icons-material/Sms';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-export const ActionComponents = ({ selectedItem, isOpen, onCloseAction }) => {
+export const ActionComponents = ({ selectedItem,onClose ,isOpen }) => {
     const [activeTab, setActiveTab] = useState(0);
     const [selectedCard, setSelectedCard] = useState(0);
     // Xử lý thay đổi tab
@@ -31,7 +31,7 @@ export const ActionComponents = ({ selectedItem, isOpen, onCloseAction }) => {
             zIndex: 1000,
         }}>
             <h3 style={{ marginTop: 80 }}>
-                <Button onClick={onCloseAction} className={`action-component ${isOpen ? "open" : "close"}`} >
+                <Button onClick={onClose} className={`action-component ${isOpen ? "open" : "close"}`} >
                     <ArrowBackIcon sx={{ fontSize: "2rem" }} />
                 </Button>
                 Hoạt động tương tác

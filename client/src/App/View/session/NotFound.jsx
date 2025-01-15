@@ -29,7 +29,7 @@ const NotFound = () => {
   return (
     <NotFoundRoot>
       <JustifyBox>
-        <IMG src={errorpage} alt="" />
+        <img src={errorpage} alt="" />
 
         <Button
           color="primary"

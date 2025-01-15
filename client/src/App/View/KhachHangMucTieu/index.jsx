@@ -33,14 +33,16 @@ import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]),
-   [rows, setRows] = useState([]),
-   [anchorEl, setAnchorEl] = useState(null),
-   [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false),
-   [modalImportKhachHangMucTeu , setModalImportKhachHangMucTeu] = useState(false),
-   navigate = useNavigate(),
-   [isActionOpen, setIsActionOpen] = useState(false),
-   handleOpen = () => setIsActionOpen(true),
-   handleCloseAction = () => setIsActionOpen(false);
+    [rows, setRows] = useState([]),
+    [anchorEl, setAnchorEl] = useState(null),
+    [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false),
+    [modalImportKhachHangMucTeu, setModalImportKhachHangMucTeu] = useState(false),
+    navigate = useNavigate(),
+    [isActionOpen, setIsActionOpen] = useState(false),
+    handleOpen = () => setIsActionOpen(true);
+  const handleCloseAction = () => {
+    setIsActionOpen(false)
+  };
   const columns = [
     {
       field: "action",
@@ -78,7 +80,7 @@ const KhachHangMucTieu = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-              // onClick={() => handleOpenModalBanGiaoKhachHang()}
+            // onClick={() => handleOpenModalBanGiaoKhachHang()}
             >
               <ThreePIcon />
             </IconButton>
@@ -95,7 +97,7 @@ const KhachHangMucTieu = () => {
         <div>
           <Link
             to={`/khachhang/${params.id}`}
-            style={{ textDecoration: "none" ,color:"text.primary" }}
+            style={{ textDecoration: "none", color: "text.primary" }}
           >
             {params.value}
           </Link>
@@ -155,35 +157,35 @@ const KhachHangMucTieu = () => {
     path: "Templates/ThongTinKhachHang.xlsx",
     filename: "ThongTinKhachHang",
   });
-  const [deleteNguoiDung] =useDeleteKhachHangMucTieuMutation()
-   const handleDeleteKhachHang = async (id) => {
-      if (
-        !userData?.response.checkIsTruongPhong 
-      ) {
-        toast.warning(
-          "Chỉ trưởng phòng mới có quyền xóa khách hàng."
-        );
-        return;
+  const [deleteNguoiDung] = useDeleteKhachHangMucTieuMutation()
+  const handleDeleteKhachHang = async (id) => {
+    if (
+      !userData?.response.checkIsTruongPhong
+    ) {
+      toast.warning(
+        "Chỉ trưởng phòng mới có quyền xóa khách hàng."
+      );
+      return;
+    }
+
+    Swal.fire({
+      title: "Bạn có muốn xóa khách hàng này?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteNguoiDung(id);
+        Swal.fire({
+          title: "Xóa thành công",
+          icon: "success",
+        });
+        refetch()
       }
-  
-      Swal.fire({
-        title: "Bạn có muốn xóa khách hàng này?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Có",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await deleteNguoiDung(id);
-          Swal.fire({
-            title: "Xóa thành công",
-            icon: "success",
-          });
-          refetch()
-        }
-      });
-    };
+    });
+  };
   const handleGetTemplates = () => {
     if (getTemplate) {
       const url = window.URL.createObjectURL(getTemplate);
@@ -318,11 +320,10 @@ const KhachHangMucTieu = () => {
             </Paper>
           </Grid2>
         </Grid2>
-        <ActionComponents selectedItem={selectedRow} />
         {isActionOpen && (
           <ActionComponents
             selectedItem={selectedRow}
-            onCloseAction={handleCloseAction}
+            onClose={handleCloseAction}
             isOpen={isActionOpen}
           />
         )}
@@ -335,10 +336,10 @@ const KhachHangMucTieu = () => {
         refetch={refetch}
       />
       {/* Modal import khách hàng */}
-         <ModalImportKhachHang
-         showModal={modalImportKhachHangMucTeu}
-         closeModal={handleCloseOpenModalImportKhachHang}
-         refetch={refetch}
+      <ModalImportKhachHang
+        showModal={modalImportKhachHangMucTeu}
+        closeModal={handleCloseOpenModalImportKhachHang}
+        refetch={refetch}
       />
     </>
   );

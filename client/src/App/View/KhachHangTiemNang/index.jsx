@@ -295,7 +295,7 @@ const KhachHangTiemNang = () => {
             <Button onClick={handleOpen} sx={{ marginLeft: 1 }} variant="outlined" color="inherit" startIcon={<UpdateIcon/>}>Lịch sử tương tác</Button>
           </Grid2>
         </Grid2>
-        <Paper>
+        <Paper >
           <Grid2 size={12}>
             <CustomDatagrid
               rows={rows}

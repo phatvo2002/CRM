@@ -130,6 +130,12 @@ const CustomDatagrid = ({
         pageSizeOptions={pageSizeOptions}
         showCellVerticalBorder={true}
         style={{ marginTop: '10px' }}
+        localeText={{
+          toolbarColumns: "Cột",
+          toolbarFilters: "Bộ lọc",
+          toolbarDensity: "Mật độ",
+          toolbarExport: "Xuất dữ liệu",
+        }}
         componentsProps={{
           pagination: {
             sx: {

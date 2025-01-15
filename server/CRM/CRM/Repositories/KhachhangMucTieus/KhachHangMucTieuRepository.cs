@@ -67,6 +67,19 @@ namespace CRM.Repositories.KhachhangMucTieus
                             _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
                         }
                     }
+                    foreach (var lh in modal.LienHe)
+                    {
+                        var lienHeData = _crmDbContext.LienHes.Where(l => l.Id == lh.Id).FirstOrDefault();
+                        if (lienHeData != null)
+                        {
+                            lienHeData.KhachHangId = modal.Id;
+                            _crmDbContext.Update(lienHeData);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
                     _crmDbContext.KhachHangMucTieus.Add(khachHangMucTieu);
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Chuyển đổi khách hàng thành công", Success = true };
@@ -146,7 +159,7 @@ namespace CRM.Repositories.KhachhangMucTieus
 
         public async Task<ResultModal> UpdateKhachHangMucTieu(KhachHangMucTieuModal modal, Guid nguoiDungId, Guid phongBanId)
         {
-            var db =  _crmDbContext.KhachHangMucTieus.FirstOrDefault(r => r.Id == modal.Id);
+            var db = _crmDbContext.KhachHangMucTieus.FirstOrDefault(r => r.Id == modal.Id);
             try
             {
                 if (db != null)
@@ -179,7 +192,7 @@ namespace CRM.Repositories.KhachhangMucTieus
                 }
                 return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }

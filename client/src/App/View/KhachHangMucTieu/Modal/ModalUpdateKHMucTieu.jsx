@@ -175,7 +175,6 @@ const ModalUpdateKHMucTieu = (props) => {
 
      callApiUpdate(tempData);
   },
-
     callApiUpdate = async (paramData) => {
       try {
         await updateKhachHangMucTieu(paramData).unwrap();

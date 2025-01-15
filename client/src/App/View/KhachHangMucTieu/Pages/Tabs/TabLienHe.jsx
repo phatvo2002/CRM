@@ -7,8 +7,8 @@ import CreateIcon from "@mui/icons-material/Create";
 import { Button, Grid2, IconButton } from '@mui/material';
 import CustomDatagrid from 'src/App/Components/DataGrid/CustomDatagrid';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
-// import ModalAddNguoiDaiDien from './Modal/ModalAddNguoiDaiDien';
 import ModalAddLienHe from '../../Modal/ModalAddLienHe';
+import ModalUpdateLienHe from '../../Modal/ModalUpdateLienHe';
 import Swal from 'sweetalert2';
 const TabLienHe = () => {
   const { id } = useParams()
@@ -27,14 +27,14 @@ const TabLienHe = () => {
         <div style={{ alignItems: "center" }}>
           <IconButton
             style={{}}
-            // disabled={selectedRowCuocGoi.length === 0}
-            // onClick={onOpenModalUpdateCuocGoi}
+            disabled={selectedRow.length === 0}
+            onClick={handleOpenModalUpdate}
           >
             <CreateIcon></CreateIcon>
           </IconButton>
           <IconButton
             style={{ margin: "0 10px" }}
-            // disabled={selectedRowCuocGoi.length === 0}
+            disabled={selectedRow.length === 0}
              onClick={handelDelete}
           >
             <DeleteIcon></DeleteIcon>
@@ -54,6 +54,12 @@ const TabLienHe = () => {
   }
   const handleCloseModalAdd = () => {
     setModalAdd(false)
+  }
+  const handleOpenModalUpdate = () => {
+    setModalUpdate(true)
+  }
+  const handleCloseModalUpdate = () => {
+    setModalUpdate(false)
   }
     const handelDelete = () => {
       Swal.fire({
@@ -106,10 +112,18 @@ const TabLienHe = () => {
           onRowSelectionChange={handleRowSelectionChange}
         />
       </Grid2>
+      {/* modal add */}
       <ModalAddLienHe
         showModal={modalAdd}
         closeModal={handleCloseModalAdd}
         refetch={retchLienHe}
+      />
+      {/* Modal update */}
+      <ModalUpdateLienHe
+       showModal={modalUpdate}
+       closeModal={handleCloseModalUpdate}
+       selectedItem={selectedRow}
+       refetch={retchLienHe}
       />
     </Grid2>
   )
