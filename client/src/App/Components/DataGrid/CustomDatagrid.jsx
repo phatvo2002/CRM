@@ -109,13 +109,13 @@ const CustomDatagrid = ({
     }
   };
 
-  const CustomHeaderWithToolbar = () => {
-    return (
-      <div style={{ display: 'flex',fontSize:"1rem", justifyContent: 'space-between', alignItems: 'center' }}>
-        <GridToolbar/>
-      </div>
-    );
-  };
+  // const CustomHeaderWithToolbar = () => {
+  //   return (
+  //     <div style={{ display: 'flex',fontSize:"1rem", justifyContent: 'space-between', alignItems: 'center' }}>
+  //       <GridToolbar/>
+  //     </div>
+  //   );
+  // };
 
   return (
     <div style={{  width: '100%', overflow: 'auto'  }}>
@@ -127,6 +127,7 @@ const CustomDatagrid = ({
         disableRowSelectionOnClick={disableRowSelectionOnClick}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
+        showTopToolbar={true}
         pageSizeOptions={pageSizeOptions}
         showCellVerticalBorder={true}
         style={{ marginTop: '10px' }}
@@ -135,6 +136,7 @@ const CustomDatagrid = ({
           toolbarFilters: "Bộ lọc",
           toolbarDensity: "Mật độ",
           toolbarExport: "Xuất dữ liệu",
+          toolbarQuickFilterPlaceholder:"Tìm kiếm"
         }}
         componentsProps={{
           pagination: {
@@ -146,7 +148,7 @@ const CustomDatagrid = ({
         onRowSelectionModelChange={handleRowSelectionChange}
         slots={{
           pagination: CustomPagination,
-          toolbar: CustomHeaderWithToolbar,
+          toolbar: GridToolbar,
         }}
         slotProps={{
           toolbar: {

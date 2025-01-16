@@ -165,6 +165,13 @@ const HangHoaQuanTamTab = () => {
         columns={columns}
         editMode="row"
         style={{fontSize:"1rem"}}
+        // initialState={{
+        //   aggregation: {
+        //     model: {
+        //       tongTien: 'sum',
+        //     },
+        //   },
+        // }}
         processRowUpdate={processRowUpdate}
         slots={{
           toolbar: () => (
