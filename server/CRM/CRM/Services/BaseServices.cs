@@ -11,8 +11,6 @@ namespace CRM.Services
         {
             _repository = repository;
         }
-
-
         public async Task<ResultModal> Create(TModal modal)
         {
             return await _repository.Create(modal);
@@ -28,6 +26,11 @@ namespace CRM.Services
         public async Task<ResultModal> DeleteById(string id)
         {
             return await _repository.DeleteById(id);
+        }
+
+        public async Task<ResultModal> DeleteMultiple(List<TModal> modals)
+        {
+            return await _repository.DeleteMultiple(modals);
         }
         public async Task<List<TDto>> GetAll()
         {

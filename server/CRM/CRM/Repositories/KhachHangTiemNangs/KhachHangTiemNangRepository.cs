@@ -30,13 +30,13 @@ namespace CRM.Repositories.KhachHangTiemNangs
 
         public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByNguoiDungIdAsync(Guid nguoiDungId)
         {
-            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
 
         public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByPhongBanIdAsync(Guid phongBanId)
         {
-            var db = await _context.KhachHangTiemNangs.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
 
@@ -148,6 +148,36 @@ namespace CRM.Repositories.KhachHangTiemNangs
             {
                 return new ResultModal() { Status = 202, Message = "Không tìm thấy khách hàng", Success = false };
             }
+        }
+
+        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangDaXoaAsync(Guid nguoiDungId)
+        {
+            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == true).ToListAsync();
+            return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
+        }
+
+        public async Task<ResultModal> XoaHangLoatKhTiemNangAssync(List<KhachHangTiemNangModel> models)
+        {
+            try
+            {
+                foreach (var item in models)
+                {
+                    var db = _context.KhachHangTiemNangs.Where(r => r.Id == item.Id).FirstOrDefault();
+                    if (db != null)
+                    {
+                        db.IsDeleted = true;
+                        _context.KhachHangTiemNangs.Update(db);
+                    }
+                    else continue;
+                }
+                await _context.SaveChangesAsync();
+                return new ResultModal() { Status = 200, Message = "Xóa thành công", Success = true };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+
         }
     }
 }

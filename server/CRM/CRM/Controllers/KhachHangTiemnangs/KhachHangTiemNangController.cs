@@ -53,6 +53,22 @@ namespace CRM.Controllers.KhachHangTiemnangs
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getkhachhangtiemnangdaxoa")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetKhachHangTiemNangDaXoa()
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangDaXoaAsync(nguoiDungId);
+                return Ok(result);
+            }
+            catch
+            (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet("getTemplate")]
         public IActionResult GetFile(string path, string filename)
         {
@@ -115,6 +131,33 @@ namespace CRM.Controllers.KhachHangTiemnangs
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getkhachhangbyrole")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetKhachHangTiemNangByRole()
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                var db = _dbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId);
+                if (db.CheckIsTruongPhong == true)
+                {
+                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId);
+                    return Ok(result);
+                }
+                else
+                {
+                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByNguoiDungIdAsync(nguoiDungId);
+                    return Ok(result);
+                }
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+
         [HttpPost("createkhachhangtiemnang")]
         [JwtAuthorize]
         public async Task<IActionResult> CreateKhachHangTiemNang(KhachHangTiemNangModel model)
@@ -168,59 +211,31 @@ namespace CRM.Controllers.KhachHangTiemnangs
                                 var tenKhacHang = !string.IsNullOrEmpty(reader.GetValue(0)?.ToString()) ? reader.GetValue(0).ToString() : null;
                                 khachHangTiemNang.TenKhachHang = tenKhacHang;
                                 var phongBanKhachHang = !string.IsNullOrEmpty(reader.GetValue(1)?.ToString()) ? reader.GetValue(1).ToString() : null;
-                                switch (phongBanKhachHang)
+                                khachHangTiemNang.MaPhongbanKhachHang = phongBanKhachHang switch
                                 {
-                                    case "Phòng giám đốc":
-                                        khachHangTiemNang.MaPhongbanKhachHang = 1;
-                                        break;
-                                    case "Phòng tài chính":
-                                        khachHangTiemNang.MaPhongbanKhachHang = 2;
-                                        break;
-                                    case "Phòng nhân sự":
-                                        khachHangTiemNang.MaPhongbanKhachHang = 3;
-                                        break;
-                                    case "Phòng marketing":
-                                        khachHangTiemNang.MaPhongbanKhachHang = 4;
-                                        break;
-                                    case "Phòng chăm sóc khách hàng ":
-                                        khachHangTiemNang.MaPhongbanKhachHang = 5;
-                                        break;
-                                    case "Phòng kinh doanh ":
-                                        khachHangTiemNang.MaPhongbanKhachHang = 6;
-                                        break;
-                                    default:
-                                        khachHangTiemNang.MaPhongbanKhachHang = null;
-                                        break;
-                                }
+                                    "Phòng giám đốc" => 1,
+                                    "Phòng tài chính" => 2,
+                                    "Phòng nhân sự" => 3,
+                                    "Phòng marketing" => 4,
+                                    "Phòng chăm sóc khách hàng " => 5,
+                                    "Phòng kinh doanh " => 6,
+                                    _ => null,
+                                };
                                 var sdtDiDong = !string.IsNullOrEmpty(reader.GetValue(2)?.ToString()) ? reader.GetValue(2).ToString() : null;
                                 khachHangTiemNang.SoDienThoaiDiDong = sdtDiDong;
 
                                 khachHangTiemNang.SoDienThoaiCoQuan = !string.IsNullOrEmpty(reader.GetValue(3)?.ToString()) ? reader.GetValue(3).ToString() : null;
                                 var nguonGocKhachHang = !string.IsNullOrEmpty(reader.GetValue(4)?.ToString()) ? reader.GetValue(4).ToString() : null;
-                                switch (nguonGocKhachHang)
+                                khachHangTiemNang.MaNguonGocKhachHang = nguonGocKhachHang switch
                                 {
-                                    case "Nhân viên kinh doanh tự tìm kiếm":
-                                        khachHangTiemNang.MaNguonGocKhachHang = 1;
-                                        break;
-                                    case "Khách hàng hoặc đối tác giới thiệu":
-                                        khachHangTiemNang.MaNguonGocKhachHang = 2;
-                                        break;
-                                    case "Thông qua sự kiện hội thảo , tập huấn":
-                                        khachHangTiemNang.MaNguonGocKhachHang = 3;
-                                        break;
-                                    case "Khách hàng tự tìm đến":
-                                        khachHangTiemNang.MaNguonGocKhachHang = 4;
-                                        break;
-                                    case "Marketing":
-                                        khachHangTiemNang.MaNguonGocKhachHang = 5;
-                                        break;
-                                    case "Khác":
-                                        khachHangTiemNang.MaNguonGocKhachHang = 6;
-                                        break;
-                                    default:
-                                        khachHangTiemNang.MaNguonGocKhachHang = null;
-                                        break;
-                                }
+                                    "Nhân viên kinh doanh tự tìm kiếm" => 1,
+                                    "Khách hàng hoặc đối tác giới thiệu" => 2,
+                                    "Thông qua sự kiện hội thảo , tập huấn" => 3,
+                                    "Khách hàng tự tìm đến" => 4,
+                                    "Marketing" => 5,
+                                    "Khác" => 6,
+                                    _ => null,
+                                };
                                 var loaiTiemNang = !string.IsNullOrEmpty(reader.GetValue(5)?.ToString()) ? reader.GetValue(5).ToString() : null;
                                 switch (loaiTiemNang)
                                 {
@@ -361,21 +376,6 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
         }
 
-        [HttpDelete("deletekhachhangtiemnang/{id}")]
-        [JwtAuthorize]
-        public async Task<IActionResult> DeleteKhachHangTiemNang(Guid id)
-        {
-            try
-            {
-                ResultModal result = await _khachHangTiemNangServices.XoaKhachHangTiemNangAsync(id);
-                return Ok(result);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpPut("bangiaokhachhangtiemnang")]
         [JwtAuthorize]
         public async Task<IActionResult> BanGiaoKhachHangTiemNang(Guid id, Guid userId)
@@ -390,6 +390,37 @@ namespace CRM.Controllers.KhachHangTiemnangs
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpDelete("deletekhachhangtiemnang/{id}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> DeleteKhachHangTiemNang(Guid id)
+        {
+            try
+            {
+                ResultModal result = await _khachHangTiemNangServices.XoaKhachHangTiemNangAsync(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete("deletehangloat")]
+        [JwtAuthorize]
+        public async Task<IActionResult> DeleteHangLoatKhachHangTiemNang(List<KhachHangTiemNangModel> models)
+        {
+            try
+            {
+                ResultModal result = await _khachHangTiemNangServices.XoaHangLoatKhTiemNangAssync(models);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
 
     }
 }
