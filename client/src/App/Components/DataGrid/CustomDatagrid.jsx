@@ -83,19 +83,18 @@ function CustomPagination() {
     />
   );
 }
-
-
 const CustomDatagrid = ({
   rows ,
   columns ,
   pageSizeOptions = [10, 25, 50, 100],
   initialPageSize = 25,
   getRowId,
-  checkboxSelection = false,
+  checkboxSelection ,
   disableMultipleSelection = false,
-  disableRowSelectionOnClick = false,
+  disableRowSelectionOnClick = true,
   showTopToolbar = true,
   onRowSelectionChange,
+  height
 }) => {
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: initialPageSize,
@@ -108,17 +107,16 @@ const CustomDatagrid = ({
       onRowSelectionChange(selectedRows);
     }
   };
-
-  // const CustomHeaderWithToolbar = () => {
-  //   return (
-  //     <div style={{ display: 'flex',fontSize:"1rem", justifyContent: 'space-between', alignItems: 'center' }}>
-  //       <GridToolbar/>
-  //     </div>
-  //   );
-  // };
+  const CustomHeaderWithToolbar = () => {
+    return (
+      <div style={{ display: 'flex',fontSize:"1rem", justifyContent: 'space-between', alignItems: 'center' }}>
+        <GridToolbar/>
+      </div>
+    );
+  };
 
   return (
-    <div style={{  width: '100%', overflow: 'auto'  }}>
+    <div style={{  width: '100%', overflow: 'auto'  , height:height }}>
       <StyledDataGrid
         rows={rows}
         columns={columns}

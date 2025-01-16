@@ -121,6 +121,47 @@ namespace CRM.Repositories
 
         }
 
+        public async Task<ResultModal> DeleteMultiple(List<TModal> modals)
+        {
+            try
+            {
+                foreach (var item in modals)
+                {
+                    var idProperty = item.GetType().GetProperty("id");
+                    if (idProperty == null)
+                    {
+                        throw new InvalidOperationException("TModal does not have an 'id' property.");
+                    }
+                    var idValue = idProperty.GetValue(item);
+                    if (idValue == null)
+                    {
+                        continue;
+                    }
+                    var entity = await GetById((int)idValue);
+                    if (entity != null)
+                    {
+                        var propertyInfo = typeof(TEntity).GetProperty("IsDeleted");
+                        if (propertyInfo != null)
+                        {
+                            propertyInfo.SetValue(entity, true);
+                            _crmDbContext.Set<TEntity>().Update(entity);
+
+                        }
+                        else
+                        {
+                            _crmDbContext.Set<TEntity>().Remove(entity);
+                        }
+                    }
+                }
+                await _crmDbContext.SaveChangesAsync();
+                return new ResultModal { Status = 200, Success = true, Message = "Xóa dữ liệu thành công" };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal { Status = 500, Success = false, Message = ex.Message };
+            }
+        }
+
         public async Task<List<TDto>> GetAll()
         {
             var db = await _crmDbContext.Set<TEntity>().ToListAsync();
@@ -145,7 +186,7 @@ namespace CRM.Repositories
             var entity = _mapper.Map<TEntity>(modal);
             _crmDbContext.Set<TEntity>().Update(entity);
             await _crmDbContext.SaveChangesAsync();
-            return new ResultModal { Success = true, Message = "Chỉnh sửa dữ liệu thành công" , Status=200 };
+            return new ResultModal { Success = true, Message = "Chỉnh sửa dữ liệu thành công", Status = 200 };
         }
     }
 }

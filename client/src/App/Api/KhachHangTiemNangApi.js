@@ -28,6 +28,12 @@ export const apiKhachHangTiemNang = createApi({
       getKhachHangTiemNangByPhongBanId: builder.query({
         query: (id) => `/KhachHangTiemNang/getkhachhangtiemnangbyPhongbanId/${id}`,
       }),
+      getKhachHangTiemNangByrole: builder.query({
+        query: (id) => `/KhachHangTiemNang/getkhachhangbyrole`,
+      }),
+      getKhachHangTiemNangDaXoa: builder.query({
+        query: (id) => `/KhachHangTiemNang/getkhachhangtiemnangdaxoa`,
+      }),
       getTemplates: builder.query({
         query: ({ path, filename }) => ({
           url: `KhachHangTiemNang/getTemplate`,
@@ -73,6 +79,13 @@ export const apiKhachHangTiemNang = createApi({
           method: 'DELETE',
         }),
       }),
+      deletehangLoatKhachHangTiemNang: builder.mutation({
+        query: (data) => ({
+          url: '/KhachHangTiemNang/deletehangloat',
+          method: 'DELETE',
+          body: data,
+        }),
+      }),
     }),
   });
   export const { 
@@ -80,12 +93,15 @@ export const apiKhachHangTiemNang = createApi({
     useGetKhachHangTiemNangByIdQuery,
     useGetKhachHangTiemNangByNguoiDungIdQuery,
     useGetKhachHangTiemNangByPhongBanIdQuery,
+    useGetKhachHangTiemNangByroleQuery,
+    useGetKhachHangTiemNangDaXoaQuery,
     useGetTemplatesQuery,
     useAddKhachHangTiemNangMutation,
     useUpdateKhachHangTiemNangMutation,
     useBangiaoKhachHangTiemNangMutation,
     useImportKhachHangMutation,
     useDeleteKhachHangTiemNangMutation,
+    useDeletehangLoatKhachHangTiemNangMutation
   } = apiKhachHangTiemNang;
 
 

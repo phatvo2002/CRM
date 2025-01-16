@@ -1,0 +1,9 @@
+﻿using CRM.Modal;
+
+namespace CRM.Services.Mails
+{
+    public interface IMailServices
+    {
+        Task SendMailAsync(MailRequest request);
+    }
+}

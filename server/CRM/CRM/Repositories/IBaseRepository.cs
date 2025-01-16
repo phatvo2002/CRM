@@ -13,5 +13,6 @@ namespace CRM.Repositories
         Task<ResultModal> DeleteById(TId id);
         Task<ResultModal> DeleteById(int id);
         Task<ResultModal> DeleteById(string id);
+        Task<ResultModal> DeleteMultiple(List<TModal> modals);
     }
 }

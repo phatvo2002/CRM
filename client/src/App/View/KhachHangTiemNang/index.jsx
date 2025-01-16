@@ -12,15 +12,19 @@ import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
 import { TYPE_MODAL } from "../../Until/constant";
 import EmailIcon from '@mui/icons-material/Email';
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import ThreePIcon from '@mui/icons-material/ThreeP';
 import Person2Icon from '@mui/icons-material/Person2';
 import UpdateIcon from '@mui/icons-material/Update';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PhoneIcon from '@mui/icons-material/Phone';
 import {
+  useDeletehangLoatKhachHangTiemNangMutation,
   useDeleteKhachHangTiemNangMutation,
   useGetKhachHangTiemNangByNguoiDungIdQuery,
   useGetKhachHangTiemNangByPhongBanIdQuery,
+  useGetKhachHangTiemNangByroleQuery,
   useGetTemplatesQuery,
 } from "src/App/Api/KhachHangTiemNangApi";
 import UpdateKhachHangTiemNang from "./components/UpdateKhachHangTiemNang";
@@ -59,7 +63,7 @@ const KhachHangTiemNang = () => {
         >
           <Tooltip title="Sửa thông tin ">
             <IconButton
-              disabled={selectedRow.length === 0}
+              disabled={selectedRow.length == 0}
               style={{}}
               onClick={onOpenModalUpdateKhachHang}
             >
@@ -68,7 +72,7 @@ const KhachHangTiemNang = () => {
           </Tooltip>
           <Tooltip title="Xóa">
             <IconButton
-              disabled={selectedRow.length === 0}
+              disabled={selectedRow.length == 0}
               style={{}}
               onClick={() => handleDeletePhongBan(params?.id)}
             >
@@ -76,7 +80,7 @@ const KhachHangTiemNang = () => {
             </IconButton>
           </Tooltip>
           <Tooltip title="Bàn giao tiềm năng">
-            <IconButton disabled={selectedRow.length === 0} style={{}}
+            <IconButton disabled={selectedRow.length == 0} style={{}}
               onClick={() => handleOpenModalBanGiaoKhachHang()}
             >
               <ThreePIcon color="primary"/>
@@ -86,6 +90,21 @@ const KhachHangTiemNang = () => {
       ),
     },
     // { field: "hoVaDem", headerName: "Họ Và Đệm", flex: 1 },
+    {
+      field: "",
+      headerName: "Nhân viên chăm sóc",
+      width: 200,
+      renderCell: (params) => {
+        return params?.row?.nguoiDung?.ten ? (
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <AssignmentIndIcon style={{ padding: 2 }} color="warning" />
+            <span> {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}</span>
+          </div>
+        ) : (
+          <div></div>
+        );
+      }
+    },
     {
       field: "tenKhachHang",
       headerName: "Họ và tên",
@@ -166,7 +185,9 @@ const KhachHangTiemNang = () => {
         userData?.response.checkIsTruongPhong === false &&
         userData?.response.checkIsGiamDoc === false,
     });
+  const {data: dataKHByRole , refetch : refetchkh} = useGetKhachHangTiemNangByroleQuery()
   const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation();
+  const [deleteHangLoat] = useDeletehangLoatKhachHangTiemNangMutation()
   const onOpenModalUpdateKhachHang = () => {
     setOpenModalUpdate(true);
     setTypeModal(TYPE_MODAL.UPDATE);
@@ -209,9 +230,30 @@ const KhachHangTiemNang = () => {
           title: "Xóa thành công",
           icon: "success",
         });
+        refetchkh()
       }
     });
   };
+  const handleDeleteMuliple =()=>
+  {
+    Swal.fire({
+      title: "Bạn có muốn xóa những khách hàng này?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+       await deleteHangLoat(selectedRow);
+        Swal.fire({
+          title: "Xóa thành công",
+          icon: "success",
+        });
+        refetchkh()
+      }
+    });
+  }
   const handleGetTemplates = () => {
     if (getTemplate) {
       const url = window.URL.createObjectURL(getTemplate);
@@ -224,19 +266,22 @@ const KhachHangTiemNang = () => {
       console.error("Không có dữ liệu để tải file.");
     }
   };
+  // useEffect(() => {
+  //   if (userData?.response?.checkIsTruongPhong === true) {
+  //     setRows(dataKhachHangPhongBan);
+  //   } else {
+  //     setRows(dataKhachHangByNguoiDung);
+  //   }
+  // }, [dataKhachHangByNguoiDung, dataKhachHangPhongBan, userData]);
 
+  useEffect(()=>{
+    setRows(dataKHByRole)
+  },[dataKHByRole])
 
-
-  useEffect(() => {
-    if (userData?.response?.checkIsTruongPhong === true) {
-      setRows(dataKhachHangPhongBan);
-    } else {
-      setRows(dataKhachHangByNguoiDung);
-    }
-  }, [dataKhachHangByNguoiDung, dataKhachHangPhongBan, userData]);
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
+  
   return (
     <div className="customer-page">
       <div>
@@ -307,6 +352,16 @@ const KhachHangTiemNang = () => {
               </MenuItem>
             </Menu>
             <Button onClick={handleOpen} sx={{ marginLeft: 1 }} variant="outlined" color="inherit" startIcon={<UpdateIcon/>}>Lịch sử tương tác</Button>
+            <Button
+              variant="outlined"
+              color="error"
+              sx={{ marginLeft: 1 }}
+              startIcon={<DeleteOutlineIcon />}
+              disabled={selectedRow.length == 0}
+              onClick={handleDeleteMuliple}
+            >
+              Xóa hàng loạt
+            </Button>
           </Grid2>
         </Grid2>
         <Paper >
@@ -314,9 +369,10 @@ const KhachHangTiemNang = () => {
             <CustomDatagrid
               rows={rows}
               columns={columns}
+              height={800}
               pageSizeOptions={[10, 25, 50]}
               initialPageSize={25}
-              checkboxSelection={false}
+              checkboxSelection={true}
               showTopToolbar={true}
               onRowSelectionChange={handleRowSelectionChange}
             />
@@ -332,7 +388,7 @@ const KhachHangTiemNang = () => {
           setTypeModal={setTypeModal}
           showModal={openModalUpdate}
           setLoading={setLoading}
-          refetch={refetch}
+          refetch={refetchkh}
         />
         <ModalBanGiaoKhachHang
           selectedItem={selectedRow}

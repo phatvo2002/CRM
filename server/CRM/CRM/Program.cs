@@ -1,6 +1,7 @@
 ﻿using CRM.Entities;
 using CRM.Entities.StoreProcedure;
 using CRM.Filters;
+using CRM.Modal;
 using CRM.Repositories.ChucVus;
 using CRM.Repositories.CuocGois;
 using CRM.Repositories.DonViTinhs;
@@ -20,7 +21,6 @@ using CRM.Repositories.PhanLoaiDuBaos;
 using CRM.Repositories.PhongBans;
 using CRM.Repositories.ThongBaos;
 using CRM.Repositories.TinhTrangs;
-using CRM.Services;
 using CRM.Services.ChucVus;
 using CRM.Services.CuocGois;
 using CRM.Services.DonViTinhs;
@@ -33,6 +33,7 @@ using CRM.Services.LichHens;
 using CRM.Services.LienHes;
 using CRM.Services.LoaiDuBaos;
 using CRM.Services.LoaiHangHoas;
+using CRM.Services.Mails;
 using CRM.Services.Menus;
 using CRM.Services.NguoiDungs;
 using CRM.Services.NhiemVus;
@@ -60,7 +61,7 @@ builder.Services.AddDbContext<CrmDbContext>(options =>
 
 builder.Services.AddDbContext<AppCrmContext>(options =>
         options.UseSqlServer(settings["DefaultConnection"]));
-
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 var logger = new LoggerConfiguration()
     .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
     .Enrich.FromLogContext()
@@ -140,7 +141,11 @@ builder.Services.AddScoped<IPhanLoaiDuBaoRepository, PhanLoaiDuBaoRepository>();
 builder.Services.AddScoped<IPhanLoaiDuBaoServices, PhanLoaiDuBaoServices>();
 
 builder.Services.AddScoped<ILienHeServices, LienHeService>();
+
+builder.Services.AddTransient<IMailServices, MailServices>();
+
 builder.Services.AddScoped<JwtAuthorizeFilter>();
+
 
 
 
@@ -194,7 +199,6 @@ builder.Services.AddSwaggerGen(opt =>
     });
 
 });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -14,7 +14,6 @@
         public string? MaSoThue { get; set; }
         public DateTime NgayThanhLap { get; set; }
         public string? DiaChi { get; set; }
-
         public string? ThongTinMoTa { get; set; }
         public int? MaPhongbanKhachHang { get; set; }
         public int? MaNguonGocKhachHang { get; set; }
@@ -25,5 +24,6 @@
         public int? MaDoanhThu { get; set; }
         public bool? IsDungChung { get; set; }
         public Guid? NguoiDungId { get; set; }
+        public NguoiDungDTO? NguoiDung { get; set; }
     }
 }
