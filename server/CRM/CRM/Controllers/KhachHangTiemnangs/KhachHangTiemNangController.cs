@@ -53,22 +53,22 @@ namespace CRM.Controllers.KhachHangTiemnangs
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("getkhachhangtiemnangdaxoa")]
-        [JwtAuthorize]
-        public async Task<IActionResult> GetKhachHangTiemNangDaXoa()
-        {
-            try
-            {
-                Guid nguoiDungId = HttpContext.GetUserId();
-                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangDaXoaAsync(nguoiDungId);
-                return Ok(result);
-            }
-            catch
-            (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpGet("getkhachhangtiemnangdaxoa")]
+        //[JwtAuthorize]
+        //public async Task<IActionResult> GetKhachHangTiemNangDaXoa()
+        //{
+        //    try
+        //    {
+        //        Guid nguoiDungId = HttpContext.GetUserId();
+        //        List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangDaXoaAsync(nguoiDungId);
+        //        return Ok(result);
+        //    }
+        //    catch
+        //    (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
         [HttpGet("getTemplate")]
         public IActionResult GetFile(string path, string filename)
         {
@@ -155,6 +155,32 @@ namespace CRM.Controllers.KhachHangTiemnangs
             {
                 return BadRequest(e.Message);
             }
+        }
+        [HttpGet("getkhachhangtiemnangdaxoa")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetKhachHangTiemNangDaXoa()
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                var db = _dbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId);
+                if (db.CheckIsTruongPhong == true)
+                {
+                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangDaXoaByPhongBanAsync(phongBanId);
+                    return Ok(result);
+                }
+                else
+                {
+                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangDaXoaAsync(nguoiDungId);
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
 

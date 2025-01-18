@@ -321,5 +321,19 @@ namespace CRM.Controllers.KhachHangMucTieus
                 return BadRequest(ex.Message);
             }
         }
+        [HttpDelete("deletehangloatkhachhangmuctieu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> DeleteHangLoatKhachHangMucTieu(List<KhachHangMucTieuModal> modal)
+        {
+            try
+            {
+                var result = await _khacHangMucTieuServices.DeleteMultiple(modal);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

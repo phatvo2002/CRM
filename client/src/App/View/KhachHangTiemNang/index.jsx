@@ -22,13 +22,12 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import {
   useDeletehangLoatKhachHangTiemNangMutation,
   useDeleteKhachHangTiemNangMutation,
-  useGetKhachHangTiemNangByNguoiDungIdQuery,
-  useGetKhachHangTiemNangByPhongBanIdQuery,
   useGetKhachHangTiemNangByroleQuery,
   useGetTemplatesQuery,
 } from "src/App/Api/KhachHangTiemNangApi";
 import UpdateKhachHangTiemNang from "./components/UpdateKhachHangTiemNang";
 import ModalBanGiaoKhachHang from "./Modal/ModalBanGiaoKhachHang";
+import ModalXemKhachHangDaXoa from "./Modal/ModalXemKhachHangDaXoa";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
@@ -36,8 +35,11 @@ const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isActionOpen, setIsActionOpen] = useState(false);
+  const [KhachHangDaXoaModal , setKhachHangDaXoaModal] = useState(false);
   const handleOpen = () => setIsActionOpen(true);
   const handleClose = () => setIsActionOpen(false);
+  const handleOpenModalXem = () => setKhachHangDaXoaModal(true)
+  const handleCloseModalXem = () => setKhachHangDaXoaModal(false)
   const navigate = useNavigate();
   const gotoLink = () => {
     navigate("/tiemnang/themmoikhachhangtiemnang");
@@ -173,18 +175,6 @@ const KhachHangTiemNang = () => {
     path: "Templates/ThongTinTiemNang.xlsx",
     filename: "ThongTinTiemNang",
   });
-  const { data: dataKhachHangByNguoiDung } =
-    useGetKhachHangTiemNangByNguoiDungIdQuery(userData?.response?.id, {
-      skip:
-        userData?.response.checkIsTruongPhong === true ||
-        userData?.response.checkIsGiamDoc === true,
-    });
-  const { data: dataKhachHangPhongBan, refetch } =
-    useGetKhachHangTiemNangByPhongBanIdQuery(userData?.response?.phongBan?.id, {
-      skip:
-        userData?.response.checkIsTruongPhong === false &&
-        userData?.response.checkIsGiamDoc === false,
-    });
   const {data: dataKHByRole , refetch : refetchkh} = useGetKhachHangTiemNangByroleQuery()
   const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation();
   const [deleteHangLoat] = useDeletehangLoatKhachHangTiemNangMutation()
@@ -346,6 +336,7 @@ const KhachHangTiemNang = () => {
                   sx={{ marginLeft: 1, width: "200px" }}
                   startIcon={<AutoDeleteIcon />}
                   color="error"
+                  onClick={handleOpenModalXem}
                 >
                   Thùng rác
                 </Button>
@@ -369,7 +360,7 @@ const KhachHangTiemNang = () => {
             <CustomDatagrid
               rows={rows}
               columns={columns}
-              height={800}
+              height={600}
               pageSizeOptions={[10, 25, 50]}
               initialPageSize={25}
               checkboxSelection={true}
@@ -408,6 +399,11 @@ const KhachHangTiemNang = () => {
           isOpen={isActionOpen}
         />
       )}
+      {/* xem khách hàng đã xóa */}
+      <ModalXemKhachHangDaXoa 
+        handleClose={handleCloseModalXem}
+        open={KhachHangDaXoaModal}
+      />
     </div>
   );
 };

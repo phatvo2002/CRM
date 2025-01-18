@@ -26,5 +26,6 @@
         public int? MaDoanhThu { get; set; }
         public NguonGocKhachHangDTO? NguonGocKhachHang { get; set; }
         public LoaiTiemNangDTO? LoaiTiemNang { get; set; }
+        public NguoiDungDTO? NguoiDung { get; set; }
     }
 }

@@ -29,10 +29,10 @@ export const apiKhachHangTiemNang = createApi({
         query: (id) => `/KhachHangTiemNang/getkhachhangtiemnangbyPhongbanId/${id}`,
       }),
       getKhachHangTiemNangByrole: builder.query({
-        query: (id) => `/KhachHangTiemNang/getkhachhangbyrole`,
+        query: () => `/KhachHangTiemNang/getkhachhangbyrole`,
       }),
       getKhachHangTiemNangDaXoa: builder.query({
-        query: (id) => `/KhachHangTiemNang/getkhachhangtiemnangdaxoa`,
+        query: () => `/KhachHangTiemNang/getkhachhangtiemnangdaxoa`,
       }),
       getTemplates: builder.query({
         query: ({ path, filename }) => ({

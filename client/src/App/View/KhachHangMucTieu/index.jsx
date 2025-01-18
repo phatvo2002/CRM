@@ -11,16 +11,19 @@ import React, { useEffect, useState } from "react";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import AddIcon from "@mui/icons-material/Add";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Person2Icon from '@mui/icons-material/Person2';
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
+  useDeletehangLoatKhachHangMucTieuMutation,
   useDeleteKhachHangMucTieuMutation,
   useGetKhachHangMucTieuByNguoiDungIdQuery,
   useGetKhachHangMucTieuByPhongBanIdQuery,
 } from "src/App/Api/KhachHangMucTieuApi";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import ThreePIcon from "@mui/icons-material/ThreeP";
 import { ActionComponents } from "./Components/Action";
@@ -89,7 +92,21 @@ const KhachHangMucTieu = () => {
         </div>
       ),
     },
-
+    {
+      field: "",
+      headerName: "Nhân viên chăm sóc",
+      width: 200,
+      renderCell: (params) => {
+        return params?.row?.nguoiDung?.ten ? (
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <AssignmentIndIcon style={{ padding: 2 }} color="warning" />
+            <span> {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}</span>
+          </div>
+        ) : (
+          <div></div>
+        );
+      }
+    },
     {
       field: "tenKhachHang",
       headerName: "Tên khách hàng",
@@ -168,6 +185,7 @@ const KhachHangMucTieu = () => {
     filename: "ThongTinKhachHang",
   });
   const [deleteNguoiDung] = useDeleteKhachHangMucTieuMutation()
+  const [deleteHangLoat] = useDeletehangLoatKhachHangMucTieuMutation()
   const handleDeleteKhachHang = async (id) => {
     if (
       !userData?.response.checkIsTruongPhong
@@ -177,7 +195,6 @@ const KhachHangMucTieu = () => {
       );
       return;
     }
-
     Swal.fire({
       title: "Bạn có muốn xóa khách hàng này?",
       icon: "warning",
@@ -196,6 +213,26 @@ const KhachHangMucTieu = () => {
       }
     });
   };
+    const handleDeleteMuliple =()=>
+    {
+      Swal.fire({
+        title: "Bạn có muốn xóa những khách hàng này?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+         await deleteHangLoat(selectedRow);
+          Swal.fire({
+            title: "Xóa thành công",
+            icon: "success",
+          });
+          refetch()
+        }
+      });
+    }
   const handleGetTemplates = () => {
     if (getTemplate) {
       const url = window.URL.createObjectURL(getTemplate);
@@ -306,6 +343,16 @@ const KhachHangMucTieu = () => {
             >
               Lịch sử tương tác
             </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              sx={{ marginLeft: 1 }}
+              startIcon={<DeleteOutlineIcon />}
+              disabled={selectedRow.length == 0}
+              onClick={handleDeleteMuliple}
+            >
+              Xóa hàng loạt
+            </Button>
 
             {/* <Button
               variant="outlined"
@@ -323,7 +370,7 @@ const KhachHangMucTieu = () => {
                 columns={columns}
                 pageSizeOptions={[10, 25, 50]}
                 initialPageSize={25}
-                checkboxSelection={false}
+                checkboxSelection={true}
                 showTopToolbar={true}
                 onRowSelectionChange={handleRowSelectionChange}
               />

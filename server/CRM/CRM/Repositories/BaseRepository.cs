@@ -127,7 +127,7 @@ namespace CRM.Repositories
             {
                 foreach (var item in modals)
                 {
-                    var idProperty = item.GetType().GetProperty("id");
+                    var idProperty = item.GetType().GetProperty("Id");
                     if (idProperty == null)
                     {
                         throw new InvalidOperationException("TModal does not have an 'id' property.");
@@ -137,7 +137,7 @@ namespace CRM.Repositories
                     {
                         continue;
                     }
-                    var entity = await GetById((int)idValue);
+                    var entity = await GetById((string)idValue);
                     if (entity != null)
                     {
                         var propertyInfo = typeof(TEntity).GetProperty("IsDeleted");

@@ -149,13 +149,16 @@ namespace CRM.Repositories.KhachHangTiemNangs
                 return new ResultModal() { Status = 202, Message = "Không tìm thấy khách hàng", Success = false };
             }
         }
-
         public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangDaXoaAsync(Guid nguoiDungId)
         {
-            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == true).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == true).Include(r=> r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
-
+        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangDaXoaByPhongBanAsync(Guid phongbanId)
+        {
+            var db = await _context.KhachHangTiemNangs.Where(r => r.PhongBanId == phongbanId && r.IsDeleted == true).Include(r => r.Nguoidung).ToListAsync();
+            return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
+        }
         public async Task<ResultModal> XoaHangLoatKhTiemNangAssync(List<KhachHangTiemNangModel> models)
         {
             try
@@ -179,5 +182,7 @@ namespace CRM.Repositories.KhachHangTiemNangs
             }
 
         }
+
+      
     }
 }

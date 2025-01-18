@@ -79,6 +79,13 @@ export const apiKhachHangMucTieu = createApi({
           method: 'DELETE',
         }),
       }),
+      deletehangLoatKhachHangMucTieu: builder.mutation({
+        query: (data) => ({
+          url: '/KhachHangMucTieu/deletehangloatkhachhangmuctieu',
+          method: 'DELETE',
+          body: data,
+        }),
+      }),
     }),
   });
   export const { 
@@ -90,7 +97,8 @@ export const apiKhachHangMucTieu = createApi({
     useAddKhachHangMucTieuMutation,
     useUpdateKhachHangTiemNangMucTieuMutation,
     useConvertKhachHangMucTieuMutation,
-    useDeleteKhachHangMucTieuMutation
+    useDeleteKhachHangMucTieuMutation,
+    useDeletehangLoatKhachHangMucTieuMutation
   } = apiKhachHangMucTieu;
 
 

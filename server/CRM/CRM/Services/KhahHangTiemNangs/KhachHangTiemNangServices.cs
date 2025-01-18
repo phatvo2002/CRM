@@ -42,9 +42,15 @@ namespace CRM.Services.KhahHangTiemNangs
             return await _khachHangTiemNang.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId);
         }
 
+
         public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangDaXoaAsync(Guid nguoiDungId)
         {
             return await _khachHangTiemNang.GetKhachHangTiemNangDaXoaAsync(nguoiDungId);
+        }
+
+        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangDaXoaByPhongBanAsync(Guid phongbanId)
+        {
+            return await _khachHangTiemNang.GetKhachHangTiemNangDaXoaByPhongBanAsync(phongbanId);
         }
 
         public async Task<ResultModal> ThemMoiKhachHangTiemNangAsync(KhachHangTiemNangModel model, Guid nguoiDungId, Guid phongBanId)

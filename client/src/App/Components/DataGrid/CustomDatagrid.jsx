@@ -92,7 +92,7 @@ const CustomDatagrid = ({
   checkboxSelection ,
   disableMultipleSelection = false,
   disableRowSelectionOnClick = true,
-  showTopToolbar = true,
+  showTopToolbar ,
   onRowSelectionChange,
   height
 }) => {
@@ -125,7 +125,7 @@ const CustomDatagrid = ({
         disableRowSelectionOnClick={disableRowSelectionOnClick}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
-        showTopToolbar={true}
+        showTopToolbar={showTopToolbar}
         pageSizeOptions={pageSizeOptions}
         showCellVerticalBorder={true}
         style={{ marginTop: '10px' }}
