@@ -416,7 +416,20 @@ namespace CRM.Controllers.KhachHangTiemnangs
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpPut("phuchoihangloat")]
+        [JwtAuthorize]
+        public async Task<IActionResult> PhucHoiHangLoatKhachHangTiemNang(List<KhachHangTiemNangModel> models)
+        {
+            try
+            {
+                ResultModal result = await _khachHangTiemNangServices.PhucHoiLoatKhTiemNangAsync(models);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpDelete("deletekhachhangtiemnang/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> DeleteKhachHangTiemNang(Guid id)

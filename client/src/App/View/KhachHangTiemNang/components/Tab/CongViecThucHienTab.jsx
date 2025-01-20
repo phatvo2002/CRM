@@ -40,14 +40,14 @@ const CongViecThucHienTab = () => {
             disabled={selectedRowCuocGoi.length === 0}
             onClick={onOpenModalUpdateCuocGoi}
           >
-            <CreateIcon></CreateIcon>
+            <CreateIcon color="primary"></CreateIcon>
           </IconButton>
           <IconButton
             style={{ margin: "0 10px" }}
             disabled={selectedRowCuocGoi.length === 0}
             onClick={handelDeleteCuocGoi}
           >
-            <DeleteIcon></DeleteIcon>
+            <DeleteIcon color="error"></DeleteIcon>
           </IconButton>
         </div>
       ),
@@ -132,14 +132,14 @@ const CongViecThucHienTab = () => {
             disabled={selectedRowLichHen.length === 0}
             onClick={handleOpenModalUpdateLichHen}
           >
-            <CreateIcon></CreateIcon>
+            <CreateIcon color="primary"></CreateIcon>
           </IconButton>
           <IconButton
             style={{ margin: "0 10px" }}
             disabled={selectedRowLichHen.length === 0}
             onClick={handelDeleteLichHen}
           >
-            <DeleteIcon></DeleteIcon>
+            <DeleteIcon color="error"></DeleteIcon>
           </IconButton>
         </div>
       ),
@@ -225,7 +225,7 @@ const CongViecThucHienTab = () => {
             disabled={selectedRowNhiemVu.length === 0}
             onClick={handleOpenModalUpdateNhiemVu}
           >
-            <CreateIcon></CreateIcon>
+            <CreateIcon color="primary"></CreateIcon>
           </IconButton>
           {/* <IconButton
             style={{ margin: "0 10px" }}
@@ -475,7 +475,7 @@ const CongViecThucHienTab = () => {
                   columns={columnsCuocGoi}
                   pageSizeOptions={[10, 25, 50]}
                   initialPageSize={25}
-                  checkboxSelection={false}
+                  checkboxSelection={true}
                   showTopToolbar={true}
                   onRowSelectionChange={handleRowCuocGoiSelectionChange}
                 />
@@ -487,7 +487,7 @@ const CongViecThucHienTab = () => {
                     columns={columnsLichHen}
                     pageSizeOptions={[10, 25, 50]}
                     initialPageSize={25}
-                    checkboxSelection={false}
+                    checkboxSelection={true}
                     showTopToolbar={true}
                     onRowSelectionChange={handleRowLichHenSelectionChange}
                   />
@@ -500,7 +500,7 @@ const CongViecThucHienTab = () => {
                     columns={columnsNhiemVu}
                     pageSizeOptions={[10, 25, 50]}
                     initialPageSize={25}
-                    checkboxSelection={false}
+                    checkboxSelection={true}
                     showTopToolbar={true}
                     onRowSelectionChange={handleRowNhiemVuSelectionChange}
                   />

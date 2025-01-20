@@ -39,6 +39,8 @@ const ThongBaoDetail = lazy(
   () => import("./Components/CustomNotification/NotificationList")
 );
 
+const NhiemVu = lazy(()=> import("./View/NhiemVu/index") )
+
 const RouteChild = [
   {
     path: "/banlamviec",
@@ -197,6 +199,15 @@ const RouteChild = [
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ThongBaoDetail />
+      </Suspense>
+    ),
+  },
+  // nhiệm vụ
+  {
+    path: "/nhiemvu",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <NhiemVu />
       </Suspense>
     ),
   },

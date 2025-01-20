@@ -36,6 +36,7 @@ namespace CRM.Repositories.CuocGois
                     cuocGoi.LoaiCuocGoiId = modal.LoaiCuocGoiId;
                     cuocGoi.KetQuaCuocGoiId = modal.KetQuaCuocGoiId;
                     cuocGoi.KhachHangTiemNangId = modal.KhachHangTiemNangId;
+                    cuocGoi.KhachHangMucTieuId = modal.KhachHangMucTieuId;
                     cuocGoi.IsDeleted = false;
                     cuocGoi.NguoiDungId = nguoiDungId;
                     cuocGoi.PhongBanId = phongBanId;
@@ -82,12 +83,14 @@ namespace CRM.Repositories.CuocGois
             if (db != null)
             {
                 db.TieuDe = modal.TieuDe;
+                db.MoTa = modal.MoTa;
                 db.NgayBatDau = modal.NgayBatDau;
                 db.SoPhutGoi = modal.SoPhutGoi;
                 db.SoGiayGoi = modal.SoGiayGoi;
                 db.LoaiCuocGoiId = modal.LoaiCuocGoiId;
                 db.KetQuaCuocGoiId = modal.KetQuaCuocGoiId;
                 db.KhachHangTiemNangId = modal.KhachHangTiemNangId;
+                db.KhachHangMucTieuId = modal.KhachHangMucTieuId;
                 db.IsHoanThanh = modal.IsHoanThanh;
                 db.NguoiDungId = nguoiDungId;
                 db.PhongBanId = phongBanId;
@@ -111,7 +114,13 @@ namespace CRM.Repositories.CuocGois
 
         public async Task<List<CuocGoiDTO>> GetCuocGoiByKhachHangTiemNangId(Guid Id)
         {
-            var db = await _context.CuocGois.Where(r => r.KhachHangTiemNangId == Id).Include(r => r.LoaiCuocGoi).Include(r=> r.KhachHangTiemNang).ToListAsync();
+            var db = await _context.CuocGois.Where(r => r.KhachHangTiemNangId == Id).Include(r => r.LoaiCuocGoi).Include(r => r.KhachHangTiemNang).ToListAsync();
+            return _mapper.Map<List<CuocGoiDTO>>(db);
+        }
+
+        public async Task<List<CuocGoiDTO>> GetCuocGoiByKhachHangId(string Id)
+        {
+            var db = await _context.CuocGois.Where(r => r.KhachHangMucTieuId == Id).Include(r => r.LoaiCuocGoi).Include(r => r.KhachHangTiemNang).ToListAsync();
             return _mapper.Map<List<CuocGoiDTO>>(db);
         }
     }

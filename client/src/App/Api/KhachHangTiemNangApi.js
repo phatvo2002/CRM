@@ -73,12 +73,20 @@ export const apiKhachHangTiemNang = createApi({
           method: 'PUT',
         }),
       }),
+      PhucHoiHangLoatKhachHangTiemNang: builder.mutation({
+        query: (data) => ({
+          url: '/KhachHangTiemNang/phuchoihangloat',
+          method: 'PUT',
+          body: data,
+        }),
+      }),
       deleteKhachHangTiemNang: builder.mutation({
         query: (id) => ({
           url: `/KhachHangTiemNang/deletekhachhangtiemnang/${id}`,
           method: 'DELETE',
         }),
       }),
+      
       deletehangLoatKhachHangTiemNang: builder.mutation({
         query: (data) => ({
           url: '/KhachHangTiemNang/deletehangloat',
@@ -99,6 +107,7 @@ export const apiKhachHangTiemNang = createApi({
     useAddKhachHangTiemNangMutation,
     useUpdateKhachHangTiemNangMutation,
     useBangiaoKhachHangTiemNangMutation,
+    usePhucHoiHangLoatKhachHangTiemNangMutation,
     useImportKhachHangMutation,
     useDeleteKhachHangTiemNangMutation,
     useDeletehangLoatKhachHangTiemNangMutation

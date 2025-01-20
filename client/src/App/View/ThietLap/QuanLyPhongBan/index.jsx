@@ -149,7 +149,7 @@ const QuanLyPhongban = () => {
           }}
           slots={{ toolbar: GridToolbar }}
           pageSizeOptions={[25, 50, 75, 100]}
-          checkboxSelection={false}
+          checkboxSelection={true}
           disableMultipleSelection={true}
           disableRowSelectionOnClick={false}
         />

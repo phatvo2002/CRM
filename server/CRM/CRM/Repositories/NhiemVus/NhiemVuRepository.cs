@@ -18,7 +18,7 @@ namespace CRM.Repositories.NhiemVus
             _mapper = mapper;
             _logger = logger;
         }
-        public async Task<ResultModal> CreateNhiemVu(NhiemVuModal modal, Guid nguoiDungId, Guid phongBanId)
+        public async Task<ResultModal> CreateNhiemVu(NhiemVuModal modal, Guid phongBanId)
         {
             var db = _context.NhiemVus.FirstOrDefault(r => r.Id == modal.Id);
             try
@@ -31,14 +31,37 @@ namespace CRM.Repositories.NhiemVus
                     nhiemVu.MoTa = modal.MoTa;
                     nhiemVu.HanHoanThanh = modal.HanHoanThanh;
                     nhiemVu.KhachHangTiemNangId = modal.KhachHangTiemNangId;
+                    nhiemVu.KhachHangMucTieuId = modal.KhachHangId;
                     nhiemVu.MucDoUuTienId = modal.MucDoUuTienId;
                     nhiemVu.TrangThaiThucHienId = modal.TrangThaiThucHienId;
                     nhiemVu.IsThongBao = false;
                     nhiemVu.IsDeleted = false;
-                    nhiemVu.NguoiDungId = nguoiDungId;
+                    nhiemVu.NguoiDungId = modal.NguoiDungId;
                     nhiemVu.PhongBanId = phongBanId;
                     nhiemVu.IsThongBao = false;
                     nhiemVu.CreateAt = DateTime.Now;
+                    if (modal.KhachHangTiemNangId != Guid.Empty)
+                    {
+                        ThongBao thongBao = new ThongBao();
+                        thongBao.TieuDe = $"Bạn có một nhiệm vụ mới được giao : {modal.TieuDe}";
+                        thongBao.NoiDung = modal.MoTa;
+                        thongBao.Type = "new";
+                        thongBao.DuongDan = $"http://localhost:3001/tiemnang/{modal.KhachHangTiemNangId}";
+                        thongBao.CreateAt = DateTime.Now;
+                        thongBao.NguoiDungId = modal.NguoiDungId;
+                        _context.ThongBaos.Add(thongBao);
+                    }
+                    if (modal.KhachHangId != null)
+                    {
+                        ThongBao thongBao = new ThongBao();
+                        thongBao.TieuDe = $"Bạn có một nhiệm vụ mới được giao : {modal.TieuDe}";
+                        thongBao.NoiDung = modal.MoTa;
+                        thongBao.Type = "new";
+                        thongBao.DuongDan = $"http://localhost:3001/tiemnang/{modal.KhachHangId}";
+                        thongBao.CreateAt = DateTime.Now;
+                        thongBao.NguoiDungId = modal.NguoiDungId;
+                        _context.ThongBaos.Add(thongBao);
+                    }
                     _context.NhiemVus.Add(nhiemVu);
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };

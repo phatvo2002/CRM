@@ -124,7 +124,7 @@ const TabBanHang = () => {
     {
       field: "maHangHoaId",
       headerName: "Hàng Hóa",
-      width: 400,
+      width: 200,
       editable: true,
       type: "singleSelect",
       valueOptions:
@@ -160,7 +160,7 @@ const TabBanHang = () => {
         rows={hangHoa}
         columns={columns}
         editMode="row"
-        sx={{width:"130vh"}}
+        sx={{width:"100%"}}
         style={{ fontSize: "1rem" }}
         processRowUpdate={processRowUpdate}
         slots={{

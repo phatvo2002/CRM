@@ -19,7 +19,6 @@ import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import TodayIcon from "@mui/icons-material/Today";
-import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
 import { useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useNavigate } from "react-router-dom";
@@ -35,13 +34,17 @@ import TabLienHe from "./Tabs/TabLienHe";
 import TabBanHang from "./Tabs/TabBanHang";
 import TabHoatDong from "./Tabs/TabHoatDong";
 import TabLichSuMuaHang from "./Tabs/TabLichSuMuaHang";
+import ContactMailIcon from '@mui/icons-material/ContactMail';
 import { useGetKhachHangMucTieuByIdQuery } from "src/App/Api/KhachHangMucTieuApi";
+import ModlaAddCuocGoi from "../Modal/ModalAddCuocGoi";
+import ModalAddLichHen from "../Modal/ModalAddLichHen";
 const KhachHangMucTieuDetail = () => {
   const [activeTab, setActiveTab] = React.useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [modalCuocGoi, setModalCuocGoi] = useState(false);
+  const [modalLichHen, setModalLichHen] = useState(false);
   const { id } = useParams();
-  const {data: KhachhangData} = useGetKhachHangMucTieuByIdQuery(id)
-  console.log(KhachhangData)
+  const { data: KhachhangData } = useGetKhachHangMucTieuByIdQuery(id)
   const navigate = useNavigate();
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -60,9 +63,10 @@ const KhachHangMucTieuDetail = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-
-
+  const handleOpenModalCuocGoi = () => setModalCuocGoi(true)
+  const handleCloseMoldalCuocGoi = () => setModalCuocGoi(false)
+  const handelOpenModalLichHen = () => setModalLichHen(true)
+  const handleCloseMdodalLichHen = () => setModalLichHen(false)
   return (
     <>
       <Grid2 container spacing={2} sx={{ padding: 2 }}>
@@ -119,14 +123,11 @@ const KhachHangMucTieuDetail = () => {
 
         </Grid2>
       </Grid2>
-      <Box>
-        <Box display="flex" flexDirection="row" height="100vh">
-          {/* Sidebar */}
+      <Grid2 container spacing={2}>
+        <Grid2 size={2}>
           <Paper
-
           >
             <Box
-              width="250px"
               bgcolor="#f9f9f9"
               p={2}
               display="flex"
@@ -135,7 +136,7 @@ const KhachHangMucTieuDetail = () => {
             >
               <Box textAlign="center" mb={2}>
                 <Avatar
-                  alt="Phat"
+                  alt=""
                   sx={{ width: 80, height: 80, margin: "0 auto", marginTop: 3 }}
                 />
                 <Typography variant="h6" mt={2}>
@@ -148,14 +149,14 @@ const KhachHangMucTieuDetail = () => {
               </Box>
               <Divider />
               <Box>
-                <IconButton sx={{ margin: 1, border: "1px solid #4caf50", alignItems: "center" }}>
+                <IconButton sx={{ margin: 1, border: "1px solid #4caf50", alignItems: "center" }} onClick={handleOpenModalCuocGoi}>
                   <LocalPhoneIcon sx={{ textAlign: "center", color: "#4caf50" }} />
                 </IconButton>
-                <IconButton sx={{ margin: 1, border: "1px solid #2196f3", alignItems: "center" }}>
+                <IconButton sx={{ margin: 1, border: "1px solid #2196f3", alignItems: "center" }} onClick={handelOpenModalLichHen}>
                   <TodayIcon sx={{ textAlign: "center", color: "#2196f3" }} />
                 </IconButton>
                 <IconButton sx={{ margin: 1, border: "1px solid #f44336", alignItems: "center" }}>
-                  <PermContactCalendarIcon sx={{ textAlign: "center", color: "#f44336" }} />
+                  <ContactMailIcon sx={{ textAlign: "center", color: "#f44336" }} />
                 </IconButton>
               </Box>
               <Box mt={2}>
@@ -173,18 +174,11 @@ const KhachHangMucTieuDetail = () => {
         </Box> */}
             </Box>
           </Paper>
-
-          {/* Main Content */}
-          <Box
-
-            sx={{
-              border: 0,
-              paddingLeft: 3
-            }}
-          >
+        </Grid2>
+        <Grid2 size={10}>
             {/* Tabs */}
-            <Paper style={{width: "100%"}}>
-              <Box sx={{height :"100vh", typography: "body1" ,width:"100%" }}>
+            <Paper style={{ width: "100%",height: "100vh" }} >
+              <Box sx={{  typography: "body1" }}>
                 <TabContext value={value} >
                   <Box
                     sx={{ border: 0, borderColor: "Highlight", fontFamily: "inherit", boxShadow: 3 }}
@@ -200,30 +194,40 @@ const KhachHangMucTieuDetail = () => {
                     </TabList>
                   </Box>
                   <TabPanel value="1">
-                    <TabTongQuan/>
+                    <TabTongQuan />
                   </TabPanel>
                   <TabPanel value="2">
-                    <TabThongTinChiTiet/>
+                    <TabThongTinChiTiet />
                   </TabPanel>
                   <TabPanel value="3">
-                     <TabLienHe/>
+                    <TabLienHe />
                   </TabPanel>
                   <TabPanel value="4">
-                     <TabHoatDong/>
+                    <TabHoatDong />
                   </TabPanel>
                   <TabPanel value="5">
-                     <TabBanHang />
+                    <TabBanHang />
                   </TabPanel>
                   <TabPanel value="6">
-                     <TabLichSuMuaHang/>
+                    <TabLichSuMuaHang />
                   </TabPanel>
                 </TabContext>
               </Box>
             </Paper>
-
-          </Box>
-        </Box>
+        </Grid2>
+      </Grid2>
+      <Box>
       </Box>
+      {/* Modal thêm cuộc gọi */}
+      <ModlaAddCuocGoi
+        showModal={modalCuocGoi}
+        closeModal={handleCloseMoldalCuocGoi}
+      />
+      {/* Modal thêm mới lịch hẹn */}
+      <ModalAddLichHen
+        showModal={modalLichHen}
+        closeModal={handleCloseMdodalLichHen}
+      />
     </>
   );
 };

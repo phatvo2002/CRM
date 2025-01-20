@@ -151,7 +151,7 @@ namespace CRM.Repositories.KhachHangTiemNangs
         }
         public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangDaXoaAsync(Guid nguoiDungId)
         {
-            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == true).Include(r=> r.Nguoidung).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == true).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
         public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangDaXoaByPhongBanAsync(Guid phongbanId)
@@ -180,9 +180,29 @@ namespace CRM.Repositories.KhachHangTiemNangs
             {
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
-
         }
 
-      
+        public async Task<ResultModal> PhucHoiLoatKhTiemNangAsync(List<KhachHangTiemNangModel> models)
+        {
+            try
+            {
+                foreach (var item in models)
+                {
+                    var db = _context.KhachHangTiemNangs.FirstOrDefault(r => r.Id == item.Id && r.IsDeleted == true);
+                    if (db != null)
+                    {
+                        db.IsDeleted = false;
+                        _context.KhachHangTiemNangs.Update(db);
+                    }
+                    else continue;
+                }
+                await _context.SaveChangesAsync();
+                return new ResultModal() { Status = 200, Message = "Phục hồi thành công", Success = true };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = true };
+            }
+        }
     }
 }

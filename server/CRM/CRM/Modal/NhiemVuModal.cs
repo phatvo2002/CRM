@@ -7,7 +7,9 @@
         public string? MoTa { get; set; }
         public DateTime? HanHoanThanh { get; set; }
         public Guid KhachHangTiemNangId { get; set; }
+        public string? KhachHangId { get; set; }
         public Guid MucDoUuTienId { get; set; }
         public Guid TrangThaiThucHienId { get; set; }
+        public Guid NguoiDungId { get; set; }
     }
 }

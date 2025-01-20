@@ -7,20 +7,22 @@ import {
   IconButton,
   Paper,
 } from "@mui/material";
-import DialogContentText from "@mui/material/DialogContentText";
 import DialogActions from "@mui/material/DialogActions";
 import React, { useEffect, useState } from "react";
 import { Tooltip } from "recharts";
-import { useGetKhachHangTiemNangDaXoaQuery } from "src/App/Api/KhachHangTiemNangApi";
+import { useGetKhachHangTiemNangDaXoaQuery, usePhucHoiHangLoatKhachHangTiemNangMutation } from "src/App/Api/KhachHangTiemNangApi";
 import ReplayIcon from "@mui/icons-material/Replay";
 import PhoneIcon from "@mui/icons-material/Phone";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Person2Icon from "@mui/icons-material/Person2";
-const ModalXemKhachHangDaXoa = ({ handleClose, open }) => {
+import "../index.css"
+import Swal from "sweetalert2";
+const ModalXemKhachHangDaXoa = ({ handleClose, open ,refetch }) => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [rows, setRows] = useState([]);
-  const { data: dataKHDaXoa } = useGetKhachHangTiemNangDaXoaQuery();
+  const { data: dataKHDaXoa , refetch : refetchKhDaXoa } = useGetKhachHangTiemNangDaXoaQuery();
+  const [phucHoiKhachHang] = usePhucHoiHangLoatKhachHangTiemNangMutation()
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
@@ -34,7 +36,7 @@ const ModalXemKhachHangDaXoa = ({ handleClose, open }) => {
       width: 100,
       renderCell: () => (
         <div style={{ alignItems: "center" }}>
-          <IconButton style={{}} disabled={selectedRow.length === 0}>
+          <IconButton style={{}} disabled={selectedRow.length === 0} onClick={handleRestoreRow}>
             <ReplayIcon color="primary" />
           </IconButton>
         </div>
@@ -96,6 +98,50 @@ const ModalXemKhachHangDaXoa = ({ handleClose, open }) => {
     { field: "linhVuc", headerName: "Lĩnh vực", width: 200 },
     { field: "nghenghiep", headerName: "Nghề nghiệp", width: 200 },
   ];
+   const handleRestoreMuliple = async ()=>
+    {
+      // Swal.fire({
+      //   title: "Bạn có muốn hồi phục những khách hàng này?",
+      //   icon: "warning",
+      //   showCancelButton: true,
+      //   confirmButtonColor: "#3085d6",
+      //   cancelButtonColor: "#d33",
+      //   confirmButtonText: "Có",
+      //   customClass: {
+      //     popup: "swal-custom-popup",
+      //   },
+      //   target: document.body,
+      // }).then(async (result) => {
+      //   if (result.isConfirmed) {
+      //    await phucHoiKhachHang(selectedRow);
+      //     Swal.fire({
+      //       title: "Hồi phục thành công",
+      //       icon: "success",
+      //     });
+      //     refetch()
+      //     handleClose()
+      //   }
+      // });
+      if(confirm("Bạn có muốn phục hồi những khách hàng này ?"))
+      {
+         await phucHoiKhachHang(selectedRow);
+         alert("Phục hồi thành công")
+         refetchKhDaXoa()
+         refetch()
+         handleClose()
+      }
+    }
+    const handleRestoreRow = async()=>
+    {
+      if(confirm("Bạn có muốn phục hồi khách hàng này ?"))
+        {
+           await phucHoiKhachHang(selectedRow);
+           alert("Phục hồi thành công")
+           refetchKhDaXoa()
+           refetch()
+           handleClose()
+        }
+    }
   return (
     <div>
       <Dialog
@@ -114,7 +160,8 @@ const ModalXemKhachHangDaXoa = ({ handleClose, open }) => {
             sx={{ marginLeft: 1, width: "250px" }}
             startIcon={<ReplayIcon />}
             color="primary"
-            //   onClick={handleOpenModalXem}
+            onClick={handleRestoreMuliple}
+            disabled={selectedRow == 0}
           >
             Phục hồi hàng loạt
           </Button>

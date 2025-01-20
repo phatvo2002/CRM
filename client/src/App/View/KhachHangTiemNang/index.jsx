@@ -360,7 +360,7 @@ const KhachHangTiemNang = () => {
             <CustomDatagrid
               rows={rows}
               columns={columns}
-              height={600}
+              height={500}
               pageSizeOptions={[10, 25, 50]}
               initialPageSize={25}
               checkboxSelection={true}
@@ -403,6 +403,7 @@ const KhachHangTiemNang = () => {
       <ModalXemKhachHangDaXoa 
         handleClose={handleCloseModalXem}
         open={KhachHangDaXoaModal}
+        refetch={refetchkh}
       />
     </div>
   );

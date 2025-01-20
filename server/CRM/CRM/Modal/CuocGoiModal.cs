@@ -11,6 +11,7 @@
         public bool? IsHoanThanh { get; set; }
         public Guid? LoaiCuocGoiId { get; set; }
         public Guid? KhachHangTiemNangId { get; set; }
+        public string? KhachHangMucTieuId { get; set; }
         public Guid? KetQuaCuocGoiId { get; set; }
     }
 }

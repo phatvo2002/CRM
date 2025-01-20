@@ -5,7 +5,6 @@ using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.KhachHangMucTieus;
 using ExcelDataReader;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
@@ -19,7 +18,7 @@ namespace CRM.Controllers.KhachHangMucTieus
         private readonly IKhacHangMucTieuServices _khacHangMucTieuServices;
         private readonly CrmDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public KhachHangMucTieuController(IKhacHangMucTieuServices khacHangMucTieuServices , CrmDbContext context , IWebHostEnvironment  webHostEnvironment) 
+        public KhachHangMucTieuController(IKhacHangMucTieuServices khacHangMucTieuServices, CrmDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _khacHangMucTieuServices = khacHangMucTieuServices;
             _context = context;
@@ -54,6 +53,7 @@ namespace CRM.Controllers.KhachHangMucTieus
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpGet("getkhachhangmuctieubynguoidungid")]
         [JwtAuthorize]
         public async Task<IActionResult> GetKhachHangMucTieuByNguoiDungId()
@@ -62,17 +62,17 @@ namespace CRM.Controllers.KhachHangMucTieus
             {
                 Guid nguoiDungId = HttpContext.GetUserId();
                 Guid phongBanId = HttpContext.GetPhongBanId();
-                var db = await _context.Nguoidungs.Where(r=> r.Id == nguoiDungId && r.MaPhongBan == phongBanId).FirstOrDefaultAsync();
-                if(db?.CheckIsTruongPhong == true)
+                var db = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId && r.MaPhongBan == phongBanId).FirstOrDefaultAsync();
+                if (db?.CheckIsTruongPhong == true)
                 {
                     List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByPhongBanId(phongBanId);
                     return Ok(result);
-                }    
+                }
                 else
                 {
-                   List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByNguoiDungId(nguoiDungId);
+                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByNguoiDungId(nguoiDungId);
                     return Ok(result);
-                }    
+                }
             }
             catch (Exception ex)
             {
@@ -132,7 +132,7 @@ namespace CRM.Controllers.KhachHangMucTieus
         {
             Guid userId = HttpContext.GetUserId();
             Guid phongBanId = HttpContext.GetPhongBanId();
-        
+
             try
             {
                 if (file == null || file.Length == 0)
@@ -277,7 +277,7 @@ namespace CRM.Controllers.KhachHangMucTieus
                                 khachHangMucTieu.PhongBanId = phongBanId;
                                 _context.KhachHangMucTieus.Add(khachHangMucTieu);
                             };
-                             await _context.SaveChangesAsync();
+                            await _context.SaveChangesAsync();
                         } while (reader.NextResult());
                     }
                 }

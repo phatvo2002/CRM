@@ -6,81 +6,100 @@ import {
   GridToolbar,
   useGridApiContext,
   useGridSelector,
+  gridPageSizeSelector,
 } from '@mui/x-data-grid';
 import { styled } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
 import "../DataGrid/CustomDatagrid.css"
-function customCheckbox(theme) {
-  return {
-    '& .MuiCheckbox-root svg': {
-      width: 16,
-      height: 16,
-      backgroundColor: 'transparent',
-      border: '1px solid #d9d9d9',
-      borderRadius: 2,
-      ...theme.applyStyles('light', {
-        borderColor: 'rgb(67, 67, 67)',
-      }),
-    },
-    '& .MuiCheckbox-root svg path': {
-      display: 'none',
-    },
-    '& .MuiCheckbox-root.Mui-checked:not(.MuiCheckbox-indeterminate) svg': {
-      backgroundColor: '#1890ff',
-      borderColor: '#1890ff',
-    },
-    '& .MuiCheckbox-root.Mui-checked .MuiIconButton-label:after': {
-      position: 'absolute',
-      display: 'table',
-      border: '2px solid #fff',
-      borderTop: 0,
-      borderLeft: 0,
-      transform: 'rotate(45deg) translate(-50%,-50%)',
-      opacity: 1,
-      transition: 'all .2s cubic-bezier(.12,.4,.29,1.46) .1s',
-      content: '""',
-      top: '50%',
-      left: '39%',
-      width: 5.71428571,
-      height: 9.14285714,
-    },
-    '& .MuiCheckbox-root.MuiCheckbox-indeterminate .MuiIconButton-label:after': {
-      width: 8,
-      height: 8,
-      backgroundColor: '#1890ff',
-      transform: 'none',
-      top: '39%',
-      border: 0,
-    },
-  };
-}
+import { Box, MenuItem, Select } from '@mui/material';
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     fontSize:"1rem"
 }));
+// const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
+//   fontSize: '1rem',
+//   '& .MuiDataGrid-virtualScroller': {
+//     scrollbarWidth: 'none', 
+//     '&::-webkit-scrollbar': {
+//       display: 'none', 
+//     },
+//   },
+// }));
+// function CustomPagination() {
+//   const apiRef = useGridApiContext();
+//   const page = useGridSelector(apiRef, gridPageSelector);
+//   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
 
+//   return (
+//     <Pagination
+//       color="primary"
+//       variant="outlined"
+//       shape="rounded"
+//       showFirstButton 
+//       showLastButton
+//       page={page + 1}
+//       sx={{
+//         display: "flex",
+//         paddingRight: "50%",
+//       }}
+//       count={pageCount}
+//       renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+//       onChange={(event, value) => apiRef.current.setPage(value - 1)}
+//     />
+//   );
+// }
 function CustomPagination() {
   const apiRef = useGridApiContext();
   const page = useGridSelector(apiRef, gridPageSelector);
   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+  const pageSize = useGridSelector(apiRef, gridPageSizeSelector);
+
+  const handlePageSizeChange = React.useCallback((event) => {
+    const newSize = event.target.value;
+    apiRef.current.setPageSize(newSize);
+  }, [apiRef]);
 
   return (
-    <Pagination
-      color="primary"
-      variant="outlined"
-      shape="rounded"
-      showFirstButton 
-      showLastButton
-      page={page + 1}
+    <Box
       sx={{
         display: "flex",
-        paddingRight: "50%",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "8px",
       }}
-      count={pageCount}
-      renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
-      onChange={(event, value) => apiRef.current.setPage(value - 1)}
-    />
+    >
+      {/* Page Size Selector */}
+      <Select
+        value={pageSize}
+        onChange={handlePageSizeChange}
+        size="small"
+        variant="outlined"
+        sx={{ minWidth: 100 }}
+      >
+        {[5, 10, 20, 50, 100].map((size) => (
+          <MenuItem key={size} value={size}>
+           Hiển thị {size} dòng
+          </MenuItem>
+        ))}
+      </Select>
+
+      {/* Pagination */}
+      <Pagination
+        color="primary"
+        variant="outlined"
+        shape="rounded"
+        showFirstButton
+        showLastButton
+        page={page + 1}
+        sx={{
+          display: "flex",
+        }}
+        count={pageCount}
+        renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+        onChange={(event, value) => apiRef.current.setPage(value - 1)}
+      />
+    </Box>
   );
 }
 const CustomDatagrid = ({
@@ -116,7 +135,7 @@ const CustomDatagrid = ({
   };
 
   return (
-    <div style={{  width: '100%', overflow: 'auto'  , height:height }}>
+    <div style={{  width: '100%', overflow: 'auto'  }}>
       <StyledDataGrid
         rows={rows}
         columns={columns}

@@ -31,6 +31,11 @@ namespace CRM.Services.CuocGois
             return await _cuocGoiRepository.GetCuocGoiById(Id);
         }
 
+        public async Task<List<CuocGoiDTO>> GetCuocGoiByKhachHangId(string Id)
+        {
+            return await _cuocGoiRepository.GetCuocGoiByKhachHangId(Id);
+        }
+
         public async Task<List<CuocGoiDTO>> GetCuocGoiByKhachHangTiemNangId(Guid Id)
         {
             return await _cuocGoiRepository.GetCuocGoiByKhachHangTiemNangId(Id);

@@ -25,6 +25,9 @@ export const apiCuocGoi = createApi({
       getCuocGoiByKhachHangTiemNangId: builder.query({
         query: (id) => `/CuocGoi/getcuocgoibykhachhangtiemnangid/${id}`,
       }),
+      getCuocGoiByKhachHangId: builder.query({
+        query: (id) => `/CuocGoi/getcuocgoibykhachhangid/${id}`,
+      }),
       getCuocGoiById: builder.query({
         query: (id) => `/CuocGoi/getcuocgoibyid/${id}`,
       }),
@@ -54,6 +57,7 @@ export const apiCuocGoi = createApi({
    useGetAllCuocGoiQuery,
    useGetCuocGoiByNguoiDungQuery,
    useGetCuocGoiByKhachHangTiemNangIdQuery,
+   useGetCuocGoiByKhachHangIdQuery,
    useGetCuocGoiByIdQuery,
    useAddCuocGoiMutation,
    useDeleteCuocGoiMutation,

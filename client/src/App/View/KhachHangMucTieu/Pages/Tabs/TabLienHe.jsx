@@ -107,7 +107,7 @@ const TabLienHe = () => {
           columns={columns}
           pageSizeOptions={[10, 25, 50]}
           initialPageSize={25}
-          checkboxSelection={false}
+          checkboxSelection={true}
           showTopToolbar={true}
           onRowSelectionChange={handleRowSelectionChange}
         />

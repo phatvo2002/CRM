@@ -3,7 +3,6 @@ using CRM.DTO;
 using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.CuocGois;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers.CuocGois
@@ -55,6 +54,20 @@ namespace CRM.Controllers.CuocGois
             try
             {
                 List<CuocGoiDTO> result = await _cuocGoiServices.GetCuocGoiByKhachHangTiemNangId(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getcuocgoibykhachhangid/{id}")]
+        [JwtAuthorize]
+        public async Task<ActionResult> GetCuoGoiByKhachHangId(string id)
+        {
+            try
+            {
+                List<CuocGoiDTO> result = await _cuocGoiServices.GetCuocGoiByKhachHangId(id);
                 return Ok(result);
             }
             catch (Exception ex)
