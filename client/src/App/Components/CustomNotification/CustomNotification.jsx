@@ -18,6 +18,7 @@ import {
   useCheckThongBaoMutation,
   useGetThongBaoByNguoiDungIdQuery,
 } from "src/App/Api/ThongBaoApi";
+import { Link } from "react-router-dom";
 export const CustomNotification = ({
   openNoti,
   handleOpenNoti,
@@ -99,9 +100,11 @@ export const CustomNotification = ({
           )}
 
           {dataNoti?.length > 0 && (
-            <Button style={{ alignItems: "center", padding: 10 }}>
-              Xem tất cả
-            </Button>
+            <Link to={`/thongbao`} style={{ textDecoration: "none" }}>
+              <Button style={{ alignItems: "center", padding: 10 }}>
+                Xem tất cả
+              </Button>
+            </Link>
           )}
         </List>
       </Popover>

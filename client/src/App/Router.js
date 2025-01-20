@@ -1,49 +1,44 @@
-import { lazy ,Suspense  } from "react";
+import { lazy, Suspense } from "react";
 
-
-//quản trị hệ thống 
-const BanLamViec = lazy(() =>
-  import("./View/BanLamViec/BanLamViec")
+//quản trị hệ thống
+const BanLamViec = lazy(() => import("./View/BanLamViec/BanLamViec"));
+const ThongTinNguoiDung = lazy(() => import("./View/ThongTinNguoiDung"));
+const ThietLapNhanVien = lazy(() => import("./View/ThietLap/ThietLap"));
+const ThemMoiNguoiDung = lazy(() => import("./View/ThietLap/AddNguoiDung"));
+const ChangePassword = lazy(() => import("./View/session/ChangePassword"));
+const ThietLapVaiTro = lazy(
+  () => import("./View/ThietLap/ThietLapVaiTro/Index")
 );
-const ThongTinNguoiDung = lazy(() =>
-  import("./View/ThongTinNguoiDung")
-);
-const ThietLapNhanVien = lazy(() =>
-  import("./View/ThietLap/ThietLap")
-);
-const ThemMoiNguoiDung = lazy(() =>
-  import("./View/ThietLap/AddNguoiDung")
-);
-const ChangePassword = lazy(() =>
-  import("./View/session/ChangePassword")
-);
-const ThietLapVaiTro = lazy(() =>
-  import("./View/ThietLap/ThietLapVaiTro/Index")
-);
-const QuanLyPhongban = lazy(() =>
-  import("./View/ThietLap/QuanLyPhongBan")
-);
-const QuanLyMenu = lazy(() =>
-  import("./View/ThietLap/QuanLyMenu/index")
-);
-const DashBoardThietLap = lazy(() =>
-  import("./View/ThietLap/DashBoardThietLap")
+const QuanLyPhongban = lazy(() => import("./View/ThietLap/QuanLyPhongBan"));
+const QuanLyMenu = lazy(() => import("./View/ThietLap/QuanLyMenu/index"));
+const DashBoardThietLap = lazy(
+  () => import("./View/ThietLap/DashBoardThietLap")
 );
 // khách hàng tiềm năng
-const KhachHangTiemNang = lazy(() =>
-  import("./View/KhachHangTiemNang/index")
-)
-const ThemMoiKhachHangTiemNang = lazy(() => import("./View/KhachHangTiemNang/components/AddKhachHangTiemNang"));
-const KhachHangTiemNangDetail = lazy(() => import("./View/KhachHangTiemNang/components/KhachHangTiemNangDetail"));
-const ImportKhachHangTiemNang =  lazy(() => import("./View/KhachHangTiemNang/components/ImportKhachHang"));
-// Khách hàng mục tiêu 
-const KhachHangMucTieu = lazy(()=> import("./View/KhachHangMucTieu/index"))
-const ThemMoiKhachHangMucTieu =  lazy(()=> import("./View/KhachHangMucTieu/Pages/AddKhachHangMucTieu"))
-const KhachHangMucTieuDetail = lazy(()=> import("./View/KhachHangMucTieu/Pages/KhachHangMucTieuDetail"))
+const KhachHangTiemNang = lazy(() => import("./View/KhachHangTiemNang/index"));
+const ThemMoiKhachHangTiemNang = lazy(
+  () => import("./View/KhachHangTiemNang/components/AddKhachHangTiemNang")
+);
+const KhachHangTiemNangDetail = lazy(
+  () => import("./View/KhachHangTiemNang/components/KhachHangTiemNangDetail")
+);
+const ImportKhachHangTiemNang = lazy(
+  () => import("./View/KhachHangTiemNang/components/ImportKhachHang")
+);
+// Khách hàng mục tiêu
+const KhachHangMucTieu = lazy(() => import("./View/KhachHangMucTieu/index"));
+const ThemMoiKhachHangMucTieu = lazy(
+  () => import("./View/KhachHangMucTieu/Pages/AddKhachHangMucTieu")
+);
+const KhachHangMucTieuDetail = lazy(
+  () => import("./View/KhachHangMucTieu/Pages/KhachHangMucTieuDetail")
+);
 // Hàng hóa
-const HangHoa  = lazy(() =>
-  import("./View/HangHoa/index")
-)
+const HangHoa = lazy(() => import("./View/HangHoa/index"));
+const ThongBaoDetail = lazy(
+  () => import("./Components/CustomNotification/NotificationList")
+);
+
 const RouteChild = [
   {
     path: "/banlamviec",
@@ -124,78 +119,87 @@ const RouteChild = [
     path: "/quantrihethong",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
-         <DashBoardThietLap />
+        <DashBoardThietLap />
       </Suspense>
     ),
   },
 
-    // Khách hàng tiềm năng
-    {
-      path: "/tiemnang",
-      element: (
-        <Suspense fallback={<div>Loading...</div>}>
-           <KhachHangTiemNang />
-        </Suspense>
-      ),
-    },
-    {
-      path: "/tiemnang/themmoikhachhangtiemnang",
-      element: (
-        <Suspense fallback={<div>Loading...</div>}>
-           <ThemMoiKhachHangTiemNang />
-        </Suspense>
-      ),
-    },
-    {
-      path: "/tiemnang/:id",
-      element: (
-        <Suspense fallback={<div>Loading...</div>}>
-           <KhachHangTiemNangDetail />
-        </Suspense>
-      ),
-    },
-    {
-      path: "/tiemnang/uploadkhachhang",
-      element: (
-        <Suspense fallback={<div>Loading...</div>}>
-           <ImportKhachHangTiemNang />
-        </Suspense>
-      ),
-    },
-    // Khách hàng mục tiêu
-    {
-      path: "/khachhang",
-      element: (
-        <Suspense fallback={<div>Loading...</div>}>
-           <KhachHangMucTieu />
-        </Suspense>
-      ),
-    },
-    {
-      path: "/khachhang/themmoikhachhang",
-      element: (
-        <Suspense fallback={<div>Loading...</div>}>
-           <ThemMoiKhachHangMucTieu />
-        </Suspense>
-      ),
-    },
-    {
-      path: "/khachhang/:id",
-      element: (
-        <Suspense fallback={<div>Loading...</div>}>
-           <KhachHangMucTieuDetail />
-        </Suspense>
-      ),
-    },
-    // hàng hóa
-    {
-      path: "/hanghoa",
-      element: (
-        <Suspense fallback={<div>Loading...</div>}>
-           <HangHoa />
-        </Suspense>
-      ),
-    },
+  // Khách hàng tiềm năng
+  {
+    path: "/tiemnang",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <KhachHangTiemNang />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/tiemnang/themmoikhachhangtiemnang",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThemMoiKhachHangTiemNang />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/tiemnang/:id",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <KhachHangTiemNangDetail />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/tiemnang/uploadkhachhang",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ImportKhachHangTiemNang />
+      </Suspense>
+    ),
+  },
+  // Khách hàng mục tiêu
+  {
+    path: "/khachhang",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <KhachHangMucTieu />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/khachhang/themmoikhachhang",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThemMoiKhachHangMucTieu />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/khachhang/:id",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <KhachHangMucTieuDetail />
+      </Suspense>
+    ),
+  },
+  // hàng hóa
+  {
+    path: "/hanghoa",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <HangHoa />
+      </Suspense>
+    ),
+  },
+  // thông báo
+  {
+    path: "/thongbao",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThongBaoDetail />
+      </Suspense>
+    ),
+  },
 ];
 
 export default RouteChild;
