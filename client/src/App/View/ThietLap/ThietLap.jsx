@@ -153,13 +153,34 @@ useEffect(() => {
 
 
   const columns = [
-   
-   // { field: "hoVaDem", headerName: "Họ Và Đệm", flex: 1 },
-    { field: "ten", headerName: "Tên", flex: 1 },
+    {
+      field: "action",
+      width: 150,
+      headerName: "Thao tác",
+      renderCell: () => (
+        <div style={{display:"flex",justifyContent:"space-between", alignItems:"center", padding: 5,margin: 5 }}> 
+         <Tooltip title="Phân quyền phân hệ">
+          <IconButton disabled={selectedRow.length === 0} style={{}} onClick={handleOpenModalUpdate}  > 
+            <PermIdentityIcon ></PermIdentityIcon>
+          </IconButton>
+         </Tooltip>
+         <Tooltip title="Phân quyền phòng ban">
+          <IconButton disabled={selectedRow.length === 0} style={{}} onClick={handleOpenModalUpdateDepartments} > 
+            <GroupAddIcon ></GroupAddIcon>
+          </IconButton>
+         </Tooltip>
+          <IconButton disabled={selectedRow.length === 0} style={{ }} onClick={handleDeleteNguoiDung} >
+            <DeleteIcon  ></DeleteIcon>
+          </IconButton>
+        </div>
+      ),
+    },
+   { field: "hoVaDem", headerName: "Họ Và Đệm",width: 150},
+    { field: "ten", headerName: "Tên" },
    // { field: "diaChi", headerName: "Địa Chỉ", width: 200, flex: 1 },
-    { field: "soDienThoai", headerName: "Số điện thoại", flex: 1 },
-    { field: "email", headerName: "Tài khoản Email", flex: 1 },
-    { field: "taiKhoan", headerName: "Tài khoản", flex: 1 },
+    { field: "soDienThoai", headerName: "Số điện thoại" ,width: 150},
+    { field: "email", headerName: "Tài khoản Email" , width: 150},
+    { field: "taiKhoan", headerName: "Tài khoản" , width: 150, },
     {
       field: "phongBan",
       headerName: "Phòng ban",
@@ -213,29 +234,7 @@ useEffect(() => {
     //     </div>
     //   ),
     // },
-    {
-      field: "action",
-      flex: 1,
-      width: 250,
-      headerName: "Thao tác",
-      renderCell: () => (
-        <div style={{display:"flex",justifyContent:"space-between", alignItems:"center", padding: 5,margin: 5 }}> 
-         <Tooltip title="Phân quyền phân hệ">
-          <IconButton disabled={selectedRow.length === 0} style={{}} onClick={handleOpenModalUpdate}  > 
-            <PermIdentityIcon ></PermIdentityIcon>
-          </IconButton>
-         </Tooltip>
-         <Tooltip title="Phân quyền phòng ban">
-          <IconButton disabled={selectedRow.length === 0} style={{}} onClick={handleOpenModalUpdateDepartments} > 
-            <GroupAddIcon ></GroupAddIcon>
-          </IconButton>
-         </Tooltip>
-          <IconButton disabled={selectedRow.length === 0} style={{ }} onClick={handleDeleteNguoiDung} >
-            <DeleteIcon  ></DeleteIcon>
-          </IconButton>
-        </div>
-      ),
-    }
+   
   
   ];
 

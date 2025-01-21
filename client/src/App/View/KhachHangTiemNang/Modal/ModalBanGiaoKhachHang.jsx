@@ -45,6 +45,7 @@ const ModalBanGiaoKhachHang = (props) => {
       setLoading,
       selectedItem,
       setTypeModal,
+      refetch
     } = props,
     _isMounted = useRef(false),
     modalRef = useRef(null),
@@ -68,6 +69,7 @@ const ModalBanGiaoKhachHang = (props) => {
          await banGiaoKhachHang(params)
         toast.success("Bàn giao khách hàng thành công");
         closeModalWithOtherFunc();
+        refetch()
       } catch (error) {
         toast.error("Đã có lỗi xảy ra vui lòng liên hệ bộ phận");
       } finally {

@@ -131,6 +131,22 @@ namespace CRM.Controllers.KhachHangTiemnangs
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getkhachhangtiemnangbyphongbanidcontext")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetKhachHangTiemNangByPhongBanIdContext()
+        {
+            try
+            {
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId);
+                return Ok(result);
+            }
+            catch
+            (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet("getkhachhangbyrole")]
         [JwtAuthorize]
         public async Task<IActionResult> GetKhachHangTiemNangByRole()

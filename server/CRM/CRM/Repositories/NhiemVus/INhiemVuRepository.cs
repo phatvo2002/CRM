@@ -8,6 +8,7 @@ namespace CRM.Repositories.NhiemVus
         Task<List<NhiemVuDTO>> GetAllNhiemVu();
         Task<NhiemVuDTO> GetNhiemVuById(Guid Id);
         Task<List<NhiemVuDTO>> GetNhiemVuByNguoiDungId(Guid NguoiDungId);
+        Task<List<NhiemVuDTO>> GetNhiemVuByPhongBanId(Guid phongBan);
         Task<List<NhiemVuDTO>> GetNhiemVuByKhachHangTiemNangId(Guid id);
         Task<ResultModal> CreateNhiemVu(NhiemVuModal modal, Guid phongBanId);
         Task<ResultModal> UpdateNhiemVu(NhiemVuModal modal, Guid nguoiDungId, Guid phongBanId);

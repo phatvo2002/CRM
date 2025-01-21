@@ -19,6 +19,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import { useParams } from "react-router-dom";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import Moment from "react-moment";
 import {
   useDeleteCuocGoiMutation,
@@ -225,7 +226,7 @@ const CongViecThucHienTab = () => {
             disabled={selectedRowNhiemVu.length === 0}
             onClick={handleOpenModalUpdateNhiemVu}
           >
-            <CreateIcon color="primary"></CreateIcon>
+            <VisibilityIcon color="primary"></VisibilityIcon>
           </IconButton>
           {/* <IconButton
             style={{ margin: "0 10px" }}
@@ -441,7 +442,7 @@ const CongViecThucHienTab = () => {
           >
             Thêm lịch hẹn
           </Button>
-          <Button
+          {/* <Button
             variant="outlined"
             color="error"
             sx={{ marginLeft: 1 }}
@@ -449,7 +450,7 @@ const CongViecThucHienTab = () => {
             onClick={handleOpenModalAddNhiemVu}
           >
             Thêm nhiệm vụ
-          </Button>
+          </Button> */}
 
         </Grid2>
         <Grid2 size={12}>

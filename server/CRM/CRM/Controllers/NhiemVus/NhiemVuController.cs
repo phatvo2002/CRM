@@ -1,9 +1,9 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
+using CRM.Entities;
 using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.NhiemVus;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers.NhiemVus
@@ -13,9 +13,11 @@ namespace CRM.Controllers.NhiemVus
     public class NhiemVuController : ControllerBase
     {
         private readonly INhiemVuServices _nhiemVuServices;
-        public NhiemVuController(INhiemVuServices nhiemVuServices)
+        private readonly CrmDbContext _dbContext;
+        public NhiemVuController(INhiemVuServices nhiemVuServices, CrmDbContext dbContext)
         {
             _nhiemVuServices = nhiemVuServices;
+            _dbContext = dbContext;
         }
 
         [HttpGet("getallnhiemvu")]
@@ -40,6 +42,21 @@ namespace CRM.Controllers.NhiemVus
             {
                 Guid nguoiDungId = HttpContext.GetUserId();
                 List<NhiemVuDTO> result = await _nhiemVuServices.GetNhiemVuByNguoiDungId(nguoiDungId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getnhiemvubyphongban")]
+        [JwtAuthorize]
+        public async Task<ActionResult> GetNhiemVuByPhongBanId()
+        {
+            try
+            {
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                List<NhiemVuDTO> result = await _nhiemVuServices.GetNhiemVuByPhongBanId(phongBanId);
                 return Ok(result);
             }
             catch (Exception ex)

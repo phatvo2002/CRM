@@ -274,7 +274,7 @@ const AddNguoiDung = () => {
              type="password"
               style={{ width: "70%" }}
               id="outlined-basic"
-              label="Số điện thoại"
+              label="Mật khẩu"
               variant="outlined"
               onChange={handleChange('matKhau')}
             />

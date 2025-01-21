@@ -41,6 +41,7 @@
     "styled-component": "^2.8.0",
     "sweetalert2": "^11.12.4",
     "toastr": "^2.1.4",
+    "tui-calendar": "^1.15.3",
     "uuid": "^11.0.3",
     "web-vitals": "^2.1.4",
     "yup": "^1.4.0"

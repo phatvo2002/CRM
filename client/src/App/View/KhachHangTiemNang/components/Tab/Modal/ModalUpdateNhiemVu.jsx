@@ -48,7 +48,7 @@ const modelObj = {
 
 const getHeader = (typeModal) => {
   const title = {
-    [TYPE_MODAL.UPDATE]: "Cập nhật nhiệm vụ",
+    [TYPE_MODAL.UPDATE]: "Xem nhiệm vụ",
   };
   return title[typeModal] ?? "";
 };
@@ -150,7 +150,7 @@ const ModalUpdateNhiemVu = (props) => {
         <TextFieldRHF
           name={modelObj.tieuDe}
           label={labelObj.tieuDe}
-          disabled={isLoading}
+          disabled={true}
           required
         />
       </Grid2>
@@ -158,7 +158,7 @@ const ModalUpdateNhiemVu = (props) => {
         <TextFieldRHF
           name={modelObj.moTa}
           label={labelObj.moTa}
-          disabled={isLoading}
+          disabled={true}
           required
         />
       </Grid2>
@@ -166,7 +166,7 @@ const ModalUpdateNhiemVu = (props) => {
         <DateTimePickerRHF
           name={modelObj.hanHoanThanh}
           label={labelObj.hanHoanThanh}
-          disabled={isLoading}
+          disabled={true}
           required
         />
       </Grid2> 
@@ -175,7 +175,7 @@ const ModalUpdateNhiemVu = (props) => {
           name={modelObj.mucDoUuTienId}
           label={labelObj.mucDoUuTienId}
           isGetOnlyId
-          disabled={isLoading}
+          disabled={true}
           data={commonMapDataAutocomplete(mucDoUuTienData, "name")}
           skeletonLoading={isGetMucDoUuTienFetching}
         />

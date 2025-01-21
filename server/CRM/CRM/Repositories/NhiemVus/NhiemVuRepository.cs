@@ -43,6 +43,7 @@ namespace CRM.Repositories.NhiemVus
                     if (modal.KhachHangTiemNangId != Guid.Empty)
                     {
                         ThongBao thongBao = new ThongBao();
+                        thongBao.Id = Guid.NewGuid();
                         thongBao.TieuDe = $"Bạn có một nhiệm vụ mới được giao : {modal.TieuDe}";
                         thongBao.NoiDung = modal.MoTa;
                         thongBao.Type = "new";
@@ -54,6 +55,7 @@ namespace CRM.Repositories.NhiemVus
                     if (modal.KhachHangId != null)
                     {
                         ThongBao thongBao = new ThongBao();
+                        thongBao.Id = Guid.NewGuid();
                         thongBao.TieuDe = $"Bạn có một nhiệm vụ mới được giao : {modal.TieuDe}";
                         thongBao.NoiDung = modal.MoTa;
                         thongBao.Type = "new";
@@ -105,13 +107,19 @@ namespace CRM.Repositories.NhiemVus
 
         public async Task<List<NhiemVuDTO>> GetNhiemVuByKhachHangTiemNangId(Guid id)
         {
-            var db = await _context.NhiemVus.Where(r => r.KhachHangTiemNangId == id).Include(r => r.MucDoUuTien).Include(r => r.TrangThaiThucHien).ToListAsync();
+            var db = await _context.NhiemVus.Where(r => r.KhachHangTiemNangId == id).Include(r => r.MucDoUuTien).Include(r => r.TrangThaiThucHien).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<NhiemVuDTO>>(db);
         }
 
         public async Task<List<NhiemVuDTO>> GetNhiemVuByNguoiDungId(Guid NguoiDungId)
         {
-            var db = await _context.NhiemVus.Where(r => r.NguoiDungId == NguoiDungId).ToListAsync();
+            var db = await _context.NhiemVus.Where(r => r.NguoiDungId == NguoiDungId).Include(r => r.MucDoUuTien).Include(r => r.TrangThaiThucHien).Include(r => r.Nguoidung).ToListAsync();
+            return _mapper.Map<List<NhiemVuDTO>>(db);
+        }
+
+        public async Task<List<NhiemVuDTO>> GetNhiemVuByPhongBanId(Guid phongBan)
+        {
+            var db = await _context.NhiemVus.Where(r => r.PhongBanId == phongBan).Include(r => r.Nguoidung).Include(r => r.TrangThaiThucHien).Include(r => r.MucDoUuTien).ToListAsync();
             return _mapper.Map<List<NhiemVuDTO>>(db);
         }
 

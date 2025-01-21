@@ -1,8 +1,11 @@
 import { Box, Button, Grid2, Tab, Tabs, Typography } from '@mui/material'
 import React from 'react'
-import AddIcon from "@mui/icons-material/Add";
 import PropTypes from 'prop-types';
 import TimeLine from './Components/TimeLine';
+import DanhSach from './Components/DanhSach';
+import ChecklistIcon from '@mui/icons-material/Checklist';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import BarChartIcon from '@mui/icons-material/BarChart';
 const index = () => {
   const [value, setValue] = React.useState(0);
 
@@ -35,6 +38,7 @@ const index = () => {
     value: PropTypes.number.isRequired,
   };
 
+  
   function a11yProps(index) {
     return {
       id: `vertical-tab-${index}`,
@@ -44,18 +48,6 @@ const index = () => {
   return (
     <>
       <Grid2 container spacing={2}>
-        <Grid2 size={10}>
-        </Grid2>
-        <Grid2 size={2}>
-          <Button
-            variant="outlined"
-            sx={{ marginLeft: 1 }}
-            startIcon={<AddIcon />}
-          // onClick={gotoLink}
-          >
-            Thêm mới
-          </Button>
-        </Grid2>
         <Grid2 size={12}>
           <Tabs
             orientation="horizontal"
@@ -65,14 +57,18 @@ const index = () => {
             aria-label="Vertical tabs example"
             sx={{ borderRight: 1, borderColor: 'divider' }}
           >
-            <Tab  label="Danh sách" {...a11yProps(0)} />
-            <Tab  label="Timeline" {...a11yProps(1)} />
+            <Tab icon={<ChecklistIcon/>} label="Danh sách" {...a11yProps(0)} />
+            <Tab icon={<CalendarTodayIcon/>} label="Timeline" {...a11yProps(1)} />
+            <Tab icon={<BarChartIcon/>} label="Thống kê" {...a11yProps(2)} />
           </Tabs>
-          <TabPanel value={value} index={0}>
-          
+          <TabPanel  value={value} index={0}>
+            <DanhSach />
           </TabPanel>
           <TabPanel value={value} index={1}>
-             <TimeLine/>
+            <TimeLine />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
+              Thống kê
           </TabPanel>
         </Grid2>
       </Grid2>

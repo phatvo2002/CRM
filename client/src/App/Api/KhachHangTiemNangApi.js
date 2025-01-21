@@ -28,6 +28,9 @@ export const apiKhachHangTiemNang = createApi({
       getKhachHangTiemNangByPhongBanId: builder.query({
         query: (id) => `/KhachHangTiemNang/getkhachhangtiemnangbyPhongbanId/${id}`,
       }),
+      getKhachHangTiemNangByPhongBanIdContext: builder.query({
+        query: () => `/KhachHangTiemNang/getkhachhangtiemnangbyphongbanidcontext`,
+      }),
       getKhachHangTiemNangByrole: builder.query({
         query: () => `/KhachHangTiemNang/getkhachhangbyrole`,
       }),
@@ -101,6 +104,7 @@ export const apiKhachHangTiemNang = createApi({
     useGetKhachHangTiemNangByIdQuery,
     useGetKhachHangTiemNangByNguoiDungIdQuery,
     useGetKhachHangTiemNangByPhongBanIdQuery,
+    useGetKhachHangTiemNangByPhongBanIdContextQuery,
     useGetKhachHangTiemNangByroleQuery,
     useGetKhachHangTiemNangDaXoaQuery,
     useGetTemplatesQuery,

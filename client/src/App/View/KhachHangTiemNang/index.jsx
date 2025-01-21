@@ -381,6 +381,7 @@ const KhachHangTiemNang = () => {
           setLoading={setLoading}
           refetch={refetchkh}
         />
+        {/* Bàn giao khách hàng */}
         <ModalBanGiaoKhachHang
           selectedItem={selectedRow}
           closeModal={handleCloseModalBanGiaoKhachHang}
@@ -388,6 +389,7 @@ const KhachHangTiemNang = () => {
           setTypeModal={setTypeModal}
           showModal={openModalBanGiao}
           setLoading={setLoading}
+          refetch={refetchkh}
         />
       </div>
 
