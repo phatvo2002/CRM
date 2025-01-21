@@ -45,7 +45,6 @@ const index = () => {
     <>
       <Grid2 container spacing={2}>
         <Grid2 size={10}>
-          <h2>Quản lý nhiệm vụ </h2>
         </Grid2>
         <Grid2 size={2}>
           <Button

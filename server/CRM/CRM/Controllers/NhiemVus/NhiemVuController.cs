@@ -82,9 +82,8 @@ namespace CRM.Controllers.NhiemVus
         {
             try
             {
-                Guid nguoiDungId = HttpContext.GetUserId();
                 Guid phongBanId = HttpContext.GetPhongBanId();
-                ResultModal ressult = await _nhiemVuServices.CreateNhiemVu(modal, nguoiDungId, phongBanId);
+                ResultModal ressult = await _nhiemVuServices.CreateNhiemVu(modal, phongBanId);
                 return Ok(ressult);
             }
             catch (Exception ex)
