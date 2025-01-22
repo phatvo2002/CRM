@@ -103,7 +103,7 @@ const AddNguoiDung = () => {
        if(response?.data?.status === 200)
        {
         toast.success("Thêm người dùng thành công", {
-          position: "top-right",
+          position: "top-center",
           autoClose: 3000,  
           hideProgressBar: false,
           closeOnClick: true,
@@ -116,7 +116,7 @@ const AddNguoiDung = () => {
        else
        {
         toast.error("Đã có lỗi khi xảy ra", {
-          position: "top-right",
+          position: "top-center",
           autoClose: 3000,  
           hideProgressBar: false,
           closeOnClick: true,

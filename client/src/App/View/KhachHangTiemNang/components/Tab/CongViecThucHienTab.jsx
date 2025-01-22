@@ -53,13 +53,12 @@ const CongViecThucHienTab = () => {
         </div>
       ),
     },
-    { field: "tieuDe", headerName: "Tiêu đề", width: 200, flex: 1 },
-    { field: "moTa", headerName: "Mô tả", width: 200, flex: 1 },
+    { field: "tieuDe", headerName: "Tiêu đề", width: 200},
+    { field: "moTa", headerName: "Mô tả", width: 200 },
     {
       field: "",
       headerName: "Ngày bắt đầu",
       width: 200,
-      flex: 1,
       renderCell: (params) => (
         <div style={{ alignItems: "center" }}> <Moment format="DD/MM/YYYY HH:SS">{new Date(params?.row?.ngayBatDau)}</Moment></div>
       ),
@@ -68,7 +67,6 @@ const CongViecThucHienTab = () => {
       field: "category",
       headerName: "Loại cuộc gọi",
       width: 200,
-      flex: 1,
       renderCell: (params) => (
         <div style={{ alignItems: "center" }}>
           {params?.row?.loaiCuocGoi?.tenCuocGoi}
@@ -79,7 +77,6 @@ const CongViecThucHienTab = () => {
       field: "isHoanThanh",
       headerName: "Đã hoàn thành",
       width: 200,
-      flex: 1,
       renderCell: (params) => (
         <div>
           {params?.row?.isHoanThanh === false ? (
@@ -114,7 +111,6 @@ const CongViecThucHienTab = () => {
       field: "",
       headerName: "Ngày tạo",
       width: 200,
-      flex: 1,
       renderCell: (params) => (
         <div style={{ alignItems: "center" }}> <Moment format="DD/MM/YYYY HH:SS">{new Date(params?.row?.createAt)}</Moment></div>
       ),
@@ -145,13 +141,12 @@ const CongViecThucHienTab = () => {
         </div>
       ),
     },
-    { field: "tieuDe", headerName: "Tiêu đề", width: 200, flex: 1 },
-    { field: "moTa", headerName: "Mô tả", width: 200, flex: 1 },
+    { field: "tieuDe", headerName: "Tiêu đề", width: 200 },
+    { field: "moTa", headerName: "Mô tả", width: 200 },
     {
       field: "ngayBatDau",
       headerName: "Ngày bắt đầu",
       width: 200,
-      flex: 1,
       renderCell: (params) => (
         <div style={{ alignItems: "center" }}>
           <Moment format="DD/MM/YYYY ">{new Date(params?.row?.ngayBatDau)}</Moment>
@@ -162,7 +157,6 @@ const CongViecThucHienTab = () => {
       field: "ngayKetThuc",
       headerName: "Ngày kết thúc",
       width: 200,
-      flex: 1,
       renderCell: (params) => (
         <div style={{ alignItems: "center" }}>
           <Moment format="DD/MM/YYYY">{new Date(params?.row?.ngayKetThuc)}</Moment>
@@ -173,7 +167,6 @@ const CongViecThucHienTab = () => {
       field: "",
       headerName: "Trạng thái thực hiện",
       width: 200,
-      flex: 1,
       renderCell: (params) => (
         <div style={{ alignItems: "center" }}>
           <div>
@@ -212,7 +205,7 @@ const CongViecThucHienTab = () => {
     //      </div>
     //    )
     //  },
-    { field: "createAt", headerName: "Ngày tạo", width: 200, flex: 1 },
+    { field: "createAt", headerName: "Ngày tạo", width: 200 },
   ];
   const columnsNhiemVu = [
     {
@@ -238,13 +231,12 @@ const CongViecThucHienTab = () => {
         </div>
       ),
     },
-    { field: "tieuDe", headerName: "Tiêu đề", width: 200, flex: 1 },
-    { field: "moTa", headerName: "Mô tả", width: 200, flex: 1 },
+    { field: "tieuDe", headerName: "Tiêu đề", width: 200 },
+    { field: "moTa", headerName: "Mô tả", width: 200 },
     {
       field: "",
       headerName: "Hạn hoàn thành",
       width: 200,
-      flex: 1,
       renderCell: (params) => (
         <div style={{ alignItems: "center" }}>{params?.row?.hanHoanThanh}</div>
       ),

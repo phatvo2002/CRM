@@ -69,7 +69,7 @@ const KhachHangTiemNangDetail = () => {
   return (
     <>
       <Grid2 container spacing={2}>
-        <Paper style={{ height: "150vh" }}>
+        <Paper style={{ height: "100vh" , width:"100%" }}>
           <Stack direction="row" spacing={2} style={{ padding: 10 }}>
             <IconButton onClick={gotoLink}>
               <ArrowBackIcon />

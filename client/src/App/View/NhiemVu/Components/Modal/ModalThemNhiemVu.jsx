@@ -18,7 +18,7 @@ import {
 import { useAddNhiemVuMutation } from "src/App/Api/NhiemVuApi";
 import { useGetUserByPhongBanIdQuery } from "src/App/Api/UserApi";
 import { useGetKhachHangTiemNangByNguoiDungIdQuery, useGetKhachHangTiemNangByPhongBanIdContextQuery } from "src/App/Api/KhachHangTiemNangApi";
-import { useGetKhachHangMucTieuByNguoiDungIdQuery, useGetKhachHangMucTieuByPhongBanIdQuery } from "src/App/Api/KhachHangMucTieuApi";
+import { useGetKhachHangMucTieuByNguoiDungIdQuery, useGetKhachHangMucTieuByNguoiDungIdQueryQuery, useGetKhachHangMucTieuByPhongBanIdQuery } from "src/App/Api/KhachHangMucTieuApi";
 // ------ Form Config ------ //
 const modelObj = {
     tieuDe: "tieuDe",
@@ -79,7 +79,7 @@ export const ModalThemNhiemVu = (props) => {
   const { data: khachhangTiemNangData, isFetching: isGetKhachHangTiemNangFetching } =
   useGetKhachHangTiemNangByNguoiDungIdQuery(nguoidungId,{skip: showModal== false});
   const { data: khachhangMucTieuData, isFetching: isGetKhachHangMucTieuFetching } =
-  useGetKhachHangMucTieuByNguoiDungIdQuery(nguoidungId,{skip: showModal== false});
+  useGetKhachHangMucTieuByNguoiDungIdQueryQuery(nguoidungId,{skip: showModal== false});
   const { data: mucDoUuTienData, isFetching: isGetMucDoUuTienFetching } =
   useGetAllMucDoUuTienQuery({skip: showModal== false});
   const [addNhiemVu] = useAddNhiemVuMutation();
@@ -100,7 +100,7 @@ export const ModalThemNhiemVu = (props) => {
       try {
         await addNhiemVu(data).unwrap();
         toast.success("Thêm mới thành công!", {
-          position: "top-right",
+          position: "center",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
@@ -112,7 +112,7 @@ export const ModalThemNhiemVu = (props) => {
         closeModalWithOtherFunc();
       } catch (error) {
         toast.error("Đã có lỗi khi xảy ra!", {
-          position: "top-right",
+          position: "center",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,

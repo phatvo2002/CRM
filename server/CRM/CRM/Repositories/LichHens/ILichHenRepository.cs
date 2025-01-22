@@ -10,6 +10,7 @@ namespace CRM.Repositories.LichHens
         Task<ResultModal> DeleteLichHen(Guid Id);
         Task<List<LichHenDTO>> GetLichHenByNguoiDungId(Guid NguoiDungId);
         Task<List<LichHenDTO>> GetLichHenByKhachHangTiemNangId(Guid id);
+        Task<List<LichHenDTO>> GetLichHenByKhachHangId(string id);
         Task<ResultModal> CreateLichHen(LichHenModal modal, Guid nguoiDungId, Guid phongBanId);
         Task<ResultModal> UpdateLichHen(LichHenModal modal, Guid nguoiDungId, Guid phongBanId);
     }

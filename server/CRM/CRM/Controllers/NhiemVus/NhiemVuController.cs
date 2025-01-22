@@ -79,6 +79,20 @@ namespace CRM.Controllers.NhiemVus
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getnhiemvubykhachhangid/{id}")]
+        [JwtAuthorize]
+        public async Task<ActionResult> GetNhiemVuByKhachHangId(string id)
+        {
+            try
+            {
+                List<NhiemVuDTO> result = await _nhiemVuServices.GetNhiemVuByKhachHangId(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet("getnhiemvuid/{id}")]
         [JwtAuthorize]
         public async Task<ActionResult> GetNhiemVuById(Guid id)

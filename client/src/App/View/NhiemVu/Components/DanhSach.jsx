@@ -31,7 +31,7 @@ const DanhSach = () => {
                     <IconButton
                         style={{ margin: "0 10px" }}
                         disabled={selectedRowNhiemVu.length === 0}
-                       onClick={()=>handleDeleteNhiemVu(params?.row?.id)}
+                       onClick={()=>handleDeleteNhiemVu(selectedRowNhiemVu[0]?.id)}
                     >
                         <DeleteIcon color='error'></DeleteIcon>
                     </IconButton>

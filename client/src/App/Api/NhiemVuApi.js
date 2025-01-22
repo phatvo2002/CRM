@@ -25,6 +25,9 @@ export const apiNhiemVu = createApi({
       getNhiemVuByKhachHangTiemNangId: builder.query({
         query: (id) => `/NhiemVu/getnhiemvubykhachhangtiemnangid/${id}`,
       }),
+      getNhiemVuByKhachHangId: builder.query({
+        query: (id) => `/NhiemVu/getnhiemvubykhachhangid/${id}`,
+      }),
       getNhiemVuByPhongBanId: builder.query({
         query: () => `/NhiemVu/getnhiemvubyphongban`,
       }),
@@ -57,6 +60,7 @@ export const apiNhiemVu = createApi({
    useGetAllNhiemVuQuery,
    useGetNhiemVuByIdQuery,
    useGetNhiemVuByKhachHangTiemNangIdQuery,
+   useGetNhiemVuByKhachHangIdQuery,
    useGetNhiemVuByNguoiDungIdQuery,
    useGetNhiemVuByPhongBanIdQuery,
    useAddNhiemVuMutation,

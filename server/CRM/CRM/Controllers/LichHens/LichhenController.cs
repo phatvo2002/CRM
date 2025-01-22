@@ -61,6 +61,21 @@ namespace CRM.Controllers.LichHens
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("getlichhenbykhachhangid/{id}")]
+        [JwtAuthorize]
+        public async Task<ActionResult> GetLichHenByKhachHangId(string id)
+        {
+            try
+            {
+                List<LichHenDTO> result = await _lichHenServices.GetLichHenByKhachHangId(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet("getlichhenbyid/{id}")]
         [JwtAuthorize]
         public async Task<ActionResult> GetLichHenById(Guid id)

@@ -25,6 +25,9 @@ export const apiKhachHangMucTieu = createApi({
       getKhachHangMucTieuByNguoiDungId: builder.query({
         query: () => `/KhachHangMucTieu/getkhachhangmuctieubynguoidungid/`,
       }),
+      getKhachHangMucTieuByNguoiDungIdQuery: builder.query({
+        query: (id) => `/KhachHangMucTieu/getkhachhangmuctieubynguoidungidquery/${id}`,
+      }),
       getKhachHangMucTieuByPhongBanId: builder.query({
         query: () => `/KhachHangMucTieu/getkhachhangmuctieubyphongbanid/`,
       }),
@@ -92,6 +95,7 @@ export const apiKhachHangMucTieu = createApi({
     useGetAllKhachHangMucTieuQuery,
     useGetKhachHangMucTieuByIdQuery,
     useGetKhachHangMucTieuByNguoiDungIdQuery,
+    useGetKhachHangMucTieuByNguoiDungIdQueryQuery,
     useGetKhachHangMucTieuByPhongBanIdQuery,
     useImportKhachHangMucTieuMutation,
     useAddKhachHangMucTieuMutation,

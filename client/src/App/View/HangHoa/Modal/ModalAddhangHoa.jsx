@@ -118,7 +118,7 @@ const ModalAddhangHoa = (props) => {
         closeModalWithOtherFunc();
       } catch (error) {
         toast.error("Đã có lỗi khi xảy ra!", {
-          position: "top-right",
+          position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,

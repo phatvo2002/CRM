@@ -1,10 +1,9 @@
 import { Grid2 } from "@mui/material";
 import { useEffect, useRef } from "react";
-import TextFieldRHF from "../../../Components/ReactHookFormComp/TextFieldRHF/TextFieldRHF";
+import { TextFieldRHF } from "src/App/Components/ReactHookFormComp";
 import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
-import { TYPE_MODAL } from "src/App/Until/constant";
 import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
-import { validateString } from "../../../Until/validateYup";
+import { validateString } from "src/App/Until/validateYup";
 import * as yup from "yup";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,19 +13,19 @@ import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
 import {
   useGetAllTrangThaiThucHienQuery,
 } from "src/App/Api/GetDataApi";
-import { useAddLichHenMutation } from "src/App/Api/LichhenApi";
+import { useUpdateLichHenMutation } from "src/App/Api/LichhenApi";
 import moment from "moment";
 // ------ Form Config ------ //
 const modelObj = {
-    tieuDe: "tieuDe",
-    moTa: "moTa",
-    ngayBatDau: "ngayBatDau",
-    ngayKetThuc: "ngayKetThuc",
-    diaDiem: "diaDiem",
-    trangThaiThucHienId: "trangThaiThucHienId",
-    khachHangTiemNangId: "khachHangTiemNangId",
-    khachHangMucTieuId:"khachHangMucTieuId"
-  },
+  tieuDe: "tieuDe",
+  moTa: "moTa",
+  ngayBatDau: "ngayBatDau",
+  ngayKetThuc: "ngayKetThuc",
+  diaDiem: "diaDiem",
+  trangThaiThucHienId: "trangThaiThucHienId",
+  khachHangTiemNangId: "khachHangTiemNangId",
+  khachHangMucTieuId: "khachHangMucTieuId"
+},
   labelObj = {
     tieuDe: "Tiêu đề",
     moTa: "Mô tả ",
@@ -43,7 +42,7 @@ const modelObj = {
     [modelObj.diaDiem]: "",
     [modelObj.trangThaiThucHienId]: "",
     [modelObj.khachHangTiemNangId]: "",
-    [modelObj.khachHangMucTieuId]:""
+    [modelObj.khachHangMucTieuId]: ""
   },
   schema = yup.object().shape({
     [modelObj.tieuDe]: validateString(),
@@ -56,62 +55,80 @@ const modelObj = {
 // ------ End Of Form Config ------ //
 
 
-const ModalAddLichHen = (props) => {
+
+const ModalUpdateLichHen = (props) => {
   const {
-      showModal,
-      closeModal,
-      typeModal,
-    } = props,
+    showModal,
+    closeModal,
+    typeModal,
+    selectedItem,
+    refetch,
+  } = props,
     _isMounted = useRef(false),
     modalRef = useRef(null),
     { id } = useParams(),
-    isLoading = false,
-    header = "Thêm mới lịch hẹn";
+    [updateLichHen, { isLoading: isUpdateCuocGoi }] =
+      useUpdateLichHenMutation(),
+    header = "Cập nhật lịch hẹn";
   const { data: trangThaiThucHienData, isFetching: isGetTrangThaiThucHienFetching } =
-  useGetAllTrangThaiThucHienQuery();
-  const [addLichHen] = useAddLichHenMutation();
+    useGetAllTrangThaiThucHienQuery();
+  const isLoading =
+    isUpdateCuocGoi;
   const submitForm = (data) => {
-      const tempData = {
-        [modelObj.tieuDe]: data[modelObj.tieuDe],
-        [modelObj.moTa]: data[modelObj.moTa],
-        [modelObj.ngayBatDau]: moment(data[modelObj.ngayBatDau]).format(),
-        [modelObj.ngayKetThuc]: moment(data[modelObj.ngayKetThuc]).format(),
-        [modelObj.diaDiem]: data[modelObj.diaDiem],
-        [modelObj.trangThaiThucHienId]: data[modelObj.trangThaiThucHienId],
-        [modelObj.khachHangTiemNangId]: null,
-        [modelObj.khachHangMucTieuId]: id,
-      };
-       callApiInsert(tempData);
-    },
-    callApiInsert = async (data) => {
+    const tempData = {
+      id: data.id,
+      [modelObj.tieuDe]: data[modelObj.tieuDe],
+      [modelObj.moTa]: data[modelObj.moTa],
+      [modelObj.ngayBatDau]: moment(data[modelObj.ngayBatDau]).format(),
+      [modelObj.ngayKetThuc]: moment(data[modelObj.ngayKetThuc]).format(),
+      [modelObj.diaDiem]: data[modelObj.diaDiem],
+      [modelObj.trangThaiThucHienId]: data[modelObj.trangThaiThucHienId],
+      [modelObj.khachHangTiemNangId]: null,
+      [modelObj.khachHangMucTieuId]: id,
+    };
+    callApiUpdate(tempData);
+  },
+    callApiUpdate = async (paramData) => {
       try {
-        await addLichHen(data).unwrap();
-        toast.success("Thêm mới thành công!", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        await updateLichHen(paramData).unwrap();
+        toast.success("Chỉnh sửa thành công thành công");
+        refetch();
         closeModalWithOtherFunc();
       } catch (error) {
-        toast.error("Đã có lỗi khi xảy ra!", {
-          position: "top-center",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
-      } 
+        toast.error("Đã có lỗi xảy ra vui lòng liên hệ bộ phận");
+      }
     },
     closeModalWithOtherFunc = () => {
       modalRef.current.reset(initialFormState);
       closeModal();
+    },
+    getInitialStateFromApiToUpdate = async (selectedItem) => {
+      modalRef.current?.reset(
+        {
+          ...selectedItem,
+          id: selectedItem?.id,
+          [modelObj.tieuDe]: selectedItem[modelObj.tieuDe],
+          [modelObj.moTa]: selectedItem[modelObj.moTa],
+          [modelObj.ngayBatDau]: selectedItem[modelObj.ngayBatDau]
+            ? new Date(selectedItem[modelObj.ngayBatDau])
+            : null,
+          [modelObj.ngayKetThuc]: selectedItem[modelObj.ngayKetThuc]
+            ? new Date(selectedItem[modelObj.ngayKetThuc])
+            : null,
+          [modelObj.diaDiem]: selectedItem[modelObj.diaDiem],
+          [modelObj.trangThaiThucHienId]: selectedItem[modelObj.trangThaiThucHienId],
+          [modelObj.khachHangTiemNangId]: selectedItem[modelObj.khachHangTiemNangId],
+          [modelObj.khachHangMucTieuId]: selectedItem[modelObj.khachHangMucTieuId],
+        },
+        { keepDirty: true }
+      );
     };
+  useEffect(() => {
+    if (selectedItem[0]) {
+      getInitialStateFromApiToUpdate(selectedItem[0]);
+    }
+  }, [selectedItem[0]]);
+
   useEffect(() => {
     _isMounted.current = true;
     return () => {
@@ -155,7 +172,7 @@ const ModalAddLichHen = (props) => {
             disabled={isLoading}
             required
           />
-        </Grid2> 
+        </Grid2>
         <Grid2 size={6}>
           <DateTimePickerRHF
             name={modelObj.ngayKetThuc}
@@ -163,7 +180,7 @@ const ModalAddLichHen = (props) => {
             disabled={isLoading}
             required
           />
-        </Grid2> 
+        </Grid2>
         <Grid2 size={12}>
           <TextFieldRHF
             name={modelObj.diaDiem}
@@ -172,7 +189,7 @@ const ModalAddLichHen = (props) => {
             required
           />
         </Grid2>
-         <Grid2 size={12}>
+        <Grid2 size={12}>
           <AutocompleteRHF
             name={modelObj.trangThaiThucHienId}
             label={labelObj.trangThaiThucHienId}
@@ -187,4 +204,4 @@ const ModalAddLichHen = (props) => {
   );
 };
 
-export default ModalAddLichHen;
+export default ModalUpdateLichHen;

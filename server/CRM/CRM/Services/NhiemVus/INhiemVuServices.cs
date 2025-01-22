@@ -10,6 +10,7 @@ namespace CRM.Services.NhiemVus
         Task<List<NhiemVuDTO>> GetNhiemVuByNguoiDungId(Guid NguoiDungId);
         Task<List<NhiemVuDTO>> GetNhiemVuByPhongBanId(Guid phongBan);
         Task<List<NhiemVuDTO>> GetNhiemVuByKhachHangTiemNangId(Guid id);
+        Task<List<NhiemVuDTO>> GetNhiemVuByKhachHangId(string id);
         Task<ResultModal> CreateNhiemVu(NhiemVuModal modal, Guid phongBanId);
         Task<ResultModal> UpdateNhiemVu(NhiemVuModal modal, Guid nguoiDungId, Guid phongBanId);
         Task<ResultModal> DeleteNhiemVu(Guid Id);

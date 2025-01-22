@@ -17,7 +17,7 @@ const ModalUpdateDepartment = ({openModal,closeModal,selectedRow}) => {
       if(res?.data?.status === 200)
       {
         toast.success("Phân quyền phòng ban thành công", {
-          position: "top-right",
+          position: "top-center",
           autoClose: 3000,  
           hideProgressBar: false,
           closeOnClick: true,
@@ -30,7 +30,7 @@ const ModalUpdateDepartment = ({openModal,closeModal,selectedRow}) => {
       else
       {
         toast.error("Đã có lỗi xảy ra", {
-          position: "top-right",
+          position: "top-center",
           autoClose: 3000,  
           hideProgressBar: false,
           closeOnClick: true,

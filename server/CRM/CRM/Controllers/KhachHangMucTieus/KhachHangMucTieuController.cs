@@ -79,6 +79,20 @@ namespace CRM.Controllers.KhachHangMucTieus
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getkhachhangmuctieubynguoidungidquery/{id}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetKhachHangMucTieuByIdQuery(Guid id)
+        {
+            try
+            {
+                var result = await _khacHangMucTieuServices.GetKhachHangMucTieuByNguoiDungIdQuery(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         //[HttpGet("getkhachhangmuctieubyphongbanid")]
         //[JwtAuthorize]
         //public async Task<IActionResult> GetKhachHangMucTieuByPhongBanId()

@@ -37,7 +37,7 @@ const ModalUpdateRole = (props) => {
          if(res?.data?.status ===200)
          {
           toast.success("Phân quyền thành công", {
-            position: "top-right",
+            position: "top-center",
             autoClose: 3000,  
             hideProgressBar: false,
             closeOnClick: true,
@@ -50,7 +50,7 @@ const ModalUpdateRole = (props) => {
          else
          {
           toast.error("Đã có lỗi xảy ra", {
-            position: "top-right",
+            position: "top-center",
             autoClose: 3000,  
             hideProgressBar: false,
             closeOnClick: true,

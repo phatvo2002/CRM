@@ -9,18 +9,14 @@ import List from "@mui/material/List";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
-import Badge from "@mui/material/Badge";
 import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import { Link as RouterLink } from "react-router-dom";
-import { Breadcrumbs, Fab, Grid, Link, Stack , Popover, ListItem, ListItemText, ListItemIcon } from "@mui/material";
+import { Breadcrumbs, Fab, Grid, Link, Stack, Popover, ListItem, ListItemText, ListItemIcon, Grid2, Icon } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from "@mui/icons-material/Menu";
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ErrorIcon from '@mui/icons-material/Error';
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import ListItems from "../Dashbroad/listItems"
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
@@ -30,10 +26,11 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { CustomNotification } from "src/App/Components/CustomNotification/CustomNotification";
 // import Chart from "./Chart";
-import MenuApi, { useGetMenuRoleByIdQuery } from "../../Api/MenuApi";
+import { useGetMenuRoleByIdQuery } from "../../Api/MenuApi";
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import panner from "../../Assets/image/banner.png"
+
 function Copyright(props) {
   return (
     <Grid
@@ -214,10 +211,9 @@ export default function RootLayout() {
             >
               <MenuIcon />
             </IconButton>
-            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+            <Breadcrumbs maxItems={2} aria-label="breadcrumb" style={{ width: "200px" }}>
               {pathParts.map((item, index) => {
                 const href = '/' + pathParts.slice(0, index + 1).join('/');
-
                 return (
                   <Link
                     key={index}
@@ -230,6 +226,24 @@ export default function RootLayout() {
                 );
               })}
             </Breadcrumbs>
+            <Grid2 style={{ width: "80%" }} overflow={"clip"}>
+              {menu.length !== 0 && (
+                <Stack direction="row" spacing={4} fontSize={"1.5rem"} alignItems="center">
+                  {menu.map((item, index) => (
+                    <Stack direction="row" spacing={1} key={index} alignItems="center">
+                      <Link
+                        component={RouterLink}
+                        style={{ textDecoration: "none", color: theme.palette.text.primary }}
+                        to={item.menu.url}
+                      >
+                         <Icon>{item.menu.icon}</Icon>
+                      </Link>
+                    </Stack>
+                  ))}
+                </Stack>
+              )}
+            </Grid2>
+
             <Typography
               component="h6"
               variant="caption"
@@ -250,11 +264,11 @@ export default function RootLayout() {
               // aria-haspopup="true"
               ></SettingsIcon>
             </IconButton>
-            <CustomNotification 
-            openNoti={openNoti}
-            handleOpenNoti={handleOpenNoti}
-            handleClose={handleCloseNoti}
-            intitialNoti={intitialNoti}
+            <CustomNotification
+              openNoti={openNoti}
+              handleOpenNoti={handleOpenNoti}
+              handleClose={handleCloseNoti}
+              intitialNoti={intitialNoti}
             />
             <IconButton style={{ border: "1px solid", padding: 10, marginLeft: "20px" }}>
               <PersonIcon

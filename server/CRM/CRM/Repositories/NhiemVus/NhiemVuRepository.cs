@@ -105,6 +105,12 @@ namespace CRM.Repositories.NhiemVus
             return _mapper.Map<NhiemVuDTO>(db);
         }
 
+        public async Task<List<NhiemVuDTO>> GetNhiemVuByKhachHangId(string id)
+        {
+            var db = await _context.NhiemVus.Where(r => r.KhachHangMucTieuId == id).ToListAsync();
+            return _mapper.Map<List<NhiemVuDTO>>(db);
+        }
+
         public async Task<List<NhiemVuDTO>> GetNhiemVuByKhachHangTiemNangId(Guid id)
         {
             var db = await _context.NhiemVus.Where(r => r.KhachHangTiemNangId == id).Include(r => r.MucDoUuTien).Include(r => r.TrangThaiThucHien).Include(r => r.Nguoidung).ToListAsync();

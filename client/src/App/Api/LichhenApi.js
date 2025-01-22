@@ -23,6 +23,9 @@ export const apiLichHen = createApi({
       getLichHenByKhachHangTiemNangId: builder.query({
         query: (id) => `/Lichhen/getlichhenbykhachhangtiemnangid/${id}`,
       }),
+      getLichHenByKhachHangId: builder.query({
+        query: (id) => `/Lichhen/getlichhenbykhachhangid/${id}`,
+      }),
       getLichHenById: builder.query({
         query: (id) => `/Lichhen/getlichhenbyid/${id}`,
       }),
@@ -52,6 +55,7 @@ export const apiLichHen = createApi({
    useGetAllLichHenQuery,
    useGetLichHenByIdQuery,
    useGetLichHenByKhachHangTiemNangIdQuery,
+   useGetLichHenByKhachHangIdQuery,
    useGetLichHenByNguoiDungIdQuery,
    useAddLichHenMutation,
    useDeleteLichHenMutation,

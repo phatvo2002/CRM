@@ -68,7 +68,7 @@ const ModalUpdateNhiemVu = (props) => {
         { id } = useParams(),
         [updateNhiemVu] = useUpdateNhiemVuMutation(),
         header = "Chỉnh sửa nhiệm vụ";
-    const [nguoidungId, setNguoiDungId] = useState(selectedItem[0]?.nguoiDung?.id)
+    const [nguoidungId, setNguoiDungId] = useState("")
     const { data: trangThaiThucHienData, isFetching: isGetTrangThaiThucHienFetching } =
         useGetAllTrangThaiThucHienQuery({ skip: showModal == false });
     const { data: nguoiDungData, isFetching: isGetNguoiDungFetching } =
@@ -125,6 +125,7 @@ const ModalUpdateNhiemVu = (props) => {
                 },
                 { keepDirty: true }
             );
+            setNguoiDungId(selectedItem?.nguoiDung?.id)
         };
     useEffect(() => {
         if (selectedItem[0]) {

@@ -1,7 +1,6 @@
 ﻿using CRM.DTO;
 using CRM.Modal;
 using CRM.Repositories.LichHens;
-using System.Security.Principal;
 
 namespace CRM.Services.LichHens
 {
@@ -31,6 +30,11 @@ namespace CRM.Services.LichHens
         public async Task<LichHenDTO> GetLichHenById(Guid Id)
         {
             return await _lichHenRepository.GetLichHenById(Id);
+        }
+
+        public async Task<List<LichHenDTO>> GetLichHenByKhachHangId(string id)
+        {
+            return await _lichHenRepository.GetLichHenByKhachHangId(id);
         }
 
         public async Task<List<LichHenDTO>> GetLichHenByKhachHangTiemNangId(Guid id)

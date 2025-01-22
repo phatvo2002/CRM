@@ -32,6 +32,11 @@ namespace CRM.Services.NhiemVus
             return await _nhiemVuRepository.GetNhiemVuById(Id);
         }
 
+        public async Task<List<NhiemVuDTO>> GetNhiemVuByKhachHangId(string id)
+        {
+            return await _nhiemVuRepository.GetNhiemVuByKhachHangId(id);
+        }
+
         public async Task<List<NhiemVuDTO>> GetNhiemVuByKhachHangTiemNangId(Guid id)
         {
             return await _nhiemVuRepository.GetNhiemVuByKhachHangTiemNangId(id);

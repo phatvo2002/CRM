@@ -10,22 +10,24 @@ const ListItems = (props) => {
   const theme = useTheme()
   return (
     <React.Fragment >
-      <Grid style={{marginTop:10 }}>
-      {props.listMenu.map((item ,index) =>{
-        return (
-        <ListItemButton key={index}>
-          <ListItemIcon>
-            <Icon>
-            {item.menu.icon}
-            </Icon>
-          </ListItemIcon>
-          <Link component={RouterLink} style={{textDecoration:"none" ,color:theme.palette.text.primary}} to={item.menu.url}>{item.menu.name}</Link>
-        </ListItemButton>
-        )
-      })}
+      <Grid style={{ marginTop: 10 }}>
+        {props.listMenu.map((item, index) => {
+          return (
+            <ListItemButton key={index}>
+              <ListItemIcon>
+                <Icon>
+                  <Link component={RouterLink} style={{ textDecoration: "none", color: theme.palette.text.primary }} to={item.menu.url}>
+                    {item.menu.icon}
+                  </Link>
+                </Icon>
+              </ListItemIcon>
+              <Link component={RouterLink} style={{ textDecoration: "none", color: theme.palette.text.primary }} to={item.menu.url}>{item.menu.name}</Link>
+            </ListItemButton>
+          )
+        })}
       </Grid>
-   
-  </React.Fragment>
+
+    </React.Fragment>
   )
 }
 

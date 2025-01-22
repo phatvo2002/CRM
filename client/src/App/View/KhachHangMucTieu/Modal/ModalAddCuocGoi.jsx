@@ -96,7 +96,7 @@ const ModlaAddCuocGoi = (props) => {
             try {
                 await addCuocGoi(data).unwrap();
                 toast.success("Thêm mới thành công!", {
-                    position: "top-right",
+                    position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: false,
                     closeOnClick: true,
@@ -107,7 +107,7 @@ const ModlaAddCuocGoi = (props) => {
                 closeModalWithOtherFunc()
             } catch (error) {
                 toast.error("Đã có lỗi khi xảy ra!", {
-                    position: "top-right",
+                    position: "top-center",
                     autoClose: 3000,
                     hideProgressBar: false,
                     closeOnClick: true,

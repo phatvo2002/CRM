@@ -76,8 +76,14 @@ namespace CRM.Repositories.LichHens
 
         public async Task<LichHenDTO> GetLichHenById(Guid Id)
         {
-            var db = await _context.LichHens.FirstOrDefaultAsync(r => r.Id == Id);
+            var db = await _context.LichHens.Include(r => r.TrangThaiThucHien).FirstOrDefaultAsync(r => r.Id == Id);
             return _mapper.Map<LichHenDTO>(db);
+        }
+
+        public async Task<List<LichHenDTO>> GetLichHenByKhachHangId(string id)
+        {
+            var db = await _context.LichHens.Where(r => r.KhachHangMucTieuId == id).Include(r => r.TrangThaiThucHien).ToListAsync();
+            return _mapper.Map<List<LichHenDTO>>(db);
         }
 
         public async Task<List<LichHenDTO>> GetLichHenByKhachHangTiemNangId(Guid id)
@@ -88,7 +94,7 @@ namespace CRM.Repositories.LichHens
 
         public async Task<List<LichHenDTO>> GetLichHenByNguoiDungId(Guid NguoiDungId)
         {
-            var db = await _context.LichHens.Where(r => r.NguoiDungId == NguoiDungId).ToListAsync();
+            var db = await _context.LichHens.Where(r => r.NguoiDungId == NguoiDungId).Include(r => r.TrangThaiThucHien).ToListAsync();
             return _mapper.Map<List<LichHenDTO>>(db);
         }
 

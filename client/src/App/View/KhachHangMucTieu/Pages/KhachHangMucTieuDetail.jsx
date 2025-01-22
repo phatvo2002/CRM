@@ -35,6 +35,7 @@ import TabBanHang from "./Tabs/TabBanHang";
 import TabHoatDong from "./Tabs/TabHoatDong";
 import TabLichSuMuaHang from "./Tabs/TabLichSuMuaHang";
 import ContactMailIcon from '@mui/icons-material/ContactMail';
+import CachedIcon from '@mui/icons-material/Cached';
 import { useGetKhachHangMucTieuByIdQuery } from "src/App/Api/KhachHangMucTieuApi";
 import ModlaAddCuocGoi from "../Modal/ModalAddCuocGoi";
 import ModalAddLichHen from "../Modal/ModalAddLichHen";
@@ -73,6 +74,9 @@ const KhachHangMucTieuDetail = () => {
         <Grid2 size={4}>
           <IconButton onClick={() => backPreviousPage()}>
             <ArrowBackIcon />
+          </IconButton>
+          <IconButton onClick={() => window.location.reload()}>
+            <CachedIcon />
           </IconButton>
         </Grid2>
         <Grid2 size={8}>

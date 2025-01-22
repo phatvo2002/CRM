@@ -10,6 +10,7 @@
         public Guid KhachHangTiemNangId { get; set; }
         public Guid MucDoUuTienId { get; set; }
         public Guid TrangThaiThucHienId { get; set; }
+        public string? KhachHangMucTieuId { get; set; }
         public MucDoUuTienDTO? MucDoUuTien { get; set; }
         public TrangThaiThucHienDTO? TrangThaiThucHien { get; set; }
         public NguoiDungDTO? NguoiDung { get; set; }
