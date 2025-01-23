@@ -30,6 +30,7 @@ import { ActionComponents } from "./Components/Action";
 import UpdateIcon from "@mui/icons-material/Update";
 import { useNavigate } from "react-router-dom";
 import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
+import ModalBanGiaoKhachHangMucTieu from "./Modal/ModalBanGiaoKhachHangMucTieu";
 import { useGetTemplatesQuery } from "src/App/Api/KhachHangTiemNangApi";
 import ModalImportKhachHang from "./Modal/ModalImportKhachHang";
 import Swal from "sweetalert2";
@@ -40,10 +41,13 @@ const KhachHangMucTieu = () => {
     [rows, setRows] = useState([]),
     [anchorEl, setAnchorEl] = useState(null),
     [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false),
+    [modalbanGiao, setModalBanGiao] = useState(false),
     [modalImportKhachHangMucTeu, setModalImportKhachHangMucTeu] = useState(false),
     navigate = useNavigate(),
     [isActionOpen, setIsActionOpen] = useState(false),
-    handleOpen = () => setIsActionOpen(true);
+    handleOpen = () => setIsActionOpen(true),
+    handleOpenModalBanGiao = ()=> setModalBanGiao(true),
+    handleCloseModalBanGiao = () => setModalBanGiao(false);
   const handleCloseAction = () => {
     setIsActionOpen(false)
   };
@@ -84,7 +88,7 @@ const KhachHangMucTieu = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-            // onClick={() => handleOpenModalBanGiaoKhachHang()}
+             onClick={handleOpenModalBanGiao}
             >
               <ThreePIcon color="primary" />
             </IconButton>
@@ -271,7 +275,6 @@ const KhachHangMucTieu = () => {
       <Grid2 container spacing={2}>
         <Grid2 container alignItems="center" spacing={2}>
           <Grid2 size={12}>
-            <h2>Khách hàng </h2>
             <Button
               variant="outlined"
               sx={{ marginLeft: 1 }}
@@ -397,6 +400,13 @@ const KhachHangMucTieu = () => {
         showModal={modalImportKhachHangMucTeu}
         closeModal={handleCloseOpenModalImportKhachHang}
         refetch={refetch}
+      />
+      {/* Modal bàn giao khách hàng */}
+      <ModalBanGiaoKhachHangMucTieu
+        showModal={modalbanGiao}
+        closeModal={handleCloseModalBanGiao}
+        refetch={refetch}
+        selectedItem={selectedRow}
       />
     </>
   );

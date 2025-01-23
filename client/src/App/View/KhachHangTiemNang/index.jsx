@@ -277,8 +277,6 @@ const KhachHangTiemNang = () => {
       <div>
         <Grid2 container alignItems="center" spacing={2}>
           <Grid2 size={12}>
-            <h2>Khách hàng tiềm năng</h2>
-
             <Button
               variant="outlined"
               sx={{ marginLeft: 1 }}

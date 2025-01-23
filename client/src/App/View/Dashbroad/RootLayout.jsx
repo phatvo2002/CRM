@@ -13,7 +13,7 @@ import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 import { Link as RouterLink } from "react-router-dom";
-import { Breadcrumbs, Fab, Grid, Link, Stack, Popover, ListItem, ListItemText, ListItemIcon, Grid2, Icon } from "@mui/material";
+import { Breadcrumbs, Fab, Grid, Link, Stack, Popover, ListItem, ListItemText, ListItemIcon, Grid2, Icon, Tooltip, Paper, Button } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -30,10 +30,11 @@ import { useGetMenuRoleByIdQuery } from "../../Api/MenuApi";
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import panner from "../../Assets/image/banner.png"
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function Copyright(props) {
   return (
-    <Grid
+    <Grid2
       sx={{
         position: "fixed",
         bottom: 0,
@@ -42,10 +43,13 @@ function Copyright(props) {
         marginTop: 100,
         backgroundColor: "background.paper",
         height: "50px",
-        textAlign: "center"
+        textAlign: "center",
+        boxShadow: " rgba(14, 63, 126, 0.06) 0px 0px 0px 1px, rgba(42, 51, 70, 0.03) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 2px 2px -1px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.03) 0px 5px 5px -2.5px, rgba(42, 51, 70, 0.03) 0px 10px 10px -5px, rgba(42, 51, 70, 0.03) 0px 24px 24px -8px;"
       }}
+
     >
       {/* Footer content */}
+
       <Typography variant="body2" color="text.secondary" sx={{ lineHeight: "50px" }}>
         {"Copyright © "}
         <Link color="inherit" href="">
@@ -54,7 +58,7 @@ function Copyright(props) {
         {new Date().getFullYear()}
         {"."}
       </Typography>
-    </Grid>
+    </Grid2>
 
   );
 }
@@ -231,13 +235,15 @@ export default function RootLayout() {
                 <Stack direction="row" spacing={4} fontSize={"1.5rem"} alignItems="center">
                   {menu.map((item, index) => (
                     <Stack direction="row" spacing={1} key={index} alignItems="center">
-                      <Link
-                        component={RouterLink}
-                        style={{ textDecoration: "none", color: theme.palette.text.primary }}
-                        to={item.menu.url}
-                      >
-                         <Icon>{item.menu.icon}</Icon>
-                      </Link>
+                      <Tooltip title={item?.menu?.name}>
+                        <Link
+                          component={RouterLink}
+                          style={{ textDecoration: "none", color: theme.palette.text.primary }}
+                          to={item.menu.url}
+                        >
+                          <Icon>{item.menu.icon}</Icon>
+                        </Link>
+                      </Tooltip>
                     </Stack>
                   ))}
                 </Stack>
@@ -317,28 +323,51 @@ export default function RootLayout() {
 
 
         </AppBar>
-        <Drawer variant="permanent" open={open} >
-
-          <Toolbar
+        <Drawer
+          variant="permanent"
+          open={open}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100vh", 
+          }}
+        >
+          {/* Nội dung phía trên */}
+          <div>
+            <Toolbar
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                px: [1],
+              }}
+            >
+              <img src={panner} style={{ width: "100%", paddingLeft: "30px" }} alt="Panner" />
+              <IconButton onClick={toggleDrawer} sx={{ color: "black" }}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </Toolbar>
+            <Divider />
+            <List component="nav">
+              <ListItems listMenu={menu} />
+              <Divider />
+            </List>
+          </div>
+          <Button
+            variant="outlined"
+            color="text.primary"
+            startIcon={<LogoutIcon />}
             sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
+              fontWeight: "bold",
+              marginTop: "auto", 
+              mb: 2, 
             }}
           >
-            <img src={panner} style={{ width: "100%", paddingLeft: "30px" }}></img>
-            <IconButton onClick={toggleDrawer} sx={{ color: "black" }}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <List component="nav" >
-            <ListItems listMenu={menu} />
-            <Divider sx={{ my: 1 }} />
-          </List>
-
+            Đăng Xuất
+          </Button>
         </Drawer>
+
+
         <Box
           component="main"
           sx={{

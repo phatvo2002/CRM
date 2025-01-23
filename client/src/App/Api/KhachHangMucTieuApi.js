@@ -52,6 +52,13 @@ export const apiKhachHangMucTieu = createApi({
           body: data,
         }),
       }),
+      banGiaoKhachHangMucTieu: builder.mutation({
+        query: (data) => ({
+          url: '/KhachHangMucTieu/bangiaokhachhangmuctieu',
+          method: 'POST',
+          body: data,
+        }),
+      }),
       ImportKhachHangMucTieu: builder.mutation({
         query: (file) => {
           const formData = new FormData();
@@ -99,6 +106,7 @@ export const apiKhachHangMucTieu = createApi({
     useGetKhachHangMucTieuByPhongBanIdQuery,
     useImportKhachHangMucTieuMutation,
     useAddKhachHangMucTieuMutation,
+    useBanGiaoKhachHangMucTieuMutation,
     useUpdateKhachHangTiemNangMucTieuMutation,
     useConvertKhachHangMucTieuMutation,
     useDeleteKhachHangMucTieuMutation,

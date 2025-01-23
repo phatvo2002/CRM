@@ -8,11 +8,6 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import AutocompleteRHF from "src/App/Components/ReactHookFormComp/AutocompleteRHF";
 import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
-import {
-  useGetAllKetQuaCuocGoiQuery,
-  useGetAllLoaiCuocGoiQuery,
-} from "src/App/Api/GetDataApi";
-import { useUpdateCuocGoiMutation } from "src/App/Api/CuocGoiApi";
 import { useGetUserByPhongBanIdQuery } from "src/App/Api/UserApi";
 import { useBangiaoKhachHangTiemNangMutation } from "src/App/Api/KhachHangTiemNangApi";
 // ------ Form Config ------ //

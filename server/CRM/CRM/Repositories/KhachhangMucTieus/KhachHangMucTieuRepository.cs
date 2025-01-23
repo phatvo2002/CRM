@@ -11,7 +11,6 @@ namespace CRM.Repositories.KhachhangMucTieus
         public KhachHangMucTieuRepository(CrmDbContext crmDbContext, IMapper mapper) : base(crmDbContext, mapper)
         {
         }
-
         public async Task<ResultModal> ConvertKhachHangMucTieu(ConvertKhachHangModal modal, Guid nguoiDungId, Guid phongBanId)
         {
             var db = _crmDbContext.KhachHangMucTieus.FirstOrDefault(r => r.Id == modal.Id);
@@ -208,5 +207,75 @@ namespace CRM.Repositories.KhachhangMucTieus
             }
 
         }
+        public async Task<ResultModal> BanGiaoKhachHangMucTieu(BanGiaoModal modal)
+        {
+            var db = _crmDbContext.KhachHangMucTieus.FirstOrDefault(r => r.Id == modal.KhachHangMucTieuId);
+            try
+            {
+                if (db != null)
+                {
+                    db.NguoiDungId = modal.NguoiDungId;
+                    _crmDbContext.KhachHangMucTieus.Update(db);
+                    if (modal.CheckIsCuocGoi == true)
+                    {
+                        var cuocGoiData = _crmDbContext.CuocGois.Where(r => r.KhachHangMucTieuId == modal.KhachHangMucTieuId).ToList();
+                        foreach (var item in cuocGoiData)
+                        {
+                            if (item != null)
+                            {
+                                item.NguoiDungId = modal.NguoiDungId;
+                                _crmDbContext.CuocGois.Update(item);
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    if (modal.CheckIsLichHen == true)
+                    {
+                        var lichHenData = _crmDbContext.LichHens.Where(r => r.KhachHangMucTieuId == modal.KhachHangMucTieuId).ToList();
+                        foreach (var item in lichHenData)
+                        {
+                            if (item != null)
+                            {
+                                item.NguoiDungId = modal.NguoiDungId;
+                                _crmDbContext.LichHens.Update(item);
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    if (modal.CheckIsNhiemVu == true)
+                    {
+                        var nhiemVuData = _crmDbContext.NhiemVus.Where(r => r.KhachHangMucTieuId == modal.KhachHangMucTieuId).ToList();
+                        foreach (var item in nhiemVuData)
+                        {
+                            if (item != null)
+                            {
+                                item.NguoiDungId = modal.NguoiDungId;
+                                _crmDbContext.NhiemVus.Update(item);
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                    }
+                    await _crmDbContext.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Bàn giao thành công", Success = true };
+                }
+                return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+
+
+        }
+
     }
 }

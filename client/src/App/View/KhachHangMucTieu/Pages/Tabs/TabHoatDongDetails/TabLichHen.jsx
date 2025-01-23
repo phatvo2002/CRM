@@ -26,7 +26,7 @@ const TabLichHen = () => {
           <IconButton
             style={{ margin: "0 10px" }}
             disabled={selectedRowLichHen.length === 0}
-          // onClick={handelDeleteLichHen}
+            onClick={handelDeleteLichHen}
           >
             <DeleteIcon color="error"></DeleteIcon>
           </IconButton>
@@ -96,7 +96,7 @@ const TabLichHen = () => {
   const { data: lichHenData, refetch: isLichHenRefetch } =
     useGetLichHenByKhachHangIdQuery(id, { skip: id == null || id == undefined });
   const [deleteLichHen] = useDeleteLichHenMutation()
-  const handelDeleteCuocGoi = () => {
+  const handelDeleteLichHen = () => {
     Swal.fire({
       title: "Bạn có muốn xóa dữ liệu này",
       icon: "warning",

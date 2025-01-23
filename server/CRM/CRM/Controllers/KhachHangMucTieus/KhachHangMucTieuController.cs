@@ -124,6 +124,20 @@ namespace CRM.Controllers.KhachHangMucTieus
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost("bangiaokhachhangmuctieu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> BanGiaoKhachHangMucTieu(BanGiaoModal modal)
+        {
+            try
+            {
+                ResultModal result = await _khacHangMucTieuServices.BanGiaoKhachHangMucTieu(modal);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost("createkhachhangmuctieu")]
         [JwtAuthorize]
         public async Task<IActionResult> CreateKhachHangMucTieu(KhachHangMucTieuModal modal)
