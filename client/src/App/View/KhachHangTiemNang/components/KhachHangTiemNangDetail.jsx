@@ -3,6 +3,8 @@ import {
   Button,
   Grid2,
   IconButton,
+  Menu,
+  MenuItem,
   Paper,
   Stack,
   Tabs,
@@ -18,6 +20,8 @@ import TabPanel from "@mui/lab/TabPanel";
 import { useParams } from "react-router-dom";
 import { useGetKhachHangTiemNangByIdQuery } from "src/App/Api/KhachHangTiemNangApi";
 import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MarkunreadIcon from "@mui/icons-material/Markunread";
 import TextsmsIcon from "@mui/icons-material/Textsms";
 import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
@@ -38,9 +42,16 @@ const KhachHangTiemNangDetail = () => {
     useGetKhachHangTiemNangByIdQuery(id);
   const [modalConvert, setOpenModalConvert] = useState(false);
   const [modalEdit, setOpenModalEdit] = useState(false);
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
   const gotoLink = () => {
     navigate(-1);
+  };
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseDrop = () => {
+    setAnchorEl(null);
   };
 
   const [value, setValue] = useState("1");
@@ -69,7 +80,7 @@ const KhachHangTiemNangDetail = () => {
   return (
     <>
       <Grid2 container spacing={2}>
-        <Paper style={{ height: "100vh" , width:"100%" }}>
+        <Paper style={{ height: "100%", width: "100%" }}>
           <Stack direction="row" spacing={2} style={{ padding: 10 }}>
             <IconButton onClick={gotoLink}>
               <ArrowBackIcon />
@@ -80,6 +91,7 @@ const KhachHangTiemNangDetail = () => {
                 alignItems: "center",
                 justifyContent: "center",
               }}
+              size={4}
             >
               <img
                 src={image}
@@ -104,45 +116,72 @@ const KhachHangTiemNangDetail = () => {
               style={{
                 marginLeft: "auto",
                 gap: "8px",
+                marginTop:20
               }}
+              size={8}
             >
               <Button
-                variant="outlined"
+                variant="contained"
                 style={{ margin: 5 }}
                 endIcon={<LocalPhoneIcon />}
               >
                 Gọi Điện thoại
               </Button>
               <Button
-                variant="outlined"
+                variant="contained"
                 style={{ margin: 5 }}
                 endIcon={<MarkunreadIcon />}
               >
                 Gửi mail
               </Button>
               <Button
-                variant="outlined"
+                variant="contained"
                 style={{ margin: 5 }}
                 endIcon={<TextsmsIcon />}
               >
                 Gửi SMS
               </Button>
               <Button
+                id="basic-button"
+                aria-controls={open ? "basic-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                onClick={handleClick}
+                sx={{ marginLeft: 1, width: "200px" }}
                 variant="outlined"
-                style={{ margin: 5 }}
-                onClick={handleOpenModalConvert}
-                endIcon={<ChangeCircleIcon />}
+                startIcon={<OpenInNewIcon />}
+                endIcon={<KeyboardArrowDownIcon />}
               >
-                Chuyển đổi khách hàng
+                Mở rộng
               </Button>
-              <Button
-                variant="outlined"
-                style={{ margin: 5 }}
-                onClick={handleOpenModalEdit}
-                endIcon={<EditIcon />}
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleCloseDrop}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
               >
-                Chỉnh sửa khách hàng
-              </Button>
+                <MenuItem onClick={handleCloseDrop}>
+                  <Button
+                    variant="text"
+                    style={{ margin: 5 , width:200 }}
+                    onClick={handleOpenModalConvert}
+                  >
+                    Chuyển đổi khách hàng
+                  </Button>
+                </MenuItem>
+                <MenuItem>
+                  <Button
+                    variant="text"
+                    style={{ margin: 5 , width:200 }}
+                    onClick={handleOpenModalEdit}
+                  >
+                    Chỉnh sửa khách hàng
+                  </Button>
+                </MenuItem>
+              </Menu>
             </Grid2>
           </Stack>
           <Grid2

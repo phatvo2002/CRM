@@ -8,6 +8,8 @@ import TaskIcon from '@mui/icons-material/Task';
 import EmailIcon from '@mui/icons-material/Email';
 import SmsIcon from '@mui/icons-material/Sms';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
+import HistoryIcon from '@mui/icons-material/History';
 export const ActionComponents = ({ selectedItem,onClose ,isOpen }) => {
     const [activeTab, setActiveTab] = useState(0);
     const [selectedCard, setSelectedCard] = useState(0);
@@ -30,17 +32,18 @@ export const ActionComponents = ({ selectedItem,onClose ,isOpen }) => {
             overflowY: "auto",
             zIndex: 1000,
         }}>
-            <h3 style={{ marginTop: 80 }}>
+            <h3 style={{ marginTop: 60 , color:"text.primary" }}>
                 <Button onClick={onClose} className={`action-component ${isOpen ? "open" : "close"}`} >
-                    <ArrowBackIcon sx={{ fontSize: "2rem" }} />
+                    <ArrowBackIcon sx={{ fontSize: "1.5rem" }} />
+                <h4 style={{paddingLeft:10, margin:0}}>Lịch sử tương tác</h4>
                 </Button>
-                Hoạt động tương tác
             </h3>
 
             {/* Tabs */}
             <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable">
+                <Tab icon={<HistoryIcon />} />
                 <Tab icon={<LocalPhoneIcon />} />
-                <Tab icon={<CalendarMonthIcon />} />
+                <Tab icon={<InsertInvitationIcon />} />
                 <Tab icon={<TaskIcon />} />
                 <Tab icon={<EmailIcon />} />
                 <Tab icon={<SmsIcon />} />
@@ -52,7 +55,7 @@ export const ActionComponents = ({ selectedItem,onClose ,isOpen }) => {
 
                 {activeTab === 0 && (
                     <Typography variant="body1" className="tab-panel">
-                        Đơn hàng
+                        Lịch sử mua hàng
                     </Typography>
                 )}
                 {activeTab === 1 && (
@@ -62,15 +65,20 @@ export const ActionComponents = ({ selectedItem,onClose ,isOpen }) => {
                 )}
                 {activeTab === 2 && (
                     <Typography variant="body1" className="tab-panel">
+                        Lịch hẹn
+                    </Typography>
+                )}
+                  {activeTab === 3 && (
+                    <Typography variant="body1" className="tab-panel">
                         Nhiệm vụ
                     </Typography>
                 )}
-                {activeTab === 3 && (
+                {activeTab === 4 && (
                     <Typography variant="body1" className="tab-panel">
                         Email đã gửi
                     </Typography>
                 )}
-                {activeTab === 4 && (
+                {activeTab === 5 && (
                     <Typography variant="body1" className="tab-panel">
                         Tin nhắn đã gửi
                     </Typography>

@@ -33,11 +33,12 @@ export const ActionComponents = ({selectedItem , isOpen,onClose}) => {
       overflowY: "auto",
       zIndex: 1000,
     }}>
-      <h3 style={{marginTop:80}}>
+      <h3 style={{marginTop:60}}>
       <Button onClick={onClose}   className={`action-component ${isOpen ? "open" : "close"}`} >
         <ArrowBackIcon  sx={{ fontSize:"2rem"}}/>
+        <h4 style={{paddingLeft:10, margin:0}}>Hoạt động tương tác</h4>
       </Button>
-      Hoạt động tương tác
+      
       </h3>
       
       {/* Tabs */}
