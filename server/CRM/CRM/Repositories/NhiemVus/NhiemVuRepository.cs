@@ -40,15 +40,17 @@ namespace CRM.Repositories.NhiemVus
                     nhiemVu.PhongBanId = phongBanId;
                     nhiemVu.IsThongBao = false;
                     nhiemVu.CreateAt = DateTime.Now;
-                    if (modal.KhachHangTiemNangId != Guid.Empty)
+                    if (modal.KhachHangTiemNangId != null)
                     {
                         ThongBao thongBao = new ThongBao();
                         thongBao.Id = Guid.NewGuid();
                         thongBao.TieuDe = $"Bạn có một nhiệm vụ mới được giao : {modal.TieuDe}";
                         thongBao.NoiDung = modal.MoTa;
                         thongBao.Type = "new";
-                        thongBao.DuongDan = $"http://localhost:3001/tiemnang/{modal.KhachHangTiemNangId}";
+                        thongBao.DuongDan = $"http://localhost:3000/tiemnang/{modal.KhachHangTiemNangId}";
                         thongBao.CreateAt = DateTime.Now;
+                        thongBao.IsRead = false;
+                        thongBao.IsDelete = false;
                         thongBao.NguoiDungId = modal.NguoiDungId;
                         _context.ThongBaos.Add(thongBao);
                     }
@@ -59,7 +61,9 @@ namespace CRM.Repositories.NhiemVus
                         thongBao.TieuDe = $"Bạn có một nhiệm vụ mới được giao : {modal.TieuDe}";
                         thongBao.NoiDung = modal.MoTa;
                         thongBao.Type = "new";
-                        thongBao.DuongDan = $"http://localhost:3001/tiemnang/{modal.KhachHangId}";
+                        thongBao.IsRead = false;
+                        thongBao.IsDelete = false;
+                        thongBao.DuongDan = $"http://localhost:3000/khachhang/{modal.KhachHangId}";
                         thongBao.CreateAt = DateTime.Now;
                         thongBao.NguoiDungId = modal.NguoiDungId;
                         _context.ThongBaos.Add(thongBao);

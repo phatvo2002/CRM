@@ -6,5 +6,6 @@ namespace CRM.Repositories.GiaiDoans
 {
     public interface IGiaiDoanBanhangRepository :IBaseRepository<GiaiDoanBanHang , GIaiDoanBanhangModal , Guid, GiaiDoanBanHangDTO>
     {
+        Task<List<GiaiDoanBanHangDTO>> GetAllGiaiDoanBanhang();
     }
 }

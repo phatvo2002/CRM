@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { ActionComponents } from "./components/Action";
-import { Button, Grid, Grid2, IconButton, Menu, MenuItem, Paper } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Grid2,
+  IconButton,
+  Menu,
+  MenuItem,
+  Paper,
+} from "@mui/material";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import AddIcon from "@mui/icons-material/Add";
-import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AutoDeleteIcon from '@mui/icons-material/AutoDelete';
+import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
 import { TYPE_MODAL } from "../../Until/constant";
-import EmailIcon from '@mui/icons-material/Email';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import ThreePIcon from '@mui/icons-material/ThreeP';
-import Person2Icon from '@mui/icons-material/Person2';
-import UpdateIcon from '@mui/icons-material/Update';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from "@mui/icons-material/Email";
+import ImportExportIcon from "@mui/icons-material/ImportExport";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import ThreePIcon from "@mui/icons-material/ThreeP";
+import Person2Icon from "@mui/icons-material/Person2";
+import UpdateIcon from "@mui/icons-material/Update";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import PhoneIcon from "@mui/icons-material/Phone";
 import {
   useDeletehangLoatKhachHangTiemNangMutation,
   useDeleteKhachHangTiemNangMutation,
@@ -35,18 +44,18 @@ const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isActionOpen, setIsActionOpen] = useState(false);
-  const [KhachHangDaXoaModal , setKhachHangDaXoaModal] = useState(false);
+  const [KhachHangDaXoaModal, setKhachHangDaXoaModal] = useState(false);
   const handleOpen = () => setIsActionOpen(true);
   const handleClose = () => setIsActionOpen(false);
-  const handleOpenModalXem = () => setKhachHangDaXoaModal(true)
-  const handleCloseModalXem = () => setKhachHangDaXoaModal(false)
+  const handleOpenModalXem = () => setKhachHangDaXoaModal(true);
+  const handleCloseModalXem = () => setKhachHangDaXoaModal(false);
   const navigate = useNavigate();
   const gotoLink = () => {
     navigate("/tiemnang/themmoikhachhangtiemnang");
   };
   const gotoLinkImport = () => {
     navigate("/tiemnang/uploadkhachhang");
-  }
+  };
 
   const columns = [
     {
@@ -78,14 +87,16 @@ const KhachHangTiemNang = () => {
               style={{}}
               onClick={() => handleDeletePhongBan(params?.id)}
             >
-              <DeleteIcon  color="error"/>
+              <DeleteIcon color="error" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Bàn giao tiềm năng">
-            <IconButton disabled={selectedRow.length == 0} style={{}}
+            <IconButton
+              disabled={selectedRow.length == 0}
+              style={{}}
               onClick={() => handleOpenModalBanGiaoKhachHang()}
             >
-              <ThreePIcon color="primary"/>
+              <ThreePIcon color="primary" />
             </IconButton>
           </Tooltip>
         </div>
@@ -100,12 +111,15 @@ const KhachHangTiemNang = () => {
         return params?.row?.nguoiDung?.ten ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <AssignmentIndIcon style={{ padding: 2 }} color="warning" />
-            <span> {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}</span>
+            <span>
+              {" "}
+              {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}
+            </span>
           </div>
         ) : (
           <div></div>
         );
-      }
+      },
     },
     {
       field: "tenKhachHang",
@@ -124,12 +138,10 @@ const KhachHangTiemNang = () => {
             }}
           >
             <Person2Icon style={{ color: "#1976d2" }} />
-            <span style={{  fontWeight: "500" }}>
-              {params.value}
-            </span>
+            <span style={{ fontWeight: "500" }}>{params.value}</span>
           </Link>
         </div>
-      ),      
+      ),
     },
     { field: "diaChi", headerName: "Địa Chỉ", width: 200 },
     {
@@ -145,7 +157,7 @@ const KhachHangTiemNang = () => {
         ) : (
           <div></div>
         );
-      }
+      },
     },
     {
       field: "soDienThoaiCoQuan",
@@ -175,9 +187,10 @@ const KhachHangTiemNang = () => {
     path: "Templates/ThongTinTiemNang.xlsx",
     filename: "ThongTinTiemNang",
   });
-  const {data: dataKHByRole , refetch : refetchkh} = useGetKhachHangTiemNangByroleQuery()
+  const { data: dataKHByRole, refetch: refetchkh } =
+    useGetKhachHangTiemNangByroleQuery();
   const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation();
-  const [deleteHangLoat] = useDeletehangLoatKhachHangTiemNangMutation()
+  const [deleteHangLoat] = useDeletehangLoatKhachHangTiemNangMutation();
   const onOpenModalUpdateKhachHang = () => {
     setOpenModalUpdate(true);
     setTypeModal(TYPE_MODAL.UPDATE);
@@ -189,11 +202,11 @@ const KhachHangTiemNang = () => {
   const handleOpenModalBanGiaoKhachHang = () => {
     setOpenModalBanGiao(true);
     setTypeModal(TYPE_MODAL.UPDATE);
-  }
+  };
   const handleCloseModalBanGiaoKhachHang = () => {
     setOpenModalBanGiao(false);
     setTypeModal("");
-  }
+  };
 
   const handleDeletePhongBan = async (id) => {
     if (
@@ -220,12 +233,11 @@ const KhachHangTiemNang = () => {
           title: "Xóa thành công",
           icon: "success",
         });
-        refetchkh()
+        refetchkh();
       }
     });
   };
-  const handleDeleteMuliple =()=>
-  {
+  const handleDeleteMuliple = () => {
     Swal.fire({
       title: "Bạn có muốn xóa những khách hàng này?",
       icon: "warning",
@@ -235,15 +247,15 @@ const KhachHangTiemNang = () => {
       confirmButtonText: "Có",
     }).then(async (result) => {
       if (result.isConfirmed) {
-       await deleteHangLoat(selectedRow);
+        await deleteHangLoat(selectedRow);
         Swal.fire({
           title: "Xóa thành công",
           icon: "success",
         });
-        refetchkh()
+        refetchkh();
       }
     });
-  }
+  };
   const handleGetTemplates = () => {
     if (getTemplate) {
       const url = window.URL.createObjectURL(getTemplate);
@@ -264,21 +276,24 @@ const KhachHangTiemNang = () => {
   //   }
   // }, [dataKhachHangByNguoiDung, dataKhachHangPhongBan, userData]);
 
-  useEffect(()=>{
-    setRows(dataKHByRole)
-  },[dataKHByRole])
+  useEffect(() => {
+    setRows(dataKHByRole);
+  }, [dataKHByRole]);
 
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
-  
+
   return (
     <div className="customer-page">
       <div>
         <Grid2 container alignItems="center" spacing={2}>
-          <Grid2 size={12}>
+        <Grid2 size={12}>
+            <h2 style={{padding :0 , margin:0}}>Tất Cả Tiềm Năng</h2>
+        </Grid2> 
+          <Grid2 size={12} >
             <Button
-              variant="outlined"
+              variant="contained"
               sx={{ marginLeft: 1 }}
               startIcon={<AddIcon />}
               onClick={gotoLink}
@@ -287,15 +302,25 @@ const KhachHangTiemNang = () => {
             </Button>
             <Button
               id="basic-button"
-              aria-controls={open ? 'basic-menu' : undefined}
+              aria-controls={open ? "basic-menu" : undefined}
               aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
+              aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
               sx={{ marginLeft: 1, width: "200px" }}
               variant="outlined"
               startIcon={<OpenInNewIcon />}
+              endIcon={<KeyboardArrowDownIcon/>}
             >
-              Mở rộng
+              Tùy chỉnh
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              sx={{ marginLeft: 1, width: "200px" }}
+              startIcon={<GetAppIcon />}
+              onClick={gotoLinkImport}
+            >
+              Nhập Dữ Liệu
             </Button>
             <Menu
               id="basic-menu"
@@ -303,29 +328,18 @@ const KhachHangTiemNang = () => {
               open={open}
               onClose={handleCloseDrop}
               MenuListProps={{
-                'aria-labelledby': 'basic-button',
+                "aria-labelledby": "basic-button",
               }}
             >
               <MenuItem onClick={handleCloseDrop}>
                 <Button
                   variant="outlined"
-                  color="warning"
+                  color="primary"
                   sx={{ marginLeft: 1, width: "200px" }}
-                  startIcon={<FileDownloadDoneIcon />}
-                  onClick={gotoLinkImport}
-                >
-                  IMPORT
-                </Button>
-              </MenuItem>
-              <MenuItem onClick={handleCloseDrop}>
-                <Button
-                  variant="outlined"
-                  color="success"
-                  sx={{ marginLeft: 1, width: "200px" }}
-                  startIcon={<GetAppIcon />}
+                  startIcon={<ImportExportIcon />}
                   onClick={handleGetTemplates}
                 >
-                  Xuất Template
+                  Xuất Mẫu
                 </Button>
               </MenuItem>
               <MenuItem onClick={handleCloseDrop}>
@@ -333,27 +347,39 @@ const KhachHangTiemNang = () => {
                   variant="outlined"
                   sx={{ marginLeft: 1, width: "200px" }}
                   startIcon={<AutoDeleteIcon />}
-                  color="error"
+                  color="primary"
                   onClick={handleOpenModalXem}
                 >
-                  Thùng rác
+                  Đã xóa
+                </Button>
+              </MenuItem>
+              <MenuItem onClick={handleCloseDrop}>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  sx={{ marginLeft: 1, width: "200px" }}
+                  startIcon={<DeleteOutlineIcon />}
+                  disabled={selectedRow.length == 0}
+                  onClick={handleDeleteMuliple}
+                >
+                  Xóa hàng loạt
                 </Button>
               </MenuItem>
             </Menu>
-            <Button onClick={handleOpen} sx={{ marginLeft: 1 }} variant="outlined" color="inherit" startIcon={<UpdateIcon/>}>Lịch sử tương tác</Button>
             <Button
-              variant="outlined"
-              color="error"
+              onClick={handleOpen}
               sx={{ marginLeft: 1 }}
-              startIcon={<DeleteOutlineIcon />}
-              disabled={selectedRow.length == 0}
-              onClick={handleDeleteMuliple}
+              variant="outlined"
+              color="inherit"
+              startIcon={<UpdateIcon />}
             >
-              Xóa hàng loạt
+              Lịch sử tương tác
             </Button>
           </Grid2>
         </Grid2>
-        <Paper >
+       
+        <Paper sx={{marginTop:1}}>
+         
           <Grid2 size={12}>
             <CustomDatagrid
               rows={rows}
@@ -367,7 +393,6 @@ const KhachHangTiemNang = () => {
             />
           </Grid2>
         </Paper>
-
 
         {/* Bảng dữ liệu khách hàng */}
         <UpdateKhachHangTiemNang
@@ -400,7 +425,7 @@ const KhachHangTiemNang = () => {
         />
       )}
       {/* xem khách hàng đã xóa */}
-      <ModalXemKhachHangDaXoa 
+      <ModalXemKhachHangDaXoa
         handleClose={handleCloseModalXem}
         open={KhachHangDaXoaModal}
         refetch={refetchkh}

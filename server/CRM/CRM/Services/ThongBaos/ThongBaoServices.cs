@@ -27,5 +27,10 @@ namespace CRM.Services.ThongBaos
         {
             return await _thongBaoRepository.GetThongBaoByNguoiDungId(nguoiDungId);
         }
+
+        public async Task<List<ThongBaoDTO>> GetThongBaoByNguoiDungIdNotRead(Guid nguoiDungId)
+        {
+            return await _thongBaoRepository.GetThongBaoByNguoiDungIdNotRead(nguoiDungId);
+        }
     }
 }

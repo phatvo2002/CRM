@@ -11,23 +11,23 @@ import React, { useEffect, useState } from "react";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import AddIcon from "@mui/icons-material/Add";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Person2Icon from '@mui/icons-material/Person2';
+import Person2Icon from "@mui/icons-material/Person2";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
   useDeletehangLoatKhachHangMucTieuMutation,
   useDeleteKhachHangMucTieuMutation,
   useGetKhachHangMucTieuByNguoiDungIdQuery,
-  useGetKhachHangMucTieuByPhongBanIdQuery,
 } from "src/App/Api/KhachHangMucTieuApi";
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import ThreePIcon from "@mui/icons-material/ThreeP";
 import { ActionComponents } from "./Components/Action";
 import UpdateIcon from "@mui/icons-material/Update";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { useNavigate } from "react-router-dom";
 import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
 import ModalBanGiaoKhachHangMucTieu from "./Modal/ModalBanGiaoKhachHangMucTieu";
@@ -36,20 +36,25 @@ import ModalImportKhachHang from "./Modal/ModalImportKhachHang";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import ModalKhachHangMucTieuDaXoa from "./Modal/ModalKhachHangMucTieuDaXoa";
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
     [anchorEl, setAnchorEl] = useState(null),
     [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false),
     [modalbanGiao, setModalBanGiao] = useState(false),
-    [modalImportKhachHangMucTeu, setModalImportKhachHangMucTeu] = useState(false),
+    [modalKhDaXoa, setModalKhDaXoa] = useState(false),
+    [modalImportKhachHangMucTeu, setModalImportKhachHangMucTeu] =
+      useState(false),
     navigate = useNavigate(),
     [isActionOpen, setIsActionOpen] = useState(false),
     handleOpen = () => setIsActionOpen(true),
-    handleOpenModalBanGiao = ()=> setModalBanGiao(true),
-    handleCloseModalBanGiao = () => setModalBanGiao(false);
+    handleOpenModalBanGiao = () => setModalBanGiao(true),
+    handleCloseModalBanGiao = () => setModalBanGiao(false),
+    handleOpenKhDaXoa = () => setModalKhDaXoa(true),
+    handleCloseKhDaXoa = () => setModalKhDaXoa(false);
   const handleCloseAction = () => {
-    setIsActionOpen(false)
+    setIsActionOpen(false);
   };
   const columns = [
     {
@@ -88,7 +93,7 @@ const KhachHangMucTieu = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-             onClick={handleOpenModalBanGiao}
+              onClick={handleOpenModalBanGiao}
             >
               <ThreePIcon color="primary" />
             </IconButton>
@@ -104,12 +109,15 @@ const KhachHangMucTieu = () => {
         return params?.row?.nguoiDung?.ten ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <AssignmentIndIcon style={{ padding: 2 }} color="warning" />
-            <span> {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}</span>
+            <span>
+              {" "}
+              {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}
+            </span>
           </div>
         ) : (
           <div></div>
         );
-      }
+      },
     },
     {
       field: "tenKhachHang",
@@ -124,13 +132,11 @@ const KhachHangMucTieu = () => {
               display: "flex",
               alignItems: "center",
               gap: "8px",
-              color: "inherit", 
+              color: "inherit",
             }}
           >
-             <Person2Icon style={{ color: "#1976d2" }} />
-             <span style={{  fontWeight: "500" }}>
-              {params.value}
-            </span>
+            <Person2Icon style={{ color: "#1976d2" }} />
+            <span style={{ fontWeight: "500" }}>{params.value}</span>
           </Link>
         </div>
       ),
@@ -188,17 +194,18 @@ const KhachHangMucTieu = () => {
     path: "Templates/ThongTinKhachHang.xlsx",
     filename: "ThongTinKhachHang",
   });
-  const [deleteNguoiDung] = useDeleteKhachHangMucTieuMutation()
-  const [deleteHangLoat] = useDeletehangLoatKhachHangMucTieuMutation()
+  const [deleteNguoiDung] = useDeleteKhachHangMucTieuMutation();
+  const [deleteHangLoat] = useDeletehangLoatKhachHangMucTieuMutation();
+
   const handleDeleteKhachHang = async (id) => {
-    if (
-      !userData?.response.checkIsTruongPhong
-    ) {
-      toast.warning(
-        "Chỉ trưởng phòng mới có quyền xóa khách hàng."
-      );
-      return;
-    }
+    // if (
+    //   !userData?.response.checkIsTruongPhong
+    // ) {
+    //   toast.warning(
+    //     "Chỉ trưởng phòng mới có quyền xóa khách hàng."
+    //   );
+    //   return;
+    // }
     Swal.fire({
       title: "Bạn có muốn xóa khách hàng này?",
       icon: "warning",
@@ -213,30 +220,29 @@ const KhachHangMucTieu = () => {
           title: "Xóa thành công",
           icon: "success",
         });
-        refetch()
+        refetch();
       }
     });
   };
-    const handleDeleteMuliple =()=>
-    {
-      Swal.fire({
-        title: "Bạn có muốn xóa những khách hàng này?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Có",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-         await deleteHangLoat(selectedRow);
-          Swal.fire({
-            title: "Xóa thành công",
-            icon: "success",
-          });
-          refetch()
-        }
-      });
-    }
+  const handleDeleteMuliple = () => {
+    Swal.fire({
+      title: "Bạn có muốn xóa những khách hàng này?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteHangLoat(selectedRow);
+        Swal.fire({
+          title: "Xóa thành công",
+          icon: "success",
+        });
+        refetch();
+      }
+    });
+  };
   const handleGetTemplates = () => {
     if (getTemplate) {
       const url = window.URL.createObjectURL(getTemplate);
@@ -253,6 +259,7 @@ const KhachHangMucTieu = () => {
   useEffect(() => {
     setRows(dataKhachHangByNguoiDung);
   }, [dataKhachHangByNguoiDung]);
+
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
@@ -265,18 +272,21 @@ const KhachHangMucTieu = () => {
   };
   const handleOpenModalImportKhachHang = () => {
     setModalImportKhachHangMucTeu(true);
-  }
+  };
   const handleCloseOpenModalImportKhachHang = () => {
     setModalImportKhachHangMucTeu(false);
-  }
+  };
 
   return (
     <>
       <Grid2 container spacing={2}>
         <Grid2 container alignItems="center" spacing={2}>
           <Grid2 size={12}>
+            <h2 style={{ padding: 0, margin: 0 }}>Tất Cả Khách Hàng</h2>
+          </Grid2>
+          <Grid2 size={12}>
             <Button
-              variant="outlined"
+              variant="contained"
               sx={{ marginLeft: 1 }}
               startIcon={<AddIcon />}
               onClick={gotoLink}
@@ -292,8 +302,18 @@ const KhachHangMucTieu = () => {
               sx={{ marginLeft: 1, width: "200px" }}
               variant="outlined"
               startIcon={<OpenInNewIcon />}
+              endIcon={<KeyboardArrowDownIcon />}
             >
-              Mở rộng
+              Tùy chỉnh
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              sx={{ marginLeft: 1, width: "200px" }}
+              startIcon={<FileDownloadDoneIcon />}
+              onClick={handleOpenModalImportKhachHang}
+            >
+              Nhập dữ liệu
             </Button>
             <Menu
               id="basic-menu"
@@ -307,23 +327,24 @@ const KhachHangMucTieu = () => {
               <MenuItem onClick={handleClose}>
                 <Button
                   variant="outlined"
-                  color="success"
+                  color="primary"
                   startIcon={<GetAppIcon />}
                   sx={{ marginLeft: 1, width: "200px" }}
                   onClick={handleGetTemplates}
                 >
-                  Xuất Template
+                  Xuất Mẫu
                 </Button>
               </MenuItem>
               <MenuItem onClick={handleClose}>
                 <Button
                   variant="outlined"
-                  color="warning"
+                  color="error"
                   sx={{ marginLeft: 1, width: "200px" }}
-                  startIcon={<FileDownloadDoneIcon />}
-                  onClick={handleOpenModalImportKhachHang}
+                  startIcon={<DeleteOutlineIcon />}
+                  disabled={selectedRow.length == 0}
+                  onClick={handleDeleteMuliple}
                 >
-                  IMPORT
+                  Xóa hàng loạt
                 </Button>
               </MenuItem>
               <MenuItem onClick={handleClose}>
@@ -331,9 +352,10 @@ const KhachHangMucTieu = () => {
                   variant="outlined"
                   sx={{ marginLeft: 1, width: "200px" }}
                   startIcon={<AutoDeleteIcon />}
+                  onClick={handleOpenKhDaXoa}
                   color="error"
                 >
-                  Thùng rác
+                  Đã xóa
                 </Button>
               </MenuItem>
             </Menu>
@@ -344,17 +366,7 @@ const KhachHangMucTieu = () => {
               color="inherit"
               startIcon={<UpdateIcon />}
             >
-              Lịch sử tương tác
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              sx={{ marginLeft: 1 }}
-              startIcon={<DeleteOutlineIcon />}
-              disabled={selectedRow.length == 0}
-              onClick={handleDeleteMuliple}
-            >
-              Xóa hàng loạt
+              Lịch sử mua hàng
             </Button>
 
             {/* <Button
@@ -407,6 +419,12 @@ const KhachHangMucTieu = () => {
         closeModal={handleCloseModalBanGiao}
         refetch={refetch}
         selectedItem={selectedRow}
+      />
+      {/* Modal khách hàng đã xóa */}
+      <ModalKhachHangMucTieuDaXoa
+        open={modalKhDaXoa}
+        handleClose={handleCloseKhDaXoa}
+        refetch={refetch}
       />
     </>
   );

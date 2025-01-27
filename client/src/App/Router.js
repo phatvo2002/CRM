@@ -9,6 +9,7 @@ const ChangePassword = lazy(() => import("./View/session/ChangePassword"));
 const ThietLapVaiTro = lazy(
   () => import("./View/ThietLap/ThietLapVaiTro/Index")
 );
+const QuyTrinhBanHang = lazy(() => import("./View/ThietLap/QuyTrinhBanHang/index"));
 const QuanLyPhongban = lazy(() => import("./View/ThietLap/QuanLyPhongBan"));
 const QuanLyMenu = lazy(() => import("./View/ThietLap/QuanLyMenu/index"));
 const DashBoardThietLap = lazy(
@@ -97,6 +98,14 @@ const RouteChild = [
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ThietLapNhanVien />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/quantrihethong/quytrinhbanhang",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <QuyTrinhBanHang />
       </Suspense>
     ),
   },

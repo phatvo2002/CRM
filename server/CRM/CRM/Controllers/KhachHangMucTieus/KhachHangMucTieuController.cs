@@ -93,6 +93,30 @@ namespace CRM.Controllers.KhachHangMucTieus
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getkhachhangmuctieudaxoa")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetKhachHangDaXoa()
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                var userData = _context.Nguoidungs.FirstOrDefault(r=> r.Id == nguoiDungId);
+                if(userData.CheckIsTruongPhong == true)
+                {
+                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuDaXoaByNguoiDungId(nguoiDungId);
+                    return Ok(result);
+                }    
+                else
+                {
+                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuDaXoaByPhongBanId(phongBanId);
+                    return Ok(result);
+                }    
+            }catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         //[HttpGet("getkhachhangmuctieubyphongbanid")]
         //[JwtAuthorize]
         //public async Task<IActionResult> GetKhachHangMucTieuByPhongBanId()
@@ -327,6 +351,20 @@ namespace CRM.Controllers.KhachHangMucTieus
                 Guid phongBanId = HttpContext.GetPhongBanId();
                 Guid nguoiDungId = HttpContext.GetUserId();
                 ResultModal result = await _khacHangMucTieuServices.UpdateKhachHangMucTieu(modal, nguoiDungId, phongBanId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("khoiphuckhachhang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> KhoiPhucKhachHangMucTieu(List<KhachHangMucTieuModal> modal)
+        {
+            try
+            {
+                ResultModal result = await _khacHangMucTieuServices.KhoiPhucKhachHang(modal);
                 return Ok(result);
             }
             catch (Exception ex)

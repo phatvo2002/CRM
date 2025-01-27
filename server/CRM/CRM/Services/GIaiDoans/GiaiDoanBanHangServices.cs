@@ -12,5 +12,10 @@ namespace CRM.Services.GIaiDoans
         {
             _giaiDoanBanHangRepository = repository;
         }
+
+        public async Task<List<GiaiDoanBanHangDTO>> GetAllGiaiDoanBanhang()
+        {
+            return await _giaiDoanBanHangRepository.GetAllGiaiDoanBanhang();
+        }
     }
 }

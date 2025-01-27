@@ -16,5 +16,7 @@ namespace CRM.Repositories.GetDatas
         Task<List<MucDoUuTienDTO>> GetAllMucDoUuTien();
         Task<List<LoaiCuocGoiDTO>> GetAllLoaiCuocGoi();
         Task<List<KetQuaCuocGoiDTO>> GetAllKetQuaCuocGoi();
+        Task<List<ClassDTO>> GetAllPhanLoaiDuBao();
+        Task<List<ClassDTO>> GetAllLoaiDuBao();
     }
 }

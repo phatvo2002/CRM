@@ -140,8 +140,6 @@ namespace CRM.Repositories.KhachhangMucTieus
             {
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
-
-            throw new NotImplementedException();
         }
 
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId)
@@ -277,5 +275,40 @@ namespace CRM.Repositories.KhachhangMucTieus
 
         }
 
+        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuDaXoaByNguoiDungId(Guid NguoiDungId)
+        {
+            var db = await _crmDbContext.KhachHangMucTieus.Where(r=> r.NguoiDungId == NguoiDungId && r.IsDeleted == true).ToListAsync();
+            return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
+        }
+
+        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuDaXoaByPhongBanId(Guid PhongBanId)
+        {
+            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.PhongBanId == PhongBanId && r.IsDeleted == true).ToListAsync();
+            return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
+        }
+
+        public async Task<ResultModal> KhoiPhucKhachHang(List<KhachHangMucTieuModal> modal)
+        {
+            try
+            {
+                foreach (var item in modal)
+                {
+                    var db = _crmDbContext.KhachHangMucTieus.Where(r => r.Id == item.Id).FirstOrDefault();
+                    if (db != null)
+                    {
+                        db.IsDeleted = false;
+                        _crmDbContext.KhachHangMucTieus.Update(db);
+                    }
+                    else { continue; }   
+                }
+                await _crmDbContext.SaveChangesAsync(); 
+                return new ResultModal () { Status = 200 , Message ="Khôi phục thành công" , Success = true };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = true };
+            }
+           
+        }
     }
 }

@@ -112,10 +112,10 @@ const DashBoardThietLap = () => {
                 <Button size="small"  style={{textAlign:"center" }}>
                   <Link
                     component={RouterLink}
-                    to={""}
+                    to={"/quantrihethong/quytrinhbanhang"}
                     style={{ textDecoration: "none", color: "primary.main"  }}
                   >
-                     Giai đoạn bán hàng
+                     Quy trình bán hàng
                   </Link>
                 </Button>
               </CardActions>

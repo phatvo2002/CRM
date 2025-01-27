@@ -46,6 +46,21 @@ namespace CRM.Controllers.ThongBaos
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getthongbaonotreadbynguoidungid")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetThongBaoNotReadByNguoiDungId()
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                List<ThongBaoDTO> result = await _thongBaoServices.GetThongBaoByNguoiDungIdNotRead(nguoiDungId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet("getthongbaobyid/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> GetThongBaoById(int id)
@@ -102,11 +117,11 @@ namespace CRM.Controllers.ThongBaos
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPut("checkdocthongbao")]
+        [HttpPut("checkdocthongbao/{id}")]
         [JwtAuthorize]
-        public async Task CheckDocThongBao(Guid thongBaoId)
+        public async Task CheckDocThongBao(Guid id)
         {
-            await _thongBaoServices.CheckDocThongBao(thongBaoId);
+            await _thongBaoServices.CheckDocThongBao(id);
         }
         [HttpDelete("deletethongbao/{id}")]
         [JwtAuthorize]

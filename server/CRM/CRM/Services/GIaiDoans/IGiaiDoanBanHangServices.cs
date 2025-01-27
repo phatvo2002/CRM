@@ -6,5 +6,6 @@ namespace CRM.Services.GIaiDoans
 {
     public interface IGiaiDoanBanHangServices : IBaseServices<GiaiDoanBanHang , GIaiDoanBanhangModal , Guid , GiaiDoanBanHangDTO>
     {
+        Task<List<GiaiDoanBanHangDTO>> GetAllGiaiDoanBanhang();
     }
 }

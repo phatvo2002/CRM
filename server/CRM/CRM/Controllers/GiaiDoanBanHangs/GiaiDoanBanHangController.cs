@@ -1,4 +1,5 @@
 ﻿using CRM.Attributes;
+using CRM.DTO;
 using CRM.Modal;
 using CRM.Repositories.GiaiDoans;
 using CRM.Services.LoaiDuBaos;
@@ -23,7 +24,7 @@ namespace CRM.Controllers.GiaiDoanBanHangs
         {
             try
             {
-                var result = await _giaiDoanBanHangservices.GetAll();
+                List<GiaiDoanBanHangDTO> result = await _giaiDoanBanHangservices.GetAllGiaiDoanBanhang();
                 return Ok(result);
             }
             catch (Exception ex)

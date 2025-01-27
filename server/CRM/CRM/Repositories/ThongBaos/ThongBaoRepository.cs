@@ -61,5 +61,11 @@ namespace CRM.Repositories.ThongBaos
             var db = await _crmDbContext.ThongBaos.Where(r => r.NguoiDungId == nguoiDungId).OrderByDescending(r => r.CreateAt).ToListAsync();
             return _mapper.Map<List<ThongBaoDTO>>(db);
         }
+
+        public async Task<List<ThongBaoDTO>> GetThongBaoByNguoiDungIdNotRead(Guid nguoiDungId)
+        {
+            var db = await _crmDbContext.ThongBaos.Where(r => r.NguoiDungId == nguoiDungId && r.IsRead == false).OrderByDescending(r => r.CreateAt).ToListAsync();
+            return _mapper.Map<List<ThongBaoDTO>>(db);
+        }
     }
 }

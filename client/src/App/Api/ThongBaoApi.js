@@ -25,6 +25,9 @@ export const apiThongBao = createApi({
       getThongBaoByNguoiDungId: builder.query({
         query: () => `/ThongBao/getthongbaobynguoidungid`,
       }),
+      getThongBaoNotReadByNguoiDungId: builder.query({
+        query: () => `/ThongBao/getthongbaonotreadbynguoidungid`,
+      }),
       addThongBao: builder.mutation({
         query: (data) => ({
           url: '/ThongBao/createthongbao',
@@ -51,15 +54,23 @@ export const apiThongBao = createApi({
           body: data, 
         }),
       }),
+      checkDocThongBao: builder.mutation({
+        query: (id) => ({
+          url: `/ThongBao/checkdocthongbao/${id}`,
+          method: 'PUT',
+        }),
+      }),
     }),
   });
   export const { 
       useGetAllThongBaoQuery,
       useGetThongBaoByNguoiDungIdQuery,
+      useGetThongBaoNotReadByNguoiDungIdQuery,
       useGetThongBaoByIdQuery,
       useAddThongBaoMutation,
       useCheckThongBaoMutation,
       useUpdateThongBaoMutation,
+      useCheckDocThongBaoMutation,
       useDeleteThongBaoMutation
   } = apiThongBao;
 

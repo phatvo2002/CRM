@@ -1,7 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthApi from "../Api/AuthApi";
-import toastr from "toastr";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 export const AuthContext = createContext();

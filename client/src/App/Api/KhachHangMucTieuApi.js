@@ -31,6 +31,9 @@ export const apiKhachHangMucTieu = createApi({
       getKhachHangMucTieuByPhongBanId: builder.query({
         query: () => `/KhachHangMucTieu/getkhachhangmuctieubyphongbanid/`,
       }),
+      getKhachHangMucTieuDaXoa: builder.query({
+        query: () => `/KhachHangMucTieu/getkhachhangmuctieudaxoa/`,
+      }),
       convertKhachHangMucTieu: builder.mutation({
         query: (data) => ({
           url: '/KhachHangMucTieu/convertkhachhangmuctieu',
@@ -77,6 +80,13 @@ export const apiKhachHangMucTieu = createApi({
           body: data,
         }),
       }),
+      khoiphucKhachHangMucTieu: builder.mutation({
+        query: (data) => ({
+          url: '/KhachHangMucTieu/khoiphuckhachhang',
+          method: 'PUT',
+          body: data,
+        }),
+      }),
     //   bangiaoKhachHangMucTieu: builder.mutation({
     //     query: ({ id, userId }) => ({
     //       url: `/KhachHangTiemNang/bangiaokhachhangtiemnang?id=${id}&userId=${userId}`,
@@ -104,10 +114,12 @@ export const apiKhachHangMucTieu = createApi({
     useGetKhachHangMucTieuByNguoiDungIdQuery,
     useGetKhachHangMucTieuByNguoiDungIdQueryQuery,
     useGetKhachHangMucTieuByPhongBanIdQuery,
+    useGetKhachHangMucTieuDaXoaQuery,
     useImportKhachHangMucTieuMutation,
     useAddKhachHangMucTieuMutation,
     useBanGiaoKhachHangMucTieuMutation,
     useUpdateKhachHangTiemNangMucTieuMutation,
+    useKhoiphucKhachHangMucTieuMutation,
     useConvertKhachHangMucTieuMutation,
     useDeleteKhachHangMucTieuMutation,
     useDeletehangLoatKhachHangMucTieuMutation

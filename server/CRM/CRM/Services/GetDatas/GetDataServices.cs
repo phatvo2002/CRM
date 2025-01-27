@@ -32,6 +32,7 @@ namespace CRM.Services.GetDatas
             return await _getDataRepository.GetAllLoaiCuocGoi();
         }
 
+
         public async Task<List<LoaiHinhNgheNghiepDTO>> GetAllLoaiHinhNgheNghiep()
         {
             return await _getDataRepository.GetAllLoaiHinhNgheNghiep();
@@ -55,7 +56,7 @@ namespace CRM.Services.GetDatas
         public async Task<List<NguonGocKhachHangDTO>> GetAllNguonGocKhachHang()
         {
             return await _getDataRepository.GetAllNguonGocKhachHang();
-        }
+        } 
 
         public async Task<List<PhongBanKhachHangDTO>> GetAllPhongBanKhachHang()
         {
@@ -65,6 +66,14 @@ namespace CRM.Services.GetDatas
         public async Task<List<TrangThaiThucHienDTO>> GetAllTrangThaiThucHien()
         {
             return await _getDataRepository.GetAllTrangThaiThucHien();
+        }
+        public async Task<List<ClassDTO>> GetAllPhanLoaiDuBao()
+        {
+            return await _getDataRepository.GetAllPhanLoaiDuBao();
+        }
+        public async Task<List<ClassDTO>> GetAllLoaiDuBao()
+        {
+            return await _getDataRepository.GetAllLoaiDuBao();
         }
     }
 }

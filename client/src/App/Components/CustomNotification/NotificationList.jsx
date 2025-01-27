@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
@@ -8,37 +8,41 @@ import {
   Divider,
   Grid2,
   Paper,
+  Button,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useGetAllThongBaoQuery } from "src/App/Api/ThongBaoApi";
-import CustomDatagrid from "../DataGrid/CustomDatagrid";
-
-const notifications = [
-  {
-    title: "Thông báo về việc xóa đăng ký học phần HK2 2024-2025",
-    date: "07/01/2025",
-    tag: "New",
-  },
-  {
-    title: "Thông báo về việc đóng học phí HK2 2024-2025",
-    date: "09/12/2024",
-    tag: "Hot",
-  },
-  {
-    title:
-      "Thông báo về việc đăng ký lớp học ngoại ngữ sơ cấp tại Trung tâm Ngoại ngữ - Tin học",
-    date: "05/12/2024",
-  },
-  {
-    title: "Thông báo đăng ký học phần HK2 2024-2025",
-    date: "19/11/2024",
-    tag: "Hot",
-  },
-];
-
+import { useCheckDocThongBaoMutation, useDeleteThongBaoMutation, useGetThongBaoByNguoiDungIdQuery } from "src/App/Api/ThongBaoApi";
+import { Link } from "react-router-dom";
+import BackspaceIcon from '@mui/icons-material/Backspace';
+import Swal from "sweetalert2";
+import { toast } from "react-toastify";
 const NotificationList = () => {
-  const { data: dataNoti } = useGetAllThongBaoQuery();
-  return (
+  const { data: dataNoti , refetch } = useGetThongBaoByNguoiDungIdQuery();
+  const [checkXemThonBao] = useCheckDocThongBaoMutation()
+  const [deleteThongbao] = useDeleteThongBaoMutation()
+  const [modalThongBao , setModalThongBao] = useState(false)
+  const [thongBaoId , setThongBaoId] = useState("")
+  const handleClickXemThongBao = async (id) => {
+     await checkXemThonBao(id)
+  }
+
+   const handleDeleteNhiemVu = async (id) => {
+      Swal.fire({
+        title: "Bạn có muốn xóa thông báo này?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+           await deleteThongbao(id)
+            toast.success("Xóa thông báo thành công")
+            refetch();
+        }
+      });
+    };
+    return (
     <div style={{ padding: "20px" }}>
       <Typography
         style={{
@@ -94,11 +98,19 @@ const NotificationList = () => {
                     >
                       {noti.noiDung}
                     </Typography>
-                    <DeleteIcon
-                      fontSize="large"
-                      style={{ cursor: "pointer" }}
-                    />
+                    <Button
+                      startIcon={ <BackspaceIcon
+                        fontSize="large"
+                        style={{ cursor: "pointer" }}
+                        
+                      />}
+                      onClick={()=> handleDeleteNhiemVu(noti?.id)}
+                    >
+                    </Button>
+                   
+                  
                   </div>
+                  <Link style={{padding : 0 , margin : 0,color:"#0276aa" , textDecoration:"none"}} color="" to={noti.duongDan} onClick={()=>handleClickXemThongBao(noti?.id)}>Thực hiện</Link>
                 </CardContent>
               </Card>
             </Grid>
@@ -109,6 +121,7 @@ const NotificationList = () => {
           </div>
         )}
       </Grid>
+      
     </div>
   );
 };

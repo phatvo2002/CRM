@@ -6,6 +6,7 @@ using CRM.Repositories.ChucVus;
 using CRM.Repositories.CuocGois;
 using CRM.Repositories.DonViTinhs;
 using CRM.Repositories.GetDatas;
+using CRM.Repositories.GiaiDoans;
 using CRM.Repositories.HangHoaQuanTams;
 using CRM.Repositories.HangHoas;
 using CRM.Repositories.KhachhangMucTieus;
@@ -25,6 +26,7 @@ using CRM.Services.ChucVus;
 using CRM.Services.CuocGois;
 using CRM.Services.DonViTinhs;
 using CRM.Services.GetDatas;
+using CRM.Services.GIaiDoans;
 using CRM.Services.HangHoaQuanTams;
 using CRM.Services.HangHoas;
 using CRM.Services.KhachHangMucTieus;
@@ -130,6 +132,10 @@ builder.Services.AddScoped<IKhacHangMucTieuServices, KhachHangMucTieuServices>()
 
 builder.Services.AddScoped<IHangHoaQuanTamRepository, HangHoaQuanTamRepository>();
 builder.Services.AddScoped<IHangHoaQuanTamServices, HangHoaQuanTamServices>();
+
+
+builder.Services.AddScoped<IGiaiDoanBanhangRepository, GiaiDoanBanHangRepository>();
+builder.Services.AddScoped<IGiaiDoanBanHangServices, GiaiDoanBanHangServices>();
 
 builder.Services.AddScoped<IThongBaoRepository, ThongBaoRepository>();
 builder.Services.AddScoped<IThongBaoServices, ThongBaoServices>();

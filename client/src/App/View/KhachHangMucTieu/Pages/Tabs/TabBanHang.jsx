@@ -80,7 +80,6 @@ const TabBanHang = () => {
     setHangHoa((prev) =>
       prev.map((row) => (row.id === updatedRow.id ? updatedRow : row))
     );
-
     return updatedRow;
   };
   const handleDeleteClick = (id) => async () => {

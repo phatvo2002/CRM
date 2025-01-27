@@ -6,45 +6,64 @@ import {
   Divider,
   List,
   Button,
+  Typography,
+  Tooltip,
+  Icon,
+  Box,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import IconButton from "@mui/material/IconButton";
+import { vi } from "date-fns/locale";
+import { formatDistanceToNow } from "date-fns";
+import { Link as BrowserRowter} from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import NotificationImportantIcon from "@mui/icons-material/NotificationImportant";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
+  useCheckDocThongBaoMutation,
   useCheckThongBaoMutation,
   useGetThongBaoByNguoiDungIdQuery,
+  useGetThongBaoNotReadByNguoiDungIdQuery,
 } from "src/App/Api/ThongBaoApi";
 import { Link } from "react-router-dom";
+import moment from "moment";
+import { toast } from "react-toastify";
 export const CustomNotification = ({
   openNoti,
   handleOpenNoti,
   handleClose,
   intitialNoti,
 }) => {
-  const { data: dataNoti } = useGetThongBaoByNguoiDungIdQuery();
+  const { data: dataNoti ,refetch } = useGetThongBaoByNguoiDungIdQuery();
+  const { data: dataNotiNotRead } = useGetThongBaoNotReadByNguoiDungIdQuery();
+  const [checkXemThonBao] = useCheckDocThongBaoMutation()
   const [CheckDeadline, { data, error }] = useCheckThongBaoMutation();
   useEffect(() => {
     const interval = setInterval(() => {
       CheckDeadline()
         .then((response) => {
           window.location.reload();
-          console.log("Checked deadlines:", response.data);
+          toast.info("Bạn có 1 thông báo mới chưa đọc !")
         })
         .catch((err) => {
-          console.error("Error checking deadlines:", err);
+          console.error("Error checking deadlines:", err);``
         });
     }, 600000);
     return () => clearInterval(interval);
   }, [CheckDeadline]);
+
+  const handleCheckXemThongBao = async(id)=> 
+  {
+      await checkXemThonBao()
+      refetch()
+  }
   return (
     <>
       <IconButton color="primary" onClick={handleOpenNoti}>
-        {dataNoti?.length > 0 ? (
-          <Badge badgeContent={dataNoti?.length} color="primary">
+        {dataNotiNotRead?.length > 0 ? (
+          <Badge badgeContent={dataNotiNotRead?.length} color="primary">
             <NotificationsIcon />
           </Badge>
         ) : (
@@ -66,7 +85,7 @@ export const CustomNotification = ({
           horizontal: "right",
         }}
       >
-        <List sx={{ width: "400px", maxHeight: "400px", overflow: "auto" }}>
+        <List sx={{ width: "400px", maxHeight: "500px", overflow: "auto" }}>
           {dataNoti?.length > 0 ? (
             dataNoti.map((noti) => (
               <div key={noti.id}>
@@ -76,7 +95,7 @@ export const CustomNotification = ({
                       <CheckCircleIcon color="success" />
                     )}
                     {noti.type === "Error" && <ErrorIcon color="error" />}
-                    {noti.type === "Info" && (
+                    {noti.type === "new" && (
                       <NotificationsIcon color="primary" />
                     )}
                     {noti.type === "Warning" && (
@@ -84,8 +103,33 @@ export const CustomNotification = ({
                     )}
                   </ListItemIcon>
                   <ListItemText
-                    primary={noti.tieuDe}
-                    secondary={noti.noiDung}
+                    primary={
+                      <Box display="flex" alignItems="center">
+                         <BrowserRowter to={noti.duongDan} style={{textDecoration:"none" , color:"text.primary"}} onClick={()=> handleCheckXemThongBao(noti?.id)}>
+                            {noti.tieuDe}
+                         </BrowserRowter>
+                        {!noti.isRead && (
+                          <Tooltip title="Chưa đọc">
+                            <Icon sx={{ color: "#2196f3", marginRight: "8px" }}>
+                              fiber_manual_record
+                            </Icon>
+                          </Tooltip>
+                        )}
+                      </Box>
+                    }
+                    secondary={
+                      <>
+                        <Typography variant="body2" color="text.primary">
+                          {noti.noiDung}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {formatDistanceToNow(new Date(noti.createAt), {
+                            addSuffix: true,
+                            locale: vi,
+                          })}
+                        </Typography>
+                      </>
+                    }
                   />
                 </ListItem>
                 <Divider />
