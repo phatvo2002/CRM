@@ -1,6 +1,4 @@
-﻿using CRM.Entities;
-
-namespace CRM.DTO
+﻿namespace CRM.DTO
 {
     public class UserDTO
     {
@@ -13,7 +11,7 @@ namespace CRM.DTO
         public string? DiaChi { get; set; }
         public string? TaiKhoan { get; set; }
         public string? SoDienThoai { get; set; }
-
+        public string? Password { get; set; }
         public string? Email { get; set; }
 
         public bool IsActive { get; set; }

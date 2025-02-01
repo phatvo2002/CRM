@@ -8,7 +8,7 @@ namespace CRM.Services.NguoiDungs
         Task<LoginDTO> Login(LoginViewModal loginViewModal);
 
         Task<ResultModal> CreateUser(UserModal userModal);
-
+        Task<ResultModal> ActiveMailServices(Guid Id, string passEmail, string email);
         Task<List<UserDTO>> GetUsers();
         Task<List<UserDTO>> GetUserByPhongBanId(Guid id);
 

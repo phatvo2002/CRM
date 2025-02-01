@@ -72,6 +72,9 @@ namespace CRM.Entities
         public virtual DbSet<BaoGia> BaoGias { get; set;  }
         public virtual DbSet<TinhTrangBaoGia> TinhTrangBaoGias { get; set; }
 
+
+        public virtual DbSet<EmailDaGui> EmailDaGuis { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             //optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
@@ -526,6 +529,7 @@ namespace CRM.Entities
                 entity.Property(e => e.TenHangHoa).HasMaxLength(100);
                 entity.Property(e => e.DuongDanHinhAnh).HasMaxLength(100);
                 entity.Property(e => e.NguonGoc).HasMaxLength(100);
+                entity.Property(e => e.SoLuongTon).HasColumnType("integer");
                 entity.Property(e => e.DonGia).HasColumnType("decimal");
                 entity.Property(e => e.MoTa).HasMaxLength(100);
                 entity.HasOne(d => d.DonViTinh).WithMany(r => r.HangHoas).HasForeignKey(r => r.MaDonViTinh)
@@ -781,6 +785,37 @@ namespace CRM.Entities
 .OnDelete(DeleteBehavior.ClientSetNull)
 .HasConstraintName("FK_PhongBan_BaoGia");
             });
+
+            // Bảng mail đã gửi 
+            modelBuilder.Entity<EmailDaGui>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_EmailDaGui");
+
+                entity.ToTable("EmailDaGui");
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.TieuDe).HasMaxLength(50);
+                entity.Property(e => e.DiaChiGui).HasMaxLength(50);
+                entity.Property(e => e.DiaChiNhan).HasMaxLength(50);
+               entity.HasOne(d => d.KhachHangMucTieu).WithMany(p => p.EmailDaGuis)
+.HasForeignKey(d => d.KhachHangMucTieuId)
+.OnDelete(DeleteBehavior.ClientSetNull)
+.HasConstraintName("FK_KhachHangMucTieu_EmailDaGui");
+                entity.HasOne(d => d.KhachHangTiemNang).WithMany(p => p.EmailDaGuis)
+.HasForeignKey(d => d.KhachHangTiemNangId)
+.OnDelete(DeleteBehavior.ClientSetNull)
+.HasConstraintName("FK_KhachHangTiemNang_EmailDaGui");
+                entity.HasOne(d => d.Nguoidung).WithMany(p => p.EmailDaGuis)
+.HasForeignKey(d => d.NguoiDungId)
+.OnDelete(DeleteBehavior.ClientSetNull)
+.HasConstraintName("FK_NguoiDung_EmailDaGui");
+                entity.HasOne(d => d.PhongBan).WithMany(p => p.EmailDaGuis)
+.HasForeignKey(d => d.PhongBanId)
+.OnDelete(DeleteBehavior.ClientSetNull)
+.HasConstraintName("FK_PhongBan_EmailDaGui");
+         
+        });
+
+           
         }
 
     }

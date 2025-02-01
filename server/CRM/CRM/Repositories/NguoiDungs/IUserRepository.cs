@@ -1,5 +1,6 @@
 ﻿using CRM.DTO;
 using CRM.Modal;
+using System.ComponentModel.DataAnnotations;
 
 namespace CRM.Repositories.NguoiDungs
 {
@@ -9,6 +10,8 @@ namespace CRM.Repositories.NguoiDungs
         Task<LoginDTO> Login(LoginViewModal loginViewModel);
 
         Task<ResultModal> ChangePassword(Guid id, string oldpass, string newpass);
+
+        Task<ResultModal> ActiveMailServices(Guid Id , string passEmail , string email);
 
         Task<ResultModal> CreateUser(UserModal userModal);
 

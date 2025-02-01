@@ -49,5 +49,6 @@
         public virtual ICollection<NhiemVu> NhiemVus { get; set; } = new List<NhiemVu>();
         public virtual ICollection<LienHe> LienHes { get; set; } = new List<LienHe>();
 
+        public virtual ICollection<EmailDaGui> EmailDaGuis { get ; set; } = new List<EmailDaGui>();
     }
 }

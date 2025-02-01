@@ -2,9 +2,7 @@
 using CRM.DTO;
 using CRM.Extensions;
 using CRM.Modal;
-using CRM.Services;
 using CRM.Services.NguoiDungs;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers.Auths
@@ -68,6 +66,22 @@ namespace CRM.Controllers.Auths
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("ActiveMailSerVices/{passEmail}/{email}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> ActiveMailSerVices(string passEmail, string email)
+        {
+            try
+            {
+                Guid userId = HttpContext.GetUserId();
+                ResultModal result = await _userServices.ActiveMailServices(userId, passEmail, email);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         [HttpPut("ChangePassword")]
         [JwtAuthorize]

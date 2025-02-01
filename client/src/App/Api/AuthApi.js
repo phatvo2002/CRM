@@ -8,16 +8,13 @@ const login = (taiKhoan, password) => {
     .post(`${API_URL}/Auth/Login`, { taiKhoan, password })
     .then((response) => response.data);
 };
-
-// const getProfile = () => {
-//   return axios
-//     .get(`${API_URL}/Auth/getprofileuser`,{
-//       headers: { Authorization: `Bearer ${Token}` },
-//     })
-//     .then((response) => response.data);
-// };
-
-
+const ActiveEmailService = (passwordEmail, email) => {
+  return axios
+    .put(`${API_URL}/Auth/ActiveMailSerVices/${passwordEmail}/${email}`, null, {
+      headers: { Authorization: `Bearer ${Token}` },
+    })
+    .then((response) => response.data);
+};
 const ActiveAccount = (data) => {
   return axios
     .put(`${API_URL}/Auth/ActiveAccount`, data, {
@@ -26,16 +23,21 @@ const ActiveAccount = (data) => {
     .then((response) => response.data);
 };
 
-const ChangePassword = (id , NewPassword  , OldPassword) => {
+const ChangePassword = (id, NewPassword, OldPassword) => {
   return axios
-  .put(`${API_URL}/Auth/ChangePassword?id=${id}&OldPassword=${OldPassword}&NewPassword=${NewPassword}`,null, {
-    headers: { Authorization: `Bearer ${Token}` },
-  })
-  .then((response) => response.data);
-}
+    .put(
+      `${API_URL}/Auth/ChangePassword?id=${id}&OldPassword=${OldPassword}&NewPassword=${NewPassword}`,
+      null,
+      {
+        headers: { Authorization: `Bearer ${Token}` },
+      }
+    )
+    .then((response) => response.data);
+};
 
 export default {
   login,
   ActiveAccount,
-  ChangePassword
+  ChangePassword,
+  ActiveEmailService
 };

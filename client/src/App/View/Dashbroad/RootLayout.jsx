@@ -11,13 +11,28 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
-import { Breadcrumbs, Fab, Grid, Link, Stack, Popover, ListItem, ListItemText, ListItemIcon, Grid2, Icon, Tooltip, Paper, Button } from "@mui/material";
-import EditIcon from '@mui/icons-material/Edit';
+import {
+  Breadcrumbs,
+  Fab,
+  Grid,
+  Link,
+  Stack,
+  Popover,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
+  Grid2,
+  Icon,
+  Tooltip,
+  Paper,
+  Button,
+} from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ListItems from "../Dashbroad/listItems"
+import ListItems from "../Dashbroad/listItems";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
@@ -27,10 +42,10 @@ import MenuItem from "@mui/material/MenuItem";
 import { CustomNotification } from "src/App/Components/CustomNotification/CustomNotification";
 // import Chart from "./Chart";
 import { useGetMenuRoleByIdQuery } from "../../Api/MenuApi";
-import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import panner from "../../Assets/image/banner.png"
-import LogoutIcon from '@mui/icons-material/Logout';
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import panner from "../../Assets/image/banner.png";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 function Copyright(props) {
   return (
@@ -44,13 +59,17 @@ function Copyright(props) {
         backgroundColor: "background.paper",
         height: "50px",
         textAlign: "center",
-        boxShadow: " rgba(14, 63, 126, 0.06) 0px 0px 0px 1px, rgba(42, 51, 70, 0.03) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 2px 2px -1px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.03) 0px 5px 5px -2.5px, rgba(42, 51, 70, 0.03) 0px 10px 10px -5px, rgba(42, 51, 70, 0.03) 0px 24px 24px -8px;"
+        boxShadow:
+          " rgba(14, 63, 126, 0.06) 0px 0px 0px 1px, rgba(42, 51, 70, 0.03) 0px 1px 1px -0.5px, rgba(42, 51, 70, 0.04) 0px 2px 2px -1px, rgba(42, 51, 70, 0.04) 0px 3px 3px -1.5px, rgba(42, 51, 70, 0.03) 0px 5px 5px -2.5px, rgba(42, 51, 70, 0.03) 0px 10px 10px -5px, rgba(42, 51, 70, 0.03) 0px 24px 24px -8px;",
       }}
-
     >
       {/* Footer content */}
 
-      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: "50px" }}>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ lineHeight: "50px" }}
+      >
         {"Copyright © "}
         <Link color="inherit" href="">
           LP CRM
@@ -59,7 +78,6 @@ function Copyright(props) {
         {"."}
       </Typography>
     </Grid2>
-
   );
 }
 
@@ -111,16 +129,15 @@ const Drawer = styled(MuiDrawer, {
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
-
 export default function RootLayout() {
   const location = useLocation();
-  const pathParts = location.pathname.split('/').filter(Boolean);
+  const pathParts = location.pathname.split("/").filter(Boolean);
   const { logout } = React.useContext(AuthContext);
   const [open, setOpen] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [menu, setMenu] = React.useState([]);
   const opens = Boolean(anchorEl);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [darkMode, setDarkMode] = React.useState(false);
   const toggleTheme = () => {
     setDarkMode(!darkMode);
@@ -129,7 +146,7 @@ export default function RootLayout() {
     () =>
       createTheme({
         palette: {
-          mode: darkMode ? 'dark' : 'light',
+          mode: darkMode ? "dark" : "light",
         },
       }),
     [darkMode]
@@ -139,21 +156,26 @@ export default function RootLayout() {
     setAnchorEl(event.currentTarget);
   };
 
-
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   const gotoLink = () => {
-    navigate("/doimatkhau")
-  }
+    navigate("/doimatkhau");
+  };
+  const linkToMail = () => navigate("/thietlapmail")
+  
 
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const roleId = localStorage.getItem("roleId")
+  const roleId = localStorage.getItem("roleId");
 
-  const { data: menuRoleData, error, isLoading } = useGetMenuRoleByIdQuery(roleId, {
+  const {
+    data: menuRoleData,
+    error,
+    isLoading,
+  } = useGetMenuRoleByIdQuery(roleId, {
     skip: !roleId,
   });
   React.useEffect(() => {
@@ -172,37 +194,44 @@ export default function RootLayout() {
 
   //handle noti
   const [openNoti, setOpenNoti] = React.useState(null);
+  const [openSetting, setOpenSetting] = React.useState(null);
   const handleOpenNoti = (event) => {
     setOpenNoti(event.currentTarget);
   };
   const handleCloseNoti = () => {
     setOpenNoti(null);
   };
+  const handleOpenSetting = (event) => {
+    setOpenSetting(event.currentTarget);
+  };
+  const handleCloseSetting = () => {
+    setOpenSetting(null);
+  };
   const intitialNoti = Boolean(openNoti);
+  const intitialSetting = Boolean(openSetting);
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{
-        display: 'flex',
-        bgcolor: 'background.default',
-        color: 'text.primary',
-        fontFamily: "inherit",
-      }} >
-
+      <Box
+        sx={{
+          display: "flex",
+          bgcolor: "background.default",
+          color: "text.primary",
+          fontFamily: "inherit",
+        }}
+      >
         <CssBaseline />
         <AppBar
           overflow={"auto"}
           height="50px"
           position="absolute"
           open={open}
-          sx={{ backgroundColor: 'background.paper' }}
+          sx={{ backgroundColor: "background.paper" }}
         >
-
           <Toolbar
             sx={{
               pr: "24px",
             }}
           >
-
             <IconButton
               edge="start"
               color="black"
@@ -215,9 +244,13 @@ export default function RootLayout() {
             >
               <MenuIcon />
             </IconButton>
-            <Breadcrumbs maxItems={2} aria-label="breadcrumb" style={{ width: "200px" }}>
+            <Breadcrumbs
+              maxItems={2}
+              aria-label="breadcrumb"
+              style={{ width: "200px" }}
+            >
               {pathParts.map((item, index) => {
-                const href = '/' + pathParts.slice(0, index + 1).join('/');
+                const href = "/" + pathParts.slice(0, index + 1).join("/");
                 return (
                   <Link
                     key={index}
@@ -232,13 +265,26 @@ export default function RootLayout() {
             </Breadcrumbs>
             <Grid2 style={{ width: "80%" }} overflow={"clip"}>
               {menu.length !== 0 && (
-                <Stack direction="row" spacing={4} fontSize={"1.5rem"} alignItems="center">
+                <Stack
+                  direction="row"
+                  spacing={4}
+                  fontSize={"1.5rem"}
+                  alignItems="center"
+                >
                   {menu.map((item, index) => (
-                    <Stack direction="row" spacing={1} key={index} alignItems="center">
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      key={index}
+                      alignItems="center"
+                    >
                       <Tooltip title={item?.menu?.name}>
                         <Link
                           component={RouterLink}
-                          style={{ textDecoration: "none", color: theme.palette.text.primary }}
+                          style={{
+                            textDecoration: "none",
+                            color: theme.palette.text.primary,
+                          }}
                           to={item.menu.url}
                         >
                           <Icon>{item.menu.icon}</Icon>
@@ -258,17 +304,33 @@ export default function RootLayout() {
             ></Typography>
             <IconButton>
               <IconButton onClick={toggleTheme}>
-                {darkMode ? <WbSunnyIcon style={{ color: "white" }} /> : <DarkModeIcon style={{ color: "black" }} />}
+                {darkMode ? (
+                  <WbSunnyIcon style={{ color: "white" }} />
+                ) : (
+                  <DarkModeIcon style={{ color: "black" }} />
+                )}
               </IconButton>
             </IconButton>
             <IconButton color="black">
               <SettingsIcon
-              // id="basic-button"
-              // onClick={gotoLinkThietLap}
-              // aria-expanded={open ? "true" : undefined}
-              // aria-controls={open ? "basic-menu" : undefined}
-              // aria-haspopup="true"
+                // id="basic-button"
+                // onClick={gotoLinkThietLap}
+                // aria-expanded={open ? "true" : undefined}
+                // aria-controls={open ? "basic-menu" : undefined}
+                // aria-haspopup="true"
+                onClick={handleOpenSetting}
               ></SettingsIcon>
+              <Menu
+                id="basic-menu"
+                anchorEl={openSetting}
+                open={intitialSetting}
+                onClose={handleCloseSetting}
+                MenuListProps={{
+                  "aria-labelledby": "basic-button",
+                }}
+              >
+                <MenuItem onClick={linkToMail}>Thiết lập Mail</MenuItem>
+              </Menu>
             </IconButton>
             <CustomNotification
               openNoti={openNoti}
@@ -276,7 +338,9 @@ export default function RootLayout() {
               handleClose={handleCloseNoti}
               intitialNoti={intitialNoti}
             />
-            <IconButton style={{ border: "1px solid", padding: 10, marginLeft: "20px" }}>
+            <IconButton
+              style={{ border: "1px solid", padding: 10, marginLeft: "20px" }}
+            >
               <PersonIcon
                 id="basic-button"
                 aria-controls={open ? "basic-menu" : undefined}
@@ -294,13 +358,14 @@ export default function RootLayout() {
                 }}
               >
                 <MenuItem>
-                  <Link component={RouterLink} to="/user/profile">Thông tin tài khoản</Link>
+                  <Link component={RouterLink} to="/user/profile">
+                    Thông tin tài khoản
+                  </Link>
                 </MenuItem>
                 <MenuItem onClick={gotoLink}>Đổi mật khẩu</MenuItem>
                 <MenuItem onClick={logout}>Logout</MenuItem>
               </Menu>
             </IconButton>
-
           </Toolbar>
           {/* <Toolbar style={{height:"10px"}}>
           {menu.map((item, index)=>{
@@ -320,8 +385,6 @@ export default function RootLayout() {
             )
           })}
           </Toolbar> */}
-
-
         </AppBar>
         <Drawer
           variant="permanent"
@@ -329,7 +392,7 @@ export default function RootLayout() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            height: "100vh", 
+            height: "100vh",
           }}
         >
           {/* Nội dung phía trên */}
@@ -342,7 +405,11 @@ export default function RootLayout() {
                 px: [1],
               }}
             >
-              <img src={panner} style={{ width: "100%", paddingLeft: "30px" }} alt="Panner" />
+              <img
+                src={panner}
+                style={{ width: "100%", paddingLeft: "30px" }}
+                alt="Panner"
+              />
               <IconButton onClick={toggleDrawer} sx={{ color: "black" }}>
                 <ChevronLeftIcon />
               </IconButton>
@@ -359,14 +426,13 @@ export default function RootLayout() {
             startIcon={<LogoutIcon />}
             sx={{
               fontWeight: "bold",
-              marginTop: "auto", 
-              mb: 2, 
+              marginTop: "auto",
+              mb: 2,
             }}
           >
             Đăng Xuất
           </Button>
         </Drawer>
-
 
         <Box
           component="main"
@@ -386,14 +452,15 @@ export default function RootLayout() {
           </Container>
           <Copyright />
 
-          <Fab color="secondary" aria-label="edit" style={{ position: "fixed", top: "90%", left: "95%" }}>
+          <Fab
+            color="secondary"
+            aria-label="edit"
+            style={{ position: "fixed", top: "90%", left: "95%" }}
+          >
             <EditIcon />
           </Fab>
         </Box>
-
       </Box>
-
-
     </ThemeProvider>
   );
 }

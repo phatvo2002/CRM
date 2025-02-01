@@ -101,8 +101,6 @@ const ModalUpdateMenu = (props) => {
         { keepDirty: true }
       );
     };
-    console.log(selectedItem)
-
   useEffect(() => {
     if (selectedItem[0] && typeModal === TYPE_MODAL.UPDATE) {
       getInitialStateFromApiToUpdate(selectedItem[0]);

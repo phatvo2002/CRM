@@ -36,6 +36,30 @@ namespace CRM.Repositories.NguoiDungs
             return new ResultModal() { Status = 202, Message = "Kích hoạt thất bại", Success = false };
         }
 
+        public async Task<ResultModal> ActiveMailServices(Guid Id, string email, string passEmail)
+        {
+            var db = _context.Nguoidungs.FirstOrDefault(r => r.Id == Id);
+            try
+            {
+                if (db != null)
+                {
+                    db.Email = email;
+                    db.Password = passEmail;
+                    _context.Nguoidungs.Update(db);
+                    await _context.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Cập nhật dịch vụ mail thành công", Success = true };
+                }
+                else
+                {
+                    return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+        }
+
         public async Task<ResultModal> ChangePassword(Guid id, string oldpass, string newpass)
         {
             var db = _context.Nguoidungs.Where(r => r.Id == id).FirstOrDefault();

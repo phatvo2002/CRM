@@ -36,6 +36,6 @@
         public virtual ICollection<CuocGoi> CuocGois { get; set;} = new List<CuocGoi>();
         public virtual ICollection<LichHen> LichHens { get; set;} = new List<LichHen>();
         public virtual ICollection<NhiemVu> NhiemVus { get; set; } = new List<NhiemVu>();
-
+        public virtual ICollection<EmailDaGui> EmailDaGuis { get; set; } = new List<EmailDaGui>();
     }
 }

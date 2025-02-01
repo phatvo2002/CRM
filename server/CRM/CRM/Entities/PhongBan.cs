@@ -18,6 +18,7 @@
         public virtual ICollection<KhachHangMucTieu> KhachHangMucTieus { get; set; } = new List<KhachHangMucTieu>();
         public virtual ICollection<CoHoi> CoHois { get; set; } = new List<CoHoi>();
         public virtual ICollection<BaoGia> BaoGias { get; set; } = new List<BaoGia>();
+        public virtual ICollection<EmailDaGui> EmailDaGuis { get; set; } = new List<EmailDaGui>();
         public virtual ICollection<LienHe> LienHes { get; set; } = new List<LienHe>();
         public virtual ICollection<CuocGoi> CuocGois { get; set; }  = new List<CuocGoi>();
         public virtual ICollection<LichHen> LichHens { get; set; } = new List<LichHen>();

@@ -64,5 +64,10 @@ namespace CRM.Services.NguoiDungs
         {
             return await _userRepository.GetUserByPhongBanId(id);
         }
+
+        public async Task<ResultModal> ActiveMailServices(Guid Id, string passEmail, string email)
+        {
+            return await _userRepository.ActiveMailServices(Id, passEmail, email);
+        }
     }
 }

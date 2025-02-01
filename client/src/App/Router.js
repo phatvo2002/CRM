@@ -15,6 +15,9 @@ const QuanLyMenu = lazy(() => import("./View/ThietLap/QuanLyMenu/index"));
 const DashBoardThietLap = lazy(
   () => import("./View/ThietLap/DashBoardThietLap")
 );
+const ThietLapMail = lazy(
+  () => import("./View/ThietLap/ThietLapMail/index")
+);
 // khách hàng tiềm năng
 const KhachHangTiemNang = lazy(() => import("./View/KhachHangTiemNang/index"));
 const ThemMoiKhachHangTiemNang = lazy(
@@ -131,6 +134,14 @@ const RouteChild = [
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <DashBoardThietLap />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/thietlapmail",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThietLapMail />
       </Suspense>
     ),
   },

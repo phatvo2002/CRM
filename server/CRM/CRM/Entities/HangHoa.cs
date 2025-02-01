@@ -10,6 +10,7 @@
         public decimal? DonGia { get; set; }
         public int MaLoaiHangHoa { get; set; }
         public int MaDonViTinh { get; set; }
+        public int SoLuongTon { get; set; }
         public virtual DonViTinh? DonViTinh { get; set; }
         public virtual LoaiHangHoa? LoaiHangHoa { get; set; }
         public virtual List<HangHoaQuanTam> HangHoaQuanTams { get; set; } = new List<HangHoaQuanTam>();

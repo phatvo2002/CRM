@@ -11,16 +11,16 @@ namespace CRM.Services.Mails
         {
             _mailSettings = mailSettings.Value;
         }
-        public async Task SendMailAsync(MailRequest request)
+        public async Task SendMailAsync(MailRequest request, string Email, string Password)
         {
             var mail = new MimeMessage();
-            mail.Sender = MailboxAddress.Parse(_mailSettings.Mail);
+            mail.Sender = MailboxAddress.Parse(Email);
             mail.To.Add(MailboxAddress.Parse(request.ToMail));
             mail.Subject = request.Subject;
             var builder = new BodyBuilder();
 
             byte[] fileByte;
-            if (request.AttachtMent.Count > 0)
+            if (request.AttachtMent != null && request.AttachtMent.Count > 0)
             {
                 foreach (var file in request.AttachtMent)
                 {
@@ -33,17 +33,13 @@ namespace CRM.Services.Mails
                         }
                         builder.Attachments.Add(file.Name, fileByte, ContentType.Parse(file.ContentType));
                     }
-                    else
-                    {
-                        continue;
-                    }
                 }
             }
             builder.HtmlBody = request.Body;
             mail.Body = builder.ToMessageBody();
             using var smtp = new MailKit.Net.Smtp.SmtpClient();
             smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
-            smtp.Authenticate(_mailSettings.Mail, _mailSettings.Password);
+            smtp.Authenticate(Email, Password);
             await smtp.SendAsync(mail);
             smtp.Disconnect(true);
         }
