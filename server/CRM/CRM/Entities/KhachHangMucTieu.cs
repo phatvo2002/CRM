@@ -24,6 +24,8 @@
         public int? MaNganhNghe { get; set; }
         public int? MaLinhVuc { get; set; }
         public int? MaDoanhThu { get; set; }
+        public DateTime? DeleteAt { get; set; }
+        public DateTime? UpdateAt { get; set; }
         public virtual PhongBanKhachHang? PhongBanKhachHang { get; set; }
         public virtual NguonGocKhachHang? NguonGocKhachHang { get; set; }
         public virtual LoaiTiemNang? LoaiTiemNang { get; set; }
@@ -34,5 +36,7 @@
         public virtual ICollection<CuocGoi> CuocGois { get; set; } = new List<CuocGoi>();
         public virtual ICollection<LichHen> LichHens { get; set; } = new List<LichHen>();
         public virtual ICollection<NhiemVu> NhiemVus { get; set; } = new List<NhiemVu>();
+        public virtual ICollection<CoHoi> CoHois { get; set; } = new List<CoHoi>();
+        public virtual ICollection<BaoGia> BaoGias { get; set; } = new List<BaoGia>();
     }
 }

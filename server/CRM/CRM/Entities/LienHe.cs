@@ -10,5 +10,6 @@
         public Guid? KhachHangTiemNangId { get; set; }
         public string? KhachHangId { get; set; }
 
+        public virtual ICollection<CoHoi> CoHois { get; set; } = new List<CoHoi>();
     }
 }

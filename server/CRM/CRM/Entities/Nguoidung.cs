@@ -13,6 +13,8 @@
         public string? SoDienThoai { get; set; }
 
         public string? Email { get; set; }
+        public string? DisplayName { get; set; } // mới
+        public string? Password { get; set; } // mới
 
         public DateTime? NgayThuViec { get; set; }
 
@@ -24,7 +26,9 @@
          
         public bool IsActive { get; set; }
 
-        public bool CheckIsTruongPhong { get; set; } 
+        public bool CheckIsTruongPhong { get; set; }
+
+        public byte[]? HinhAnh { get; set; } // mới
 
         public bool CheckIsGiamDoc { get; set; }
         public Guid? MaChucVu { get; set; }
@@ -38,6 +42,8 @@
 
         public virtual ICollection<KhachHangTiemNang> KhachHangTiemNangs { get; set; } = new List<KhachHangTiemNang>();
         public virtual ICollection<KhachHangMucTieu> KhachHangMucTieus { get; set; } = new List<KhachHangMucTieu>();
+        public virtual ICollection<CoHoi> CoHois { get; set; } = new List<CoHoi>();
+        public virtual ICollection<BaoGia> BaoGias { get; set; } = new List<BaoGia>();
         public virtual ICollection<CuocGoi> CuocGois { get; set; } = new List<CuocGoi>();
         public virtual ICollection<LichHen> LichHens { get; set; } = new List<LichHen>();
         public virtual ICollection<NhiemVu> NhiemVus { get; set; } = new List<NhiemVu>();
