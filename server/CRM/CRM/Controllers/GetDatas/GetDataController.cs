@@ -1,7 +1,6 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
 using CRM.Services.GetDatas;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers.GetDatas
@@ -190,6 +189,20 @@ namespace CRM.Controllers.GetDatas
             try
             {
                 List<ClassDTO> result = await _getDataServices.GetAllPhanLoaiDuBao();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getallloaicohoi")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetAllLoaiCoHoi()
+        {
+            try
+            {
+                List<ClassDTO> result = await _getDataServices.GetAllLoaiCoHoi();
                 return Ok(result);
             }
             catch (Exception ex)

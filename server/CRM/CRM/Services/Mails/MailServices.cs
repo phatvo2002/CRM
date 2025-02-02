@@ -1,4 +1,5 @@
-﻿using CRM.Modal;
+﻿using CRM.Entities;
+using CRM.Modal;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
@@ -7,11 +8,13 @@ namespace CRM.Services.Mails
     public class MailServices : IMailServices
     {
         private readonly MailSettings _mailSettings;
-        public MailServices(IOptions<MailSettings> mailSettings)
+        private readonly CrmDbContext _context;
+        public MailServices(IOptions<MailSettings> mailSettings, CrmDbContext context)
         {
             _mailSettings = mailSettings.Value;
+            _context = context;
         }
-        public async Task SendMailAsync(MailRequest request, string Email, string Password)
+        public async Task SendMailAsync(MailRequest request, string Email, string Password, Guid nguoiDungId, Guid PhongBanId)
         {
             var mail = new MimeMessage();
             mail.Sender = MailboxAddress.Parse(Email);
@@ -42,6 +45,19 @@ namespace CRM.Services.Mails
             smtp.Authenticate(Email, Password);
             await smtp.SendAsync(mail);
             smtp.Disconnect(true);
+
+            EmailDaGui emailDaGui = new EmailDaGui();
+            emailDaGui.Id = Guid.NewGuid();
+            emailDaGui.TieuDe = request.Subject;
+            emailDaGui.DiaChiGui = Email;
+            emailDaGui.DiaChiNhan = request.ToMail;
+            emailDaGui.KhachHangTiemNangId = request.KhachHangTiemNangId;
+            emailDaGui.KhachHangMucTieuId = request.KhachHangMucTieuId;
+            emailDaGui.CreateAt = DateTime.Now;
+            emailDaGui.NguoiDungId = nguoiDungId;
+            emailDaGui.PhongBanId = PhongBanId;
+            _context.EmailDaGuis.Add(emailDaGui);
+            await _context.SaveChangesAsync();
         }
     }
 }

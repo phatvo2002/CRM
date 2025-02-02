@@ -32,6 +32,7 @@ import NguoiDaiDienTab from "./Tab/NguoiDaiDienTab";
 import HangHoaQuanTamTab from "./Tab/HangHoaQuanTamTab";
 import CongViecThucHienTab from "./Tab/CongViecThucHienTab";
 import ModalConvertKhachHangTiemNang from "./ModalConvertKhachHangTiemNang";
+import { ModalGuiMail } from "../Modal/ModalGuiMail";
 import EmailTab from "./Tab/EmailTab";
 import SMStab from "./Tab/SMStab";
 import ModalEditKhachHangTiemNang from "../ModalEditKhachHangTiemNang";
@@ -41,6 +42,7 @@ const KhachHangTiemNangDetail = () => {
   const { data: dataKhachHangById, isLoading } =
     useGetKhachHangTiemNangByIdQuery(id);
   const [modalConvert, setOpenModalConvert] = useState(false);
+  const [modalGuiMail , setModalGuiMail] = useState(false);
   const [modalEdit, setOpenModalEdit] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -53,7 +55,6 @@ const KhachHangTiemNangDetail = () => {
   const handleCloseDrop = () => {
     setAnchorEl(null);
   };
-
   const [value, setValue] = useState("1");
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -70,6 +71,12 @@ const KhachHangTiemNangDetail = () => {
   const handleCloseModalEdit = () => {
     setOpenModalEdit(false);
   };
+  const handleOpenModalGuiMail = () =>{
+    setModalGuiMail(true)
+  }
+  const handleCloseModalGuiMail = () => {
+    setModalGuiMail(false)
+  }
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -131,6 +138,7 @@ const KhachHangTiemNangDetail = () => {
                 variant="contained"
                 style={{ margin: 5 }}
                 endIcon={<MarkunreadIcon />}
+                onClick={handleOpenModalGuiMail}
               >
                 Gửi mail
               </Button>
@@ -248,6 +256,11 @@ const KhachHangTiemNangDetail = () => {
           </Grid2>
         </Paper>
       </Grid2>
+      {/* Modal Gửi mail  */}
+      <ModalGuiMail
+        showModal={modalGuiMail}
+        closeModal={handleCloseModalGuiMail}
+      />
     </>
   );
 };

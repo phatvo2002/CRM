@@ -69,7 +69,7 @@ namespace CRM.Repositories.GetDatas
             return _mapper.Map<List<NguonGocKhachHangDTO>>(db);
         }
 
-      
+
 
         public async Task<List<PhongBanKhachHangDTO>> GetAllPhongBanKhachHang()
         {
@@ -85,12 +85,18 @@ namespace CRM.Repositories.GetDatas
 
         public async Task<List<ClassDTO>> GetAllLoaiDuBao()
         {
-           var db = await _context.LoaiDuBaos.AsNoTracking().ToListAsync();
+            var db = await _context.LoaiDuBaos.AsNoTracking().ToListAsync();
             return _mapper.Map<List<ClassDTO>>(db);
         }
         public async Task<List<ClassDTO>> GetAllPhanLoaiDuBao()
         {
             var db = await _context.PhanLoaiDuBaos.AsNoTracking().ToListAsync();
+            return _mapper.Map<List<ClassDTO>>(db);
+        }
+
+        public async Task<List<ClassDTO>> GetAllLoaiCoHoi()
+        {
+            var db = await _context.LoaiCoHois.AsNoTracking().ToListAsync();
             return _mapper.Map<List<ClassDTO>>(db);
         }
     }

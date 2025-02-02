@@ -16,7 +16,6 @@ const ImportKhachHang = () => {
   const [files, setFiles] = React.useState([]);
   const updateFiles = (incommingFiles) => {
     //do something with the files
-    console.log("incomming files", incommingFiles);
     setFiles(incommingFiles);
     //even your own upload implementation
   };

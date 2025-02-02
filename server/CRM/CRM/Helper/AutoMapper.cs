@@ -56,6 +56,11 @@ namespace CRM.Helper
             CreateMap<ThongBao, ThongBaoDTO>();
             CreateMap<ThongBaoModal, ThongBao>().ReverseMap();
 
+            CreateMap<CoHoi, CoHoiDTO>();
+            CreateMap<CoHoiModal, CoHoi>().ReverseMap();
+
+            CreateMap<LoaiCoHoi, ClassDTO>();
+
         }
     }
 }

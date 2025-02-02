@@ -3,6 +3,7 @@ using CRM.Entities.StoreProcedure;
 using CRM.Filters;
 using CRM.Modal;
 using CRM.Repositories.ChucVus;
+using CRM.Repositories.CoHois;
 using CRM.Repositories.CuocGois;
 using CRM.Repositories.DonViTinhs;
 using CRM.Repositories.GetDatas;
@@ -23,6 +24,7 @@ using CRM.Repositories.PhongBans;
 using CRM.Repositories.ThongBaos;
 using CRM.Repositories.TinhTrangs;
 using CRM.Services.ChucVus;
+using CRM.Services.CoHois;
 using CRM.Services.CuocGois;
 using CRM.Services.DonViTinhs;
 using CRM.Services.GetDatas;
@@ -149,6 +151,10 @@ builder.Services.AddScoped<IPhanLoaiDuBaoServices, PhanLoaiDuBaoServices>();
 builder.Services.AddScoped<ILienHeServices, LienHeService>();
 
 builder.Services.AddTransient<IMailServices, MailServices>();
+
+builder.Services.AddScoped<ICoHoiRepository, CoHoiRepository>();
+builder.Services.AddScoped<ICoHoiServices, CoHoiServices>();
+
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 

@@ -1,5 +1,4 @@
 ﻿using CRM.DTO;
-using CRM.Entities;
 
 namespace CRM.Repositories.GetDatas
 {
@@ -18,5 +17,6 @@ namespace CRM.Repositories.GetDatas
         Task<List<KetQuaCuocGoiDTO>> GetAllKetQuaCuocGoi();
         Task<List<ClassDTO>> GetAllPhanLoaiDuBao();
         Task<List<ClassDTO>> GetAllLoaiDuBao();
+        Task<List<ClassDTO>> GetAllLoaiCoHoi();
     }
 }

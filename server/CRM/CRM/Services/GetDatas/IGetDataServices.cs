@@ -17,5 +17,6 @@ namespace CRM.Services.GetDatas
         Task<List<KetQuaCuocGoiDTO>> GetAllKetQuaCuocGoi();
         Task<List<ClassDTO>> GetAllPhanLoaiDuBao();
         Task<List<ClassDTO>> GetAllLoaiDuBao();
+        Task<List<ClassDTO>> GetAllLoaiCoHoi();
     }
 }

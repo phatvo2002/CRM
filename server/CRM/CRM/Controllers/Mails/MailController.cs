@@ -26,12 +26,13 @@ namespace CRM.Controllers.Mails
             try
             {
                 Guid nguoiDungID = HttpContext.GetUserId();
+                Guid phongBand = HttpContext.GetPhongBanId();
                 var db = _crmDbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungID);
                 if (db != null)
                 {
                     if (db.Password != null)
                     {
-                        await _mailService.SendMailAsync(mailRequest, db.Email, db.Password);
+                        await _mailService.SendMailAsync(mailRequest, db.Email, db.Password, nguoiDungID, phongBand);
                         return Ok(new ResultModal() { Status = 200, Message = "Gửi mail thành công", Success = true });
                     }
                     return Ok(new ResultModal() { Status = 202, Message = "Bạn chưa đăng ký dịch vụ mail cá nhân", Success = false });

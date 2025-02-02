@@ -16,18 +16,36 @@ export const apiMail = createApi({
       },
     }),
     endpoints: (builder) => ({
-      addMail: builder.mutation({
-        query: (data) => ({
-          url: '/Mail/GuiMail',
-          method: 'POST',
-          body: data,
-        }),
-      }),
+      AddMail: builder.mutation({
+        query: (data) => {
+          const formData = new FormData();
+          formData.append('ToMail', data.ToMail);
+          formData.append('Subject', data.Subject);
+          formData.append('Body', data.Body);
+          
+          if (data.KhachHangTiemNangId) {
+            formData.append('KhachHangTiemNangId', data.KhachHangTiemNangId);
+          }
+          
+          if (data.KhachHangMucTieuId) {
+            formData.append('KhachHangMucTieuId', data.KhachHangMucTieuId);
+          }
+          if (data.AttachtMent && data.AttachtMent.length > 0) {
+            data.AttachtMent.forEach((file) => {
+              formData.append('AttachtMent', file);
+            });
+          }
+          return {
+            url: '/Mail/GuiMail',
+            method: 'POST',
+            body: formData,
+          };
+        },
+      }),      
     }),
   });
   export const { 
-   useGetAllDonViTinhQuery,
-
+   useAddMailMutation,
   } = apiMail;
 
 

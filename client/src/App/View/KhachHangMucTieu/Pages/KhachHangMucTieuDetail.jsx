@@ -2,9 +2,6 @@ import React from "react";
 import {
   Box,
   Typography,
-  Tabs,
-  Card,
-  CardContent,
   Divider,
   Avatar,
   Button,
@@ -13,11 +10,11 @@ import {
   Paper,
   Menu,
   MenuItem,
-  Icon,
 } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
+import WbIncandescentIcon from '@mui/icons-material/WbIncandescent';
 import TodayIcon from "@mui/icons-material/Today";
 import { useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -35,15 +32,18 @@ import TabBanHang from "./Tabs/TabBanHang";
 import TabHoatDong from "./Tabs/TabHoatDong";
 import TabLichSuMuaHang from "./Tabs/TabLichSuMuaHang";
 import ContactMailIcon from '@mui/icons-material/ContactMail';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import CachedIcon from '@mui/icons-material/Cached';
 import { useGetKhachHangMucTieuByIdQuery } from "src/App/Api/KhachHangMucTieuApi";
 import ModlaAddCuocGoi from "../Modal/ModalAddCuocGoi";
 import ModalAddLichHen from "../Modal/ModalAddLichHen";
+import { ModalSinhCoHoi } from "../Modal/ModalSinhCoHoi";
 const KhachHangMucTieuDetail = () => {
   const [activeTab, setActiveTab] = React.useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [modalCuocGoi, setModalCuocGoi] = useState(false);
   const [modalLichHen, setModalLichHen] = useState(false);
+  const [modalSinhCoHoi ,setModalSinhCoHoi] = useState(false);
   const { id } = useParams();
   const { data: KhachhangData } = useGetKhachHangMucTieuByIdQuery(id)
   const navigate = useNavigate();
@@ -68,6 +68,8 @@ const KhachHangMucTieuDetail = () => {
   const handleCloseMoldalCuocGoi = () => setModalCuocGoi(false)
   const handelOpenModalLichHen = () => setModalLichHen(true)
   const handleCloseMdodalLichHen = () => setModalLichHen(false)
+  const handleOpenModalChuyenDoiCoHoi = () => setModalSinhCoHoi(true)
+  const handleCloseModalChuyenDoiCoHoi  = () => setModalSinhCoHoi(false)
   return (
     <>
       <Grid2 container spacing={2} sx={{ padding: 2 }}>
@@ -121,8 +123,8 @@ const KhachHangMucTieuDetail = () => {
               'aria-labelledby': 'basic-button',
             }}
           >
-            <MenuItem onClick={handleClose}>Sinh đơn hàng</MenuItem>
-            <MenuItem onClick={handleClose}>Sinh cơ hội</MenuItem>
+            <MenuItem onClick={handleClose}><ContentPasteIcon sx={{margin : 1}}/> Sinh đơn hàng</MenuItem>
+            <MenuItem onClick={handleOpenModalChuyenDoiCoHoi}><WbIncandescentIcon sx={{margin : 1}}/> Sinh cơ hội</MenuItem>
           </Menu>
 
         </Grid2>
@@ -231,6 +233,12 @@ const KhachHangMucTieuDetail = () => {
       <ModalAddLichHen
         showModal={modalLichHen}
         closeModal={handleCloseMdodalLichHen}
+      />
+      {/* Modal Chuyển đổi cơ hội */}
+      <ModalSinhCoHoi
+        khachHangData={KhachhangData}
+        showModal={modalSinhCoHoi}
+        closeModal={handleCloseModalChuyenDoiCoHoi}
       />
     </>
   );

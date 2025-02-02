@@ -1,0 +1,11 @@
+﻿using CRM.DTO;
+using CRM.Entities;
+using CRM.Modal;
+
+namespace CRM.Services.CoHois
+{
+    public interface ICoHoiServices : IBaseServices<CoHoi, CoHoiModal, Guid, CoHoiDTO>
+    {
+        Task<ResultModal> ConvertCoHoi(CoHoiModal modal, Guid nguoiDung, Guid phongBan);
+    }
+}
