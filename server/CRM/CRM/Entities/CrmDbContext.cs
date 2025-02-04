@@ -69,9 +69,13 @@ namespace CRM.Entities
         public virtual DbSet<LoaiCoHoi> LoaiCoHois { get; set; }
         public virtual DbSet<CoHoi> CoHois { get; set; }
         // Báo giá
-        public virtual DbSet<BaoGia> BaoGias { get; set;  }
+        public virtual DbSet<BaoGia> BaoGias { get; set; }
         public virtual DbSet<TinhTrangBaoGia> TinhTrangBaoGias { get; set; }
-
+        // Đơn hàng
+        public virtual DbSet<LoaiDonHang> LoaiDonHangs { get; set; }
+        public virtual DbSet<TinhTrangDonHang> TinhTrangDonHangs { get; set; }
+        public virtual DbSet<TinhTrangGhiDoanhSo> TinhTrangGhiDoanhSos { get; set; }
+        public virtual DbSet<DonHang> DonHangs { get; set; }
 
         public virtual DbSet<EmailDaGui> EmailDaGuis { get; set; }
 
@@ -112,7 +116,7 @@ namespace CRM.Entities
                 entity.Property(e => e.MoTa).HasMaxLength(300);
 
             });
-
+            #region Menu
             modelBuilder.Entity<Menu>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_menu");
@@ -147,6 +151,8 @@ namespace CRM.Entities
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Menu_Role_Menu");
             });
+            #endregion
+
 
             modelBuilder.Entity<TinhTrang>(entity =>
             {
@@ -173,6 +179,9 @@ namespace CRM.Entities
                 entity.Property(e => e.Email).HasMaxLength(50);
                 entity.Property(e => e.NgayThuViec).HasColumnType("datetime");
                 entity.Property(e => e.NgayBatDauLamViec).HasColumnType("datetime");
+                entity.Property(e => e.TaiKhoan).HasMaxLength(50);
+                entity.Property(e => e.DoanhSoDuKien).HasMaxLength(50);
+                entity.Property(e => e.DoanhSoThucTe).HasMaxLength(50);
                 entity.Property(e => e.TaiKhoan).HasMaxLength(50);
                 entity.Property(e => e.MatKhau).HasMaxLength(50);
                 entity.Property(e => e.HinhAnh).HasColumnType("varbinary(MAX)");
@@ -390,6 +399,10 @@ namespace CRM.Entities
               .HasForeignKey(d => d.KhachHangMucTieuId)
              .OnDelete(DeleteBehavior.ClientSetNull)
              .HasConstraintName("FK_KHMucTieu_CuocGoi");
+                entity.HasOne(d => d.CoHoi).WithMany(p => p.CuocGois)
+             .HasForeignKey(d => d.CoHoiId)
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .HasConstraintName("FK_CoHoi_CuocGoi");
                 entity.HasOne(d => d.Nguoidung).WithMany(p => p.CuocGois)
              .HasForeignKey(d => d.NguoiDungId)
              .OnDelete(DeleteBehavior.ClientSetNull)
@@ -403,6 +416,7 @@ namespace CRM.Entities
         .OnDelete(DeleteBehavior.ClientSetNull)
         .HasConstraintName("FK_KetQuaCuocGoi_CuocGoi");
             });
+
             modelBuilder.Entity<LichHen>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_LichHen");
@@ -433,6 +447,10 @@ namespace CRM.Entities
            .HasForeignKey(d => d.NguoiDungId)
            .OnDelete(DeleteBehavior.ClientSetNull)
            .HasConstraintName("FK_NguoiDung_LichHen");
+                entity.HasOne(d => d.CoHoi).WithMany(p => p.LichHens)
+                .HasForeignKey(d => d.CoHoiId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("FK_CoHoi_LichHen");
                 entity.HasOne(d => d.PhongBan).WithMany(p => p.LichHens)
              .HasForeignKey(d => d.PhongBanId)
              .OnDelete(DeleteBehavior.ClientSetNull)
@@ -479,6 +497,10 @@ namespace CRM.Entities
                 .HasForeignKey(r => r.KhachHangMucTieuId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_KhachHangMucTieu_NhiemVu");
+                entity.HasOne(d => d.CoHoi).WithMany(r => r.NhiemVus)
+                .HasForeignKey(r => r.CoHoiId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_CoHoi_NhiemVu");
                 entity.HasOne(d => d.Nguoidung).WithMany(r => r.NhiemVus).HasForeignKey(r => r.NguoiDungId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_NguoiDung_NhiemVu");
@@ -486,7 +508,8 @@ namespace CRM.Entities
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PhongBan_NhiemVu");
             });
-            // hàng hóa
+
+            #region Hàng hóa
             modelBuilder.Entity<LoaiHangHoa>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_LoaiHangHoa");
@@ -504,8 +527,11 @@ namespace CRM.Entities
                 entity.Property(e => e.KhachHangTiemNangId).HasColumnType("uniqueidentifier");
                 entity.Property(e => e.MaHangHoaId).HasMaxLength(100);
                 entity.Property(e => e.CoHoiId).HasMaxLength(100);
+                entity.Property(e => e.BaoGiaId).HasMaxLength(100);
                 entity.Property(e => e.HoaDonId).HasMaxLength(100);
                 entity.Property(e => e.SoLuong).HasColumnType("int");
+                entity.Property(e => e.ThueSuat).HasColumnType("int");
+                entity.Property(e => e.TienThue).HasColumnType("decimal");
                 entity.Property(e => e.ThanhTien).HasColumnType("decimal");
                 entity.Property(e => e.TongTien).HasColumnType("decimal");
                 entity.HasOne(d => d.HangHoa).WithMany(r => r.HangHoaQuanTams).HasForeignKey(r => r.MaHangHoaId)
@@ -539,8 +565,9 @@ namespace CRM.Entities
                .OnDelete(DeleteBehavior.ClientSetNull)
                .HasConstraintName("FK_LoaiHangHoa_HangHoa");
             });
+            #endregion
 
-            // bảng liên hệ 
+            #region Liên hệ
             modelBuilder.Entity<LienHe>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_LienHe");
@@ -561,7 +588,9 @@ namespace CRM.Entities
                .OnDelete(DeleteBehavior.ClientSetNull)
                .HasConstraintName("FK_PhongBan_PhongBan");
             });
-            //bảng khách hàng mục tiêu
+            #endregion
+
+            #region Khách hàng mục tiêu
             modelBuilder.Entity<KhachHangMucTieu>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_KhachHangMucTieu");
@@ -622,8 +651,9 @@ namespace CRM.Entities
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DoanhThu_KhachHangMucTieu");
             });
+            #endregion
 
-            // Bảng giai đoạn bán hàng 
+            #region  Giai đoạn bán hàng
             modelBuilder.Entity<LoaiDuBao>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_LoaiDuBao");
@@ -673,7 +703,7 @@ namespace CRM.Entities
                 entity.Property(e => e.SoTien).HasColumnType("decimal");
                 entity.Property(e => e.NgayKyVongKetThuc).HasColumnType("datetime");
                 entity.HasOne(d => d.CoHoi).WithOne(p => p.ChiTietKetQua)
-               .HasForeignKey<ChiTietKetQua>(d=> d.MaCoHoi)
+               .HasForeignKey<ChiTietKetQua>(d => d.MaCoHoi)
                .OnDelete(DeleteBehavior.ClientSetNull)
                .HasConstraintName("FK_CoHoi_ChiTietKetQua");
                 entity.HasOne(d => d.GiaiDoanBanHang).WithMany(p => p.ChiTietKetQuas)
@@ -685,7 +715,9 @@ namespace CRM.Entities
             .OnDelete(DeleteBehavior.ClientSetNull)
             .HasConstraintName("FK_LyDo_ChiTietKetQua");
             });
-            // Cơ hội 
+            #endregion
+
+            #region Cơ hội
             modelBuilder.Entity<LoaiCoHoi>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_LoaiCoHoi");
@@ -742,8 +774,9 @@ namespace CRM.Entities
        .OnDelete(DeleteBehavior.ClientSetNull)
        .HasConstraintName("FK_PhongBan_CoHoi");
             });
+            #endregion
 
-            // báo giá
+            #region Báo giá
             modelBuilder.Entity<TinhTrangBaoGia>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_TinhTrangBaoGia");
@@ -785,8 +818,9 @@ namespace CRM.Entities
 .OnDelete(DeleteBehavior.ClientSetNull)
 .HasConstraintName("FK_PhongBan_BaoGia");
             });
+            #endregion
 
-            // Bảng mail đã gửi 
+            #region Mail đã gửi
             modelBuilder.Entity<EmailDaGui>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_EmailDaGui");
@@ -796,10 +830,10 @@ namespace CRM.Entities
                 entity.Property(e => e.TieuDe).HasMaxLength(50);
                 entity.Property(e => e.DiaChiGui).HasMaxLength(50);
                 entity.Property(e => e.DiaChiNhan).HasMaxLength(50);
-               entity.HasOne(d => d.KhachHangMucTieu).WithMany(p => p.EmailDaGuis)
-.HasForeignKey(d => d.KhachHangMucTieuId)
-.OnDelete(DeleteBehavior.ClientSetNull)
-.HasConstraintName("FK_KhachHangMucTieu_EmailDaGui");
+                entity.HasOne(d => d.KhachHangMucTieu).WithMany(p => p.EmailDaGuis)
+ .HasForeignKey(d => d.KhachHangMucTieuId)
+ .OnDelete(DeleteBehavior.ClientSetNull)
+ .HasConstraintName("FK_KhachHangMucTieu_EmailDaGui");
                 entity.HasOne(d => d.KhachHangTiemNang).WithMany(p => p.EmailDaGuis)
 .HasForeignKey(d => d.KhachHangTiemNangId)
 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -812,10 +846,93 @@ namespace CRM.Entities
 .HasForeignKey(d => d.PhongBanId)
 .OnDelete(DeleteBehavior.ClientSetNull)
 .HasConstraintName("FK_PhongBan_EmailDaGui");
-         
-        });
 
-           
+            });
+            #endregion 
+
+            #region Đơn hàng
+            modelBuilder.Entity<LoaiDonHang>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_LoaiDonhang");
+
+                entity.ToTable("LoaiDonHang");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+            });
+            modelBuilder.Entity<TinhTrangDonHang>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_TinhTrangDonHang");
+
+                entity.ToTable("TinhTrangDonHang");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+            });
+            modelBuilder.Entity<TinhTrangGhiDoanhSo>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_TinhTrangGhiDoanhSo");
+
+                entity.ToTable("TinhTrangGhiDoanhSo");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Name).HasMaxLength(50);
+
+            });
+            modelBuilder.Entity<DonHang>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_DonHang");
+
+                entity.ToTable("DonHang");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.TenDonHang).HasMaxLength(100);
+                entity.Property(e => e.MoTaDonHang).HasMaxLength(300);
+                entity.Property(e => e.NgayDatHang).HasColumnType("datetime");
+                entity.Property(e => e.GiaTriDonHang).HasColumnType("decimal");
+                entity.Property(e => e.HanThanhToan).HasColumnType("datetime");
+                entity.Property(e => e.HanGiaoHang).HasColumnType("datetime");
+                entity.Property(e => e.NgayGhiDoanhSo).HasColumnType("datetime");
+                entity.Property(e => e.HanThanhToan).HasColumnType("datetime");
+                entity.Property(e => e.IsGhiDoanhSo).HasColumnType("bit");
+                entity.Property(e => e.ThongTinHoaDon).HasMaxLength(150);
+                entity.Property(e => e.ThongTinGiaoHang).HasMaxLength(150);
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+                entity.Property(e => e.IsDeleted).HasColumnType("bit");
+                entity.HasOne(d => d.LoaiDonHang).WithMany(p => p.DonHangs)
+                 .HasForeignKey(d => d.MaLoaiDonHang)
+                 .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("FK_LoaiDonHang_DonHang");
+                entity.HasOne(d => d.TinhTrangDonHang).WithMany(p => p.DonHangs)
+                 .HasForeignKey(d => d.MaTinhTrangDonHang)
+                 .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("FK_TinhTrangDonHang_DonHang");
+                entity.HasOne(d => d.TinhTrangGhiDoanhSo).WithMany(p => p.DonHangs)
+                 .HasForeignKey(d => d.MaTinhTrangGhiDoanhSo)
+                 .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("FK_TinhTrangGhiDoanhSo_DonHang");
+                entity.HasOne(d => d.KhachHangMucTieu).WithMany(p => p.DonHangs)
+                 .HasForeignKey(d => d.MaKhachHang)
+                 .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("FK_KhachHangMucTieu_DonHang");
+                entity.HasOne(d => d.LienHe).WithMany(p => p.DonHangs)
+                 .HasForeignKey(d => d.MaLienHe)
+                 .OnDelete(DeleteBehavior.ClientSetNull)
+                 .HasConstraintName("FK_LienHe_DonHang");
+                entity.HasOne(d => d.PhongBan).WithMany(p => p.DonHangs)
+                .HasForeignKey(d => d.PhongBanId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PhongBan_DonHang");
+                entity.HasOne(d => d.Nguoidung).WithMany(p => p.DonHangs)
+               .HasForeignKey(d => d.NguoiDungId)
+               .OnDelete(DeleteBehavior.ClientSetNull)
+               .HasConstraintName("FK_NguoiDung_DonHang");
+            });
+            #endregion
+
+
         }
 
     }

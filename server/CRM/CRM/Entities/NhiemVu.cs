@@ -11,9 +11,11 @@
         public Guid? MucDoUuTienId { get; set; }
         public Guid? TrangThaiThucHienId { get; set; }
         public string? KhachHangMucTieuId { get; set; }
+        public string? CoHoiId { get; set; }
         public virtual KhachHangTiemNang? KhachHangTiemNang { get; set; }
         public virtual KhachHangMucTieu? KhachHangMucTieu { get; set; }
         public virtual MucDoUuTien? MucDoUuTien { get; set; }
         public virtual TrangThaiThucHien? TrangThaiThucHien { get; set; }
+        public virtual CoHoi? CoHoi { get; set; }
     }
 }
