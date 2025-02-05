@@ -11,16 +11,14 @@ import { validateDatePicker, validateString } from "src/App/Until/validateYup";
 import * as yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
-import {
-  useGetKhachHangMucTieuByNguoiDungIdQuery,
-  useGetKhachHangMucTieuByPhongBanIdQuery,
-} from "src/App/Api/KhachHangMucTieuApi";
+import { useGetKhachHangMucTieuByNguoiDungIdQuery } from "src/App/Api/KhachHangMucTieuApi";
 import {
   AutocompleteRHF,
   TextFieldRHF,
 } from "src/App/Components/ReactHookFormComp";
+import TextAreaRHF from "src/App/Components/ReactHookFormComp/TextAreaRHF";
 import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
-import { Button, Grid2, IconButton, TextField } from "@mui/material";
+import { Box, Button, Grid2, IconButton, TextField, Typography } from "@mui/material";
 import { toast } from "react-toastify";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
@@ -34,6 +32,8 @@ import { useGetAllLoaiHangHoaQuery } from "src/App/Api/LoaiHangHoa";
 import { useGetAllGiaiDoanBanHangQuery } from "src/App/Api/GiaiDoanBanHangApi";
 import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
+import { useConvertCoHoiMutation } from "src/App/Api/CoHoiApi";
+
 const modelObj = {
     id: "id",
     tenCoHoi: "tenCoHoi",
@@ -73,25 +73,25 @@ const modelObj = {
     [modelObj.tiLeThanhCong]: 0,
     [modelObj.doanhSoKyVong]: 0,
     [modelObj.ngayKyVongKetThuc]: new Date(),
-    [modelObj.maKhachHang]: "",
-    [modelObj.maLienHe]: "",
-    [modelObj.maLoaiHangHoa]: "",
-    [modelObj.maLoaiCoHoi]: "",
-    [modelObj.maGiaiDoanBanHang]: "",
-    [modelObj.maNguonGocKhachHang]: "",
+    [modelObj.maKhachHang]: null,
+    [modelObj.maLienHe]: null,
+    [modelObj.maLoaiHangHoa]: null,
+    [modelObj.maLoaiCoHoi]: null,
+    [modelObj.maGiaiDoanBanHang]: null,
+    [modelObj.maNguonGocKhachHang]: null,
     [modelObj.diaChi]: "",
     [modelObj.hangHoaQuanTams]: [],
   },
   schema = yup.object().shape({
-    [modelObj.maKhachHang]: validateString(),
-    [modelObj.tenCoHoi]: validateString(),
-    [modelObj.maLoaiCoHoi]: validateString(),
-    [modelObj.maLoaiHangHoa]: validateString(),
-    [modelObj.soTien]: validateString(),
-    [modelObj.maGiaiDoanBanHang]: validateString(),
-    [modelObj.ngayKyVongKetThuc]: validateDatePicker(),
-    [modelObj.maNguonGocKhachHang]: validateString(),
-    [modelObj.diaChi]: validateString(),
+    // [modelObj.maKhachHang]: validateString(),
+     [modelObj.tenCoHoi]: validateString(),
+     [modelObj.maLoaiCoHoi]: validateString(),
+    // [modelObj.maLoaiHangHoa]: validateString(),
+    // [modelObj.soTien]: validateString(),
+    // [modelObj.maGiaiDoanBanHang]: validateString(),
+    // [modelObj.ngayKyVongKetThuc]: validateDatePicker(),
+    // [modelObj.maNguonGocKhachHang]: validateString(),
+     [modelObj.diaChi]: validateString(),
   });
 export const ModalSinhCoHoi = ({
   khachHangData,
@@ -101,6 +101,7 @@ export const ModalSinhCoHoi = ({
   isLoading,
   typeModal,
 }) => {
+  
   const _isMounted = useRef(false),
     modalRef = useRef(null),
     { id } = useParams();
@@ -127,6 +128,7 @@ export const ModalSinhCoHoi = ({
     useGetAllGiaiDoanBanHangQuery(undefined, { skip: showModal == false });
   const { data: dataNguonGocBanHang, isLoading: isGetNguonGocBanHangFetching } =
     useGetAllNguonGocKhachHangQuery();
+  const [convertCoHoi] = useConvertCoHoiMutation()
   const handleAddClick = () => {
     const newRow = {
       id: uuidv4(),
@@ -134,6 +136,9 @@ export const ModalSinhCoHoi = ({
       khachHangTiemNangId: null,
       khachHangId: id,
       soLuong: 0,
+      thueSuat: 0,
+      tienThue: 0,
+      donGia: 0,
       thanhTien: 0,
       tongTien: 0,
       isNew: true,
@@ -164,11 +169,17 @@ export const ModalSinhCoHoi = ({
     const updatedThanhTien = selectedItem
       ? selectedItem.donGia * (newRow.soLuong || 0)
       : 0;
-    const updateTongTien = selectedItem ? updatedThanhTien : 0;
+    // const updateTongTien = selectedItem ? updatedThanhTien : 0;
+    const updateTienThue = selectedItem
+      ? (selectedItem.donGia * newRow?.thueSuat * (newRow.soLuong || 0)) / 100
+      : 0;
+    const updateTongTien = selectedItem ? updatedThanhTien + updateTienThue : 0;
     const updatedRow = {
       ...newRow,
+      tienThue: updateTienThue,
       thanhTien: updatedThanhTien,
       tongTien: updateTongTien,
+      donGia: selectedItem.donGia,
     };
     setHangHoa((prev) =>
       prev.map((row) => (row.id === updatedRow.id ? updatedRow : row))
@@ -191,7 +202,8 @@ export const ModalSinhCoHoi = ({
       }
     }
   };
-
+  const totalAmount = hangHoa.reduce((sum, row) => sum + (row.tongTien || 0), 0);
+  const doanhsoKyVongResult = (totalAmount * tiLeThanhCong ) / 100 
   const columns = [
     {
       field: "actions",
@@ -236,16 +248,45 @@ export const ModalSinhCoHoi = ({
       editable: true,
     },
     {
+      field: "donGia",
+      headerName: "Đơn giá",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        const selectedItem = hangHoas?.find(
+          (item) => item.id === params.row.maHangHoaId
+        );
+        return selectedItem ? selectedItem.donGia.toLocaleString("vi-VN") : 0;
+      },
+    },
+    {
+      field: "thueSuat",
+      headerName: "Thuế suất (%)",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "tienThue",
+      headerName: "Tiền thuế",
+      width: 200,
+      editable: false,
+      renderCell: (params) =>
+        params.value ? params.value.toLocaleString("vi-VN") : 0,
+    },
+    {
       field: "thanhTien",
       headerName: "Thành Tiền",
-      width: 300,
+      width: 200,
       editable: false,
-      renderCell: (params) => params.value,
+      renderCell: (params) =>
+        params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
     {
       field: "tongTien",
       headerName: "Tổng Tiền",
-      width: 300,
+      width: 200,
+      renderCell: (params) =>
+        params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
   ];
 
@@ -261,9 +302,9 @@ export const ModalSinhCoHoi = ({
       const tempData = {
         [modelObj.id]: "CH" + generateRandomSequence(8),
         [modelObj.tenCoHoi]: data[modelObj.tenCoHoi],
-        [modelObj.soTien]: data[modelObj.soTien],
+        [modelObj.soTien]: totalAmount,
         [modelObj.tiLeThanhCong]: tiLeThanhCong,
-        [modelObj.doanhSoKyVong]: data[modelObj.doanhSoKyVong],
+        [modelObj.doanhSoKyVong]: doanhsoKyVongResult,
         [modelObj.ngayKyVongKetThuc]: data[modelObj.ngayKyVongKetThuc],
         [modelObj.maKhachHang]: data[modelObj.maKhachHang],
         [modelObj.maLienHe]: data[modelObj.maLienHe],
@@ -274,8 +315,18 @@ export const ModalSinhCoHoi = ({
         [modelObj.diaChi]: data[modelObj.diaChi],
         [modelObj.hangHoaQuanTams]: hangHoa,
       };
-
-      // callApiUpdate(tempData);
+    
+      callApiConvert(tempData);
+    },
+    callApiConvert = async (paramData) => {
+      try {
+        console.log(paramData)
+          await convertCoHoi(paramData).unwrap();
+          toast.success("Chuyển đổi thành công")
+          closeModalWithOtherFunc() 
+        } catch (error) {
+          console.log(error)
+        } 
     },
     closeModalWithOtherFunc = () => {
       modalRef.current.reset(initialFormState);
@@ -287,8 +338,10 @@ export const ModalSinhCoHoi = ({
           ...selectedItem,
           id: selectedItem?.id,
           [modelObj.maKhachHang]: khachHangData?.id,
+          [modelObj.maLienHe]: null,
           [modelObj.maNguonGocKhachHang]: khachHangData?.maNguonGocKhachHang,
           [modelObj.diaChi]: khachHangData?.thongTinHoaDon,
+          
         },
         { keepDirty: true }
       );
@@ -389,12 +442,7 @@ export const ModalSinhCoHoi = ({
             />
           </Grid2>
           <Grid2 size={6}>
-            <TextFieldRHF
-              name={modelObj.soTien}
-              label={labelObj.soTien}
-              disabled={isLoading}
-              type="number"
-            />
+          <TextField fullWidth id="outlined-basic"  label="Số tiền" variant="outlined" value={totalAmount.toLocaleString("vi-VN")} />
           </Grid2>
           <Grid2 size={6}>
             <AutocompleteRHF
@@ -417,19 +465,13 @@ export const ModalSinhCoHoi = ({
             />
           </Grid2>
           <Grid2 size={6}>
-            <TextFieldRHF
-              name={modelObj.doanhSoKyVong}
-              label={labelObj.doanhSoKyVong}
-              disabled={isLoading}
-              type="number"
-            />
+          <TextField fullWidth id="outlined-basic"  label="Doanh số kỳ vọng" variant="outlined" value={doanhsoKyVongResult.toLocaleString("vi-VN")} />
           </Grid2>
           <Grid2 size={6}>
             <DateTimePickerRHF
               name={modelObj.ngayKyVongKetThuc}
               label={labelObj.ngayKyVongKetThuc}
               disabled={isLoading}
-              required
             />
           </Grid2>
           <Grid2 size={6}>
@@ -453,6 +495,11 @@ export const ModalSinhCoHoi = ({
               sx={{ width: "100%" }}
               style={{ fontSize: "1rem" }}
               processRowUpdate={processRowUpdate}
+              componentsProps={{
+                footer: {
+                  style: { padding: "10px", fontWeight: "bold", textAlign: "right" },
+                },
+              }}
               slots={{
                 toolbar: () => (
                   <GridToolbarContainer>
@@ -465,8 +512,25 @@ export const ModalSinhCoHoi = ({
                     </Button>
                   </GridToolbarContainer>
                 ),
+                footer: () => (
+                  <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2, bgcolor: "#f1f1f1" }}>
+                    <Typography variant="h6">
+                      Tổng tiền: {totalAmount.toLocaleString("vi-VN")} VND
+                    </Typography>
+                  </Box>
+                ),
               }}
             />
+          </Grid2>
+          <Grid2 size={12}>
+            <Grid2 size={12}>
+              <TextAreaRHF
+                name={modelObj.diaChi}
+                label={labelObj.diaChi}
+                disabled={isLoading}
+                required
+              />
+            </Grid2>
           </Grid2>
         </Grid2>
       </RHFDrawer>

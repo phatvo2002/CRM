@@ -37,6 +37,9 @@ const TabBanHang = () => {
       maHangHoaId: "",
       khachHangTiemNangId: null,
       khachHangId: id,
+      thueSuat:0,
+      tienThue:0,
+      donGia : 0,
       soLuong: 0,
       thanhTien: 0,
       tongTien: 0,
@@ -71,11 +74,15 @@ const TabBanHang = () => {
     const updatedThanhTien = selectedItem
       ? selectedItem.donGia * (newRow.soLuong || 0)
       : 0;
-    const updateTongTien = selectedItem ? updatedThanhTien : 0;
+    // const updateTongTien = selectedItem ? updatedThanhTien : 0;
+    const updateTienThue = selectedItem ? (((selectedItem.donGia * (newRow?.thueSuat))) * (newRow.soLuong || 0)) / 100 : 0;
+    const updateTongTien = selectedItem ? updatedThanhTien + updateTienThue : 0;
     const updatedRow = {
       ...newRow,
+      tienThue : updateTienThue,
       thanhTien: updatedThanhTien,
       tongTien: updateTongTien,
+      donGia : selectedItem.donGia
     };
     setHangHoa((prev) =>
       prev.map((row) => (row.id === updatedRow.id ? updatedRow : row))
@@ -141,17 +148,42 @@ const TabBanHang = () => {
       editable: true,
     },
     {
+      field: "donGia",
+      headerName: "Đơn giá",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
+        return selectedItem ? selectedItem.donGia.toLocaleString("vi-VN") : 0 ;
+      },
+    },
+    {
+      field: "thueSuat",
+      headerName: "Thuế suất (%)",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "tienThue",
+      headerName: "Tiền thuế",
+      width: 200,
+      editable: false,
+      renderCell: (params) =>  params.value ? params.value.toLocaleString("vi-VN") : 0,
+    },
+    {
       field: "thanhTien",
       headerName: "Thành Tiền",
       width: 200,
       editable: false,
-      renderCell: (params) => params.value,
+      renderCell: (params) =>  params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
     {
       field: "tongTien",
       headerName: "Tổng Tiền",
       width: 200,
+      renderCell: (params) =>  params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
+   
   ];
   return (
     <div>

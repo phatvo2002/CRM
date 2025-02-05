@@ -36,7 +36,7 @@ namespace CRM.Repositories.CoHois
                     cohoi.IsDeleted = false;
                     cohoi.NguoiDungId = nguoiDung;
                     cohoi.PhongBanId = phongBan;
-                    _crmDbContext.CoHois.Add(cohoi);
+
 
                     foreach (var item in modal.HangHoaQuanTams)
                     {
@@ -44,7 +44,7 @@ namespace CRM.Repositories.CoHois
                         if (hanghoa != null)
                         {
                             hanghoa.CoHoiId = cohoi.Id;
-                            _crmDbContext.Update(hanghoa);
+                            _crmDbContext.HangHoaQuanTams.Update(hanghoa);
                         }
                         else
                         {
@@ -56,9 +56,10 @@ namespace CRM.Repositories.CoHois
                             hangHoaQuanTam.SoLuong = item.SoLuong;
                             hangHoaQuanTam.ThanhTien = item.ThanhTien;
                             hangHoaQuanTam.TongTien = item.TongTien;
-                            _crmDbContext.Add(hangHoaQuanTam);
+                            _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
                         }
                     }
+                    _crmDbContext.CoHois.Add(cohoi);
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Chuyển đổi thành công", Success = true };
                 }

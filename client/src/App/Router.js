@@ -42,6 +42,8 @@ const HangHoa = lazy(() => import("./View/HangHoa/index"));
 const ThongBaoDetail = lazy(
   () => import("./Components/CustomNotification/NotificationList")
 );
+// cơ hội
+const CoHoi = lazy(() => import("./View/CoHoi/index"))
 
 const NhiemVu = lazy(()=> import("./View/NhiemVu/index") )
 
@@ -228,6 +230,15 @@ const RouteChild = [
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <NhiemVu />
+      </Suspense>
+    ),
+  },
+  // Cơ hội
+  {
+    path: "/cohoi",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <CoHoi />
       </Suspense>
     ),
   },

@@ -61,6 +61,9 @@ namespace CRM.Repositories.KhachhangMucTieus
                             hangHoaQuanTam.KhachHangId = modal.Id;
                             hangHoaQuanTam.KhachHangTiemNangId = h.KhachHangTiemNangId;
                             hangHoaQuanTam.SoLuong = h.SoLuong;
+                            hangHoaQuanTam.DonGia = h.DonGia;
+                            hangHoaQuanTam.ThueSuat = h.ThueSuat;
+                            hangHoaQuanTam.TienThue = h.TienThue;
                             hangHoaQuanTam.ThanhTien = h.ThanhTien;
                             hangHoaQuanTam.TongTien = h.TongTien;
                             _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
@@ -277,7 +280,7 @@ namespace CRM.Repositories.KhachhangMucTieus
 
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuDaXoaByNguoiDungId(Guid NguoiDungId)
         {
-            var db = await _crmDbContext.KhachHangMucTieus.Where(r=> r.NguoiDungId == NguoiDungId && r.IsDeleted == true).ToListAsync();
+            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.NguoiDungId == NguoiDungId && r.IsDeleted == true).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
 
@@ -299,16 +302,16 @@ namespace CRM.Repositories.KhachhangMucTieus
                         db.IsDeleted = false;
                         _crmDbContext.KhachHangMucTieus.Update(db);
                     }
-                    else { continue; }   
+                    else { continue; }
                 }
-                await _crmDbContext.SaveChangesAsync(); 
-                return new ResultModal () { Status = 200 , Message ="Khôi phục thành công" , Success = true };
+                await _crmDbContext.SaveChangesAsync();
+                return new ResultModal() { Status = 200, Message = "Khôi phục thành công", Success = true };
             }
             catch (Exception ex)
             {
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = true };
             }
-           
+
         }
     }
 }

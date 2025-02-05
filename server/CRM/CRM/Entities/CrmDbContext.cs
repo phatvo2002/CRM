@@ -532,6 +532,7 @@ namespace CRM.Entities
                 entity.Property(e => e.SoLuong).HasColumnType("int");
                 entity.Property(e => e.ThueSuat).HasColumnType("int");
                 entity.Property(e => e.TienThue).HasColumnType("decimal");
+                entity.Property(e => e.DonGia).HasColumnType("decimal");
                 entity.Property(e => e.ThanhTien).HasColumnType("decimal");
                 entity.Property(e => e.TongTien).HasColumnType("decimal");
                 entity.HasOne(d => d.HangHoa).WithMany(r => r.HangHoaQuanTams).HasForeignKey(r => r.MaHangHoaId)

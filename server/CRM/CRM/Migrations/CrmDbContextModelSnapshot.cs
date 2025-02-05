@@ -565,6 +565,9 @@ namespace CRM.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<decimal?>("DonGia")
+                        .HasColumnType("decimal");
+
                     b.Property<string>("HoaDonId")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -579,19 +582,19 @@ namespace CRM.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("SoLuong")
+                    b.Property<int?>("SoLuong")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("ThanhTien")
+                    b.Property<decimal?>("ThanhTien")
                         .HasColumnType("decimal");
 
-                    b.Property<int>("ThueSuat")
+                    b.Property<int?>("ThueSuat")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("TienThue")
+                    b.Property<decimal?>("TienThue")
                         .HasColumnType("decimal");
 
-                    b.Property<decimal>("TongTien")
+                    b.Property<decimal?>("TongTien")
                         .HasColumnType("decimal");
 
                     b.HasKey("Id")
