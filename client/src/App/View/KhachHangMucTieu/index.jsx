@@ -37,6 +37,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import ModalKhachHangMucTieuDaXoa from "./Modal/ModalKhachHangMucTieuDaXoa";
+import NoImage from "../../Assets/image/no-image.png"
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
@@ -108,7 +109,14 @@ const KhachHangMucTieu = () => {
       renderCell: (params) => {
         return params?.row?.nguoiDung?.ten ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <AssignmentIndIcon style={{ padding: 2 }} color="warning" />
+            <div>
+              {params?.row?.nguoiDung?.hinhAnh == null ?
+                <div>
+                  <img src={NoImage} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: 2 }} />
+                </div> : <div>
+                  <img src={'data:image/jpeg;base64,' + params?.row?.nguoiDung?.hinhAnh} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: 2 }} />
+                </div>}
+            </div>
             <span>
               {" "}
               {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}

@@ -3,9 +3,6 @@ using CRM.DTO;
 using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.NguoiDungs;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers.Users
@@ -118,6 +115,21 @@ namespace CRM.Controllers.Users
             try
             {
                 ResultModal result = await _userService.UserDepartment(userId, departmentId);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("uploadimage")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UpLoadImage(IFormFile formFile)
+        {
+            try
+            {
+                Guid userId = HttpContext.GetUserId();
+                ResultModal result = await _userService.UploadImage(userId, formFile);
                 return Ok(result);
             }
             catch (ArgumentException ex)

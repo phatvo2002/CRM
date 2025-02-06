@@ -10,5 +10,6 @@
         public string? TaiKhoan { get; set; }
         public string? SoDienThoai { get; set; }
         public string? Email { get; set; }
+        public byte[]? HinhAnh { get; set; }
     }
 }

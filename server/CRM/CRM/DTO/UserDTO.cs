@@ -13,9 +13,8 @@
         public string? SoDienThoai { get; set; }
         public string? Password { get; set; }
         public string? Email { get; set; }
-
+        public byte[]? HinhAnh { get; set; }
         public bool IsActive { get; set; }
-
         public DateTime? NgayThuViec { get; set; }
 
         public DateTime? NgayBatDauLamViec { get; set; }

@@ -1,6 +1,5 @@
 ﻿using CRM.DTO;
 using CRM.Modal;
-using System.ComponentModel.DataAnnotations;
 
 namespace CRM.Repositories.NguoiDungs
 {
@@ -11,7 +10,7 @@ namespace CRM.Repositories.NguoiDungs
 
         Task<ResultModal> ChangePassword(Guid id, string oldpass, string newpass);
 
-        Task<ResultModal> ActiveMailServices(Guid Id , string passEmail , string email);
+        Task<ResultModal> ActiveMailServices(Guid Id, string passEmail, string email);
 
         Task<ResultModal> CreateUser(UserModal userModal);
 
@@ -28,6 +27,8 @@ namespace CRM.Repositories.NguoiDungs
         Task<ResultModal> UserRolePermission(Guid userId, Guid roleId, string roleName);
 
         Task<ResultModal> UserDepartment(Guid userId, Guid departmentId);
+
+        Task<ResultModal> UploadImage(Guid userId, IFormFile formFile);
 
     }
 }

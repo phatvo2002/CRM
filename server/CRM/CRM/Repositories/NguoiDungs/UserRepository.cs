@@ -204,6 +204,8 @@ namespace CRM.Repositories.NguoiDungs
             return result;
         }
 
+
+
         public async Task<ResultModal> UserDepartment(Guid userId, Guid departmentId)
         {
             var db = _context.Nguoidungs.AsNoTracking().FirstOrDefault(r => r.Id == userId);
@@ -268,9 +270,31 @@ namespace CRM.Repositories.NguoiDungs
                 _logger.LogError(ex, ex.Message);
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
-
-
-
+        }
+        public async Task<ResultModal> UploadImage(Guid userId, IFormFile formFile)
+        {
+            var db = _context.Nguoidungs.Where(r => r.Id == userId).FirstOrDefault();
+            try
+            {
+                if (db != null)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await formFile.CopyToAsync(memoryStream);
+                        db.HinhAnh = memoryStream.ToArray();
+                    }
+                    _context.Nguoidungs.Update(db);
+                    await _context.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Cập nhật hình ảnh thành công", Success = true };
+                }
+                else return new ResultModal() { Status = 202, Message = "Không tìm thấy người dùng", Success = false };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+            throw new NotImplementedException();
         }
     }
 }

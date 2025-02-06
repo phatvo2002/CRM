@@ -57,6 +57,20 @@ export const apiUser = createApi({
         method: "PUT",
       }),
     }),
+    upLoadImage: builder.mutation({
+      query: (data) => {
+        const formData = new FormData();
+        if (data.file) {
+            formData.append('formFile', data.file);
+        }
+        return {
+          url: '/User/uploadimage',
+          method: 'PUT',
+          body: formData,
+        };
+      }
+    }),
+
   }),
 });
 
@@ -68,7 +82,8 @@ export const {
   useAddUserMutation, 
   useDeleteUserMutation,
   useUpdateUserPermissionMutation,
-  useUpdateUserDepartmentMutation
+  useUpdateUserDepartmentMutation,
+  useUpLoadImageMutation
 } = apiUser;
 
 export default apiUser.reducer;

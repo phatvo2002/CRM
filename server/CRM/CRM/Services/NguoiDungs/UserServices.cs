@@ -69,5 +69,10 @@ namespace CRM.Services.NguoiDungs
         {
             return await _userRepository.ActiveMailServices(Id, passEmail, email);
         }
+
+        public async Task<ResultModal> UploadImage(Guid userId, IFormFile formFile)
+        {
+            return await _userRepository.UploadImage(userId, formFile);
+        }
     }
 }

@@ -40,6 +40,7 @@ import ModalXemKhachHangDaXoa from "./Modal/ModalXemKhachHangDaXoa";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import NoImage from "../../Assets/image/no-image.png"
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -110,7 +111,14 @@ const KhachHangTiemNang = () => {
       renderCell: (params) => {
         return params?.row?.nguoiDung?.ten ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <AssignmentIndIcon style={{ padding: 2 }} color="warning" />
+            <div>
+              {params?.row?.nguoiDung?.hinhAnh == null ?
+                <div>
+                  <img src={NoImage} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: 2 }} />
+                </div> : <div>
+                  <img src={'data:image/jpeg;base64,' + params?.row?.nguoiDung?.hinhAnh} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: 2 }} />
+                </div>}
+            </div>
             <span>
               {" "}
               {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}
@@ -288,9 +296,9 @@ const KhachHangTiemNang = () => {
     <div className="customer-page">
       <div>
         <Grid2 container alignItems="center" spacing={2}>
-        <Grid2 size={12}>
-            <h2 style={{padding :0 , margin:0}}>Tất Cả Tiềm Năng</h2>
-        </Grid2> 
+          <Grid2 size={12}>
+            <h2 style={{ padding: 0, margin: 0 }}>Tất Cả Tiềm Năng</h2>
+          </Grid2>
           <Grid2 size={12} >
             <Button
               variant="contained"
@@ -309,7 +317,7 @@ const KhachHangTiemNang = () => {
               sx={{ marginLeft: 1, width: "200px" }}
               variant="outlined"
               startIcon={<OpenInNewIcon />}
-              endIcon={<KeyboardArrowDownIcon/>}
+              endIcon={<KeyboardArrowDownIcon />}
             >
               Tùy chỉnh
             </Button>
@@ -377,9 +385,9 @@ const KhachHangTiemNang = () => {
             </Button>
           </Grid2>
         </Grid2>
-       
-        <Paper sx={{marginTop:1}}>
-         
+
+        <Paper sx={{ marginTop: 1 }}>
+
           <Grid2 size={12}>
             <CustomDatagrid
               rows={rows}

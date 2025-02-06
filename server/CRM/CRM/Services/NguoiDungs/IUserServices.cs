@@ -23,6 +23,7 @@ namespace CRM.Services.NguoiDungs
         Task<ResultModal> UserRolePermission(Guid id, Guid roleId, string roleName);
 
         Task<ResultModal> UserDepartment(Guid userId, Guid departmentId);
+        Task<ResultModal> UploadImage(Guid userId, IFormFile formFile);
     }
 
 }
