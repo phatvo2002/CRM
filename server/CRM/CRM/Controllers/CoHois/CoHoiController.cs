@@ -1,4 +1,6 @@
 ﻿using CRM.Attributes;
+using CRM.DTO;
+using CRM.Entities;
 using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.CoHois;
@@ -11,10 +13,66 @@ namespace CRM.Controllers.CoHois
     public class CoHoiController : ControllerBase
     {
         private readonly ICoHoiServices _coHoiServices;
+        private readonly CrmDbContext _context;
 
-        public CoHoiController(ICoHoiServices coHoiServices)
+        public CoHoiController(ICoHoiServices coHoiServices, CrmDbContext context)
         {
             _coHoiServices = coHoiServices;
+            _context = context;
+        }
+
+        [HttpGet("getallcohoi")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetAllCoHoi()
+        {
+            try
+            {
+                var result = await _coHoiServices.GetAll();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getcohoibyid/{id}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetCoHoiById(string id)
+        {
+            try
+            {
+                var result = await _coHoiServices.GetById(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getcohoilist")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetCoHoiList()
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                var userData = _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefault();
+                if (userData.CheckIsTruongPhong == true)
+                {
+                    List<CoHoiDTO> result = await _coHoiServices.GetCoHoiByPhongBanId(phongBanId);
+                    return Ok(result);
+                }
+                else
+                {
+                    List<CoHoiDTO> result = await _coHoiServices.GetCoHoiByNguoiDungId(nguoiDungId);
+                    return Ok(result);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("convertcohoi")]
@@ -33,5 +91,35 @@ namespace CRM.Controllers.CoHois
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("updategiaidoan")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UpdateGiaiDoan(string id, Guid giaiDoanId)
+        {
+            try
+            {
+                ResultModal result = await _coHoiServices.UpdateGiaiDoan(id, giaiDoanId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("deletecohoi/{id}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> DeleteCoHoi(string id)
+        {
+            try
+            {
+                var result = await _coHoiServices.DeleteById(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

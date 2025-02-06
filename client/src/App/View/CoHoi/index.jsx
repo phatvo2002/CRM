@@ -10,7 +10,8 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import TabBieuDoCoHoi from "./Pages/Tabs/TabBieuDoCoHoi";
+import TabListCoHoi from "./Pages/Tabs/TabListCoHoi";
 const index = () => {
   const [value, setValue] = useState(1);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -99,8 +100,9 @@ const index = () => {
                   <Tab icon={<ZoomOutMapIcon />} label="Biểu đồ" value="2" />
                 </TabList>
               </Box>
-              <TabPanel value="1">Danh sách </TabPanel>
-              <TabPanel value="2">Biểu đồ</TabPanel>
+              <TabPanel value="1"><TabListCoHoi/> 
+              </TabPanel>
+              <TabPanel value="2"><TabBieuDoCoHoi/></TabPanel>
             </TabContext>
           </Paper>
         </Grid2>

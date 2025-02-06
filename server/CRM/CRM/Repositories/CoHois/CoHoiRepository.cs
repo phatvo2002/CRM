@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repositories.CoHois
 {
@@ -64,6 +65,38 @@ namespace CRM.Repositories.CoHois
                     return new ResultModal() { Status = 200, Message = "Chuyển đổi thành công", Success = true };
                 }
                 else return new ResultModal() { Status = 202, Message = "Dữ liệu đã tồn tại trong hệ thống", Success = false };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+        }
+
+        public async Task<List<CoHoiDTO>> GetCoHoiByNguoiDungId(Guid nguoiDungId)
+        {
+            var db = await _crmDbContext.CoHois.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).ToListAsync();
+            return _mapper.Map<List<CoHoiDTO>>(db);
+        }
+
+        public async Task<List<CoHoiDTO>> GetCoHoiByPhongBanId(Guid phongBanId)
+        {
+            var db = await _crmDbContext.CoHois.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).ToListAsync();
+            return _mapper.Map<List<CoHoiDTO>>(db);
+        }
+
+        public async Task<ResultModal> UpdateGiaiDoan(string cohoiId, Guid giaiDoanId)
+        {
+            var db = _crmDbContext.CoHois.Where(r => r.Id == cohoiId).FirstOrDefault();
+            try
+            {
+                if (db != null)
+                {
+                    db.MaGiaiDoanBanHang = giaiDoanId;
+                    _crmDbContext.CoHois.Update(db);
+                    await _crmDbContext.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Chuyển đổi giai đoạn thành công", Success = true };
+                }
+                else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
             }
             catch (Exception ex)
             {

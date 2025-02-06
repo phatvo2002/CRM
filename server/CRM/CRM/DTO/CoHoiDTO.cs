@@ -17,5 +17,7 @@
         public string? DiaChi { get; set; }
         public DateTime? DeleteAt { get; set; }
         public DateTime? UpdateAt { get; set; }
+
+        public GiaiDoanBanHangDTO? GiaiDoanBanHang { get; set; }
     }
 }

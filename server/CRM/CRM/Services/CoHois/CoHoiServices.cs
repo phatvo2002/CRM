@@ -17,5 +17,20 @@ namespace CRM.Services.CoHois
         {
             return await _coHoiRepository.ConvertCoHoi(modal, nguoiDung, phongBan);
         }
+
+        public async Task<List<CoHoiDTO>> GetCoHoiByNguoiDungId(Guid nguoiDungId)
+        {
+            return await _coHoiRepository.GetCoHoiByNguoiDungId(nguoiDungId);
+        }
+
+        public async Task<List<CoHoiDTO>> GetCoHoiByPhongBanId(Guid phongBanId)
+        {
+            return await _coHoiRepository.GetCoHoiByPhongBanId(phongBanId);
+        }
+
+        public async Task<ResultModal> UpdateGiaiDoan(string cohoiId, Guid giaiDoanId)
+        {
+            return await _coHoiRepository.UpdateGiaiDoan(cohoiId, giaiDoanId);
+        }
     }
 }
