@@ -1,41 +1,71 @@
-import { Box, Button, Grid2, Menu, MenuItem, Paper, Stack, Step, StepButton, Stepper, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
-import EditIcon from '@mui/icons-material/Edit';
-import { useNavigate, useParams } from 'react-router-dom';
-import CachedIcon from '@mui/icons-material/Cached';
-import { useGetCoHoiByIdQuery } from 'src/App/Api/CoHoiApi';
-import { useGetAllGiaiDoanBanHangQuery } from 'src/App/Api/GiaiDoanBanHangApi';
+import {
+  Box,
+  Button,
+  Grid2,
+  Menu,
+  MenuItem,
+  Paper,
+  Stack,
+  Step,
+  StepButton,
+  Stepper,
+  TextField,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import EditIcon from "@mui/icons-material/Edit";
+import { useNavigate, useParams } from "react-router-dom";
+import CachedIcon from "@mui/icons-material/Cached";
+import {
+  useGetCoHoiByIdQuery,
+  useUpdateGiaiDoanMutation,
+} from "src/App/Api/CoHoiApi";
+import { useGetAllGiaiDoanBanHangQuery } from "src/App/Api/GiaiDoanBanHangApi";
+import Tab from '@mui/material/Tab';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
 const index = () => {
-  const navigate = useNavigate()
-  const { id } = useParams()
+  const navigate = useNavigate();
+  const { id } = useParams();
   const [anchorEl, setAnchorEl] = useState(null);
-  const { data: dataCoHoi, refetch } = useGetCoHoiByIdQuery(id)
-  const { data: dataGiaiDoan } = useGetAllGiaiDoanBanHangQuery()
+  const { data: dataCoHoi, refetch } = useGetCoHoiByIdQuery(id);
+  const { data: dataGiaiDoan } = useGetAllGiaiDoanBanHangQuery();
   const steps = dataGiaiDoan || [];
-  const [activeStep, setActiveStep] = useState(dataCoHoi?.giaiDoanBanHang?.id);
+  const [activeStep, setActiveStep] = useState(null);
   const [completed, setCompleted] = useState({});
+  const [value, setValue] = useState("1");
+  const [updateGiaiDoan] = useUpdateGiaiDoanMutation();
+  useEffect(() => {
+    if (dataCoHoi?.giaiDoanBanHang?.id) {
+      setActiveStep(dataCoHoi?.giaiDoanBanHang?.id);
+    }
+  }, [dataCoHoi]);
+
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
   const handleReturn = () => {
-    navigate("/cohoi")
-  }
+    navigate("/cohoi");
+  };
   const handleReload = () => {
-    refetch()
-  }
+    refetch();
+  };
 
   const totalSteps = () => {
     return steps.length;
   };
-
   const completedSteps = () => {
     return Object.keys(completed).length;
   };
@@ -44,21 +74,37 @@ const index = () => {
     return activeStep === totalSteps() - 1;
   };
 
-  const allStepsCompleted = () => {
+  const allStepsCompleted = async () => {
     return completedSteps() === totalSteps();
   };
 
-  const handleNext = () => {
-    const newActiveStep =
+  const handleNext = async () => {
+    const activeStepIndex = steps.findIndex((s) => s.id === activeStep);
+    if (activeStepIndex === -1) return;
+
+    const nextStepIndex =
       isLastStep() && !allStepsCompleted()
-        ?
-        steps.findIndex((step, i) => !(i in completed))
-        : activeStep + steps.findIndex((s) => s.id === activeStep) + 1;
-    setActiveStep(newActiveStep);
+        ? steps.findIndex((_, i) => !(i in completed))
+        : activeStepIndex + 1;
+
+    if (nextStepIndex < steps.length) {
+      const nextStepId = steps[nextStepIndex].id;
+      setActiveStep(nextStepId);
+
+      await updateGiaiDoan({ cohoiId: id, giaiDoanId: nextStepId });
+      refetch();
+    }
   };
 
-  const handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  const handleBack = async () => {
+    const activeStepIndex = steps.findIndex((s) => s.id === activeStep);
+
+    if (activeStepIndex > 0) {
+      const previousStepId = steps[activeStepIndex - 1].id;
+      setActiveStep(previousStepId);
+      await updateGiaiDoan({ cohoiId: id, giaiDoanId: previousStepId });
+      refetch();
+    }
   };
 
   const handleStep = (step) => () => {
@@ -71,13 +117,14 @@ const index = () => {
       [activeStep]: true,
     });
     handleNext();
-
   };
 
   const handleReset = () => {
-    setActiveStep(0);
+    setActiveStep(dataCoHoi?.giaiDoanBanHang?.id);
     setCompleted({});
   };
+
+  const activeStepIndex = steps.findIndex((step) => step.id === activeStep);
 
   return (
     <>
@@ -85,22 +132,31 @@ const index = () => {
         <Grid2 size={12}>
           <Stack direction={"row"} spacing={2} justifyContent={"space-between"}>
             <div>
-              <Button variant='outlined' startIcon={<ArrowBackIcon />} onClick={handleReturn}>
+              <Button
+                variant="outlined"
+                startIcon={<ArrowBackIcon />}
+                onClick={handleReturn}
+              >
                 Quay về
               </Button>
-              <Button variant='outlined' startIcon={<CachedIcon />} style={{ marginLeft: 3 }}>
+              <Button
+                variant="outlined"
+                startIcon={<CachedIcon />}
+                style={{ marginLeft: 3 }}
+                onclick={handleReload}
+              >
                 Reload
               </Button>
             </div>
-            <div >
+            <div>
               <Button
                 id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
+                aria-controls={open ? "basic-menu" : undefined}
                 aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
+                aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
-                variant='outlined'
-                color='text.primary'
+                variant="outlined"
+                color="text.primary"
                 startIcon={<OpenInNewIcon />}
               >
                 Mở rộng
@@ -111,49 +167,110 @@ const index = () => {
                 open={open}
                 onClose={handleClose}
                 MenuListProps={{
-                  'aria-labelledby': 'basic-button',
+                  "aria-labelledby": "basic-button",
                 }}
               >
-                <MenuItem onClick={handleClose} ><ShoppingCartIcon /> Sinh đơn hàng</MenuItem>
-                <MenuItem onClick={handleClose}><AttachMoneyIcon /> Sinh Báo giá</MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <ShoppingCartIcon /> Sinh đơn hàng
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                  <AttachMoneyIcon /> Sinh Báo giá
+                </MenuItem>
               </Menu>
-              <Button variant='contained' startIcon={<EditIcon />} style={{ marginLeft: 3 }}>
+              <Button
+                variant="contained"
+                startIcon={<EditIcon />}
+                style={{ marginLeft: 3 }}
+              >
                 Sửa
               </Button>
             </div>
           </Stack>
-
         </Grid2>
         <Grid2 size={12}>
           <Paper sx={{ width: "100%", height: "100%", padding: 3 }}>
-            <Typography variant='h6' component={"h6"}> <b>{dataCoHoi?.tenCoHoi}</b> <span>- {dataCoHoi?.soTien.toLocaleString("vi-VN")} VND</span></Typography>
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+            <Typography variant="h6" component={"h6"}>
+              {" "}
+              <b>{dataCoHoi?.tenCoHoi}</b>{" "}
+              <span>- {dataCoHoi?.soTien.toLocaleString("vi-VN")} VND</span>
+            </Typography>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "10px",
+              }}
+            >
               <span style={{ width: "200px" }}>Liên hệ :</span>
-              <TextField id="standard-basic" label="Liên hệ" variant="standard" />
+              <TextField
+                id="standard-basic"
+                label="Liên hệ"
+                variant="standard"
+              />
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "10px",
+              }}
+            >
               <span style={{ width: "200px" }}>Số tiền :</span>
-              <TextField id="standard-basic" label="Số tiền" variant="standard" />
+              <TextField
+                id="standard-basic"
+                label="Số tiền"
+                variant="standard"
+              />
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "10px",
+              }}
+            >
               <span style={{ width: "200px" }}>Giai đoạn bán hàng :</span>
-              <TextField id="standard-basic" label="Giai đoạn bán hàng" variant="standard" />
+              <TextField
+                id="standard-basic"
+                label="Giai đoạn bán hàng"
+                variant="standard"
+              />
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "10px",
+              }}
+            >
               <span style={{ width: "200px" }}>Tỉ lệ thành công :</span>
-              <TextField id="standard-basic" label="Tỉ lệ thành công" variant="standard" />
+              <TextField
+                id="standard-basic"
+                label="Tỉ lệ thành công"
+                variant="standard"
+              />
             </div>
 
-            <div style={{ display: "flex", alignItems: "center", marginBottom: "10px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                marginBottom: "10px",
+              }}
+            >
               <span style={{ width: "200px" }}>Doanh số kỳ vọng :</span>
-              <TextField id="standard-basic" label="Doanh số kỳ vọng" variant="standard" />
+              <TextField
+                id="standard-basic"
+                label="Doanh số kỳ vọng"
+                variant="standard"
+              />
             </div>
 
-            <Box sx={{ width: '100%', padding: 2 }}>
-              <Stepper activeStep={activeStep} alternativeLabel>
+            <Box sx={{ width: "100%", padding: 2 }}>
+              <Stepper activeStep={activeStepIndex} alternativeLabel>
                 {steps.map((label, index) => (
                   <Step key={label} completed={completed[index]}>
                     <StepButton color="inherit" onClick={handleStep(index)}>
@@ -163,57 +280,60 @@ const index = () => {
                 ))}
               </Stepper>
               <div>
-                {allStepsCompleted() ? (
-                  <React.Fragment>
-                    <Typography sx={{ mt: 2, mb: 1 }}>
-                      All steps completed - you&apos;re finished
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                      <Box sx={{ flex: '1 1 auto' }} />
-                      <Button onClick={handleReset}>Reset</Button>
-                    </Box>
-                  </React.Fragment>
-                ) : (
-                  <React.Fragment>
-                    <Typography sx={{ mt: 2, mb: 1, py: 1 }}>
-                      Step {steps.findIndex((s) => s.id === activeStep) + 1}
-                    </Typography>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                      <Button
-                        color="inherit"
-                        disabled={steps.findIndex((s) => s.id === activeStep) === 0}
-                        onClick={handleBack}
-                        sx={{ mr: 1 }}
-                      >
-                        Quay về 
-                      </Button>
-                      <Box sx={{ flex: '1 1 auto' }} />
-                      <Button onClick={handleNext} sx={{ mr: 1 }}>
-                        Tiếp theo
-                      </Button>
-                      {steps.findIndex((s) => s.id === activeStep) !== steps.length - 1 &&
-                        (completed[activeStep] ? (
-                          <Typography variant="caption" sx={{ display: 'inline-block' }}>
-                            Giai đoạn {steps.findIndex((s) => s.id === activeStep) + 1} Đã hoàn thành
-                          </Typography>
-                        ) : (
-                          <Button onClick={handleComplete}>
-                            {completedSteps() === totalSteps() - 1 ? 'Hoàn thành' : 'Hoàn thành giai đoạn'}
-                          </Button>
-                        ))}
-                    </Box>
-                  </React.Fragment>
-                )}
-
+                <React.Fragment>
+                  <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                    <Button
+                      color="inherit"
+                      disabled={
+                        steps.findIndex((s) => s.id === activeStep) === 0
+                      }
+                      onClick={handleBack}
+                      sx={{ mr: 1 }}
+                    >
+                      Quay về
+                    </Button>
+                    <Box sx={{ flex: "1 1 auto" }} />
+                    <Button onClick={handleNext} sx={{ mr: 1 }}>
+                      Bước tiếp theo
+                    </Button>
+                  </Box>
+                </React.Fragment>
               </div>
             </Box>
-
+            <Box sx={{ width: "100%", typography: "body1" }}>
+              <TabContext value={value}>
+                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                  <TabList
+                    onChange={handleChange}
+                    aria-label="lab API tabs example"
+                  >
+                    <Tab label="Thông tin chung " value="1" />
+                    <Tab label="Lịch sử giao dịch" value="2" />
+                    <Tab label="Báo giá" value="3" />
+                    <Tab label="Liên hệ" value="4" />
+                    <Tab label="Bán hàng" value="5" />
+                    <Tab label="Đơn hàng" value="6" />
+                    <Tab label="Công việc đang thực hiện" value="7" />
+                    <Tab label="Công việc đã hoàn thành" value="8" />
+                    <Tab label="Ghi chú" value="9" />
+                  </TabList>
+                </Box>
+                <TabPanel value="1">Thông tin chung</TabPanel>
+                <TabPanel value="2">Item Two</TabPanel>
+                <TabPanel value="3">Item Three</TabPanel>
+                <TabPanel value="4">Item Three</TabPanel>
+                <TabPanel value="5">Item Three</TabPanel>
+                <TabPanel value="6">Item Three</TabPanel>
+                <TabPanel value="7">Item Three</TabPanel>
+                <TabPanel value="8">Item Three</TabPanel>
+                <TabPanel value="9">Item Three</TabPanel>
+              </TabContext>
+            </Box>
           </Paper>
         </Grid2>
-
       </Grid2>
     </>
-  )
-}
+  );
+};
 
-export default index
+export default index;
