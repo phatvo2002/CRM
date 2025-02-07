@@ -11,7 +11,6 @@ import React, { useEffect, useState } from "react";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import AddIcon from "@mui/icons-material/Add";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Person2Icon from "@mui/icons-material/Person2";
@@ -34,7 +33,6 @@ import ModalBanGiaoKhachHangMucTieu from "./Modal/ModalBanGiaoKhachHangMucTieu";
 import { useGetTemplatesQuery } from "src/App/Api/KhachHangTiemNangApi";
 import ModalImportKhachHang from "./Modal/ModalImportKhachHang";
 import Swal from "sweetalert2";
-import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import ModalKhachHangMucTieuDaXoa from "./Modal/ModalKhachHangMucTieuDaXoa";
 import NoImage from "../../Assets/image/no-image.png"
@@ -195,7 +193,6 @@ const KhachHangMucTieu = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const userData = JSON.parse(localStorage.getItem("authorizationData"));
   const { data: dataKhachHangByNguoiDung, refetch } =
     useGetKhachHangMucTieuByNguoiDungIdQuery();
   const { data: getTemplate } = useGetTemplatesQuery({

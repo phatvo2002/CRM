@@ -10,11 +10,18 @@ import ContactPageIcon from '@mui/icons-material/ContactPage';
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import TabBieuDoCoHoi from "./Pages/Tabs/TabBieuDoCoHoi";
-import TabListCoHoi from "./Pages/Tabs/TabListCoHoi";
+import WidgetsIcon from '@mui/icons-material/Widgets';
+import {TabBieuDoCoHoi} from "./Pages/Tabs/TabBieuDoCoHoi";
+import {TabListCoHoi} from "./Pages/Tabs/TabListCoHoi";
+import ModalThemMoiCoHoi from "./Modal/ModalThemMoiCoHoi";
+import { useGetCoHoiListQuery } from "src/App/Api/CoHoiApi";
 const index = () => {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState("1");
   const [anchorEl, setAnchorEl] = useState(null);
+  const { data: dataCoHoi , refetch } = useGetCoHoiListQuery()
+   const [modalThemMoi,setModalThemMoi] = useState(false);
+  const handleOpenModalThemMoiCoHoi = ()=> setModalThemMoi(true)
+  const handleCloseModalThemMoiCoHoi = () => setModalThemMoi(false)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -32,7 +39,7 @@ const index = () => {
           <h3 style={{ padding: 0, margin: 0 }}>Tất cả cơ hội</h3>
         </Grid2>
         <Grid2 size={4}>
-          <Button variant="contained" startIcon={<AddIcon />}>
+          <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenModalThemMoiCoHoi}>
             Thêm mới{" "}
           </Button>
           <Button
@@ -89,24 +96,30 @@ const index = () => {
           </Menu>
         </Grid2>
         <Grid2 size={12}>
-          <Paper>
-            <TabContext value={value}>
+          <Paper style={{maxWidth:"100%"}}>
+            <TabContext value={value} >
               <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                 <TabList
                   onChange={handleChange}
-                  aria-label="lab API tabs example"
+                  aria-label=""
                 >
                   <Tab icon={<FactCheckIcon />} label="Danh sách" value="1" />
-                  <Tab icon={<ZoomOutMapIcon />} label="Biểu đồ" value="2" />
+                  <Tab icon={<WidgetsIcon />} label="Mở rộng" value="2" />
                 </TabList>
               </Box>
-              <TabPanel value="1"><TabListCoHoi/> 
+              <TabPanel value="1" ><TabListCoHoi dataCoHoi={dataCoHoi}/> 
               </TabPanel>
               <TabPanel value="2"><TabBieuDoCoHoi/></TabPanel>
             </TabContext>
           </Paper>
         </Grid2>
       </Grid2>
+      {/* Modal thêm mới */}
+      <ModalThemMoiCoHoi 
+        showModal={modalThemMoi}
+        closeModal={handleCloseModalThemMoiCoHoi}
+        refetch={refetch}
+      />
     </>
   );
 };

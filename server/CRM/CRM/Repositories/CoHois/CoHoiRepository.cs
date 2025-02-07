@@ -72,15 +72,21 @@ namespace CRM.Repositories.CoHois
             }
         }
 
+        public async Task<CoHoiDTO> GetCoHoiById(string id)
+        {
+            var db = await _crmDbContext.CoHois.Where(r => r.Id == id).Include(r => r.GiaiDoanBanHang).FirstOrDefaultAsync();
+            return _mapper.Map<CoHoiDTO>(db);
+        }
+
         public async Task<List<CoHoiDTO>> GetCoHoiByNguoiDungId(Guid nguoiDungId)
         {
-            var db = await _crmDbContext.CoHois.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).ToListAsync();
+            var db = await _crmDbContext.CoHois.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<CoHoiDTO>>(db);
         }
 
         public async Task<List<CoHoiDTO>> GetCoHoiByPhongBanId(Guid phongBanId)
         {
-            var db = await _crmDbContext.CoHois.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).ToListAsync();
+            var db = await _crmDbContext.CoHois.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<CoHoiDTO>>(db);
         }
 
@@ -91,7 +97,9 @@ namespace CRM.Repositories.CoHois
             {
                 if (db != null)
                 {
+                    var dataGiaiDoan = _crmDbContext.GiaiDoanBanHangs.Where(r => r.Id == giaiDoanId).FirstOrDefault();
                     db.MaGiaiDoanBanHang = giaiDoanId;
+                    db.DoanhSoKyVong = (db.SoTien * Decimal.Parse(dataGiaiDoan.TiLeThanhCong)) / 100;
                     _crmDbContext.CoHois.Update(db);
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Chuyển đổi giai đoạn thành công", Success = true };

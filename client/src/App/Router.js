@@ -45,6 +45,8 @@ const ThongBaoDetail = lazy(
 // cơ hội
 const CoHoi = lazy(() => import("./View/CoHoi/index"))
 
+const CoHoiDetail = lazy(() => import("./View/CoHoi/Pages/CoHoiDetail/index"))
+
 const NhiemVu = lazy(()=> import("./View/NhiemVu/index") )
 
 const RouteChild = [
@@ -239,6 +241,14 @@ const RouteChild = [
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <CoHoi />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/cohoi/:id",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <CoHoiDetail />
       </Suspense>
     ),
   },

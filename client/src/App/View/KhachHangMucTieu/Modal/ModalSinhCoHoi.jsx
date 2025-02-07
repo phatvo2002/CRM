@@ -83,14 +83,8 @@ const modelObj = {
     [modelObj.hangHoaQuanTams]: [],
   },
   schema = yup.object().shape({
-    // [modelObj.maKhachHang]: validateString(),
      [modelObj.tenCoHoi]: validateString(),
      [modelObj.maLoaiCoHoi]: validateString(),
-    // [modelObj.maLoaiHangHoa]: validateString(),
-    // [modelObj.soTien]: validateString(),
-    // [modelObj.maGiaiDoanBanHang]: validateString(),
-    // [modelObj.ngayKyVongKetThuc]: validateDatePicker(),
-    // [modelObj.maNguonGocKhachHang]: validateString(),
      [modelObj.diaChi]: validateString(),
   });
 export const ModalSinhCoHoi = ({
@@ -108,7 +102,7 @@ export const ModalSinhCoHoi = ({
 
   const [hangHoa, setHangHoa] = useState([]);
   const { data: rows, refetch } = useGetHangHoaQuanTamByKhachHangIdQuery(id);
-  const { data: hangHoas } = useGetAllHangHoaQuery();
+  const { data: hangHoas } = useGetAllHangHoaQuery(undefined, {skip : showModal == false });
   const [createData] = useAddHangHoaQuanTamMutation();
   const [updateData] = useUpdateHangHoaQuanTamMutation();
   const [deleteData] = useDeleteHangHoaQuanTamMutation();

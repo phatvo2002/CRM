@@ -18,6 +18,11 @@ namespace CRM.Services.CoHois
             return await _coHoiRepository.ConvertCoHoi(modal, nguoiDung, phongBan);
         }
 
+        public async Task<CoHoiDTO> GetCoHoiById(string id)
+        {
+            return await _coHoiRepository.GetCoHoiById(id);
+        }
+
         public async Task<List<CoHoiDTO>> GetCoHoiByNguoiDungId(Guid nguoiDungId)
         {
             return await _coHoiRepository.GetCoHoiByNguoiDungId(nguoiDungId);

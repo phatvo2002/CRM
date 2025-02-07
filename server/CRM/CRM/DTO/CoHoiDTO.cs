@@ -18,6 +18,8 @@
         public DateTime? DeleteAt { get; set; }
         public DateTime? UpdateAt { get; set; }
 
+        public DateTime? CreateAt { get; set; }
         public GiaiDoanBanHangDTO? GiaiDoanBanHang { get; set; }
+        public NguoiDungDTO? NguoiDung { get; set; }
     }
 }

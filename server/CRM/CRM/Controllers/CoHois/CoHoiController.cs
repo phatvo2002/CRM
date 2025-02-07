@@ -41,7 +41,7 @@ namespace CRM.Controllers.CoHois
         {
             try
             {
-                var result = await _coHoiServices.GetById(id);
+                CoHoiDTO result = await _coHoiServices.GetCoHoiById(id);
                 return Ok(result);
             }
             catch (Exception ex)
