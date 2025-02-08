@@ -37,5 +37,10 @@ namespace CRM.Services.CoHois
         {
             return await _coHoiRepository.UpdateGiaiDoan(cohoiId, giaiDoanId);
         }
+
+        public async Task<ResultModal> UpdateCoHoiGiaTien(string CoHoiId, decimal giaTien)
+        {
+            return await _coHoiRepository.UpdateCoHoiGiaTien(CoHoiId, giaTien);
+        }
     }
 }

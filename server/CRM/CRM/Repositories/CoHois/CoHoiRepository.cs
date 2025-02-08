@@ -99,10 +99,31 @@ namespace CRM.Repositories.CoHois
                 {
                     var dataGiaiDoan = _crmDbContext.GiaiDoanBanHangs.Where(r => r.Id == giaiDoanId).FirstOrDefault();
                     db.MaGiaiDoanBanHang = giaiDoanId;
+                    db.TiLeThanhCong = int.Parse(dataGiaiDoan.TiLeThanhCong);
                     db.DoanhSoKyVong = (db.SoTien * Decimal.Parse(dataGiaiDoan.TiLeThanhCong)) / 100;
                     _crmDbContext.CoHois.Update(db);
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Chuyển đổi giai đoạn thành công", Success = true };
+                }
+                else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+        }
+        public async Task<ResultModal> UpdateCoHoiGiaTien(string CoHoiId, decimal giaTien)
+        {
+            var db = _crmDbContext.CoHois.Where(r => r.Id == CoHoiId).FirstOrDefault();
+            try
+            {
+                if (db != null)
+                {
+                    db.SoTien = giaTien;
+                    db.DoanhSoKyVong = (giaTien * db.TiLeThanhCong) / 100;
+                    _crmDbContext.CoHois.Update(db);
+                    await _crmDbContext.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Cập nhật thành công", Success = true };
                 }
                 else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
             }

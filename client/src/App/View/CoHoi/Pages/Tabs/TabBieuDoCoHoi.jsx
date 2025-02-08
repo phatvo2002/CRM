@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react'
 import { useGetCoHoiListQuery, useUpdateGiaiDoanMutation } from 'src/App/Api/CoHoiApi'
 import { useGetAllGiaiDoanBanHangQuery } from 'src/App/Api/GiaiDoanBanHangApi'
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Paper, Stack, Typography } from '@mui/material';
 import Moment from 'react-moment';
 export const TabBieuDoCoHoi = () => {
   const { data: dataGiaiDoan } = useGetAllGiaiDoanBanHangQuery()
-  const { data: dataCoHoi , refetch } = useGetCoHoiListQuery()
+  const { data: dataCoHoi, refetch } = useGetCoHoiListQuery()
   const [kanbanData, setKanbanData] = useState({});
   const [updateGiaiDoan] = useUpdateGiaiDoanMutation()
   useEffect(() => {
@@ -55,29 +55,40 @@ export const TabBieuDoCoHoi = () => {
     await updateGiaiDoan({ cohoiId: movedItem.id, giaiDoanId: movedItem.giaiDoanBanHang.id });
     refetch()
   };
-
+  const headerColors = ["#1E88E5", "#43A047", "#FB8C00", "#8E24AA", "#D81B60"];
 
   return (
     <>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div style={{ display: "flex", gap: "16px", overflow: "scroll" }}>
+        <Box sx={{ display: "flex", gap: "24px", overflowX: "auto", padding: "16px" , height:"100vh" }}>
           {Object.entries(kanbanData).map(([stageId, stageData]) => (
             <Droppable droppableId={stageId} key={stageId}>
               {(provided) => (
-                <div
+                <Paper
                   ref={provided.innerRef}
                   {...provided.droppableProps}
-                  style={{
-                    background: "background.default ",
-                    padding: "10px",
-                    minWidth: "300px",
-                    minHeight: "100vh",
-                   
+                  sx={{
+                    minWidth: "320px",
+                    bgcolor: "background.paper",
+                    borderRadius: "12px",
+                    boxShadow: 3,
+                    overflow: "hidden",
                   }}
+
                 >
-                  <div style={{ backgroundColor: "background.default", minHeight: "80px", lineHeight: "80px" , boxShadow:"rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset" }}>
-                    <p style={{ textAlign: "center" }}>{stageData.stt}. {stageData.name}</p>
-                  </div>
+                  <Box
+                    sx={{
+                      bgcolor: headerColors[stageData.stt % headerColors.length],
+                      color: "white",
+                      textAlign: "center",
+                      py: 2,
+                      borderRadius: "12px 12px 0 0",
+                    }}
+                  >
+                    <Typography variant="subtitle1">
+                      {stageData.stt}. {stageData.name}
+                    </Typography>
+                  </Box>
                   {stageData.items.map((item, index) => (
                     <Draggable key={String(item.id)} draggableId={String(item.id)} index={index}>
                       {(provided, snapshot) => (
@@ -85,15 +96,16 @@ export const TabBieuDoCoHoi = () => {
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          style={{
-                            padding: "10px",
-                            margin: "5px 0", 
-                            boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-                            borderRadius: "5px",
-                            userSelect: "none",
-                            ...provided.draggableProps.style,
+                          sx={{
+                            padding: "12px",
+                            marginBottom: "12px",
+                            bgcolor: "background.default",
+                            borderRadius: "12px",
+                            boxShadow: snapshot.isDragging ? 4 : 2,
+                            transition: "box-shadow 0.2s ease-in-out",
+                            border: 1,
+                            borderColor: "primary.light",
                           }}
-                          sx={{ borderRadius: '16px', border: 1, borderColor: 'primary.main' , bgcolor: "background.default", }}
                         >
                           <Stack direction="row" spacing={2}>
                             <Typography variant={'caption'} component={"p"}>
@@ -108,25 +120,25 @@ export const TabBieuDoCoHoi = () => {
                             </Typography>
                           </Stack>
                           <div>
-                          <Stack direction="row" spacing={2} paddingTop={2}>
-                            <Typography variant={'caption'}>Ngày kỳ vọng kết thúc : <Moment format="DD/MM/YYYY ">{new Date(item.ngayKyVongKetThuc)}</Moment> </Typography> 
-                          </Stack>
+                            <Stack direction="row" spacing={2} paddingTop={2}>
+                              <Typography variant={'caption'}>Ngày kỳ vọng kết thúc : <Moment format="DD/MM/YYYY ">{new Date(item.ngayKyVongKetThuc)}</Moment> </Typography>
+                            </Stack>
                           </div>
                           <div>
-                          <Typography variant={'caption'}>Doanh số kỳ vọng : <b>{item.doanhSoKyVong.toLocaleString("vi-VN")} VND</b> </Typography> 
+                            <Typography variant={'caption'}>Doanh số kỳ vọng : <b>{item.doanhSoKyVong.toLocaleString("vi-VN")} VND</b> </Typography>
                           </div>
-                          <Typography variant={'caption'}>Số tiền : <b>{item.soTien.toLocaleString("vi-VN")} VND</b> </Typography> 
+                          <Typography variant={'caption'}>Số tiền : <b>{item.soTien.toLocaleString("vi-VN")} VND</b> </Typography>
                         </Box>
                       )}
                     </Draggable>
 
                   ))}
                   {provided.placeholder}
-                </div>
+                </Paper>
               )}
             </Droppable>
           ))}
-        </div>
+        </Box>
       </DragDropContext>
     </>
   )

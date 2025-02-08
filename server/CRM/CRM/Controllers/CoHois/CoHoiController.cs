@@ -106,6 +106,21 @@ namespace CRM.Controllers.CoHois
             }
         }
 
+        [HttpPut("updatesotien")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UpdateSoTien(string id, decimal soTien)
+        {
+            try
+            {
+                ResultModal result = await _coHoiServices.UpdateCoHoiGiaTien(id, soTien);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpDelete("deletecohoi/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> DeleteCoHoi(string id)

@@ -1,19 +1,18 @@
-import { Grid2, IconButton, Paper } from '@mui/material'
+import { Grid2, IconButton } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { Tooltip } from 'recharts'
-import { useGetCoHoiListQuery } from 'src/App/Api/CoHoiApi'
 import { Link } from "react-router-dom";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import NoImage from "../../../../Assets/image/no-image.png"
 import Person2Icon from "@mui/icons-material/Person2";
 import CustomDatagrid from 'src/App/Components/DataGrid/CustomDatagrid';
 import Moment from 'react-moment';
-
+import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
 export const TabListCoHoi = ({dataCoHoi}) => {
   
   const [selectedRow, setSelectedRow] = useState([]),
   [rows, setRows] = useState([]);
+
+   
   const columns = [
     {
       field: "action",
@@ -26,7 +25,7 @@ export const TabListCoHoi = ({dataCoHoi}) => {
             // disabled={selectedRowLichHen.length === 0}
             // onClick={handleOpenModalUpdateLichHen}
           >
-            <EditIcon color="primary"></EditIcon>
+            <AssignmentIndIcon color="primary"></AssignmentIndIcon>
           </IconButton>
           <IconButton
             style={{ margin: "0 10px" }}
@@ -49,12 +48,12 @@ export const TabListCoHoi = ({dataCoHoi}) => {
             {params?.row?.nguoiDung?.hinhAnh == null ? (
               <img 
                 src={NoImage} 
-                style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover" }} 
+                style={{ width: "30px", height: "30px", borderRadius: "50%", objectFit: "cover" }} 
               />
             ) : (
               <img 
                 src={'data:image/jpeg;base64,' + params?.row?.nguoiDung?.hinhAnh} 
-                style={{ width: "40px", height: "40px", borderRadius: "50%", objectFit: "cover" }} 
+                style={{ width: "30px", height: "30px", borderRadius: "50%", objectFit: "cover" }} 
               />
             )}
           </div>
@@ -142,7 +141,6 @@ export const TabListCoHoi = ({dataCoHoi}) => {
   return (
     <>
       <Grid2 container spacing={2}>
-       
           <CustomDatagrid
             rows={rows}
             columns={columns}
@@ -153,7 +151,7 @@ export const TabListCoHoi = ({dataCoHoi}) => {
             onRowSelectionChange={handleRowSelectionChange}
           />
       </Grid2>
-  
+    {/* modal sửa  */}
     </>
   )
 }

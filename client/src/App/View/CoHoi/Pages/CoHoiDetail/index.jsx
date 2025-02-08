@@ -29,6 +29,7 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import BanHangTab from "./ComponentTabs/BanHangTab";
 const index = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -126,6 +127,8 @@ const index = () => {
 
   const activeStepIndex = steps.findIndex((step) => step.id === activeStep);
 
+  const doanhSoKyVongResult = (dataCoHoi?.soTien * dataCoHoi?.tiLeThanhCong ) / 100 
+ 
   return (
     <>
       <Grid2 container spacing={2}>
@@ -219,7 +222,7 @@ const index = () => {
               <span style={{ width: "200px" }}>Số tiền :</span>
               <TextField
                 id="standard-basic"
-                label="Số tiền"
+                value={dataCoHoi?.soTien.toLocaleString("vi-VN")}
                 variant="standard"
               />
             </div>
@@ -234,7 +237,7 @@ const index = () => {
               <span style={{ width: "200px" }}>Giai đoạn bán hàng :</span>
               <TextField
                 id="standard-basic"
-                label="Giai đoạn bán hàng"
+                value={dataCoHoi?.giaiDoanBanHang?.tenGiaiDoan}
                 variant="standard"
               />
             </div>
@@ -249,7 +252,7 @@ const index = () => {
               <span style={{ width: "200px" }}>Tỉ lệ thành công :</span>
               <TextField
                 id="standard-basic"
-                label="Tỉ lệ thành công"
+                value={dataCoHoi?.tiLeThanhCong}
                 variant="standard"
               />
             </div>
@@ -264,7 +267,7 @@ const index = () => {
               <span style={{ width: "200px" }}>Doanh số kỳ vọng :</span>
               <TextField
                 id="standard-basic"
-                label="Doanh số kỳ vọng"
+                value={doanhSoKyVongResult.toLocaleString("vi-VN")}
                 variant="standard"
               />
             </div>
@@ -306,6 +309,8 @@ const index = () => {
                   <TabList
                     onChange={handleChange}
                     aria-label="lab API tabs example"
+                     variant="scrollable"
+                    scrollButtons="auto"
                   >
                     <Tab label="Thông tin chung " value="1" />
                     <Tab label="Lịch sử giao dịch" value="2" />
@@ -319,14 +324,14 @@ const index = () => {
                   </TabList>
                 </Box>
                 <TabPanel value="1">Thông tin chung</TabPanel>
-                <TabPanel value="2">Item Two</TabPanel>
-                <TabPanel value="3">Item Three</TabPanel>
-                <TabPanel value="4">Item Three</TabPanel>
-                <TabPanel value="5">Item Three</TabPanel>
-                <TabPanel value="6">Item Three</TabPanel>
-                <TabPanel value="7">Item Three</TabPanel>
-                <TabPanel value="8">Item Three</TabPanel>
-                <TabPanel value="9">Item Three</TabPanel>
+                <TabPanel value="2">Lịch sử giao dịch</TabPanel>
+                <TabPanel value="3">Báo giá </TabPanel>
+                <TabPanel value="4">Liên hệ</TabPanel>
+                <TabPanel value="5"><BanHangTab dataCoHoi={dataCoHoi} refetchCoHoi={refetch}/></TabPanel>
+                <TabPanel value="6">Đơn hàng </TabPanel>
+                <TabPanel value="7">Công việc đang thực hiện</TabPanel>
+                <TabPanel value="8">Công việc hoàn thành</TabPanel>
+                <TabPanel value="9">Ghi chú</TabPanel>
               </TabContext>
             </Box>
           </Paper>

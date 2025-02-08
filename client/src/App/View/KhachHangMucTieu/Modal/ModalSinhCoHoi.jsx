@@ -314,7 +314,6 @@ export const ModalSinhCoHoi = ({
     },
     callApiConvert = async (paramData) => {
       try {
-        console.log(paramData)
           await convertCoHoi(paramData).unwrap();
           toast.success("Chuyển đổi thành công")
           closeModalWithOtherFunc() 
