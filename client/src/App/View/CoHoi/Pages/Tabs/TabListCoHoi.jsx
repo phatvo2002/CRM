@@ -1,40 +1,58 @@
-import { Grid2, IconButton } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Grid2, IconButton, MenuItem, Select } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
-import NoImage from "../../../../Assets/image/no-image.png"
+import NoImage from "../../../../Assets/image/no-image.png";
 import Person2Icon from "@mui/icons-material/Person2";
-import CustomDatagrid from 'src/App/Components/DataGrid/CustomDatagrid';
-import Moment from 'react-moment';
-import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
-export const TabListCoHoi = ({dataCoHoi}) => {
-  
+import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
+import Moment from "react-moment";
+import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
+import EditIcon from "@mui/icons-material/Edit";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+export const TabListCoHoi = ({ dataCoHoi }) => {
   const [selectedRow, setSelectedRow] = useState([]),
-  [rows, setRows] = useState([]);
+    [rows, setRows] = useState([]);
+  const [selectedAction, setSelectedAction] = useState("");
 
-   
+  const handleActionChange = (event, rowId) => {
+    setSelectedAction((prev) => ({
+      ...prev,
+      [rowId]: event.target.value,
+    }));
+    console.log(`Row ${rowId} selected action:`, event.target.value);
+  };
   const columns = [
     {
       field: "action",
       headerName: "Thao tác",
-      width: 100,
-      renderCell: () => (
-        <div style={{ alignItems: "center" }}>
-          <IconButton
-            style={{}}
-            // disabled={selectedRowLichHen.length === 0}
-            // onClick={handleOpenModalUpdateLichHen}
-          >
-            <AssignmentIndIcon color="primary"></AssignmentIndIcon>
-          </IconButton>
-          <IconButton
-            style={{ margin: "0 10px" }}
-            // disabled={selectedRowLichHen.length === 0}
-            // onClick={handelDeleteLichHen}
-          >
-            <DeleteIcon color="error"></DeleteIcon>
-          </IconButton>
-        </div>
+      width: 200,
+      renderCell: (params) => (
+        <Select
+          value={selectedAction[params.row.id] || ""}
+          onChange={(event) => handleActionChange(event, params.row.id)}
+          displayEmpty
+          style={{ width: "100%" }}
+        >
+          <MenuItem value="" disabled>
+            Chọn thao tác
+          </MenuItem>
+          <MenuItem value="edit">
+            <EditIcon color="success" style={{ marginRight: 8 }} />
+            Chỉnh sửa giai đoạn
+          </MenuItem>
+          <MenuItem value="calendar">
+            <CalendarMonthIcon color="warning" style={{ marginRight: 8 }} />
+            Thay đổi ngày kỳ vọng
+          </MenuItem>
+          <MenuItem value="assign">
+            <AssignmentIndIcon color="primary" style={{ marginRight: 8 }} />
+            Bàn giao công việc
+          </MenuItem>
+          <MenuItem value="delete">
+            <DeleteIcon color="error" style={{ marginRight: 8 }} />
+            Xóa dữ liệu
+          </MenuItem>
+        </Select>
       ),
     },
     {
@@ -44,23 +62,43 @@ export const TabListCoHoi = ({dataCoHoi}) => {
       renderCell: (params) => {
         return params?.row?.nguoiDung?.ten ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", width: "40px", height: "40px" }}>
-            {params?.row?.nguoiDung?.hinhAnh == null ? (
-              <img 
-                src={NoImage} 
-                style={{ width: "30px", height: "30px", borderRadius: "50%", objectFit: "cover" }} 
-              />
-            ) : (
-              <img 
-                src={'data:image/jpeg;base64,' + params?.row?.nguoiDung?.hinhAnh} 
-                style={{ width: "30px", height: "30px", borderRadius: "50%", objectFit: "cover" }} 
-              />
-            )}
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "40px",
+                height: "40px",
+              }}
+            >
+              {params?.row?.nguoiDung?.hinhAnh == null ? (
+                <img
+                  src={NoImage}
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <img
+                  src={
+                    "data:image/jpeg;base64," + params?.row?.nguoiDung?.hinhAnh
+                  }
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
+            </div>
+            <span>
+              {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}
+            </span>
           </div>
-          <span>
-            {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}
-          </span>
-        </div>        
         ) : (
           <div></div>
         );
@@ -90,27 +128,33 @@ export const TabListCoHoi = ({dataCoHoi}) => {
     },
     { field: "id", headerName: "Mã cơ hội", width: 200 },
     {
-      field: "giaidoan", headerName: "Giai đoạn", width: 200,
-      renderCell: (params) =>
-      (
+      field: "giaidoan",
+      headerName: "Giai đoạn",
+      width: 200,
+      renderCell: (params) => (
         <div>
           {console.log(params)}
           {params.row.giaiDoanBanHang?.tenGiaiDoan}
         </div>
-      )
+      ),
     },
-    { field: "soTien", headerName: "Số tiền", width: 200,
-      renderCell : (params) => (
+    {
+      field: "soTien",
+      headerName: "Số tiền",
+      width: 200,
+      renderCell: (params) => (
         <div>{params.value.toLocaleString("vi-VN")} VND</div>
-      )
-     },
+      ),
+    },
     {
       field: "ngayKyVongKetThuc",
       headerName: "Ngày kỳ vọng kết thúc",
       width: 200,
       renderCell: (params) => (
-        <div><Moment format="DD/MM/YYYY ">{new Date(params.value)}</Moment></div>
-      )
+        <div>
+          <Moment format="DD/MM/YYYY ">{new Date(params.value)}</Moment>
+        </div>
+      ),
     },
     // {
     //   field: "soDienThoai",
@@ -126,11 +170,12 @@ export const TabListCoHoi = ({dataCoHoi}) => {
       field: "createAt",
       headerName: "Ngày tạo",
       width: 200,
-      renderCell : (params) => (
-         <div><Moment format="DD/MM/YYYY ">{new Date(params.value)}</Moment></div>
-      )
+      renderCell: (params) => (
+        <div>
+          <Moment format="DD/MM/YYYY ">{new Date(params.value)}</Moment>
+        </div>
+      ),
     },
-  
   ];
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
@@ -141,17 +186,17 @@ export const TabListCoHoi = ({dataCoHoi}) => {
   return (
     <>
       <Grid2 container spacing={2}>
-          <CustomDatagrid
-            rows={rows}
-            columns={columns}
-            pageSizeOptions={[10, 25, 50]}
-            initialPageSize={25}
-            checkboxSelection={true}
-            showTopToolbar={true}
-            onRowSelectionChange={handleRowSelectionChange}
-          />
+        <CustomDatagrid
+          rows={rows}
+          columns={columns}
+          pageSizeOptions={[10, 25, 50]}
+          initialPageSize={25}
+          checkboxSelection={true}
+          showTopToolbar={true}
+          onRowSelectionChange={handleRowSelectionChange}
+        />
       </Grid2>
-    {/* modal sửa  */}
+      {/* modal sửa  */}
     </>
-  )
-}
+  );
+};

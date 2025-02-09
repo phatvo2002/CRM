@@ -20,7 +20,6 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 const index = () => {
   const [value, setValue] = useState("1");
   const [anchorEl, setAnchorEl] = useState(null);
-  const [anchorEl2, setAnchorEl2] = useState(null);
   const { data: dataCoHoi , refetch } = useGetCoHoiListQuery()
    const [modalThemMoi,setModalThemMoi] = useState(false);
   const handleOpenModalThemMoiCoHoi = ()=> setModalThemMoi(true)
@@ -29,37 +28,23 @@ const index = () => {
     setValue(newValue);
   };
   const open = Boolean(anchorEl);
-  const openUpdate = Boolean(anchorEl2);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleCloseDrop = () => {
     setAnchorEl(null);
   };
-  const handleClickButtonUpdate = (event)=> setAnchorEl2(event.currentTarget)
-  const handleCloseClickButton  = () => setAnchorEl2(null)
   return (
     <>
       <Grid2 container spacing={2}>
-        <Grid2 size={4}>
+        <Grid2 size={8}>
           <h3 style={{ padding: 0, margin: 0 }}>Tất cả cơ hội</h3>
         </Grid2>
-        <Grid2 size={8}>
+        <Grid2 size={4}>
           <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpenModalThemMoiCoHoi}>
             Thêm mới{" "}
           </Button>
-          <Button
-            id="basic-button"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClickButtonUpdate}
-            sx={{ marginLeft: 1, width: "250px" }}
-            variant="outlined"
-            startIcon={<EditIcon />}
-          >
-            Chỉnh sửa thông tin
-          </Button>
+    
 
           {/* dropdown update */}
           <Button
@@ -86,16 +71,6 @@ const index = () => {
             <MenuItem onClick={handleCloseDrop}>
               <Button
                 variant="outlined"
-                color="primary"
-                sx={{ marginLeft: 1, width: "200px" }}
-                startIcon={<ContactPageIcon/>}
-              >
-                Bàn giao công việc
-              </Button>
-            </MenuItem>
-            <MenuItem onClick={handleCloseDrop}>
-              <Button
-                variant="outlined"
                 sx={{ marginLeft: 1, width: "200px" }}
                 startIcon={<AutoDeleteIcon />}
                 color="primary"
@@ -115,36 +90,7 @@ const index = () => {
             </MenuItem>
           </Menu>
 
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl2}
-            open={openUpdate}
-            onClose={handleCloseClickButton}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-          >
-            <MenuItem onClick={handleCloseClickButton}>
-              <Button
-                variant="outlined"
-                sx={{ marginLeft: 1, width: "100%" }}
-                startIcon={<AutoDeleteIcon />}
-                color="primary"
-              >
-                Cập nhật giai đoạn
-              </Button>
-            </MenuItem>
-            <MenuItem onClick={handleCloseClickButton}>
-              <Button
-                variant="outlined"
-                color="primary"
-                sx={{ marginLeft: 1, width: "100%" }}
-                startIcon={<CalendarMonthIcon />}
-              >
-                 Ngày kỳ vọng kết thúc
-              </Button>
-            </MenuItem>
-          </Menu>
+        
         </Grid2>
         <Grid2 size={12}>
           <Paper style={{maxWidth:"100%"}}>
