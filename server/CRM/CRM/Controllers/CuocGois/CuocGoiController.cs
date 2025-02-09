@@ -47,6 +47,7 @@ namespace CRM.Controllers.CuocGois
             }
         }
 
+
         [HttpGet("getcuocgoibykhachhangtiemnangid/{id}")]
         [JwtAuthorize]
         public async Task<ActionResult> GetCuoGoiByKhachHangTiemNangId(Guid id)
@@ -89,6 +90,36 @@ namespace CRM.Controllers.CuocGois
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getcuocgoiDahoanthanh/{id}")]
+        [JwtAuthorize]
+        public async Task<ActionResult> GetCuoGoiDaHoanThanh(string id)
+        {
+            try
+            {
+                List<CuocGoiDTO> result = await _cuocGoiServices.GetCuocGoiIsThucHien(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("getcuocgoiChuahoanthanh/{id}")]
+        [JwtAuthorize]
+        public async Task<ActionResult> GetCuoGoiChuaHoanThanh(string id)
+        {
+            try
+            {
+                List<CuocGoiDTO> result = await _cuocGoiServices.GetCuocGoiChuaThucHien(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("createcuocgoi")]
         [JwtAuthorize]
         public async Task<ActionResult> CreateCuocGoi(CuocGoiModal modal)

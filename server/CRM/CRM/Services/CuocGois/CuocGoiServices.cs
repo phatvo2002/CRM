@@ -46,6 +46,16 @@ namespace CRM.Services.CuocGois
             return await _cuocGoiRepository.GetCuocGoiByNguoiDungId(NguoiDungId);
         }
 
+        public async Task<List<CuocGoiDTO>> GetCuocGoiChuaThucHien(string coHoiId)
+        {
+            return await _cuocGoiRepository.GetCuocGoiChuaThucHien(coHoiId);
+        }
+
+        public async Task<List<CuocGoiDTO>> GetCuocGoiIsThucHien(string coHoiId)
+        {
+            return await _cuocGoiRepository.GetCuocGoiIsThucHien(coHoiId);
+        }
+
         public async Task<ResultModal> UpdateCuocGoi(CuocGoiModal modal, Guid nguoiDungId, Guid phongBanId)
         {
             return await _cuocGoiRepository.UpdateCuocGoi(modal, nguoiDungId, phongBanId);

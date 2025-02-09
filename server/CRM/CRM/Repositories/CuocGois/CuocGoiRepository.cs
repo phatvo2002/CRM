@@ -37,6 +37,7 @@ namespace CRM.Repositories.CuocGois
                     cuocGoi.KetQuaCuocGoiId = modal.KetQuaCuocGoiId;
                     cuocGoi.KhachHangTiemNangId = modal.KhachHangTiemNangId;
                     cuocGoi.KhachHangMucTieuId = modal.KhachHangMucTieuId;
+                    cuocGoi.CoHoiId = modal.CoHoiId;
                     cuocGoi.IsDeleted = false;
                     cuocGoi.NguoiDungId = nguoiDungId;
                     cuocGoi.PhongBanId = phongBanId;
@@ -121,6 +122,18 @@ namespace CRM.Repositories.CuocGois
         public async Task<List<CuocGoiDTO>> GetCuocGoiByKhachHangId(string Id)
         {
             var db = await _context.CuocGois.Where(r => r.KhachHangMucTieuId == Id).Include(r => r.LoaiCuocGoi).Include(r => r.KhachHangTiemNang).ToListAsync();
+            return _mapper.Map<List<CuocGoiDTO>>(db);
+        }
+
+        public async Task<List<CuocGoiDTO>> GetCuocGoiIsThucHien(string coHoiId)
+        {
+            var db = await _context.CuocGois.Where(r => r.CoHoiId == coHoiId && r.IsHoanThanh == false).ToListAsync();
+            return _mapper.Map<List<CuocGoiDTO>>(db);
+        }
+
+        public async Task<List<CuocGoiDTO>> GetCuocGoiChuaThucHien(string coHoiId)
+        {
+            var db = await _context.CuocGois.Where(r => r.CoHoiId == coHoiId && r.IsHoanThanh == true).ToListAsync();
             return _mapper.Map<List<CuocGoiDTO>>(db);
         }
     }

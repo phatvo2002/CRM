@@ -12,6 +12,7 @@ namespace CRM.Services.CoHois
         Task<List<CoHoiDTO>> GetCoHoiByPhongBanId(Guid phongBanId);
         Task<ResultModal> UpdateGiaiDoan(string cohoiId, Guid giaiDoanId);
         Task<ResultModal> UpdateCoHoiGiaTien(string CoHoiId, decimal giaTien);
+        Task<ResultModal> UpdateNgayKyVong(string coHoiId, DateTime? ngayKyVong);
 
     }
 }

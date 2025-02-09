@@ -35,6 +35,7 @@ namespace CRM.Repositories.LichHens
                     lichHen.TrangThaiThucHienId = modal.TrangThaiThucHienId;
                     lichHen.KhachHangTiemNangId = modal.KhachHangTiemNangId;
                     lichHen.KhachHangMucTieuId = modal.KhachHangMucTieuId;
+                    lichHen.CoHoiId = modal.CoHoiId;
                     lichHen.IsDeleted = false;
                     lichHen.NguoiDungId = nguoiDungId;
                     lichHen.PhongBanId = phongBanId;

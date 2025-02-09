@@ -132,5 +132,25 @@ namespace CRM.Repositories.CoHois
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
         }
+
+        public async Task<ResultModal> UpdateNgayKyVong(string coHoiId, DateTime? ngayKyVong)
+        {
+            var db = _crmDbContext.CoHois.Where(r => r.Id == coHoiId).FirstOrDefault();
+            try
+            {
+                if (db != null)
+                {
+                    db.NgayKyVongKetThuc = ngayKyVong;
+                    _crmDbContext.CoHois.Update(db);
+                    await _crmDbContext.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Cập nhật thành công", Success = true };
+                }
+                else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+        }
     }
 }

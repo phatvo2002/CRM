@@ -11,6 +11,7 @@ namespace CRM.Repositories.CoHois
         Task<List<CoHoiDTO>> GetCoHoiByNguoiDungId(Guid nguoiDungId);
         Task<List<CoHoiDTO>> GetCoHoiByPhongBanId(Guid phongBanId);
         Task<ResultModal> UpdateGiaiDoan(string cohoiId, Guid giaiDoanId);
+        Task<ResultModal> UpdateNgayKyVong(string coHoiId, DateTime? ngayKyVong);
         Task<ResultModal> UpdateCoHoiGiaTien(string CoHoiId, decimal giaTien);
     }
 }

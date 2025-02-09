@@ -120,6 +120,20 @@ namespace CRM.Controllers.CoHois
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("updatengaykyvong")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UpdateNgayKyVongKetThuc(string id, DateTime ngayKyVong)
+        {
+            try
+            {
+                ResultModal result = await _coHoiServices.UpdateNgayKyVong(id, ngayKyVong);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpDelete("deletecohoi/{id}")]
         [JwtAuthorize]

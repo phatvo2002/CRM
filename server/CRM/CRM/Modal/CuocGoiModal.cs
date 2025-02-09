@@ -12,6 +12,7 @@
         public Guid? LoaiCuocGoiId { get; set; }
         public Guid? KhachHangTiemNangId { get; set; }
         public string? KhachHangMucTieuId { get; set; }
+        public string? CoHoiId { get; set; }
         public Guid? KetQuaCuocGoiId { get; set; }
     }
 }

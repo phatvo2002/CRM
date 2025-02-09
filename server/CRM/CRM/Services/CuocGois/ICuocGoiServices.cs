@@ -13,5 +13,7 @@ namespace CRM.Services.CuocGois
         Task<ResultModal> CreateCuocGoi(CuocGoiModal modal, Guid nguoiDungId, Guid phongBanId);
         Task<ResultModal> UpdateCuocGoi(CuocGoiModal modal, Guid nguoiDungId, Guid phongBanId);
         Task<ResultModal> DeleteCuocGoi(Guid Id);
+        Task<List<CuocGoiDTO>> GetCuocGoiIsThucHien(string coHoiId);
+        Task<List<CuocGoiDTO>> GetCuocGoiChuaThucHien(string coHoiId);
     }
 }

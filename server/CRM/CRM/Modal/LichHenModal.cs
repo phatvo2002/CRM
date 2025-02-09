@@ -11,5 +11,6 @@
         public Guid? TrangThaiThucHienId { get; set; }
         public Guid? KhachHangTiemNangId { get; set; }
         public string? KhachHangMucTieuId { get; set; }
+        public string? CoHoiId { get; set; }
     }
 }
