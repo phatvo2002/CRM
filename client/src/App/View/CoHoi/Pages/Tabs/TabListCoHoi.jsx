@@ -1,4 +1,4 @@
-import { Grid2, IconButton, MenuItem, Select } from "@mui/material";
+import { Grid2, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -9,50 +9,44 @@ import Moment from "react-moment";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import EditIcon from "@mui/icons-material/Edit";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-export const TabListCoHoi = ({ dataCoHoi }) => {
+import ModalChinhSuaGiaiDoan from "../../Modal/ModalChinhSuaGiaiDoan";
+import ModalChinhSuaNgayKyVong from "../../Modal/ModalChinhSuaNgayKyVong";
+export const TabListCoHoi = ({ dataCoHoi , refetch }) => {
   const [selectedRow, setSelectedRow] = useState([]),
-    [rows, setRows] = useState([]);
-  const [selectedAction, setSelectedAction] = useState("");
-
-  const handleActionChange = (event, rowId) => {
-    setSelectedAction((prev) => ({
-      ...prev,
-      [rowId]: event.target.value,
-    }));
-    console.log(`Row ${rowId} selected action:`, event.target.value);
-  };
+    [rows, setRows] = useState([]),
+    [modalChinhSua , setModalChinhSua] = useState(false),
+    [modalChinhSuaNgayKyVong ,setModalChinhSuaNgayKyVong] = useState(false);
+    
+  const handleOpenModalChinhSuaGiaiDoan = () => setModalChinhSua(true)
+  const handleCloseModalChinhSuaGiaiDoan = () => setModalChinhSua(false)
+  const handleOpenModalChinhSuaNgayKyVong = () => setModalChinhSuaNgayKyVong(true)
+  const handleCloseModalChinhSuaNgayKyVong = () => setModalChinhSuaNgayKyVong(false)
   const columns = [
     {
       field: "action",
       headerName: "Thao tác",
       width: 200,
-      renderCell: (params) => (
-        <Select
-          value={selectedAction[params.row.id] || ""}
-          onChange={(event) => handleActionChange(event, params.row.id)}
-          displayEmpty
-          style={{ width: "100%" }}
-        >
-          <MenuItem value="" disabled>
-            Chọn thao tác
-          </MenuItem>
-          <MenuItem value="edit">
-            <EditIcon color="success" style={{ marginRight: 8 }} />
-            Chỉnh sửa giai đoạn
-          </MenuItem>
-          <MenuItem value="calendar">
-            <CalendarMonthIcon color="warning" style={{ marginRight: 8 }} />
-            Thay đổi ngày kỳ vọng
-          </MenuItem>
-          <MenuItem value="assign">
-            <AssignmentIndIcon color="primary" style={{ marginRight: 8 }} />
-            Bàn giao công việc
-          </MenuItem>
-          <MenuItem value="delete">
-            <DeleteIcon color="error" style={{ marginRight: 8 }} />
-            Xóa dữ liệu
-          </MenuItem>
-        </Select>
+      renderCell: () => (
+        <div style={{ display: "flex", alignItems: "center", overflow: "auto", maxWidth: "150px" }}>
+          <IconButton disabled={selectedRow.length === 0} onClick={handleOpenModalChinhSuaGiaiDoan}>
+            <EditIcon color="success"></EditIcon>
+          </IconButton>
+          <IconButton disabled={selectedRow.length === 0} onClick={handleOpenModalChinhSuaNgayKyVong}>
+            <CalendarMonthIcon color="warning"></CalendarMonthIcon>
+          </IconButton>
+          <IconButton
+            disabled={selectedRow.length === 0}
+            // onClick={handleOpenModalUpdateLichHen}
+          >
+            <AssignmentIndIcon color="primary"></AssignmentIndIcon>
+          </IconButton>
+          <IconButton
+            disabled={selectedRow.length === 0}
+            // onClick={handelDeleteLichHen}
+          >
+            <DeleteIcon color="error"></DeleteIcon>
+          </IconButton>
+        </div>
       ),
     },
     {
@@ -196,7 +190,20 @@ export const TabListCoHoi = ({ dataCoHoi }) => {
           onRowSelectionChange={handleRowSelectionChange}
         />
       </Grid2>
-      {/* modal sửa  */}
+      {/* modal sửa gia đoạn  */}
+      <ModalChinhSuaGiaiDoan
+        showModal={modalChinhSua}
+        closeModal={handleCloseModalChinhSuaGiaiDoan}
+        selectedItem={selectedRow}
+        refetch={refetch}
+      />
+      {/* Modal chỉnh sửa ngày kỳ vọng */}
+      <ModalChinhSuaNgayKyVong
+       showModal={modalChinhSuaNgayKyVong}
+       closeModal={handleCloseModalChinhSuaNgayKyVong}
+       selectedItem={selectedRow}
+       refetch={refetch}
+      />
     </>
   );
 };

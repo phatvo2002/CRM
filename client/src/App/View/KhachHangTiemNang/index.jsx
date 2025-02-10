@@ -10,6 +10,7 @@ import {
   Paper,
 } from "@mui/material";
 import GetAppIcon from "@mui/icons-material/GetApp";
+import { useMemo } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import EditIcon from "@mui/icons-material/Edit";
@@ -58,25 +59,16 @@ const KhachHangTiemNang = () => {
     navigate("/tiemnang/uploadkhachhang");
   };
 
-  const columns = [
+  const columns = useMemo(() => [
     {
       field: "action",
       width: 150,
       headerName: "Thao tác",
       renderCell: (params) => (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            padding: 5,
-            margin: 5,
-          }}
-        >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 5, margin: 5 }}>
           <Tooltip title="Sửa thông tin ">
             <IconButton
-              disabled={selectedRow.length == 0}
-              style={{}}
+              disabled={selectedRow.length === 0}
               onClick={onOpenModalUpdateKhachHang}
             >
               <EditIcon color="success" />
@@ -84,8 +76,7 @@ const KhachHangTiemNang = () => {
           </Tooltip>
           <Tooltip title="Xóa">
             <IconButton
-              disabled={selectedRow.length == 0}
-              style={{}}
+              disabled={selectedRow.length === 0}
               onClick={() => handleDeletePhongBan(params?.id)}
             >
               <DeleteIcon color="error" />
@@ -93,9 +84,8 @@ const KhachHangTiemNang = () => {
           </Tooltip>
           <Tooltip title="Bàn giao tiềm năng">
             <IconButton
-              disabled={selectedRow.length == 0}
-              style={{}}
-              onClick={() => handleOpenModalBanGiaoKhachHang()}
+              disabled={selectedRow.length === 0}
+              onClick={handleOpenModalBanGiaoKhachHang}
             >
               <ThreePIcon color="primary" />
             </IconButton>
@@ -103,31 +93,25 @@ const KhachHangTiemNang = () => {
         </div>
       ),
     },
-    // { field: "hoVaDem", headerName: "Họ Và Đệm", flex: 1 },
     {
-      field: "",
+      field: "nhanVienChamSoc",
       headerName: "Nhân viên chăm sóc",
       width: 200,
-      renderCell: (params) => {
-        return params?.row?.nguoiDung?.ten ? (
+      renderCell: (params) =>
+        params?.row?.nguoiDung?.ten ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <div>
-              {params?.row?.nguoiDung?.hinhAnh == null ?
-                <div>
-                  <img src={NoImage} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: 2 }} />
-                </div> : <div>
-                  <img src={'data:image/jpeg;base64,' + params?.row?.nguoiDung?.hinhAnh} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: 2 }} />
-                </div>}
-            </div>
+            <img
+              src={params?.row?.nguoiDung?.hinhAnh ? `data:image/jpeg;base64,${params?.row?.nguoiDung?.hinhAnh}` : NoImage}
+              style={{ width: "40px", height: "40px", borderRadius: "50%", margin: 2 }}
+              alt="avatar"
+            />
             <span>
-              {" "}
               {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}
             </span>
           </div>
         ) : (
           <div></div>
-        );
-      },
+        ),
     },
     {
       field: "tenKhachHang",
@@ -156,28 +140,23 @@ const KhachHangTiemNang = () => {
       field: "soDienThoaiDiDong",
       headerName: "Số điện thoại cá nhân",
       width: 200,
-      renderCell: (params) => {
-        return params.value ? (
+      renderCell: (params) =>
+        params.value ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <PhoneIcon style={{ padding: 2 }} color="success" />
             <span>{params.value}</span>
           </div>
         ) : (
           <div></div>
-        );
-      },
+        ),
     },
-    {
-      field: "soDienThoaiCoQuan",
-      headerName: "Số điện thoại cơ quan",
-      width: 200,
-    },
+    { field: "soDienThoaiCoQuan", headerName: "Số điện thoại cơ quan", width: 200 },
     { field: "emailCaNhan", headerName: "Email cá nhân", width: 200 },
     { field: "EmailCoQuan", headerName: "Tài khoản", width: 200 },
     { field: "nguonGoc", headerName: "Nguồn gốc khách hàng", width: 200 },
     { field: "linhVuc", headerName: "Lĩnh vực", width: 200 },
     { field: "nghenghiep", headerName: "Nghề nghiệp", width: 200 },
-  ];
+  ], [selectedRow]);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -296,9 +275,9 @@ const KhachHangTiemNang = () => {
     <div className="customer-page">
       <div>
         <Grid2 container alignItems="center" spacing={2}>
-          <Grid2 size={12}>
-            <h2 style={{ padding: 0, margin: 0 }}>Tất Cả Tiềm Năng</h2>
-          </Grid2>
+        <Grid2 size={12}>
+            <h2 style={{padding :0 , margin:0}}>Tất Cả Tiềm Năng</h2>
+        </Grid2> 
           <Grid2 size={12} >
             <Button
               variant="contained"
@@ -317,7 +296,7 @@ const KhachHangTiemNang = () => {
               sx={{ marginLeft: 1, width: "200px" }}
               variant="outlined"
               startIcon={<OpenInNewIcon />}
-              endIcon={<KeyboardArrowDownIcon />}
+              endIcon={<KeyboardArrowDownIcon/>}
             >
               Tùy chỉnh
             </Button>
@@ -385,9 +364,9 @@ const KhachHangTiemNang = () => {
             </Button>
           </Grid2>
         </Grid2>
-
-        <Paper sx={{ marginTop: 1 }}>
-
+       
+        <Paper sx={{marginTop:1}}>
+         
           <Grid2 size={12}>
             <CustomDatagrid
               rows={rows}

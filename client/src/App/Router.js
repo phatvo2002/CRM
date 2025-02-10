@@ -1,3 +1,4 @@
+import { Box, CircularProgress } from "@mui/material";
 import { lazy, Suspense } from "react";
 
 //quản trị hệ thống
@@ -9,15 +10,15 @@ const ChangePassword = lazy(() => import("./View/session/ChangePassword"));
 const ThietLapVaiTro = lazy(
   () => import("./View/ThietLap/ThietLapVaiTro/Index")
 );
-const QuyTrinhBanHang = lazy(() => import("./View/ThietLap/QuyTrinhBanHang/index"));
+const QuyTrinhBanHang = lazy(
+  () => import("./View/ThietLap/QuyTrinhBanHang/index")
+);
 const QuanLyPhongban = lazy(() => import("./View/ThietLap/QuanLyPhongBan"));
 const QuanLyMenu = lazy(() => import("./View/ThietLap/QuanLyMenu/index"));
 const DashBoardThietLap = lazy(
   () => import("./View/ThietLap/DashBoardThietLap")
 );
-const ThietLapMail = lazy(
-  () => import("./View/ThietLap/ThietLapMail/index")
-);
+const ThietLapMail = lazy(() => import("./View/ThietLap/ThietLapMail/index"));
 // khách hàng tiềm năng
 const KhachHangTiemNang = lazy(() => import("./View/KhachHangTiemNang/index"));
 const ThemMoiKhachHangTiemNang = lazy(
@@ -43,11 +44,11 @@ const ThongBaoDetail = lazy(
   () => import("./Components/CustomNotification/NotificationList")
 );
 // cơ hội
-const CoHoi = lazy(() => import("./View/CoHoi/index"))
+const CoHoi = lazy(() => import("./View/CoHoi/index"));
 
-const CoHoiDetail = lazy(() => import("./View/CoHoi/Pages/CoHoiDetail/index"))
+const CoHoiDetail = lazy(() => import("./View/CoHoi/Pages/CoHoiDetail/index"));
 
-const NhiemVu = lazy(()=> import("./View/NhiemVu/index") )
+const NhiemVu = lazy(() => import("./View/NhiemVu/index"));
 
 const RouteChild = [
   {
@@ -154,7 +155,21 @@ const RouteChild = [
   {
     path: "/tiemnang",
     element: (
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense
+        fallback={
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              width: "100vw",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        }
+      >
         <KhachHangTiemNang />
       </Suspense>
     ),

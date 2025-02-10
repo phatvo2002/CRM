@@ -1,44 +1,56 @@
 import { Grid2 } from "@mui/material";
 import React, { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import { useUpdateGiaiDoanMutation } from "src/App/Api/CoHoiApi";
+import {
+  useUpdateGiaiDoanMutation,
+  useUpdateNgayKyVongMutation,
+} from "src/App/Api/CoHoiApi";
 import { useGetAllGiaiDoanBanHangQuery } from "src/App/Api/GiaiDoanBanHangApi";
-import { AutocompleteRHF } from "src/App/Components/ReactHookFormComp";
+import {
+  AutocompleteRHF,
+  DatePickerRHF,
+} from "src/App/Components/ReactHookFormComp";
+import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
 import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
 import { validateString } from "src/App/Until/validateYup";
 import * as yup from "yup";
 const modelObj = {
     id: "id",
-    giaiDoanId: "giaiDoanId",
+    ngayKyVong: "ngayKyVong",
   },
   labelObj = {
-    giaiDoanId: "Giai đoạn",
+    ngayKyVong: "Ngày kì vọng kết thúc",
   },
   initialFormState = {
-    [modelObj.giaiDoanId]: "",
+    [modelObj.ngayKyVong]: new Date(),
   },
   schema = yup.object().shape({
-    [modelObj.giaiDoanId]: validateString(),
+    [modelObj.ngayKyVong]: validateString(),
   });
-const ModalChinhSuaGiaiDoan = (prop) => {
-  const { showModal, closeModal, selectedItem, refetch , typeModal , isLoading } = prop,
+const ModalChinhSuaNgayKyVong = (prop) => {
+  const { showModal, closeModal, selectedItem, refetch, typeModal, isLoading } =
+      prop,
     _isMounted = useRef(false),
     modalRef = useRef(null);
-  const [updateGiaiDoan] = useUpdateGiaiDoanMutation();
-  const { data: dataGiaiDoan , isFetching : giaiDoanIsFetching } = useGetAllGiaiDoanBanHangQuery();
+  const [updateGiaiDoan] = useUpdateNgayKyVongMutation();
   const submitForm = (data) => {
       const tempData = {
-        [modelObj.id]:selectedItem[0]?.id,
-        [modelObj.giaiDoanId]: data[modelObj.giaiDoanId],
+        [modelObj.id]: selectedItem[0]?.id,
+        [modelObj.ngayKyVong]: data[modelObj.ngayKyVong],
       };
-    
+
       callApiUpdate(tempData);
     },
     callApiUpdate = async (paramData) => {
       try {
-        await updateGiaiDoan({cohoiId:paramData?.id , giaiDoanId: paramData?.giaiDoanId}).unwrap();
-        toast.success("Cập nhật giai đoạn thành công");
+        await updateGiaiDoan({
+            cohoiId: paramData?.id,
+            ngayKyVong: paramData?.ngayKyVong 
+              ? new Date(paramData.ngayKyVong).toISOString() 
+              : null,
+          }).unwrap();          
+        toast.success("Cập nhật thành công");
         refetch();
         closeModalWithOtherFunc();
       } catch (error) {
@@ -53,18 +65,17 @@ const ModalChinhSuaGiaiDoan = (prop) => {
       modalRef.current?.reset(
         {
           ...selectedItem,
-          [modelObj.giaiDoanId]: selectedItem?.maGiaiDoanBanHang,
+          [modelObj.ngayKyVong]: selectedItem?.ngayKyVongKetThuc,
         },
         { keepDirty: true }
       );
     };
+  console.log(selectedItem);
   useEffect(() => {
     if (selectedItem[0]) {
       getInitialStateFromApiToUpdate(selectedItem[0]);
     }
   }, [selectedItem[0]]);
-
-
 
   useEffect(() => {
     _isMounted.current = true;
@@ -78,7 +89,7 @@ const ModalChinhSuaGiaiDoan = (prop) => {
         handleClose={closeModalWithOtherFunc}
         submitForm={submitForm}
         isOpen={showModal}
-        header={"Chỉnh sửa giai đoạn"}
+        header={"Chỉnh sửa ngày kỳ vọng kết thúc"}
         type={typeModal}
         loading={isLoading}
         initialFormState={initialFormState}
@@ -87,13 +98,11 @@ const ModalChinhSuaGiaiDoan = (prop) => {
       >
         <Grid2 container spacing={2}>
           <Grid2 size={12}>
-            <AutocompleteRHF
-              name={modelObj.giaiDoanId}
-              label={labelObj.giaiDoanId}
-              isGetOnlyId
+            <DateTimePickerRHF
+              name={modelObj.ngayKyVong}
+              label={labelObj.ngayKyVong}
               disabled={isLoading}
-              data={commonMapDataAutocomplete(dataGiaiDoan, "name")}
-              skeletonLoading={giaiDoanIsFetching}
+              required
             />
           </Grid2>
         </Grid2>
@@ -102,4 +111,4 @@ const ModalChinhSuaGiaiDoan = (prop) => {
   );
 };
 
-export default ModalChinhSuaGiaiDoan;
+export default ModalChinhSuaNgayKyVong;

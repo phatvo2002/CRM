@@ -38,6 +38,12 @@ export const apiCoHoi = createApi({
           method: 'PUT', 
         }),
       }),     
+      updateNgayKyVong: builder.mutation({
+        query: ({ cohoiId, ngayKyVong }) => ({
+          url: `/CoHoi/updatengaykyvong?id=${encodeURIComponent(cohoiId)}&ngayKyVong=${encodeURIComponent(ngayKyVong)}`, 
+          method: 'PUT', 
+        }),
+      }),     
       updateSoTien: builder.mutation({
         query: ({ cohoiId, sotien }) => ({
           url: `/CoHoi/updatesotien?id=${cohoiId}&soTien=${sotien}`, 
@@ -57,6 +63,7 @@ export const apiCoHoi = createApi({
     useGetCoHoiByIdQuery,
     useGetCoHoiListQuery,
     useConvertCoHoiMutation,
+    useUpdateNgayKyVongMutation,
     useUpdateGiaiDoanMutation,
     useUpdateSoTienMutation,
     useDeleteCoHoiMutation,

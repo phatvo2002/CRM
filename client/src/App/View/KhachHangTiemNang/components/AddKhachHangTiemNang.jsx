@@ -99,11 +99,7 @@ const modelObj = {
   };
 const AddKhachHangTiemNang = () => {
   const navigate = useNavigate();
-
-  
   const userData = JSON.parse(localStorage.getItem('authorizationData'));
-   
-
   const [linhVucId, setLinhVucId] = useState("");
   const previousPage = () => {
       const isConfirmed = window.confirm(

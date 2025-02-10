@@ -104,7 +104,7 @@ const index = () => {
                   <Tab icon={<WidgetsIcon />} label="Mở rộng" value="2" />
                 </TabList>
               </Box>
-              <TabPanel value="1" ><TabListCoHoi dataCoHoi={dataCoHoi}/> 
+              <TabPanel value="1" ><TabListCoHoi dataCoHoi={dataCoHoi} refetch={refetch}/> 
               </TabPanel>
               <TabPanel value="2"><TabBieuDoCoHoi/></TabPanel>
             </TabContext>
