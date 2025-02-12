@@ -13,6 +13,11 @@ namespace CRM.Services.HangHoaQuanTams
             _hangHoaQuanTamRepository = repository;
         }
 
+        public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByCoHoiId(string id)
+        {
+            return await _hangHoaQuanTamRepository.GetHangHoaQuanTamByCoHoiId(id);
+        }
+
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangId(string id)
         {
             return await _hangHoaQuanTamRepository.GetHangHoaQuanTamByKhachHangId(id);

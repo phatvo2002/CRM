@@ -61,6 +61,9 @@ namespace CRM.Helper
 
             CreateMap<LoaiCoHoi, ClassDTO>();
 
+            CreateMap<BaoGia, BaoGiaDTO>();
+            CreateMap<BaoGiaModal, BaoGia>().ReverseMap();
+
         }
     }
 }

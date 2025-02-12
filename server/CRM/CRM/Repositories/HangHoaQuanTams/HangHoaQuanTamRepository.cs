@@ -12,9 +12,15 @@ namespace CRM.Repositories.HangHoaQuanTams
         {
         }
 
+        public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByCoHoiId(string id)
+        {
+            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.CoHoiId == id).ToListAsync();
+            return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
+        }
+
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangId(string id)
         {
-            var db = await _crmDbContext.HangHoaQuanTams.Where(r=> r.KhachHangId == id).ToListAsync();
+            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.KhachHangId == id).ToListAsync();
             return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
         }
 

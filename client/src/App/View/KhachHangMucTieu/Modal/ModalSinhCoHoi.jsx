@@ -89,7 +89,6 @@ const modelObj = {
   });
 export const ModalSinhCoHoi = ({
   khachHangData,
-  hangHoaQuanTamData,
   showModal,
   closeModal,
   isLoading,
