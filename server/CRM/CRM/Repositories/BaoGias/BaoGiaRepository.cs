@@ -40,7 +40,7 @@ namespace CRM.Repositories.BaoGias
                         HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
                         hangHoaQuanTam.Id = Guid.NewGuid();
                         hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
-                        hangHoaQuanTam.KhachHangId = baoGiaModal.MaKhachHang;
+                        hangHoaQuanTam.KhachHangId = null;
                         hangHoaQuanTam.CoHoiId = baoGiaModal.MaCoHoi;
                         hangHoaQuanTam.BaoGiaId = baoGia.Id;
                         hangHoaQuanTam.DonGia = item.DonGia;

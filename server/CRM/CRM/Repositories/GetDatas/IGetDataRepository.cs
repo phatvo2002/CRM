@@ -18,5 +18,6 @@ namespace CRM.Repositories.GetDatas
         Task<List<ClassDTO>> GetAllPhanLoaiDuBao();
         Task<List<ClassDTO>> GetAllLoaiDuBao();
         Task<List<ClassDTO>> GetAllLoaiCoHoi();
+        Task<List<ClassDTO>> GetAllTinhTrangBaoGia();
     }
 }

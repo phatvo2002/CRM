@@ -5,6 +5,7 @@ import { useGetAllHangHoaQuery } from "src/App/Api/HangHoa";
 import {
   useAddHangHoaQuanTamMutation,
   useDeleteHangHoaQuanTamMutation,
+  useGetHangHoaQuanTamByCoHoiIdQuery,
   useGetHangHoaQuanTamByKhachHangIdQuery,
   useUpdateHangHoaQuanTamMutation,
 } from "src/App/Api/HangHoaQuanTam";
@@ -20,7 +21,7 @@ import EditIcon from '@mui/icons-material/Edit';
 const BanHangTab = ({dataCoHoi , refetchCoHoi}) => {
   const { id } = useParams();
   const [hangHoa, setHangHoa] = useState([]);
-  const { data: rows, refetch } = useGetHangHoaQuanTamByKhachHangIdQuery(dataCoHoi?.maKhachHang);
+  const { data: rows, refetch } = useGetHangHoaQuanTamByCoHoiIdQuery(id);
   const { data: hangHoas } = useGetAllHangHoaQuery();
   const [createData] = useAddHangHoaQuanTamMutation();
   const [updateData] = useUpdateHangHoaQuanTamMutation();
