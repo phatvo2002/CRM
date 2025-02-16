@@ -13,6 +13,7 @@
         public int? SoLuong { get; set; }
         public int? ThueSuat { get; set; }
         public decimal? TienThue { get; set; }
+        public decimal? ChiecKhauDonHang { get; set; }
         public decimal? ThanhTien { get; set; }
         public decimal? TongTien { get; set; }
         public virtual HangHoa? HangHoa { get; set; }

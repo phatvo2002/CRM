@@ -7,12 +7,13 @@
         public DateTime? NgayBaoGia { get; set; }
         public DateTime? NgayHetHan { get; set; }
         public string? DiaChi { get; set; }
+        public string? MoTa { get; set; }
         public string? MaSoThue { get; set; }
         public decimal? TongTien { get; set; }
         public int? MaTinhTrangBaoGia { get; set; }
         public string? MaCoHoi { get; set; }
         public string? MaKhachHang { get; set; }
 
-        public List<HangHoaQuanTamModal>? HangHoaQuanTam { get; set; }
+        public List<HangHoaQuanTamModal>? HangHoaQuanTams { get; set; }
     }
 }

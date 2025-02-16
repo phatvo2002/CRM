@@ -20,15 +20,16 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, useParams } from "react-router-dom";
 import CachedIcon from "@mui/icons-material/Cached";
+import { ModalConvertBaoGia } from "../../Modal/ModalConvertBaoGia";
 import {
   useGetCoHoiByIdQuery,
   useUpdateGiaiDoanMutation,
 } from "src/App/Api/CoHoiApi";
 import { useGetAllGiaiDoanBanHangQuery } from "src/App/Api/GiaiDoanBanHangApi";
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 import BanHangTab from "./ComponentTabs/BanHangTab";
 const index = () => {
   const navigate = useNavigate();
@@ -40,6 +41,7 @@ const index = () => {
   const [activeStep, setActiveStep] = useState(null);
   const [completed, setCompleted] = useState({});
   const [value, setValue] = useState("1");
+  const [modalChuyenDoiBaoGia, setModalChuyenDoiBaoGia] = useState(false);
   const [updateGiaiDoan] = useUpdateGiaiDoanMutation();
   useEffect(() => {
     if (dataCoHoi?.giaiDoanBanHang?.id) {
@@ -47,6 +49,8 @@ const index = () => {
     }
   }, [dataCoHoi]);
 
+  const handleOpenModalChuyenDoiBaoGia = () => setModalChuyenDoiBaoGia(true);
+  const handleCloseModaChuyenDoiBaoGia = () => setModalChuyenDoiBaoGia(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -127,8 +131,9 @@ const index = () => {
 
   const activeStepIndex = steps.findIndex((step) => step.id === activeStep);
 
-  const doanhSoKyVongResult = (dataCoHoi?.soTien * dataCoHoi?.tiLeThanhCong ) / 100 
- 
+  const doanhSoKyVongResult =
+    (dataCoHoi?.soTien * dataCoHoi?.tiLeThanhCong) / 100;
+
   return (
     <>
       <Grid2 container spacing={2}>
@@ -176,7 +181,7 @@ const index = () => {
                 <MenuItem onClick={handleClose}>
                   <ShoppingCartIcon /> Sinh đơn hàng
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleOpenModalChuyenDoiBaoGia}>
                   <AttachMoneyIcon /> Sinh Báo giá
                 </MenuItem>
               </Menu>
@@ -309,7 +314,7 @@ const index = () => {
                   <TabList
                     onChange={handleChange}
                     aria-label="lab API tabs example"
-                     variant="scrollable"
+                    variant="scrollable"
                     scrollButtons="auto"
                   >
                     <Tab label="Thông tin chung " value="1" />
@@ -327,7 +332,9 @@ const index = () => {
                 <TabPanel value="2">Lịch sử giao dịch</TabPanel>
                 <TabPanel value="3">Báo giá </TabPanel>
                 <TabPanel value="4">Liên hệ</TabPanel>
-                <TabPanel value="5"><BanHangTab dataCoHoi={dataCoHoi} refetchCoHoi={refetch}/></TabPanel>
+                <TabPanel value="5">
+                  <BanHangTab dataCoHoi={dataCoHoi} refetchCoHoi={refetch} />
+                </TabPanel>
                 <TabPanel value="6">Đơn hàng </TabPanel>
                 <TabPanel value="7">Công việc đang thực hiện</TabPanel>
                 <TabPanel value="8">Công việc hoàn thành</TabPanel>
@@ -337,6 +344,12 @@ const index = () => {
           </Paper>
         </Grid2>
       </Grid2>
+      {/* Modal chuyển đổi báo giá */}
+      <ModalConvertBaoGia
+        coHoiData={dataCoHoi}
+        showModal={modalChuyenDoiBaoGia}
+        closeModal={handleCloseModaChuyenDoiBaoGia}
+      />
     </>
   );
 };

@@ -8,6 +8,7 @@
         public DateTime? NgayHetHan { get; set; }
         public string? DiaChi { get; set; }
         public string? MaSoThue { get; set; }
+        public string? MoTa { get; set; } // dòng mới 
         public decimal? TongTien { get; set; }
         public int? MaTinhTrangBaoGia { get; set; }
         public string? MaCoHoi { get; set; }

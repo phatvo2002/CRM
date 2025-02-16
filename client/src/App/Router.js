@@ -47,6 +47,8 @@ const ThongBaoDetail = lazy(
 const CoHoi = lazy(() => import("./View/CoHoi/index"));
 
 const CoHoiDetail = lazy(() => import("./View/CoHoi/Pages/CoHoiDetail/index"));
+// báo giá 
+const BaoGia = lazy(() => import("./View/BaoGia/index"))
 
 const NhiemVu = lazy(() => import("./View/NhiemVu/index"));
 
@@ -264,6 +266,30 @@ const RouteChild = [
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <CoHoiDetail />
+      </Suspense>
+    ),
+  },
+
+  // báo giá 
+  {
+    path: "/baogia",
+    element: (
+      <Suspense
+        fallback={
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              width: "100vw",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        }
+      >
+        <BaoGia />
       </Suspense>
     ),
   },

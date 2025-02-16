@@ -24,6 +24,7 @@ namespace CRM.Repositories.BaoGias
                     baoGia.NgayBaoGia = baoGiaModal.NgayBaoGia;
                     baoGia.NgayHetHan = baoGiaModal.NgayHetHan;
                     baoGia.DiaChi = baoGiaModal.DiaChi;
+                    baoGia.MoTa = baoGiaModal.MoTa;
                     baoGia.MaSoThue = baoGiaModal.MaSoThue;
                     baoGia.TongTien = baoGiaModal.TongTien;
                     baoGia.MaTinhTrangBaoGia = baoGiaModal.MaTinhTrangBaoGia;
@@ -33,9 +34,9 @@ namespace CRM.Repositories.BaoGias
                     baoGia.PhongBanId = phongBanId;
                     baoGia.CreateAt = DateTime.Now;
                     baoGia.IsDeleted = false;
-                    _crmDbContext.BaoGias.Add(baoGia);
 
-                    foreach (var item in baoGiaModal.HangHoaQuanTam)
+
+                    foreach (var item in baoGiaModal.HangHoaQuanTams)
                     {
                         HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
                         hangHoaQuanTam.Id = Guid.NewGuid();
@@ -49,8 +50,10 @@ namespace CRM.Repositories.BaoGias
                         hangHoaQuanTam.TienThue = item.TienThue;
                         hangHoaQuanTam.ThanhTien = item.ThanhTien;
                         hangHoaQuanTam.TongTien = item.TongTien;
+                        hangHoaQuanTam.ChiecKhauDonHang = item.ChiecKhauDonHang;
                         _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
                     }
+                    _crmDbContext.BaoGias.Add(baoGia);
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm báo giá thành công", Success = true };
                 }
@@ -58,7 +61,7 @@ namespace CRM.Repositories.BaoGias
             }
             catch (Exception ex)
             {
-                return new ResultModal() { Status = 200, Message = ex.Message, Success = false };
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
 
         }
