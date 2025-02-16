@@ -4,6 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ModalAddPhongBan from "./Modal/ModalAddPhongBan";
 import { TYPE_MODAL } from "../../../Until/constant";
 import ModalUpdatePhongBan from "./Modal/ModalUpdatePhongBan";
@@ -101,6 +102,9 @@ const QuanLyPhongban = () => {
   const gotoLink = () => {
     navigate(-1);
   };
+  const backLink = async () => {
+    navigate("/quantrihethong");
+  };
   useEffect(() => {
     if (phongbanlist) {
       setRows(phongbanlist);
@@ -116,14 +120,28 @@ const QuanLyPhongban = () => {
         <h2>Danh Sách Phòng Ban</h2>
         <p>Đây là phần quản lý thông tin của các phòng ban trong công ty</p>
 
-        <Button
-          variant="contained"
-          style={{ marginTop: "10px" }}
-          onClick={onOpenModalAddPhongBan}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            gap: "10px",
+            margin: "10px 0",
+          }}
         >
-          {" "}
-          <AddIcon></AddIcon> Thêm mới
-        </Button>
+          <Button variant="contained" onClick={backLink}>
+            {" "}
+            <ArrowBackIosIcon /> Quay lại
+          </Button>
+          <Button
+            variant="contained"
+            style={{ marginTop: "10px" }}
+            onClick={onOpenModalAddPhongBan}
+          >
+            {" "}
+            <AddIcon></AddIcon> Thêm mới
+          </Button>
+        </div>
 
         <DataGrid
           rows={rows}

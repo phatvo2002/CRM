@@ -1,6 +1,7 @@
 import newStyled from "@emotion/styled";
 import { Button, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
   useGetAllLoaiDuBaoQuery,
@@ -16,6 +17,7 @@ import { v4 as uuidv4 } from "uuid";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 
 const index = () => {
@@ -39,6 +41,7 @@ const index = () => {
     };
     setData((prev) => [...prev, newRow]);
   };
+  const navigate = useNavigate();
 
   const handleSave = async (id) => {
     const currentRow = data.find((row) => row.id === id);
@@ -127,10 +130,11 @@ const index = () => {
       editable: true,
       type: "singleSelect",
       valueOptions:
-        loaiDuBao?.map((item) => ({ value: item.id, label: item.name })) ||
-        [],
+        loaiDuBao?.map((item) => ({ value: item.id, label: item.name })) || [],
       renderCell: (params) => {
-        const selectedItem = loaiDuBao?.find((item) => item.id === params.value);
+        const selectedItem = loaiDuBao?.find(
+          (item) => item.id === params.value
+        );
         return selectedItem ? selectedItem.name : "";
       },
     },
@@ -144,10 +148,12 @@ const index = () => {
         phanLoaiDuBao?.map((item) => ({ value: item.id, label: item.name })) ||
         [],
       renderCell: (params) => {
-        const selectedItem = phanLoaiDuBao?.find((item) => item.id === params.value);
+        const selectedItem = phanLoaiDuBao?.find(
+          (item) => item.id === params.value
+        );
         return selectedItem ? selectedItem.name : "";
       },
-    }, 
+    },
   ];
 
   useEffect(() => {
@@ -156,17 +162,38 @@ const index = () => {
     }
   }, [giaiDoanBanHang]);
 
-  return <div>
-     <DataGrid
+  const backLink = async () => {
+    navigate("/quantrihethong");
+  };
+
+  return (
+    <div>
+      <DataGrid
         rows={data}
         columns={columns}
         editMode="row"
-        sx={{width:"100%"}}
+        sx={{ width: "100%" }}
         style={{ fontSize: "1rem" }}
         processRowUpdate={handleSaveUpdate}
         slots={{
           toolbar: () => (
-            <GridToolbarContainer>
+            <GridToolbarContainer
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-between",
+                gap: "10px",
+                margin: "10px 0",
+              }}
+            >
+              <Button
+                style={{ margin: "10px 0" }}
+                variant="contained"
+                onClick={backLink}
+              >
+                {" "}
+                <ArrowBackIosIcon /> Quay lại
+              </Button>
               <Button
                 color="primary"
                 startIcon={<AddIcon />}
@@ -178,7 +205,8 @@ const index = () => {
           ),
         }}
       />
-  </div>;
+    </div>
+  );
 };
 
 export default index;
