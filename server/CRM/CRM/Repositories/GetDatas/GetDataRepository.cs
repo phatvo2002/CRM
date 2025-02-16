@@ -99,6 +99,13 @@ namespace CRM.Repositories.GetDatas
             var db = await _context.LoaiCoHois.AsNoTracking().ToListAsync();
             return _mapper.Map<List<ClassDTO>>(db);
         }
+
+        public async Task<List<ClassDTO>> GetAllTinhTrangBaoGia()
+        {
+
+            var db = await _context.TinhTrangBaoGias.AsNoTracking().ToListAsync();
+            return _mapper.Map<List<ClassDTO>>(db);
+        }
     }
 
 }

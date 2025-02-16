@@ -41,24 +41,16 @@ namespace CRM.Repositories.CoHois
 
                     foreach (var item in modal.HangHoaQuanTams)
                     {
-                        var hanghoa = _crmDbContext.HangHoaQuanTams.FirstOrDefault(r => r.Id == item.Id);
-                        if (hanghoa != null)
-                        {
-                            hanghoa.CoHoiId = cohoi.Id;
-                            _crmDbContext.HangHoaQuanTams.Update(hanghoa);
-                        }
-                        else
-                        {
-                            HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
-                            hangHoaQuanTam.Id = Guid.NewGuid();
-                            hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
-                            hangHoaQuanTam.KhachHangId = modal.MaKhachHang;
-                            hangHoaQuanTam.CoHoiId = modal.Id;
-                            hangHoaQuanTam.SoLuong = item.SoLuong;
-                            hangHoaQuanTam.ThanhTien = item.ThanhTien;
-                            hangHoaQuanTam.TongTien = item.TongTien;
-                            _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
-                        }
+
+                        HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
+                        hangHoaQuanTam.Id = Guid.NewGuid();
+                        hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
+                        hangHoaQuanTam.KhachHangId = modal.MaKhachHang;
+                        hangHoaQuanTam.CoHoiId = modal.Id;
+                        hangHoaQuanTam.SoLuong = item.SoLuong;
+                        hangHoaQuanTam.ThanhTien = item.ThanhTien;
+                        hangHoaQuanTam.TongTien = item.TongTien;
+                        _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
                     }
                     _crmDbContext.CoHois.Add(cohoi);
                     await _crmDbContext.SaveChangesAsync();

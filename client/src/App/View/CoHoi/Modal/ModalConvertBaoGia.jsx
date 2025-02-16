@@ -1,144 +1,142 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useConvertBaoGiaMutation } from "src/App/Api/BaoGiaApi";
+import { useGetCoHoiListQuery } from "src/App/Api/CoHoiApi";
+import { useGetAllTinhTrangBaoGiaQuery } from "src/App/Api/GetDataApi";
 import { useGetAllHangHoaQuery } from "src/App/Api/HangHoa";
 import {
   useAddHangHoaQuanTamMutation,
   useDeleteHangHoaQuanTamMutation,
+  useGetHangHoaQuanTamByCoHoiIdQuery,
   useGetHangHoaQuanTamByKhachHangIdQuery,
   useUpdateHangHoaQuanTamMutation,
 } from "src/App/Api/HangHoaQuanTam";
+import { useGetKhachHangMucTieuByNguoiDungIdQuery } from "src/App/Api/KhachHangMucTieuApi";
 import { validateDatePicker, validateString } from "src/App/Until/validateYup";
 import * as yup from "yup";
+import TextAreaRHF from "src/App/Components/ReactHookFormComp/TextAreaRHF";
 import { v4 as uuidv4 } from "uuid";
 import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
-import { useGetKhachHangMucTieuByNguoiDungIdQuery } from "src/App/Api/KhachHangMucTieuApi";
+import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
 import {
   AutocompleteRHF,
   TextFieldRHF,
 } from "src/App/Components/ReactHookFormComp";
-import TextAreaRHF from "src/App/Components/ReactHookFormComp/TextAreaRHF";
-import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
-import { Box, Button, Grid2, IconButton, TextField, Typography } from "@mui/material";
 import { toast } from "react-toastify";
+import {
+  Box,
+  Button,
+  Grid2,
+  IconButton,
+  TextField,
+  Typography,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useGetLienHeByKhachHangMucTieuIdQuery } from "src/App/Api/LienHeApi";
-import {
-  useGetAllLoaiCoHoiQuery,
-  useGetAllNguonGocKhachHangQuery,
-} from "src/App/Api/GetDataApi";
-import { useGetAllLoaiHangHoaQuery } from "src/App/Api/LoaiHangHoa";
-import { useGetAllGiaiDoanBanHangQuery } from "src/App/Api/GiaiDoanBanHangApi";
-import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
-import { useConvertCoHoiMutation } from "src/App/Api/CoHoiApi";
-
+import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 const modelObj = {
     id: "id",
-    tenCoHoi: "tenCoHoi",
-    soTien: "soTien",
-    tiLeThanhCong: "tiLeThanhCong",
-    doanhSoKyVong: "doanhSoKyVong",
-    ngayKyVongKetThuc: "ngayKyVongKetThuc",
-    maKhachHang: "maKhachHang",
-    maLienHe: "maLienHe",
-    maLoaiHangHoa: "maLoaiHangHoa",
-    maLoaiCoHoi: "maLoaiCoHoi",
-    maGiaiDoanBanHang: "maGiaiDoanBanHang",
-    maNguonGocKhachHang: "maNguonGocKhachHang",
+    tenBaoGia: "tenBaoGia",
+    ngayBaoGia: "ngayBaoGia",
+    ngayHetHan: "ngayHetHan",
     diaChi: "diaChi",
+    maSoThue: "maSoThue",
+    tongTien: "tongTien",
+    maTinhTrangBaoGia: "maTinhTrangBaoGia",
+    maCoHoi: "maCoHoi",
+    maKhachHang: "maKhachHang",
     hangHoaQuanTams: "hangHoaQuanTams",
+    moTa: "moTa",
   },
   labelObj = {
-    id: "Mã cơ hội",
-    tenCoHoi: "Tên cơ hội",
-    soTien: "Số tiền",
-    tiLeThanhCong: "Tỉ lệ thành công",
-    doanhSoKyVong: "Doanh số kì vọng",
-    ngayKyVongKetThuc: "Ngày kì vọng kết thúc",
-    maKhachHang: "Khách hàng",
-    maLienHe: "Liên hệ ",
-    maLoaiHangHoa: "Loại hàng hóa",
-    maLoaiCoHoi: "Loại cơ hội",
-    maGiaiDoanBanHang: "Giai đoạn bán hàng",
-    maNguonGocKhachHang: "Nguồn gốc khách hàng",
+    id: "Mã báo giá",
+    tenBaoGia: "Tên báo giá",
+    ngayBaoGia: "Ngày báo giá",
+    ngayHetHan: "Ngày hết hạn",
+    maSoThue: "Mã số thuế",
+    tongTien: "tongTien",
+    maTinhTrangBaoGia: "Tình trạng báo giá",
+    maCoHoi: "Cơ hội",
+    maKhachHang: "Khach Hàng",
     diaChi: "Địa chỉ",
     hangHoaQuanTam: "Hàng hóa quan tâm",
+    moTa: "Thông tin Mô tả",
   },
   initialFormState = {
     [modelObj.id]: "",
-    [modelObj.tenCoHoi]: "",
-    [modelObj.soTien]: 0,
-    [modelObj.tiLeThanhCong]: 0,
-    [modelObj.doanhSoKyVong]: 0,
-    [modelObj.ngayKyVongKetThuc]: new Date(),
+    [modelObj.tenBaoGia]: "",
+    [modelObj.ngayBaoGia]: new Date(),
+    [modelObj.ngayHetHan]: new Date(),
+    [modelObj.maSoThue]: "",
+    [modelObj.tongTien]: 0,
+    [modelObj.maTinhTrangBaoGia]: null,
+    [modelObj.maCoHoi]: null,
     [modelObj.maKhachHang]: null,
-    [modelObj.maLienHe]: null,
-    [modelObj.maLoaiHangHoa]: null,
-    [modelObj.maLoaiCoHoi]: null,
-    [modelObj.maGiaiDoanBanHang]: null,
-    [modelObj.maNguonGocKhachHang]: null,
     [modelObj.diaChi]: "",
     [modelObj.hangHoaQuanTams]: [],
+    [modelObj.moTa]: "",
   },
   schema = yup.object().shape({
-     [modelObj.tenCoHoi]: validateString(),
-     [modelObj.maLoaiCoHoi]: validateString(),
-     [modelObj.diaChi]: validateString(),
+    [modelObj.tenBaoGia]: validateString(),
+    [modelObj.ngayBaoGia]: validateDatePicker(),
+    [modelObj.ngayHetHan]: validateDatePicker(),
+    [modelObj.maKhachHang]: validateString(),
+    [modelObj.maCoHoi]: validateString(),
   });
-export const ModalSinhCoHoi = ({
-  khachHangData,
+export const ModalConvertBaoGia = ({
+  coHoiData,
   showModal,
   closeModal,
-  isLoading,
   typeModal,
+  isLoading
 }) => {
-  
   const _isMounted = useRef(false),
     modalRef = useRef(null),
-    { id } = useParams();
-
-  const [hangHoa, setHangHoa] = useState([]);
-  const { data: rows, refetch } = useGetHangHoaQuanTamByKhachHangIdQuery(id);
-  const { data: hangHoas } = useGetAllHangHoaQuery(undefined, {skip : showModal == false });
+    { id } = useParams(),
+    [hangHoa, setHangHoa] = useState([]);
+  const { data: hangHoas } = useGetAllHangHoaQuery(undefined, {
+    skip: showModal == false,
+  });
+  const { data: rows, refetch } = useGetHangHoaQuanTamByCoHoiIdQuery(id);
   const [createData] = useAddHangHoaQuanTamMutation();
   const [updateData] = useUpdateHangHoaQuanTamMutation();
   const [deleteData] = useDeleteHangHoaQuanTamMutation();
-  const [selectedGiaiDoan, setSelectedGiaiDoan] = useState(null);
-  const [tiLeThanhCong, setTiLeThanhCong] = useState(0);
   const { data: dataKhachhangMucTieu, isLoading: isGetKhachHangIsFeatching } =
     useGetKhachHangMucTieuByNguoiDungIdQuery(undefined, {
       skip: showModal == false,
     });
-  const { data: dataLienHe, isLoading: isGetLienHeIsFetching } =
-    useGetLienHeByKhachHangMucTieuIdQuery(id, { skip: showModal == false });
-  const { data: dataLoaiCoHoi, isLoading: isGetLoaiCoHoiIsFetching } =
-    useGetAllLoaiCoHoiQuery(undefined, { skip: showModal == false });
-  const { data: dataLoaiHangHoa, isLoading: isGetLoaiHangHoaIsFetching } =
-    useGetAllLoaiHangHoaQuery(undefined, { skip: showModal == false });
-  const { data: dataGiaiDoanBanHang, isLoading: isGetGiaiDoanBanhangFetching } =
-    useGetAllGiaiDoanBanHangQuery(undefined, { skip: showModal == false });
-  const { data: dataNguonGocBanHang, isLoading: isGetNguonGocBanHangFetching } =
-    useGetAllNguonGocKhachHangQuery();
-  const [convertCoHoi] = useConvertCoHoiMutation()
+  const {
+    data: dataTinhTrangBaoGia,
+    isLoading: isGetTinhTrangBaoGiaIsFetching,
+  } = useGetAllTinhTrangBaoGiaQuery({ skip: showModal == false });
+  const { data: dataCoHoi, isLoading: isGetCoHoiIsFetching } =
+      useGetCoHoiListQuery({ skip: showModal == false }),
+    [convertBaoGia] = useConvertBaoGiaMutation();
+  // const isLoading =
+  //   isGetTinhTrangBaoGiaIsFetching ||
+  //   isGetTinhTrangBaoGiaIsFetching ||
+  //   isGetCoHoiIsFetching;
   const handleAddClick = () => {
     const newRow = {
       id: uuidv4(),
       maHangHoaId: "",
       khachHangTiemNangId: null,
-      khachHangId: id,
+      khachHangId: null,
+      coHoiId: id,
       soLuong: 0,
       thueSuat: 0,
       tienThue: 0,
       donGia: 0,
       thanhTien: 0,
       tongTien: 0,
+      chiecKhauDonHang:0,
       isNew: true,
     };
     setHangHoa((prev) => [...prev, newRow]);
+    
   };
-
   const handleSaveClick = async (id) => {
     const currentRow = hangHoa.find((row) => row.id === id);
     if (!currentRow) {
@@ -154,7 +152,6 @@ export const ModalSinhCoHoi = ({
     }
     toast.success("Lưu dữ liệu thành công!");
   };
-
   const processRowUpdate = (newRow) => {
     const selectedItem = hangHoas?.find(
       (item) => item.id === newRow.maHangHoaId
@@ -179,7 +176,6 @@ export const ModalSinhCoHoi = ({
     );
     return updatedRow;
   };
-
   const handleDeleteClick = (id) => async () => {
     const rowToDelete = hangHoa.find((row) => row.id === id);
     if (rowToDelete?.isNew) {
@@ -195,8 +191,21 @@ export const ModalSinhCoHoi = ({
       }
     }
   };
-  const totalAmount = hangHoa.reduce((sum, row) => sum + (row.tongTien || 0), 0);
-  const doanhsoKyVongResult = (totalAmount * tiLeThanhCong ) / 100 
+  const totalAmount = hangHoa.reduce(
+    (sum, row) => sum + (row.tongTien || 0),
+    0
+  );
+  const totalChiecKhau = hangHoa.reduce(
+    (sum, row) => sum + (Number(row.chiecKhauDonHang) || 0),
+    0
+  );
+  const totalAmountFinal = hangHoa.reduce(
+    (sum, row) => sum + (row.tongTien || 0),
+    0
+  ) - hangHoa.reduce(
+    (sum, row) => sum + (Number(row.chiecKhauDonHang) || 0),
+    0
+  )
   const columns = [
     {
       field: "actions",
@@ -258,6 +267,7 @@ export const ModalSinhCoHoi = ({
       width: 150,
       editable: true,
     },
+    
     {
       field: "tienThue",
       headerName: "Tiền thuế",
@@ -275,6 +285,16 @@ export const ModalSinhCoHoi = ({
         params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
     {
+      field: "chiecKhauDonHang",
+      headerName: "Chiếc khấu đơn hàng",
+      width: 200,
+      editable: true,
+      renderCell: (params) => {
+        const value = Number(params.value) || 0; 
+        return value.toLocaleString("vi-VN");
+      }
+    },
+    {
       field: "tongTien",
       headerName: "Tổng Tiền",
       width: 200,
@@ -282,43 +302,31 @@ export const ModalSinhCoHoi = ({
         params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
   ];
-
-  const generateRandomSequence = (length) => {
-    let result = "";
-    for (let i = 0; i < length; i++) {
-      result += Math.floor(Math.random() * 10);
-    }
-    return result;
-  };
-
   const submitForm = (data) => {
       const tempData = {
-        [modelObj.id]: "CH" + generateRandomSequence(8),
-        [modelObj.tenCoHoi]: data[modelObj.tenCoHoi],
-        [modelObj.soTien]: totalAmount,
-        [modelObj.tiLeThanhCong]: tiLeThanhCong,
-        [modelObj.doanhSoKyVong]: doanhsoKyVongResult,
-        [modelObj.ngayKyVongKetThuc]: data[modelObj.ngayKyVongKetThuc],
+        [modelObj.tenBaoGia]: data[modelObj.tenBaoGia],
+        [modelObj.ngayBaoGia]: data[modelObj.ngayBaoGia],
+        [modelObj.ngayHetHan]: data[modelObj.ngayHetHan],
+        [modelObj.maSoThue]: data[modelObj.maSoThue],
+        [modelObj.tongTien]: totalAmountFinal,
+        [modelObj.maCoHoi]: data[modelObj.maCoHoi],
+        [modelObj.maTinhTrangBaoGia]: data[modelObj.maTinhTrangBaoGia],
         [modelObj.maKhachHang]: data[modelObj.maKhachHang],
-        [modelObj.maLienHe]: data[modelObj.maLienHe],
-        [modelObj.maLoaiHangHoa]: data[modelObj.maLoaiHangHoa],
-        [modelObj.maLoaiCoHoi]: data[modelObj.maLoaiCoHoi],
-        [modelObj.maGiaiDoanBanHang]: data[modelObj.maGiaiDoanBanHang],
-        [modelObj.maNguonGocKhachHang]: data[modelObj.maNguonGocKhachHang],
         [modelObj.diaChi]: data[modelObj.diaChi],
         [modelObj.hangHoaQuanTams]: hangHoa,
       };
-    
+
       callApiConvert(tempData);
     },
     callApiConvert = async (paramData) => {
       try {
-          await convertCoHoi(paramData).unwrap();
-          toast.success("Chuyển đổi thành công")
-          closeModalWithOtherFunc() 
-        } catch (error) {
-          console.log(error)
-        } 
+        console.log(paramData);
+        await convertBaoGia(paramData).unwrap();
+        toast.success("Chuyển đổi thành công")
+        closeModalWithOtherFunc()
+      } catch (error) {
+        console.log(error);
+      }
     },
     closeModalWithOtherFunc = () => {
       modalRef.current.reset(initialFormState);
@@ -328,39 +336,23 @@ export const ModalSinhCoHoi = ({
       modalRef.current?.reset(
         {
           ...selectedItem,
-          id: selectedItem?.id,
-          [modelObj.maKhachHang]: khachHangData?.id,
-          [modelObj.maLienHe]: null,
-          [modelObj.maNguonGocKhachHang]: khachHangData?.maNguonGocKhachHang,
-          [modelObj.diaChi]: khachHangData?.thongTinHoaDon,
-          
+          [modelObj.maCoHoi]: coHoiData?.id,
+          [modelObj.maKhachHang]: coHoiData?.maKhachHang,
+          [modelObj.diaChi]: coHoiData?.diaChi,
         },
         { keepDirty: true }
       );
     };
-
-  const handleGiaiDoanChange = (value) => {
-    setSelectedGiaiDoan(value);
-    const foundGiaiDoan = dataGiaiDoanBanHang.find(
-      (giaiDoan) => giaiDoan.id === value
-    );
-    if (foundGiaiDoan) {
-      setTiLeThanhCong(foundGiaiDoan.tiLeThanhCong || 0);
-    } else {
-      setTiLeThanhCong(0);
-    }
-  };
-
   useEffect(() => {
     if (rows) {
       setHangHoa(rows);
     }
   }, [rows]);
   useEffect(() => {
-    if (khachHangData) {
-      getInitialStateFromApiToUpdate(khachHangData);
+    if (coHoiData) {
+      getInitialStateFromApiToUpdate(coHoiData);
     }
-  }, [khachHangData]);
+  }, [coHoiData]);
   useEffect(() => {
     _isMounted.current = true;
     return () => {
@@ -373,7 +365,7 @@ export const ModalSinhCoHoi = ({
         handleClose={closeModalWithOtherFunc}
         submitForm={submitForm}
         isOpen={showModal}
-        header={"Sinh cơ hội"}
+        header={"Sinh báo giá"}
         type={typeModal}
         fullScreen={true}
         loading={isLoading}
@@ -383,7 +375,34 @@ export const ModalSinhCoHoi = ({
       >
         <Grid2 container spacing={2}>
           <Grid2 size={12}>
-            <h3>Thông tin chung</h3>
+            <h3>Thông tin chi tiết</h3>
+          </Grid2>
+          <Grid2 size={6}>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label="Mã báo giá"
+              variant="outlined"
+              disabled
+            />
+          </Grid2>
+          <Grid2 size={6}>
+            <TextFieldRHF
+              name={modelObj.tenBaoGia}
+              label={labelObj.tenBaoGia}
+              disabled={isLoading}
+              required
+            />
+          </Grid2>
+          <Grid2 size={6}>
+            <AutocompleteRHF
+              name={modelObj.maTinhTrangBaoGia}
+              label={labelObj.maTinhTrangBaoGia}
+              isGetOnlyId
+              disabled={isLoading}
+              data={commonMapDataAutocomplete(dataTinhTrangBaoGia, "name")}
+              skeletonLoading={isGetTinhTrangBaoGiaIsFetching}
+            />
           </Grid2>
           <Grid2 size={6}>
             <AutocompleteRHF
@@ -396,89 +415,46 @@ export const ModalSinhCoHoi = ({
             />
           </Grid2>
           <Grid2 size={6}>
-            <AutocompleteRHF
-              name={modelObj.maLienHe}
-              label={labelObj.maLienHe}
-              isGetOnlyId
-              disabled={isLoading}
-              data={commonMapDataAutocomplete(dataLienHe, "name")}
-              skeletonLoading={isGetLienHeIsFetching}
-            />
-          </Grid2>
-          <Grid2 size={6}>
             <TextFieldRHF
-              name={modelObj.tenCoHoi}
-              label={labelObj.tenCoHoi}
+              name={modelObj.maSoThue}
+              label={labelObj.maSoThue}
               disabled={isLoading}
               required
             />
           </Grid2>
           <Grid2 size={6}>
             <AutocompleteRHF
-              name={modelObj.maLoaiCoHoi}
-              label={labelObj.maLoaiCoHoi}
+              name={modelObj.maCoHoi}
+              label={labelObj.maCoHoi}
               isGetOnlyId
               disabled={isLoading}
-              data={commonMapDataAutocomplete(dataLoaiCoHoi, "name")}
-              skeletonLoading={isGetLoaiCoHoiIsFetching}
+              data={commonMapDataAutocomplete(dataCoHoi, "name")}
+              skeletonLoading={isGetCoHoiIsFetching}
             />
-          </Grid2>
-          <Grid2 size={6}>
-            <AutocompleteRHF
-              name={modelObj.maLoaiHangHoa}
-              label={labelObj.maLoaiHangHoa}
-              isGetOnlyId
-              disabled={isLoading}
-              data={commonMapDataAutocomplete(dataLoaiHangHoa, "name")}
-              skeletonLoading={isGetLoaiHangHoaIsFetching}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-          <TextField fullWidth id="outlined-basic"  label="Số tiền" variant="outlined" value={totalAmount.toLocaleString("vi-VN")} />
-          </Grid2>
-          <Grid2 size={6}>
-            <AutocompleteRHF
-              name={modelObj.maGiaiDoanBanHang}
-              label={labelObj.maGiaiDoanBanHang}
-              isGetOnlyId
-              disabled={isLoading}
-              data={commonMapDataAutocomplete(dataGiaiDoanBanHang, "name")}
-              skeletonLoading={isGetGiaiDoanBanhangFetching}
-              onChangeCallback={(v) => handleGiaiDoanChange(v)}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <TextField
-              label="Tỉ lệ thành công (%)"
-              variant="outlined"
-              value={tiLeThanhCong}
-              disabled
-              fullWidth
-            />
-          </Grid2>
-          <Grid2 size={6}>
-          <TextField fullWidth id="outlined-basic"  label="Doanh số kỳ vọng" variant="outlined" value={doanhsoKyVongResult.toLocaleString("vi-VN")} />
           </Grid2>
           <Grid2 size={6}>
             <DateTimePickerRHF
-              name={modelObj.ngayKyVongKetThuc}
-              label={labelObj.ngayKyVongKetThuc}
+              name={modelObj.ngayBaoGia}
+              label={labelObj.ngayBaoGia}
               disabled={isLoading}
             />
           </Grid2>
           <Grid2 size={6}>
-            <AutocompleteRHF
-              name={modelObj.maNguonGocKhachHang}
-              label={labelObj.maNguonGocKhachHang}
-              isGetOnlyId
+            <DateTimePickerRHF
+              name={modelObj.ngayHetHan}
+              label={labelObj.ngayHetHan}
               disabled={isLoading}
-              data={commonMapDataAutocomplete(dataNguonGocBanHang, "name")}
-              skeletonLoading={isGetNguonGocBanHangFetching}
             />
           </Grid2>
           <Grid2 size={12}>
-            <h3>Thông tin hàng hóa</h3>
+            <TextAreaRHF
+              name={modelObj.diaChi}
+              label={labelObj.diaChi}
+              disabled={isLoading}
+              required
+            />
           </Grid2>
+
           <Grid2 size={12}>
             <DataGrid
               rows={hangHoa}
@@ -489,7 +465,11 @@ export const ModalSinhCoHoi = ({
               processRowUpdate={processRowUpdate}
               componentsProps={{
                 footer: {
-                  style: { padding: "10px", fontWeight: "bold", textAlign: "right" },
+                  style: {
+                    padding: "10px",
+                    fontWeight: "bold",
+                    textAlign: "right",
+                  },
                 },
               }}
               slots={{
@@ -505,11 +485,45 @@ export const ModalSinhCoHoi = ({
                   </GridToolbarContainer>
                 ),
                 footer: () => (
-                  <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2, bgcolor: "#f1f1f1" }}>
+                  <>
+                   <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      p: 2,
+                      bgcolor: "#f1f1f1",
+                    }}
+                  >
                     <Typography variant="h6">
-                      Tổng tiền: {totalAmount.toLocaleString("vi-VN")} VND
+                      Thành tiền: {totalAmount.toLocaleString("vi-VN")} VND
                     </Typography>
                   </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      p: 2,
+                      bgcolor: "#f1f1f1",
+                    }}
+                  >
+                    <Typography variant="h6">
+                      Tiền chiếc khấu:{totalChiecKhau.toLocaleString("vi-VN")} VND
+                    </Typography>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      p: 2,
+                      bgcolor: "#f1f1f1",
+                    }}
+                  >
+                    <Typography variant="h6">
+                      Tổng tiền: {totalAmountFinal.toLocaleString("vi-VN")} VND
+                    </Typography>
+                  </Box>
+                  </>
+                 
                 ),
               }}
             />
@@ -517,8 +531,8 @@ export const ModalSinhCoHoi = ({
           <Grid2 size={12}>
             <Grid2 size={12}>
               <TextAreaRHF
-                name={modelObj.diaChi}
-                label={labelObj.diaChi}
+                name={modelObj.moTa}
+                label={labelObj.moTa}
                 disabled={isLoading}
                 required
               />

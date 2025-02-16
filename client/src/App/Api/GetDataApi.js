@@ -58,6 +58,9 @@ export const apiGetData = createApi({
       getAllLoaiCoHoi: builder.query({
         query: () => `/GetData/getallloaicohoi`,
       }),
+      getAllTinhTrangBaoGia: builder.query({
+        query: () => `/GetData/getalltinhtrangbaogia`,
+      }),
     }),
   });
   export const { 
@@ -74,7 +77,8 @@ export const apiGetData = createApi({
     useGetAllKetQuaCuocGoiQuery,
     useGetAllLoaiDuBaoQuery,
     useGetAllPhanLoaiDuBaoQuery,
-    useGetAllLoaiCoHoiQuery
+    useGetAllLoaiCoHoiQuery,
+    useGetAllTinhTrangBaoGiaQuery,
   } = apiGetData;
 
 

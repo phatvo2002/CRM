@@ -20,6 +20,7 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import EditIcon from "@mui/icons-material/Edit";
 import { useNavigate, useParams } from "react-router-dom";
 import CachedIcon from "@mui/icons-material/Cached";
+import { ModalConvertBaoGia } from "../../Modal/ModalConvertBaoGia";
 import {
   useGetCoHoiByIdQuery,
   useUpdateGiaiDoanMutation,
@@ -42,6 +43,7 @@ const index = () => {
   const [activeStep, setActiveStep] = useState(null);
   const [completed, setCompleted] = useState({});
   const [value, setValue] = useState("1");
+  const [modalChuyenDoiBaoGia, setModalChuyenDoiBaoGia] = useState(false);
   const [updateGiaiDoan] = useUpdateGiaiDoanMutation();
   useEffect(() => {
     if (dataCoHoi?.giaiDoanBanHang?.id) {
@@ -49,6 +51,8 @@ const index = () => {
     }
   }, [dataCoHoi]);
 
+  const handleOpenModalChuyenDoiBaoGia = () => setModalChuyenDoiBaoGia(true);
+  const handleCloseModaChuyenDoiBaoGia = () => setModalChuyenDoiBaoGia(false);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -179,7 +183,7 @@ const index = () => {
                 <MenuItem onClick={handleClose}>
                   <ShoppingCartIcon /> Sinh đơn hàng
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleOpenModalChuyenDoiBaoGia}>
                   <AttachMoneyIcon /> Sinh Báo giá
                 </MenuItem>
               </Menu>
@@ -346,6 +350,12 @@ const index = () => {
           </Paper>
         </Grid2>
       </Grid2>
+      {/* Modal chuyển đổi báo giá */}
+      <ModalConvertBaoGia
+        coHoiData={dataCoHoi}
+        showModal={modalChuyenDoiBaoGia}
+        closeModal={handleCloseModaChuyenDoiBaoGia}
+      />
     </>
   );
 };

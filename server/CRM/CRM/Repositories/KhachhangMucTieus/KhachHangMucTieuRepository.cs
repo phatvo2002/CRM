@@ -47,7 +47,7 @@ namespace CRM.Repositories.KhachhangMucTieus
                     khachHangMucTieu.CreateAt = DateTime.Now;
                     foreach (var h in modal.HangHoaQuanTam)
                     {
-                        var hangHoa = _crmDbContext.HangHoaQuanTams.FirstOrDefault(r => r.Id == h.Id);
+                        var hangHoa = await _crmDbContext.HangHoaQuanTams.FirstOrDefaultAsync(r => r.Id == h.Id);
                         if (hangHoa != null)
                         {
                             hangHoa.KhachHangId = modal.Id;
@@ -58,7 +58,7 @@ namespace CRM.Repositories.KhachhangMucTieus
                             HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
                             hangHoaQuanTam.Id = Guid.NewGuid();
                             hangHoaQuanTam.MaHangHoaId = h.MaHangHoaId;
-                            hangHoaQuanTam.KhachHangId = modal.Id;
+                            hangHoaQuanTam.KhachHangId = khachHangMucTieu.Id;
                             hangHoaQuanTam.KhachHangTiemNangId = h.KhachHangTiemNangId;
                             hangHoaQuanTam.SoLuong = h.SoLuong;
                             hangHoaQuanTam.DonGia = h.DonGia;

@@ -263,7 +263,7 @@ export default function RootLayout() {
                 );
               })}
             </Breadcrumbs>
-            <Grid2 style={{ width: "80%" }} overflow={"clip"}>
+            {/* <Grid2 style={{ width: "80%" }} overflow={"clip"}>
               {menu.length !== 0 && (
                 <Stack
                   direction="row"
@@ -294,7 +294,7 @@ export default function RootLayout() {
                   ))}
                 </Stack>
               )}
-            </Grid2>
+            </Grid2> */}
 
             <Typography
               component="h6"

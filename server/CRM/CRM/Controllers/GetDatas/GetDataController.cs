@@ -209,6 +209,21 @@ namespace CRM.Controllers.GetDatas
             {
                 return BadRequest(ex.Message);
             }
+
+        }
+        [HttpGet("getalltinhtrangbaogia")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetAllTinhTrangBaoGia()
+        {
+            try
+            {
+                List<ClassDTO> result = await _getDataServices.GetAllTinhTrangBaoGia();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

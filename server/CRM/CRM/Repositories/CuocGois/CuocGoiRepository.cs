@@ -127,13 +127,13 @@ namespace CRM.Repositories.CuocGois
 
         public async Task<List<CuocGoiDTO>> GetCuocGoiIsThucHien(string coHoiId)
         {
-            var db = await _context.CuocGois.Where(r => r.CoHoiId == coHoiId && r.IsHoanThanh == false).ToListAsync();
+            var db = await _context.CuocGois.Where(r => r.CoHoiId == coHoiId && r.IsHoanThanh == true).ToListAsync();
             return _mapper.Map<List<CuocGoiDTO>>(db);
         }
 
         public async Task<List<CuocGoiDTO>> GetCuocGoiChuaThucHien(string coHoiId)
         {
-            var db = await _context.CuocGois.Where(r => r.CoHoiId == coHoiId && r.IsHoanThanh == true).ToListAsync();
+            var db = await _context.CuocGois.Where(r => r.CoHoiId == coHoiId && r.IsHoanThanh == false).ToListAsync();
             return _mapper.Map<List<CuocGoiDTO>>(db);
         }
     }

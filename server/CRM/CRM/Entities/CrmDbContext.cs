@@ -526,7 +526,7 @@ namespace CRM.Entities
                 entity.Property(e => e.KhachHangTiemNangId).HasColumnType("uniqueidentifier");
                 entity.Property(e => e.MaHangHoaId).HasMaxLength(100);
                 entity.Property(e => e.CoHoiId).HasMaxLength(100);
-                entity.Property(e => e.BaoGiaId).HasMaxLength(100);
+                entity.Property(e => e.BaoGiaId).HasColumnType("uniqueidentifier");
                 entity.Property(e => e.HoaDonId).HasMaxLength(100);
                 entity.Property(e => e.SoLuong).HasColumnType("int");
                 entity.Property(e => e.ThueSuat).HasColumnType("int");
@@ -792,6 +792,7 @@ namespace CRM.Entities
                 entity.ToTable("BaoGia");
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.TenBaoGia).HasMaxLength(50);
+                entity.Property(e => e.MoTa).HasMaxLength(300);
                 entity.Property(e => e.NgayBaoGia).HasColumnType("datetime");
                 entity.Property(e => e.NgayHetHan).HasColumnType("datetime");
                 entity.Property(e => e.DiaChi).HasMaxLength(100);

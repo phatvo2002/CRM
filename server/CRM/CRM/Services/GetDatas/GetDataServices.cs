@@ -80,5 +80,10 @@ namespace CRM.Services.GetDatas
         {
             return await _getDataRepository.GetAllLoaiCoHoi();
         }
+
+        public async Task<List<ClassDTO>> GetAllTinhTrangBaoGia()
+        {
+            return await _getDataRepository.GetAllTinhTrangBaoGia();
+        }
     }
 }

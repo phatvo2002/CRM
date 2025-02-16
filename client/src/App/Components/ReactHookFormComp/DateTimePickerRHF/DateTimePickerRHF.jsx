@@ -55,6 +55,7 @@ const DateTimePickerRHF = (props) => {
               maxDate={watchingMaxDate}
               className={componentID}
               label="Ngày bắt đầu"
+              sx={{width:"100%"}}
               inputFormat="dd/MM/yyyy HH:mm"
               value={value ? new Date(value) : null} // Ensure value is a Date object
               onChange={(x) => {
@@ -68,7 +69,8 @@ const DateTimePickerRHF = (props) => {
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  fullWidth={true}
+                  fullWidth
+                  style={{width: '100%'}}
                   error={!!getError(errors, name)}
                   helperText={getErrorMessage(errors, name)}
                   onBlur={onBlur}
