@@ -25,11 +25,13 @@ import {
   useUpdateGiaiDoanMutation,
 } from "src/App/Api/CoHoiApi";
 import { useGetAllGiaiDoanBanHangQuery } from "src/App/Api/GiaiDoanBanHangApi";
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import Tab from "@mui/material/Tab";
+import TabContext from "@mui/lab/TabContext";
+import TabList from "@mui/lab/TabList";
+import TabPanel from "@mui/lab/TabPanel";
 import BanHangTab from "./ComponentTabs/BanHangTab";
+import ThongTinChung from "./ComponentTabs/ThongTinChungTab";
+import CuocGoiHoanThanhTab from "./ComponentTabs/CuocGoiHoanThanh";
 const index = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -127,8 +129,9 @@ const index = () => {
 
   const activeStepIndex = steps.findIndex((step) => step.id === activeStep);
 
-  const doanhSoKyVongResult = (dataCoHoi?.soTien * dataCoHoi?.tiLeThanhCong ) / 100 
- 
+  const doanhSoKyVongResult =
+    (dataCoHoi?.soTien * dataCoHoi?.tiLeThanhCong) / 100;
+
   return (
     <>
       <Grid2 container spacing={2}>
@@ -309,7 +312,7 @@ const index = () => {
                   <TabList
                     onChange={handleChange}
                     aria-label="lab API tabs example"
-                     variant="scrollable"
+                    variant="scrollable"
                     scrollButtons="auto"
                   >
                     <Tab label="Thông tin chung " value="1" />
@@ -323,14 +326,20 @@ const index = () => {
                     <Tab label="Ghi chú" value="9" />
                   </TabList>
                 </Box>
-                <TabPanel value="1">Thông tin chung</TabPanel>
+                <TabPanel value="1">
+                  <ThongTinChung />
+                </TabPanel>
                 <TabPanel value="2">Lịch sử giao dịch</TabPanel>
                 <TabPanel value="3">Báo giá </TabPanel>
                 <TabPanel value="4">Liên hệ</TabPanel>
-                <TabPanel value="5"><BanHangTab dataCoHoi={dataCoHoi} refetchCoHoi={refetch}/></TabPanel>
+                <TabPanel value="5">
+                  <BanHangTab dataCoHoi={dataCoHoi} refetchCoHoi={refetch} />
+                </TabPanel>
                 <TabPanel value="6">Đơn hàng </TabPanel>
                 <TabPanel value="7">Công việc đang thực hiện</TabPanel>
-                <TabPanel value="8">Công việc hoàn thành</TabPanel>
+                <TabPanel value="8">
+                  <CuocGoiHoanThanhTab />
+                </TabPanel>
                 <TabPanel value="9">Ghi chú</TabPanel>
               </TabContext>
             </Box>

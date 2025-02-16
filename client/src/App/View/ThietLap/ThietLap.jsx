@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from "react";
-import {  Button, IconButton  } from "@mui/material";
-import  { useDeleteUserMutation } from "../../Api/UserApi";
+import { Button, IconButton } from "@mui/material";
+import { useDeleteUserMutation } from "../../Api/UserApi";
 import { Container } from "@mui/material";
 import Switch from "@mui/material/Switch";
 import Swal from "sweetalert2";
-import PermIdentityIcon from '@mui/icons-material/PermIdentity';
+import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import AuthApi from "../../Api/AuthApi";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import ModalUpdateRole from "./Modal/ModalUpdateRole";
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import { useGetUserAllQuery } from "../../Api/UserApi";
 import ModalUpdateDepartment from "./Modal/ModalUpdateDepartment";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 const ThietLap = () => {
   const navigate = useNavigate();
- // const [user, setUser] = useState([]);
- 
+  // const [user, setUser] = useState([]);
 
   const [checked, setChecked] = useState(false);
   const [dataCheck, setDataCheck] = useState();
   const [selectedRow, setSelectedRow] = useState([]);
   const [loading, setLoading] = useState(false);
-  const {data: userList ,refetch } = useGetUserAllQuery();
-  const [deleteuser] = useDeleteUserMutation()
+  const { data: userList, refetch } = useGetUserAllQuery();
+  const [deleteuser] = useDeleteUserMutation();
   const [rows, setRows] = useState([]);
-  const [openModalUpdateRole , setOpenModalUpdateRole] = useState(false);
-  const [openModalUpdateDepartment , setOpenModalUpdateDepartment] = useState(false);
+  const [openModalUpdateRole, setOpenModalUpdateRole] = useState(false);
+  const [openModalUpdateDepartment, setOpenModalUpdateDepartment] =
+    useState(false);
   const [title, setTitle] = useState("");
   const titleChange = (event) => {
     if (event.target.checked === true) {
@@ -39,21 +40,21 @@ const ThietLap = () => {
   };
 
   const handleOpenModalUpdate = () => {
-    setOpenModalUpdateRole(true)
-  }
+    setOpenModalUpdateRole(true);
+  };
   const handleCloseModalUpdate = () => {
-    setSelectedRow([])
-    setOpenModalUpdateRole(false)
-    refetch()
-  }
+    setSelectedRow([]);
+    setOpenModalUpdateRole(false);
+    refetch();
+  };
   const handleOpenModalUpdateDepartments = () => {
-      setOpenModalUpdateDepartment(true)
-  }
+    setOpenModalUpdateDepartment(true);
+  };
   const handleCloseModalUpdateDepartments = () => {
-    setSelectedRow([])
-    setOpenModalUpdateDepartment(false)
-    refetch()
-  }
+    setSelectedRow([]);
+    setOpenModalUpdateDepartment(false);
+    refetch();
+  };
 
   const handleChange = async (event) => {
     Swal.fire({
@@ -81,13 +82,12 @@ const ThietLap = () => {
           title: "Thành công",
           icon: "success",
         });
-        refetch()
+        refetch();
       }
     });
   };
 
-
-  const handleDeleteNguoiDung = () =>{
+  const handleDeleteNguoiDung = () => {
     Swal.fire({
       title: "Bạn có muốn xóa người dùng này",
       text: "Người dùng này sẽ bị xóa vĩnh viễn",
@@ -95,18 +95,18 @@ const ThietLap = () => {
       showCancelButton: true,
       confirmButtonColor: "#3085d6",
       cancelButtonColor: "#d33",
-      confirmButtonText: "Có"
-    }).then(async(result) => {
+      confirmButtonText: "Có",
+    }).then(async (result) => {
       if (result.isConfirmed) {
-         await deleteuser(selectedRow[0]?.id)
-          Swal.fire({
-            title: "Xóa thành công",
-            icon: "success",
-          });
-           refetch()
+        await deleteuser(selectedRow[0]?.id);
+        Swal.fire({
+          title: "Xóa thành công",
+          icon: "success",
+        });
+        refetch();
       }
     });
-  }
+  };
 
   // const getData = async () => {
   //   const response = await UserApi.getAllUserData();
@@ -136,6 +136,10 @@ const ThietLap = () => {
     navigate("/nguoidung/themmoi");
   };
 
+  const backLink = async () => {
+    navigate("/quantrihethong");
+  };
+
   // useEffect(() => {
   //   getData();
   // }, []);
@@ -144,13 +148,11 @@ const ThietLap = () => {
   //   setLoading(false);
   // }, [loading]);
 
-  
-useEffect(() => {
-  if (userList) {
-    setRows(userList);
-  }
-}, [userList]);
-
+  useEffect(() => {
+    if (userList) {
+      setRows(userList);
+    }
+  }, [userList]);
 
   const columns = [
     {
@@ -158,48 +160,60 @@ useEffect(() => {
       width: 150,
       headerName: "Thao tác",
       renderCell: () => (
-        <div style={{display:"flex",justifyContent:"space-between", alignItems:"center", padding: 5,margin: 5 }}> 
-         <Tooltip title="Phân quyền phân hệ">
-          <IconButton disabled={selectedRow.length === 0} style={{}} onClick={handleOpenModalUpdate}  > 
-            <PermIdentityIcon ></PermIdentityIcon>
-          </IconButton>
-         </Tooltip>
-         <Tooltip title="Phân quyền phòng ban">
-          <IconButton disabled={selectedRow.length === 0} style={{}} onClick={handleOpenModalUpdateDepartments} > 
-            <GroupAddIcon ></GroupAddIcon>
-          </IconButton>
-         </Tooltip>
-          <IconButton disabled={selectedRow.length === 0} style={{ }} onClick={handleDeleteNguoiDung} >
-            <DeleteIcon  ></DeleteIcon>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: 5,
+            margin: 5,
+          }}
+        >
+          <Tooltip title="Phân quyền phân hệ">
+            <IconButton
+              disabled={selectedRow.length === 0}
+              style={{}}
+              onClick={handleOpenModalUpdate}
+            >
+              <PermIdentityIcon></PermIdentityIcon>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Phân quyền phòng ban">
+            <IconButton
+              disabled={selectedRow.length === 0}
+              style={{}}
+              onClick={handleOpenModalUpdateDepartments}
+            >
+              <GroupAddIcon></GroupAddIcon>
+            </IconButton>
+          </Tooltip>
+          <IconButton
+            disabled={selectedRow.length === 0}
+            style={{}}
+            onClick={handleDeleteNguoiDung}
+          >
+            <DeleteIcon></DeleteIcon>
           </IconButton>
         </div>
       ),
     },
-   { field: "hoVaDem", headerName: "Họ Và Đệm",width: 150},
+    { field: "hoVaDem", headerName: "Họ Và Đệm", width: 150 },
     { field: "ten", headerName: "Tên" },
-   // { field: "diaChi", headerName: "Địa Chỉ", width: 200, flex: 1 },
-    { field: "soDienThoai", headerName: "Số điện thoại" ,width: 150},
-    { field: "email", headerName: "Tài khoản Email" , width: 150},
-    { field: "taiKhoan", headerName: "Tài khoản" , width: 150, },
+    // { field: "diaChi", headerName: "Địa Chỉ", width: 200, flex: 1 },
+    { field: "soDienThoai", headerName: "Số điện thoại", width: 150 },
+    { field: "email", headerName: "Tài khoản Email", width: 150 },
+    { field: "taiKhoan", headerName: "Tài khoản", width: 150 },
     {
       field: "phongBan",
       headerName: "Phòng ban",
       width: 150,
-      renderCell: (params) => (
-         <span>
-          {params.row?.phongBan?.tenPhongBan}
-         </span>
-      ),
+      renderCell: (params) => <span>{params.row?.phongBan?.tenPhongBan}</span>,
     },
     {
       field: "chucVu",
       headerName: "Chức vụ ",
       width: 150,
-      renderCell: (params) => (
-         <span>
-          {params.row?.chucVu?.tenChucVu}
-         </span>
-      ),
+      renderCell: (params) => <span>{params.row?.chucVu?.tenChucVu}</span>,
     },
     {
       field: "isActive",
@@ -234,41 +248,65 @@ useEffect(() => {
     //     </div>
     //   ),
     // },
-   
-  
   ];
 
   const handleRowSelectionChange = (selectedRows) => {
-    setSelectedRow(selectedRows)
+    setSelectedRow(selectedRows);
   };
   return (
     <Container style={{ maxWidth: "100%" }}>
       <div style={{ width: "100%" }}>
         <h2>DANH SÁCH TÀI KHOẢN</h2>
         <p>Quản lý danh sách người dùng của LPCRM</p>
-        <Button
-          variant="contained"
-          style={{ marginTop: "10px", marginLeft: "86%" }}
-          onClick={gotoLink}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row-reverse",
+            justifyContent: "space-between",
+            gap: "10px",
+            margin: "10px 0",
+          }}
         >
-          {" "}
-          <PersonAddIcon /> Thêm mới tài khoản
-        </Button>
-  
+          <Button
+            sx={{
+              display: "flex",
+              alignItems: "center",
+            }}
+            variant="contained"
+            onClick={gotoLink}
+          >
+            {" "}
+            <PersonAddIcon />
+            <span style={{ marginLeft: "8px" }}>Thêm mới tài khoản</span>
+          </Button>
+          <Button variant="contained" onClick={backLink}>
+            {" "}
+            <ArrowBackIosIcon /> Quay lại
+          </Button>
+        </div>
+
         <CustomDatagrid
-      rows={rows}
-      columns={columns}
-      pageSizeOptions={[10, 25, 50]}
-      initialPageSize={25}
-      checkboxSelection={true}
-      showTopToolbar={true}
-      onRowSelectionChange={handleRowSelectionChange}
-    />
+          rows={rows}
+          columns={columns}
+          pageSizeOptions={[10, 25, 50]}
+          initialPageSize={25}
+          checkboxSelection={true}
+          showTopToolbar={true}
+          onRowSelectionChange={handleRowSelectionChange}
+        />
       </div>
       {/* Modal UpdateRole */}
-      <ModalUpdateRole openModal={openModalUpdateRole} selectedRow={selectedRow} closeModal={handleCloseModalUpdate} />
+      <ModalUpdateRole
+        openModal={openModalUpdateRole}
+        selectedRow={selectedRow}
+        closeModal={handleCloseModalUpdate}
+      />
       {/* Modal Update Department */}
-      <ModalUpdateDepartment openModal={openModalUpdateDepartment} selectedRow={selectedRow} closeModal={handleCloseModalUpdateDepartments}/>
+      <ModalUpdateDepartment
+        openModal={openModalUpdateDepartment}
+        selectedRow={selectedRow}
+        closeModal={handleCloseModalUpdateDepartments}
+      />
     </Container>
   );
 };
