@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repositories.BaoGias
 {
@@ -65,5 +66,19 @@ namespace CRM.Repositories.BaoGias
             }
 
         }
+
+        public async Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId)
+        {
+            var db = await _crmDbContext.BaoGias.Where(r => r.NguoiDungId == nguoiDungId).Include(r => r.KhachHangMucTieu).Include(r => r.CoHoi).ToListAsync();
+            return _mapper.Map<List<BaoGiaDTO>>(db);
+        }
+
+        public async Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId)
+        {
+            var db = await _crmDbContext.BaoGias.Where(r => r.PhongBanId == phongBanId).Include(r => r.KhachHangMucTieu).Include(r => r.CoHoi).ToListAsync();
+            return _mapper.Map<List<BaoGiaDTO>>(db);
+        }
+
+
     }
 }

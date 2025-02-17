@@ -115,6 +115,20 @@ namespace CRM.Controllers.HangHoaQuanTams
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("updatehanghoaquantamlist")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UpdateHangHoaQuanTamList(List<HangHoaQuanTamModal> modal)
+        {
+            try
+            {
+                ResultModal result = await _hangHoaQuanTamServices.UpdateHangHoaQuanTam(modal);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpDelete("deletehanghoaquantam/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> DeleteHangHoaQuanTam(Guid id)

@@ -183,10 +183,31 @@ namespace CRM.Repositories
 
         public async Task<ResultModal> Update(TModal modal)
         {
-            var entity = _mapper.Map<TEntity>(modal);
-            _crmDbContext.Set<TEntity>().Update(entity);
+            var idProperty = modal.GetType().GetProperty("Id");
+            if (idProperty == null)
+            {
+                return new ResultModal { Success = false, Message = "Không tìm thấy dữ liệu", Status = 400 };
+            }
+
+            var idValue = idProperty.GetValue(modal);
+            if (idValue == null)
+            {
+                return new ResultModal { Success = false, Message = "Giá trị Id không hợp lệ", Status = 400 };
+            }
+
+            var existingEntity = await GetById((TId)idValue);
+            if (existingEntity == null)
+            {
+                return new ResultModal { Success = false, Message = "Dữ liệu không tồn tại", Status = 404 };
+            }
+
+            _mapper.Map(modal, existingEntity);
+
+            _crmDbContext.Set<TEntity>().Update(existingEntity);
             await _crmDbContext.SaveChangesAsync();
+
             return new ResultModal { Success = true, Message = "Chỉnh sửa dữ liệu thành công", Status = 200 };
         }
+
     }
 }

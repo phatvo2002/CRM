@@ -27,5 +27,10 @@ namespace CRM.Services.HangHoaQuanTams
         {
             return await _hangHoaQuanTamRepository.GetHangHoaQuanTamByKhachHangTiemNangId(id);
         }
+
+        public async Task<ResultModal> UpdateHangHoaQuanTam(List<HangHoaQuanTamModal> hanghoaquantam)
+        {
+            return await _hangHoaQuanTamRepository.UpdateHangHoaQuanTam(hanghoaquantam);
+        }
     }
 }

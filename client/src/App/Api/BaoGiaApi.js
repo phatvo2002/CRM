@@ -16,6 +16,9 @@ export const apiBaoGia = createApi({
       },
     }),
     endpoints: (builder) => ({
+      getBaoGiaList: builder.query({
+        query: () => `/BaoGia/getbaogialist`,
+      }),
       convertBaoGia: builder.mutation({
         query: (data) => ({
           url: '/BaoGia/covertbaogia',
@@ -23,11 +26,26 @@ export const apiBaoGia = createApi({
           body: data,
         }),
       }),
+      updateBaoGia: builder.mutation({
+        query: (data) => ({
+            url: `/BaoGia/updatebaogia`, 
+            method: 'PUT', 
+            body: data, 
+          }),
+      }),
+      deleteBaoGia: builder.mutation({
+        query: (id) => ({
+          url: `/BaoGia/deletebaogia/${id}`,
+          method: 'DELETE',
+        }),
+      }),
     }),
   });
   export const { 
+    useGetBaoGiaListQuery,
     useConvertBaoGiaMutation,
-   
+    useUpdateBaoGiaMutation,
+    useDeleteBaoGiaMutation
   } = apiBaoGia;
 
 
