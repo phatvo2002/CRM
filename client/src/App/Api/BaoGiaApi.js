@@ -33,6 +33,12 @@ export const apiBaoGia = createApi({
             body: data, 
           }),
       }),
+      updateTongTien: builder.mutation({
+        query: ({baoGiaId , tongTien}) => ({
+            url: `/BaoGia/updateThanhTien?baoGiaId=${baoGiaId}&thanhTien=${tongTien}`, 
+            method: 'PUT', 
+          }),
+      }),
       deleteBaoGia: builder.mutation({
         query: (id) => ({
           url: `/BaoGia/deletebaogia/${id}`,
@@ -45,6 +51,7 @@ export const apiBaoGia = createApi({
     useGetBaoGiaListQuery,
     useConvertBaoGiaMutation,
     useUpdateBaoGiaMutation,
+    useUpdateTongTienMutation,
     useDeleteBaoGiaMutation
   } = apiBaoGia;
 

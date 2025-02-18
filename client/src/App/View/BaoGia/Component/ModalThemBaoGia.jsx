@@ -8,7 +8,6 @@ import {
   useAddHangHoaQuanTamMutation,
   useDeleteHangHoaQuanTamMutation,
   useGetHangHoaQuanTamByCoHoiIdQuery,
-  useGetHangHoaQuanTamByKhachHangIdQuery,
   useUpdateHangHoaQuanTamMutation,
 } from "src/App/Api/HangHoaQuanTam";
 import { useGetKhachHangMucTieuByNguoiDungIdQuery } from "src/App/Api/KhachHangMucTieuApi";

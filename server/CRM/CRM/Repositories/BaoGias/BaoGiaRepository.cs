@@ -69,16 +69,36 @@ namespace CRM.Repositories.BaoGias
 
         public async Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId)
         {
-            var db = await _crmDbContext.BaoGias.Where(r => r.NguoiDungId == nguoiDungId).Include(r => r.KhachHangMucTieu).Include(r => r.CoHoi).ToListAsync();
+            var db = await _crmDbContext.BaoGias.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).Include(r => r.KhachHangMucTieu).Include(r => r.CoHoi).ToListAsync();
             return _mapper.Map<List<BaoGiaDTO>>(db);
         }
 
         public async Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId)
         {
-            var db = await _crmDbContext.BaoGias.Where(r => r.PhongBanId == phongBanId).Include(r => r.KhachHangMucTieu).Include(r => r.CoHoi).ToListAsync();
+            var db = await _crmDbContext.BaoGias.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false).Include(r => r.KhachHangMucTieu).Include(r => r.CoHoi).ToListAsync();
             return _mapper.Map<List<BaoGiaDTO>>(db);
         }
 
 
+        public async Task<ResultModal> UpdateSoTienHangHoa(Guid baoGiaId, decimal soTien)
+        {
+            var db = _crmDbContext.BaoGias.Where(r => r.Id == baoGiaId).FirstOrDefault();
+            try
+            {
+                if (db != null)
+                {
+                    db.TongTien = soTien;
+                    _crmDbContext.BaoGias.Update(db);
+                    await _crmDbContext.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Chỉnh sửa đơn hàng thành công", Success = true };
+                }
+                return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 200, Message = ex.Message, Success = false };
+
+            }
+        }
     }
 }

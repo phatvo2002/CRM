@@ -25,21 +25,25 @@ import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
-import { useGetBaoGiaListQuery } from "src/App/Api/BaoGiaApi";
+import { useDeleteBaoGiaMutation, useGetBaoGiaListQuery } from "src/App/Api/BaoGiaApi";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import IconWord from "../../Assets/icon/word.png";
 import ModalThemBaoGia from "./Component/ModalThemBaoGia";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import ModalSuaThongTinBaoGia from "./Component/ModalSuaThongTinBaoGia";
+import Swal from "sweetalert2";
+import ModalSuaThongTinHangHoa from "./Component/ModalSuaThongTinHangHoa";
 const index = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
     [anchorEl, setAnchorEl] = useState(null),
     [modalThemMoi , setModalThemMoi] = useState(false),
     [modalSuaThongTinBaoGia , setModalSuaThongTinBaoGia] = useState(false),
+    [modalSuaThongTinHangHoa, setModalSuaThongTinHangHoa] = useState(false),
     navigate = useNavigate(),
     [isActionOpen, setIsActionOpen] = useState(false),
+    [deleteBaoGia] =useDeleteBaoGiaMutation(),
     handleOpen = () => setIsActionOpen(true);
 
     const handleOpenModalThemMoi = () => setModalThemMoi(true)
@@ -49,6 +53,30 @@ const index = () => {
     const handleOpenModalSuaThongTinBaoGia = () => setModalSuaThongTinBaoGia(true)
 
     const handleCloseModalSuaThongTinBaoGia = () => setModalSuaThongTinBaoGia(false)
+
+    const handleOpenModalSuaThongTinHangHoa = () => setModalSuaThongTinHangHoa(true)
+
+    const handleCloseModalSuaThongTinHangHoa = () => setModalSuaThongTinHangHoa(false)
+    const handleDeleteBaoGia = (id) => {
+        Swal.fire({
+             title: "Bạn có muốn xóa khách hàng này?",
+             icon: "warning",
+             showCancelButton: true,
+             confirmButtonColor: "#3085d6",
+             cancelButtonColor: "#d33",
+             confirmButtonText: "Có",
+           }).then(async (result) => {
+             if (result.isConfirmed) {
+               await deleteBaoGia(id);
+               Swal.fire({
+                 title: "Xóa báo giá thành công",
+                 icon: "success",
+               });
+               refetch();
+             }
+           });
+    }
+
   const columns = [
     {
       field: "action",
@@ -76,7 +104,7 @@ const index = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-              //</Tooltip> onClick={() => handleDeleteKhachHang(params?.id)}
+              onClick={() => handleDeleteBaoGia(params?.id)}
             >
               <DeleteIcon color="error" />
             </IconButton>
@@ -255,6 +283,8 @@ const index = () => {
               sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
               variant="outlined"
               color="primary"
+              disabled={selectedRow.length == 0}
+              onClick={handleOpenModalSuaThongTinHangHoa}
               startIcon={<Inventory2Icon />}
             >
               Chỉnh sửa hàng hóa
@@ -282,10 +312,9 @@ const index = () => {
               <Button
                 variant="outlined"
                 color="primary"
-                startIcon={<GetAppIcon />}
                 sx={{ width: "100%", justifyContent: "flex-start" }}
               >
-                Xuất Mẫu
+               <img src={IconWord} alt="Xuất báo giá" width={24} height={24} style={{marginLeft:2}}/> Tải báo giá
               </Button>
             </MenuItem>
 
@@ -340,6 +369,13 @@ const index = () => {
          selectedItem={selectedRow}
          showModal={modalSuaThongTinBaoGia}
          closeModal={handleCloseModalSuaThongTinBaoGia}
+         refetch={refetch}
+       />
+       {/* Modal sửa thông tin hàng hóa  */}
+       <ModalSuaThongTinHangHoa
+         selectedItem={selectedRow}
+         showModal={modalSuaThongTinHangHoa}
+         closeModal={handleCloseModalSuaThongTinHangHoa}
          refetch={refetch}
        />
     </>

@@ -23,7 +23,11 @@ namespace CRM.Repositories.HangHoaQuanTams
             var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.KhachHangId == id && r.CoHoiId == null).ToListAsync();
             return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
         }
-
+        public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByBaoGiaId(Guid id)
+        {
+            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.BaoGiaId == id && r.BaoGiaId == null).ToListAsync();
+            return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
+        }
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangTiemNangId(Guid id)
         {
             var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.KhachHangTiemNangId == id).ToListAsync();

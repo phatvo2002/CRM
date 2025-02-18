@@ -79,8 +79,22 @@ namespace CRM.Controllers.BaoGias
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("updatetongtien")]
+        [JwtAuthorize]
+        public async Task<IActionResult> UpdateSoTienHangHoa(Guid baoGiaId, decimal soTien)
+        {
+            try
+            {
+                ResultModal result = await _baoGiaServices.UpdateSoTienHangHoa(baoGiaId, soTien);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
-        [HttpDelete("deletebaogia")]
+        [HttpDelete("deletebaogia/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> DeleteBaoGia(Guid id)
         {

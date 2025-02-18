@@ -95,7 +95,7 @@ const ModalSuaThongTinBaoGia = ({
       [modelObj.ngayBaoGia]: data[modelObj.ngayBaoGia],
       [modelObj.ngayHetHan]: data[modelObj.ngayHetHan],
       [modelObj.maSoThue]: data[modelObj.maSoThue],
-      [modelObj.tongTien]: selectedItem?.tongTien,
+      [modelObj.tongTien]: selectedItem[0]?.tongTien,
       [modelObj.maCoHoi]: data[modelObj.maCoHoi],
       [modelObj.maTinhTrangBaoGia]: data[modelObj.maTinhTrangBaoGia],
       [modelObj.maKhachHang]: data[modelObj.maKhachHang],
