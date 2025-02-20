@@ -1,7 +1,11 @@
 ﻿using CRM.Attributes;
+using CRM.DTO;
 using CRM.Helper;
+using CRM.Modal;
+using CRM.Services.BaoGias;
+using CRM.Services.HangHoaQuanTams;
 using Microsoft.AspNetCore.Mvc;
-
+using OpenXmlPowerTools;
 namespace CRM.Controllers.Files
 {
     [Route("api/v1/[controller]")]
@@ -9,9 +13,13 @@ namespace CRM.Controllers.Files
     public class FileController : ControllerBase
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public FileController(IWebHostEnvironment webHostEnvironment)
+        public readonly IBaoGiaServices _baoGiaServices;
+        public readonly IHangHoaQuanTamServices _hangHoaQuanTamServices;
+        public FileController(IWebHostEnvironment webHostEnvironment, IBaoGiaServices baoGiaServices, IHangHoaQuanTamServices hangHoaQuanTamServices)
         {
             _webHostEnvironment = webHostEnvironment;
+            _baoGiaServices = baoGiaServices;
+            _hangHoaQuanTamServices = hangHoaQuanTamServices;
         }
         [HttpGet("file")]
         [JwtAuthorize]
@@ -72,5 +80,50 @@ namespace CRM.Controllers.Files
 
             return Ok(null);
         }
+        [HttpPost("exportbaogia/{baoGiaId}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> ExportBaoGia(Guid baoGiaId)
+        {
+            try
+            {
+                ExportBaoGiaModal modal = new ExportBaoGiaModal();
+
+                BaoGiaDTO baoGiaResult = await _baoGiaServices.GetBaoGiaById(baoGiaId);
+
+                var hangHoaResult = await _hangHoaQuanTamServices.GetHangHoaQuanTamByBaoGiaId(baoGiaId);
+                List<HangHoaQuanTamDTO> hanghoa = new List<HangHoaQuanTamDTO>();
+                foreach (var item in hangHoaResult)
+                {
+                    HangHoaQuanTamDTO h = new HangHoaQuanTamDTO();
+                    h.MaHangHoaId = item.MaHangHoaId;
+                    h.SoLuong = item.SoLuong;
+                    h.DonGia = item.DonGia;
+                    hanghoa.Add(h);
+                }
+                DateTime dateTime = DateTime.UtcNow.Date;
+                modal.BaoGia = baoGiaResult;
+                modal.Ngay = dateTime.Day.ToString();
+                modal.Thang = dateTime.Month.ToString();
+                modal.Nam = dateTime.Year.ToString();
+                modal.HangHoaQuanTam = hanghoa;
+                modal.TongTien = hangHoaResult.Sum(r => (decimal)r.ThanhTien);
+                modal.NguoiDung = baoGiaResult.NguoiDung;
+                var pathTemplate = $"{_webHostEnvironment.WebRootPath}\\Templates\\baogiadonhang.docx";
+                FileInfo templateDoc = new(pathTemplate);
+                var obj = Until.ObjectToXml<ExportBaoGiaModal>(modal);
+                WmlDocument wmlDoc = new(templateDoc.FullName);
+                bool templateError;
+                WmlDocument wmlAssembledDoc = DocumentAssembler.AssembleDocument(wmlDoc, obj, out templateError);
+                string fileName = $"baogiadonhang.docx";
+                byte[] data = wmlAssembledDoc.DocumentByteArray;
+                return File(data, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
+
 }
+

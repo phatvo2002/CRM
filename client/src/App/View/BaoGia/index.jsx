@@ -34,6 +34,7 @@ import Inventory2Icon from '@mui/icons-material/Inventory2';
 import ModalSuaThongTinBaoGia from "./Component/ModalSuaThongTinBaoGia";
 import Swal from "sweetalert2";
 import ModalSuaThongTinHangHoa from "./Component/ModalSuaThongTinHangHoa";
+import { useDownloadFileMutation } from "src/App/Api/FileApi";
 const index = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
@@ -44,6 +45,7 @@ const index = () => {
     navigate = useNavigate(),
     [isActionOpen, setIsActionOpen] = useState(false),
     [deleteBaoGia] =useDeleteBaoGiaMutation(),
+    [downloadBaoGia] = useDownloadFileMutation(),
     handleOpen = () => setIsActionOpen(true);
 
     const handleOpenModalThemMoi = () => setModalThemMoi(true)
@@ -77,10 +79,14 @@ const index = () => {
            });
     }
 
+    const handleDownLoadFileBaoGia = (id) => {
+        downloadBaoGia(id)
+    }
+
   const columns = [
     {
       field: "action",
-      width: 200,
+      width: 150,
       headerName: "Thao tác",
       renderCell: (params) => (
         <div
@@ -109,19 +115,10 @@ const index = () => {
               <DeleteIcon color="error" />
             </IconButton>
           </Tooltip>
-          <Tooltip title="Gửi mail báo giá">
-            <IconButton
-              disabled={selectedRow.length === 0}
-              style={{}}
-              // onClick={handleOpenModalBanGiao}
-            >
-              <AttachEmailIcon color="primary" />
-            </IconButton>
-          </Tooltip>
           <Tooltip title="Xuất báo giá">
             <IconButton
               disabled={selectedRow.length === 0}
-              //onClick={handleOpenModalBanGiao}
+             onClick={()=>handleDownLoadFileBaoGia(params?.id)}
             >
               <img src={IconWord} alt="Xuất báo giá" width={24} height={24} />
             </IconButton>
@@ -207,14 +204,6 @@ const index = () => {
         <div style={{ alignItems: "center" }}> {params?.row?.tongTien ? params?.row?.tongTien.toLocaleString("vi-VN")  : 0}</div>
       ),
     },
-    //   {
-    //     field: "lienHe",
-    //     headerName: "Liên hệ",
-    //     width: 200,
-    //     renderCell: (params) => (
-    //       <div style={{ alignItems: "center" }}> </div>
-    //     ),
-    //   },
   ];
   const { data: dataBaogia, refetch } = useGetBaoGiaListQuery();
   const open = Boolean(anchorEl);
@@ -257,20 +246,6 @@ const index = () => {
             </Button>
 
             <Button
-              id="basic-button"
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-              sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
-              variant="outlined"
-              startIcon={<OpenInNewIcon />}
-              endIcon={<KeyboardArrowDownIcon />}
-            >
-              Tùy chỉnh
-            </Button>
-
-            <Button
               variant="outlined"
               color="primary"
               //onClick={handleOpenModalThemMoi}
@@ -297,6 +272,19 @@ const index = () => {
             >
               Thông tin hàng hóa
             </Button>
+            <Button
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
+              variant="outlined"
+              startIcon={<OpenInNewIcon />}
+              endIcon={<KeyboardArrowDownIcon />}
+            >
+              Tùy chỉnh
+            </Button>
           </Stack>
 
           {/* Dropdown menu */}
@@ -308,16 +296,6 @@ const index = () => {
             MenuListProps={{ "aria-labelledby": "basic-button" }}
             sx={{ mt: 1 }}
           >
-            <MenuItem onClick={handleClose}>
-              <Button
-                variant="outlined"
-                color="primary"
-                sx={{ width: "100%", justifyContent: "flex-start" }}
-              >
-               <img src={IconWord} alt="Xuất báo giá" width={24} height={24} style={{marginLeft:2}}/> Tải báo giá
-              </Button>
-            </MenuItem>
-
             <Divider />
 
             <MenuItem onClick={handleClose}>

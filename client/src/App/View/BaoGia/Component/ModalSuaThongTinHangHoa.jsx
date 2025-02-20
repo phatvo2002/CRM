@@ -19,12 +19,11 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
   const _isMounted = useRef(false),
     modalRef = useRef(null),
     [hangHoa, setHangHoa] = useState([]);
+   console.log(selectedItem[0]?.id)
   const { data: hangHoas } = useGetAllHangHoaQuery(undefined, {
     skip: showModal == false,
   });
-  const { data: rows } = useGetHangHoaQuanTamByBaoGiaIdQuery(
-    selectedItem[0]?.id
-  );
+  const { data: rows } = useGetHangHoaQuanTamByBaoGiaIdQuery(selectedItem[0]?.id , {skip : showModal == false});
   const [createData] = useAddHangHoaQuanTamMutation();
   const [updateData] = useUpdateHangHoaQuanTamMutation();
   const [deleteData] = useDeleteHangHoaQuanTamMutation();
@@ -213,9 +212,22 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
   const closeModalWithOtherFunc = () => {
     modalRef.current.reset(setHangHoa([]));
     closeModal();
-  };
+  },
+     getInitialStateFromApiToUpdate = async (selectedItem) => {
+        modalRef.current?.reset(
+          {
+            ...selectedItem,
+          },
+          { keepDirty: true }
+        );
+      };
+    useEffect(() => {
+      if (selectedItem[0]) {
+        getInitialStateFromApiToUpdate(selectedItem[0]);
+      }
+    }, [selectedItem[0]]);
   useEffect(() => {
-    if (rows) {
+    if ( rows) {
       setHangHoa(rows);
     }
   }, [rows]);
@@ -227,7 +239,6 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
   }, []);
   const submitForm = (data) => {
     const tempData = {
-         baoGiaId: selectedItem[0]?.id,
          tongTien: totalAmountFinal,
     };
 
@@ -235,7 +246,7 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
   },
   callApiChinhSua = async (paramData) => {
       try {
-        await updateBaoGia({baoGiaid : paramData?.baoGiaId,tongTien : paramData?.tongTien}).unwrap();
+        await updateBaoGia({baoGiaId :selectedItem[0]?.id,tongTien : paramData?.tongTien}).unwrap();
         toast.success("Chỉnh sửa hàng hóa thành công");
         closeModalWithOtherFunc();
         refetch()

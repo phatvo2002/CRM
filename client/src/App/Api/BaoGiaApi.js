@@ -35,7 +35,7 @@ export const apiBaoGia = createApi({
       }),
       updateTongTien: builder.mutation({
         query: ({baoGiaId , tongTien}) => ({
-            url: `/BaoGia/updateThanhTien?baoGiaId=${baoGiaId}&thanhTien=${tongTien}`, 
+            url: `/BaoGia/updatetongtien?baoGiaId=${baoGiaId}&soTien=${tongTien}`, 
             method: 'PUT', 
           }),
       }),

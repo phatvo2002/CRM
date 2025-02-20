@@ -67,6 +67,12 @@ namespace CRM.Repositories.BaoGias
 
         }
 
+        public async Task<BaoGiaDTO> GetBaoGiaById(Guid id)
+        {
+            var db = await _crmDbContext.BaoGias.Where(r => r.Id == id).AsNoTracking().Include(r => r.KhachHangMucTieu).Include(r => r.Nguoidung).FirstOrDefaultAsync();
+            return _mapper.Map<BaoGiaDTO>(db);
+        }
+
         public async Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId)
         {
             var db = await _crmDbContext.BaoGias.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).Include(r => r.KhachHangMucTieu).Include(r => r.CoHoi).ToListAsync();

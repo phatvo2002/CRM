@@ -10,6 +10,7 @@ namespace CRM.Services.BaoGias
         Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId);
         Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId);
         Task<ResultModal> UpdateSoTienHangHoa(Guid baoGiaId, decimal soTien);
+        Task<BaoGiaDTO> GetBaoGiaById(Guid id);
 
     }
 }

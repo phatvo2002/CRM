@@ -18,6 +18,11 @@ namespace CRM.Services.BaoGias
             return await _baoGiaRepository.ConvertBaoGia(baoGiaModal, nguoiDungId, phongBanId);
         }
 
+        public async Task<BaoGiaDTO> GetBaoGiaById(Guid id)
+        {
+            return await _baoGiaRepository.GetBaoGiaById(id);
+        }
+
         public async Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId)
         {
             return await _baoGiaRepository.GetBaoGiaByNguoiDungId(nguoiDungId);

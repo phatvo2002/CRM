@@ -14,5 +14,6 @@
         public string? MaKhachHang { get; set; }
         public KhachHangMucTieuDTO? KhachHangMucTieu { get; set; }
         public CoHoiDTO? CoHoi { get; set; }
+        public NguoiDungExportDTO? NguoiDung { get; set; }
     }
 }
