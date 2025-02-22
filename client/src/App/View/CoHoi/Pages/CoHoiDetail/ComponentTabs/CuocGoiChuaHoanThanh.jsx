@@ -1,16 +1,16 @@
 import { Typography, Paper } from "@mui/material";
 import React from "react";
 import { useParams } from "react-router-dom";
-import { useGetCuocGoiDaHoanThanhByIdQuery } from "src/App/Api/CuocGoiApi";
+import { useGetCuocGoiChuaHoanThanhByIdQuery } from "src/App/Api/CuocGoiApi";
 import { DataGrid } from "@mui/x-data-grid";
 
-const CuocGoiHoanThanhTab = () => {
+const CuocGoiChuaHoanThanhTab = () => {
   const { id } = useParams();
   const {
     data: dataCuocGoi,
     isLoading,
     isError,
-  } = useGetCuocGoiDaHoanThanhByIdQuery(id);
+  } = useGetCuocGoiChuaHoanThanhByIdQuery(id);
 
   if (isLoading) return <p>Đang tải...</p>;
   if (isError) return <p>Lỗi tải dữ liệu</p>;
@@ -26,7 +26,7 @@ const CuocGoiHoanThanhTab = () => {
             : "Không có dữ liệu",
           soPhutGoi: callData.soPhutGoi || "Không có dữ liệu",
           soGiayGoi: callData.soGiayGoi || "Không có dữ liệu",
-          trangThai: callData.isHoanThanh ? "Đã liên lạc" : "Chưa liên lạc",
+          trangThai: callData.isHoanThanh ? "Đã liên lạc" : "Đang tiến hành",
         }))
       : [];
 
@@ -82,7 +82,7 @@ const CuocGoiHoanThanhTab = () => {
         variant="h5"
         component="h5"
       >
-        Cuộc gọi đã hoàn thành
+        Cuộc gọi đang thực hiện
       </Typography>
       <Paper sx={{ margin: 2, height: 400, width: "100%" }}>
         <DataGrid
@@ -97,4 +97,4 @@ const CuocGoiHoanThanhTab = () => {
   );
 };
 
-export default CuocGoiHoanThanhTab;
+export default CuocGoiChuaHoanThanhTab;

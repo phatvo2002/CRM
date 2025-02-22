@@ -138,9 +138,16 @@ export default function RootLayout() {
   const [menu, setMenu] = React.useState([]);
   const opens = Boolean(anchorEl);
   const navigate = useNavigate();
-  const [darkMode, setDarkMode] = React.useState(false);
+  const [darkMode, setDarkMode] = React.useState(() => {
+    return localStorage.getItem("darkMode") === "true";
+  });
+  // Hàm toggle dark mode
   const toggleTheme = () => {
-    setDarkMode(!darkMode);
+    setDarkMode((prevMode) => {
+      const newMode = !prevMode;
+      localStorage.setItem("darkMode", newMode); // Lưu vào localStorage
+      return newMode;
+    });
   };
   const theme = React.useMemo(
     () =>
@@ -163,8 +170,7 @@ export default function RootLayout() {
   const gotoLink = () => {
     navigate("/doimatkhau");
   };
-  const linkToMail = () => navigate("/thietlapmail")
-  
+  const linkToMail = () => navigate("/thietlapmail");
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -410,7 +416,10 @@ export default function RootLayout() {
                 style={{ width: "100%", paddingLeft: "30px" }}
                 alt="Panner"
               />
-              <IconButton onClick={toggleDrawer} sx={{ color: "black" }}>
+              <IconButton
+                onClick={toggleDrawer}
+                sx={{ color: darkMode ? "white" : "black" }}
+              >
                 <ChevronLeftIcon />
               </IconButton>
             </Toolbar>

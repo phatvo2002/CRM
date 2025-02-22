@@ -33,6 +33,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import BanHangTab from "./ComponentTabs/BanHangTab";
 import ThongTinChung from "./ComponentTabs/ThongTinChungTab";
 import CuocGoiHoanThanhTab from "./ComponentTabs/CuocGoiHoanThanh";
+import CuocGoiChuaHoanThanhTab from "./ComponentTabs/CuocGoiChuaHoanThanh";
 const index = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -340,7 +341,9 @@ const index = () => {
                   <BanHangTab dataCoHoi={dataCoHoi} refetchCoHoi={refetch} />
                 </TabPanel>
                 <TabPanel value="6">Đơn hàng </TabPanel>
-                <TabPanel value="7">Công việc đang thực hiện</TabPanel>
+                <TabPanel value="7">
+                  <CuocGoiChuaHoanThanhTab />
+                </TabPanel>
                 <TabPanel value="8">
                   <CuocGoiHoanThanhTab />
                 </TabPanel>
