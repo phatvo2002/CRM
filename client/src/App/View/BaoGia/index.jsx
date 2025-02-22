@@ -35,6 +35,7 @@ import ModalSuaThongTinBaoGia from "./Component/ModalSuaThongTinBaoGia";
 import Swal from "sweetalert2";
 import ModalSuaThongTinHangHoa from "./Component/ModalSuaThongTinHangHoa";
 import { useDownloadFileMutation } from "src/App/Api/FileApi";
+import { ModalNhanBanBaoGia } from "./Component/ModalNhanBanBaoGia";
 const index = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
@@ -42,6 +43,7 @@ const index = () => {
     [modalThemMoi , setModalThemMoi] = useState(false),
     [modalSuaThongTinBaoGia , setModalSuaThongTinBaoGia] = useState(false),
     [modalSuaThongTinHangHoa, setModalSuaThongTinHangHoa] = useState(false),
+    [modalNhaBanBaoGia ,setModalNhanBanBaoGia] = useState(false),
     navigate = useNavigate(),
     [isActionOpen, setIsActionOpen] = useState(false),
     [deleteBaoGia] =useDeleteBaoGiaMutation(),
@@ -59,9 +61,14 @@ const index = () => {
     const handleOpenModalSuaThongTinHangHoa = () => setModalSuaThongTinHangHoa(true)
 
     const handleCloseModalSuaThongTinHangHoa = () => setModalSuaThongTinHangHoa(false)
+
+    const handleOpenModalOpenModalNhanBan = () => setModalNhanBanBaoGia(true)
+
+    const handlleCLoseModalNhanBan = () => setModalNhanBanBaoGia(false)
+
     const handleDeleteBaoGia = (id) => {
         Swal.fire({
-             title: "Bạn có muốn xóa khách hàng này?",
+             title: "Bạn có muốn xóa thông tin này?",
              icon: "warning",
              showCancelButton: true,
              confirmButtonColor: "#3085d6",
@@ -129,7 +136,7 @@ const index = () => {
     {
       field: "tenBaoGia",
       headerName: "Tên báo giá",
-      width: 200,
+      width: 300,
       renderCell: (params) => (
         <div>
           <Link
@@ -248,7 +255,8 @@ const index = () => {
             <Button
               variant="outlined"
               color="primary"
-              //onClick={handleOpenModalThemMoi}
+              onClick={handleOpenModalOpenModalNhanBan}
+              disabled={selectedRow.length == 0}
               sx={{ borderRadius: 2, textTransform: "none", boxShadow: 3 }}
               startIcon={<ContentCopyIcon />}
             >
@@ -354,6 +362,13 @@ const index = () => {
          selectedItem={selectedRow}
          showModal={modalSuaThongTinHangHoa}
          closeModal={handleCloseModalSuaThongTinHangHoa}
+         refetch={refetch}
+       />
+       {/* Modal nhân bản báo giá */}
+       <ModalNhanBanBaoGia
+         selectedRow={selectedRow}
+         showModal={modalNhaBanBaoGia}
+         closeModal={handlleCLoseModalNhanBan}
          refetch={refetch}
        />
     </>

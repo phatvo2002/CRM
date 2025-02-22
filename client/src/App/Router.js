@@ -50,6 +50,8 @@ const CoHoiDetail = lazy(() => import("./View/CoHoi/Pages/CoHoiDetail/index"));
 // báo giá 
 const BaoGia = lazy(() => import("./View/BaoGia/index"))
 
+const ChiTietBaoGia = lazy(() => import("./View/BaoGia/pages/chitiet/index"))
+
 const NhiemVu = lazy(() => import("./View/NhiemVu/index"));
 
 const RouteChild = [
@@ -290,6 +292,28 @@ const RouteChild = [
         }
       >
         <BaoGia />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/baogia/:id",
+    element: (
+      <Suspense
+        fallback={
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              width: "100vw",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        }
+      >
+        <ChiTietBaoGia />
       </Suspense>
     ),
   },
