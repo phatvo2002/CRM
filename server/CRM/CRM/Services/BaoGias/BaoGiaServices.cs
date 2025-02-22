@@ -17,5 +17,25 @@ namespace CRM.Services.BaoGias
         {
             return await _baoGiaRepository.ConvertBaoGia(baoGiaModal, nguoiDungId, phongBanId);
         }
+
+        public async Task<BaoGiaDTO> GetBaoGiaById(Guid id)
+        {
+            return await _baoGiaRepository.GetBaoGiaById(id);
+        }
+
+        public async Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId)
+        {
+            return await _baoGiaRepository.GetBaoGiaByNguoiDungId(nguoiDungId);
+        }
+
+        public async Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId)
+        {
+            return await _baoGiaRepository.GetBaoGiaByPhongBanId(phongBanId);
+        }
+
+        public async Task<ResultModal> UpdateSoTienHangHoa(Guid baoGiaId, decimal soTien)
+        {
+            return await _baoGiaRepository.UpdateSoTienHangHoa(baoGiaId, soTien);
+        }
     }
 }

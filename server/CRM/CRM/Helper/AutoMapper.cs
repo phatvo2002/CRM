@@ -14,6 +14,7 @@ namespace CRM.Helper
             CreateMap<Nguoidung, LoginDTO>();
             CreateMap<Nguoidung, UserDTO>();
             CreateMap<Nguoidung, NguoiDungDTO>();
+            CreateMap<Nguoidung, NguoiDungExportDTO>();
             CreateMap<ChucVu, ChucVuDTO>();
             CreateMap<TinhTrang, TinhTrangDTO>();
             CreateMap<KetQuaCuocGoi, KetQuaCuocGoiDTO>();

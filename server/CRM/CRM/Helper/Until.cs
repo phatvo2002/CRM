@@ -1,6 +1,10 @@
 ﻿
+using OpenXmlPowerTools;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 namespace CRM.Helper
 {
     public static class Until
@@ -101,6 +105,34 @@ namespace CRM.Helper
                 return false;
             }
 
+        }
+
+        public static XElement ObjectToXml<T>(T obj)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(T));
+            {
+                XDocument doc = new XDocument();
+                using (XmlWriter xw = doc.CreateWriter())
+                {
+                    ser.Serialize(xw, obj);
+                    xw.Close();
+                }
+                return doc.Root;
+            }
+        }
+
+        public static async Task<byte[]> RenderTemplate<T>(string path, T data)
+        {
+            var templateDoc = new FileInfo(path);
+            var obj = ObjectToXml<T>(data);
+            WmlDocument wmlDoc = new WmlDocument(templateDoc.FullName);
+            WmlDocument wmlAssembledDoc = OpenXmlPowerTools.DocumentAssembler.AssembleDocument(wmlDoc, obj, out _);
+            if (true)
+            {
+                return wmlAssembledDoc.DocumentByteArray;
+            }
+
+            //return await File.ReadAllBytesAsync(path);
         }
     }
 }

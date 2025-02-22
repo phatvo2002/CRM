@@ -13,6 +13,11 @@ namespace CRM.Services.HangHoaQuanTams
             _hangHoaQuanTamRepository = repository;
         }
 
+        public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByBaoGiaId(Guid id)
+        {
+            return await _hangHoaQuanTamRepository.GetHangHoaQuanTamByBaoGiaId(id);
+        }
+
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByCoHoiId(string id)
         {
             return await _hangHoaQuanTamRepository.GetHangHoaQuanTamByCoHoiId(id);
@@ -26,6 +31,11 @@ namespace CRM.Services.HangHoaQuanTams
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangTiemNangId(Guid id)
         {
             return await _hangHoaQuanTamRepository.GetHangHoaQuanTamByKhachHangTiemNangId(id);
+        }
+
+        public async Task<ResultModal> UpdateHangHoaQuanTam(List<HangHoaQuanTamModal> hanghoaquantam)
+        {
+            return await _hangHoaQuanTamRepository.UpdateHangHoaQuanTam(hanghoaquantam);
         }
     }
 }

@@ -23,6 +23,7 @@
     "date-fns": "^2.29.3",
     "dayjs": "^1.11.13",
     "formik": "^2.4.6",
+    "js-file-download": "^0.4.12",
     "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "material-react-table": "^3.0.1",

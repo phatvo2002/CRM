@@ -8,11 +8,12 @@ import {
   Menu,
   MenuItem,
   Paper,
+  Typography,
 } from "@mui/material";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import { useMemo } from "react";
 import AddIcon from "@mui/icons-material/Add";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
@@ -41,7 +42,7 @@ import ModalXemKhachHangDaXoa from "./Modal/ModalXemKhachHangDaXoa";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
-import NoImage from "../../Assets/image/no-image.png"
+import NoImage from "../../Assets/image/no-image.png";
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -59,104 +60,128 @@ const KhachHangTiemNang = () => {
     navigate("/tiemnang/uploadkhachhang");
   };
 
-  const columns = useMemo(() => [
-    {
-      field: "action",
-      width: 150,
-      headerName: "Thao tác",
-      renderCell: (params) => (
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: 5, margin: 5 }}>
-          <Tooltip title="Sửa thông tin ">
-            <IconButton
-              disabled={selectedRow.length === 0}
-              onClick={onOpenModalUpdateKhachHang}
-            >
-              <EditIcon color="success" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Xóa">
-            <IconButton
-              disabled={selectedRow.length === 0}
-              onClick={() => handleDeletePhongBan(params?.id)}
-            >
-              <DeleteIcon color="error" />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Bàn giao tiềm năng">
-            <IconButton
-              disabled={selectedRow.length === 0}
-              onClick={handleOpenModalBanGiaoKhachHang}
-            >
-              <ThreePIcon color="primary" />
-            </IconButton>
-          </Tooltip>
-        </div>
-      ),
-    },
-    {
-      field: "nhanVienChamSoc",
-      headerName: "Nhân viên chăm sóc",
-      width: 200,
-      renderCell: (params) =>
-        params?.row?.nguoiDung?.ten ? (
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <img
-              src={params?.row?.nguoiDung?.hinhAnh ? `data:image/jpeg;base64,${params?.row?.nguoiDung?.hinhAnh}` : NoImage}
-              style={{ width: "40px", height: "40px", borderRadius: "50%", margin: 2 }}
-              alt="avatar"
-            />
-            <span>
-              {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}
-            </span>
-          </div>
-        ) : (
-          <div></div>
-        ),
-    },
-    {
-      field: "tenKhachHang",
-      headerName: "Họ và tên",
-      width: 200,
-      renderCell: (params) => (
-        <div>
-          <Link
-            to={`/tiemnang/${params.id}`}
+  const columns = useMemo(
+    () => [
+      {
+        field: "action",
+        width: 150,
+        headerName: "Thao tác",
+        renderCell: (params) => (
+          <div
             style={{
-              textDecoration: "none",
               display: "flex",
+              justifyContent: "space-between",
               alignItems: "center",
-              gap: "8px",
-              color: "inherit",
+              padding: 5,
+              margin: 5,
             }}
           >
-            <Person2Icon style={{ color: "#1976d2" }} />
-            <span style={{ fontWeight: "500" }}>{params.value}</span>
-          </Link>
-        </div>
-      ),
-    },
-    { field: "diaChi", headerName: "Địa Chỉ", width: 200 },
-    {
-      field: "soDienThoaiDiDong",
-      headerName: "Số điện thoại cá nhân",
-      width: 200,
-      renderCell: (params) =>
-        params.value ? (
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <PhoneIcon style={{ padding: 2 }} color="success" />
-            <span>{params.value}</span>
+            <Tooltip title="Sửa thông tin ">
+              <IconButton
+                disabled={selectedRow.length === 0}
+                onClick={onOpenModalUpdateKhachHang}
+              >
+                <EditIcon color="success" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Xóa">
+              <IconButton
+                disabled={selectedRow.length === 0}
+                onClick={() => handleDeletePhongBan(params?.id)}
+              >
+                <DeleteIcon color="error" />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Bàn giao tiềm năng">
+              <IconButton
+                disabled={selectedRow.length === 0}
+                onClick={handleOpenModalBanGiaoKhachHang}
+              >
+                <ThreePIcon color="primary" />
+              </IconButton>
+            </Tooltip>
           </div>
-        ) : (
-          <div></div>
         ),
-    },
-    { field: "soDienThoaiCoQuan", headerName: "Số điện thoại cơ quan", width: 200 },
-    { field: "emailCaNhan", headerName: "Email cá nhân", width: 200 },
-    { field: "EmailCoQuan", headerName: "Tài khoản", width: 200 },
-    { field: "nguonGoc", headerName: "Nguồn gốc khách hàng", width: 200 },
-    { field: "linhVuc", headerName: "Lĩnh vực", width: 200 },
-    { field: "nghenghiep", headerName: "Nghề nghiệp", width: 200 },
-  ], [selectedRow]);
+      },
+      {
+        field: "nhanVienChamSoc",
+        headerName: "Nhân viên chăm sóc",
+        width: 200,
+        renderCell: (params) =>
+          params?.row?.nguoiDung?.ten ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <img
+                src={
+                  params?.row?.nguoiDung?.hinhAnh
+                    ? `data:image/jpeg;base64,${params?.row?.nguoiDung?.hinhAnh}`
+                    : NoImage
+                }
+                style={{
+                  width: "40px",
+                  height: "40px",
+                  borderRadius: "50%",
+                  margin: 2,
+                }}
+                alt="avatar"
+              />
+              <span>
+                {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}
+              </span>
+            </div>
+          ) : (
+            <div></div>
+          ),
+      },
+      {
+        field: "tenKhachHang",
+        headerName: "Họ và tên",
+        width: 200,
+        renderCell: (params) => (
+          <div>
+            <Link
+              to={`/tiemnang/${params.id}`}
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                color: "inherit",
+              }}
+            >
+              <Person2Icon style={{ color: "#1976d2" }} />
+              <span style={{ fontWeight: "500" }}>{params.value}</span>
+            </Link>
+          </div>
+        ),
+      },
+      { field: "diaChi", headerName: "Địa Chỉ", width: 200 },
+      {
+        field: "soDienThoaiDiDong",
+        headerName: "Số điện thoại cá nhân",
+        width: 200,
+        renderCell: (params) =>
+          params.value ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <PhoneIcon style={{ padding: 2 }} color="success" />
+              <span>{params.value}</span>
+            </div>
+          ) : (
+            <div></div>
+          ),
+      },
+      {
+        field: "soDienThoaiCoQuan",
+        headerName: "Số điện thoại cơ quan",
+        width: 200,
+      },
+      { field: "emailCaNhan", headerName: "Email cá nhân", width: 200 },
+      { field: "EmailCoQuan", headerName: "Tài khoản", width: 200 },
+      { field: "nguonGoc", headerName: "Nguồn gốc khách hàng", width: 200 },
+      { field: "linhVuc", headerName: "Lĩnh vực", width: 200 },
+      { field: "nghenghiep", headerName: "Nghề nghiệp", width: 200 },
+    ],
+    [selectedRow]
+  );
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -274,99 +299,105 @@ const KhachHangTiemNang = () => {
   return (
     <div className="customer-page">
       <div>
-        <Grid2 container alignItems="center" spacing={2}>
-        <Grid2 size={12}>
-            <h2 style={{padding :0 , margin:0}}>Tất Cả Tiềm Năng</h2>
-        </Grid2> 
-          <Grid2 size={12} >
-            <Button
-              variant="contained"
-              sx={{ marginLeft: 1 }}
-              startIcon={<AddIcon />}
-              onClick={gotoLink}
-            >
-              Thêm mới
-            </Button>
-            <Button
-              id="basic-button"
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-              sx={{ marginLeft: 1, width: "200px" }}
-              variant="outlined"
-              startIcon={<OpenInNewIcon />}
-              endIcon={<KeyboardArrowDownIcon/>}
-            >
-              Tùy chỉnh
-            </Button>
-            <Button
-              variant="outlined"
-              color="primary"
-              sx={{ marginLeft: 1, width: "200px" }}
-              startIcon={<GetAppIcon />}
-              onClick={gotoLinkImport}
-            >
-              Nhập Dữ Liệu
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleCloseDrop}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem onClick={handleCloseDrop}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  sx={{ marginLeft: 1, width: "200px" }}
-                  startIcon={<ImportExportIcon />}
-                  onClick={handleGetTemplates}
-                >
-                  Xuất Mẫu
-                </Button>
-              </MenuItem>
-              <MenuItem onClick={handleCloseDrop}>
-                <Button
-                  variant="outlined"
-                  sx={{ marginLeft: 1, width: "200px" }}
-                  startIcon={<AutoDeleteIcon />}
-                  color="primary"
-                  onClick={handleOpenModalXem}
-                >
-                  Đã xóa
-                </Button>
-              </MenuItem>
-              <MenuItem onClick={handleCloseDrop}>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  sx={{ marginLeft: 1, width: "200px" }}
-                  startIcon={<DeleteOutlineIcon />}
-                  disabled={selectedRow.length == 0}
-                  onClick={handleDeleteMuliple}
-                >
-                  Xóa hàng loạt
-                </Button>
-              </MenuItem>
-            </Menu>
-            <Button
-              onClick={handleOpen}
-              sx={{ marginLeft: 1 }}
-              variant="outlined"
-              color="inherit"
-              startIcon={<UpdateIcon />}
-            >
-              Lịch sử tương tác
-            </Button>
-          </Grid2>
+        <Grid2 xs={12}>
+          <Typography
+            variant="h5"
+            sx={{ padding: 0, margin: 0, fontWeight: 600 }}
+          >
+            Tất Cả Tiềm Năng
+          </Typography>
         </Grid2>
-       
-        <Paper sx={{marginTop:1}}>
-         
+
+        <Grid2 xs={12} sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+          {/* Thêm mới */}
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={gotoLink}
+          >
+            Thêm mới
+          </Button>
+
+          {/* Tùy chỉnh (Dropdown) */}
+          <Button
+            id="basic-button"
+            aria-controls={open ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+            variant="outlined"
+            startIcon={<OpenInNewIcon />}
+            endIcon={<KeyboardArrowDownIcon />}
+          >
+            Tùy chỉnh
+          </Button>
+
+          {/* Nhập dữ liệu */}
+          <Button
+            variant="outlined"
+            color="primary"
+            startIcon={<GetAppIcon />}
+            onClick={gotoLinkImport}
+          >
+            Nhập Dữ Liệu
+          </Button>
+
+          {/* Menu dropdown */}
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleCloseDrop}
+            MenuListProps={{ "aria-labelledby": "basic-button" }}
+          >
+            <MenuItem onClick={handleCloseDrop}>
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<ImportExportIcon />}
+                onClick={handleGetTemplates}
+                fullWidth
+              >
+                Xuất Mẫu
+              </Button>
+            </MenuItem>
+            <MenuItem onClick={handleCloseDrop}>
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<AutoDeleteIcon />}
+                onClick={handleOpenModalXem}
+                fullWidth
+              >
+                Đã xóa
+              </Button>
+            </MenuItem>
+            <MenuItem onClick={handleCloseDrop}>
+              <Button
+                variant="outlined"
+                color="error"
+                startIcon={<DeleteOutlineIcon />}
+                disabled={selectedRow.length === 0}
+                onClick={handleDeleteMuliple}
+                fullWidth
+              >
+                Xóa hàng loạt
+              </Button>
+            </MenuItem>
+          </Menu>
+
+          {/* Lịch sử tương tác */}
+          <Button
+            onClick={handleOpen}
+            variant="outlined"
+            color="inherit"
+            startIcon={<UpdateIcon />}
+          >
+            Lịch sử tương tác
+          </Button>
+        </Grid2>
+
+        <Paper sx={{ marginTop: 1 }}>
           <Grid2 size={12}>
             <CustomDatagrid
               rows={rows}

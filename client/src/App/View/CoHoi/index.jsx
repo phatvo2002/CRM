@@ -1,4 +1,4 @@
-import { Button, Grid2, Menu, MenuItem, Paper } from "@mui/material";
+import { Button, Grid2, Menu, MenuItem, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
@@ -36,87 +36,90 @@ const index = () => {
   };
   return (
     <>
-      <Grid2 container spacing={2}>
-        <Grid2 size={8}>
-          <h3 style={{ padding: 0, margin: 0 }}>Tất cả cơ hội</h3>
-        </Grid2>
-        <Grid2
-          sx={{ display: "flex", justifyContent: "space-between" }}
-          size={4}
-        >
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={handleOpenModalThemMoiCoHoi}
-            >
-              Thêm mới{" "}
-            </Button>
-
-            {/* dropdown update */}
-            <Button
-              id="basic-button"
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-              onClick={handleClick}
-              sx={{ marginLeft: 1, width: "150px" }}
-              variant="outlined"
-              startIcon={<OpenInNewIcon />}
-            >
-              Mở rộng
-            </Button>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleCloseDrop}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem onClick={handleCloseDrop}>
-                <Button
-                  variant="outlined"
-                  sx={{ marginLeft: 1, width: "200px" }}
-                  startIcon={<AutoDeleteIcon />}
-                  color="primary"
-                >
-                  Xóa hàng loạt
-                </Button>
-              </MenuItem>
-              <MenuItem onClick={handleCloseDrop}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  sx={{ marginLeft: 1, width: "200px" }}
-                  startIcon={<DeleteOutlineIcon />}
-                >
-                  Thùng rác
-                </Button>
-              </MenuItem>
-            </Menu>
-          </div>
-        </Grid2>
-        <Grid2 size={12}>
-          <Paper style={{ maxWidth: "100%" }}>
-            <TabContext value={value}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                <TabList onChange={handleChange} aria-label="">
-                  <Tab icon={<FactCheckIcon />} label="Danh sách" value="1" />
-                  <Tab icon={<WidgetsIcon />} label="Mở rộng" value="2" />
-                </TabList>
-              </Box>
-              <TabPanel value="1">
-                <TabListCoHoi dataCoHoi={dataCoHoi} refetch={refetch} />
-              </TabPanel>
-              <TabPanel value="2">
-                <TabBieuDoCoHoi />
-              </TabPanel>
-            </TabContext>
-          </Paper>
-        </Grid2>
+     <Grid2 container spacing={2} alignItems="center">
+      {/* Tiêu đề */}
+      <Grid2 xs={12} md={8}>
+        <Typography variant="h5" sx={{ fontWeight: "bold", color: "#1976d2" }}>
+          📋 Tất cả cơ hội
+        </Typography>
       </Grid2>
+
+      {/* Các nút chức năng */}
+      <Grid2 xs={12} md={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleOpenModalThemMoiCoHoi}
+          sx={{ borderRadius: 2, textTransform: "none", boxShadow: 2, mr: 1 }}
+        >
+          Thêm mới
+        </Button>
+
+        <Button
+          id="basic-button"
+          aria-controls={open ? "basic-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          onClick={handleClick}
+          variant="outlined"
+          startIcon={<OpenInNewIcon />}
+          sx={{ borderRadius: 2, textTransform: "none", width: 150 }}
+        >
+          Mở rộng
+        </Button>
+
+        {/* Dropdown Menu */}
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleCloseDrop}
+          MenuListProps={{ "aria-labelledby": "basic-button" }}
+          sx={{ mt: 1 }}
+        >
+          <MenuItem onClick={handleCloseDrop}>
+            <Button
+              variant="outlined"
+              sx={{ width: "100%", justifyContent: "flex-start" }}
+              startIcon={<AutoDeleteIcon />}
+              color="error"
+            >
+              Xóa hàng loạt
+            </Button>
+          </MenuItem>
+          <MenuItem onClick={handleCloseDrop}>
+            <Button
+              variant="outlined"
+              sx={{ width: "100%", justifyContent: "flex-start" }}
+              startIcon={<DeleteOutlineIcon />}
+              color="primary"
+            >
+              Thùng rác
+            </Button>
+          </MenuItem>
+        </Menu>
+      </Grid2>
+
+      {/* Nội dung chính */}
+      <Grid2 xs={12}>
+        <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <TabList onChange={handleChange} aria-label="Chuyển tab">
+                <Tab icon={<FactCheckIcon />} label="Danh sách" value="1" />
+                <Tab icon={<WidgetsIcon />} label="Mở rộng" value="2" />
+              </TabList>
+            </Box>
+            <TabPanel value="1">
+              <TabListCoHoi dataCoHoi={dataCoHoi} refetch={refetch} />
+            </TabPanel>
+            <TabPanel value="2">
+              <TabBieuDoCoHoi />
+            </TabPanel>
+          </TabContext>
+        </Paper>
+      </Grid2>
+    </Grid2>
       {/* Modal thêm mới */}
       <ModalThemMoiCoHoi
         showModal={modalThemMoi}

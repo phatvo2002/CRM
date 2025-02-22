@@ -7,6 +7,7 @@
         public Guid? KhachHangTiemNangId { get; set; }
         public string? KhachHangId { get; set; }
         public string? CoHoiId { get; set; }
+        public Guid? BaoGiaId { get; set; }
         public string? HoaDonId { get; set; }
         public int? SoLuong { get; set; }
         public decimal? DonGia { get; set; }
