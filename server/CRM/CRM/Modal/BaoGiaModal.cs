@@ -13,7 +13,6 @@
         public int? MaTinhTrangBaoGia { get; set; }
         public string? MaCoHoi { get; set; }
         public string? MaKhachHang { get; set; }
-
         public List<HangHoaQuanTamModal>? HangHoaQuanTams { get; set; }
     }
 }

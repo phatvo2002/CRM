@@ -11,6 +11,9 @@ namespace CRM.Services.BaoGias
         Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId);
         Task<ResultModal> UpdateSoTienHangHoa(Guid baoGiaId, decimal soTien);
         Task<BaoGiaDTO> GetBaoGiaById(Guid id);
+        Task<ResultModal> DeleteBaoGia(Guid id);
+        Task<ResultModal> PheDuyetBaoGia(Guid baoGiaId, int trangthaiId);
+
 
     }
 }

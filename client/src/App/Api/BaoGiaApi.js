@@ -19,6 +19,9 @@ export const apiBaoGia = createApi({
       getBaoGiaList: builder.query({
         query: () => `/BaoGia/getbaogialist`,
       }),
+      getBaoGiaById: builder.query({
+        query: (id) => `/BaoGia/getbaogiabyid/${id}`,
+      }),
       convertBaoGia: builder.mutation({
         query: (data) => ({
           url: '/BaoGia/covertbaogia',
@@ -39,6 +42,12 @@ export const apiBaoGia = createApi({
             method: 'PUT', 
           }),
       }),
+      updatePheDuyetBaoGia: builder.mutation({
+        query: ({baoGiaId , trangThaiId}) => ({
+            url: `/BaoGia/pheduyetbaogia?baoGiaId=${baoGiaId}&trangThaiId=${trangThaiId}`, 
+            method: 'PUT', 
+          }),
+      }),
       deleteBaoGia: builder.mutation({
         query: (id) => ({
           url: `/BaoGia/deletebaogia/${id}`,
@@ -49,9 +58,11 @@ export const apiBaoGia = createApi({
   });
   export const { 
     useGetBaoGiaListQuery,
+    useGetBaoGiaByIdQuery,
     useConvertBaoGiaMutation,
     useUpdateBaoGiaMutation,
     useUpdateTongTienMutation,
+    useUpdatePheDuyetBaoGiaMutation,
     useDeleteBaoGiaMutation
   } = apiBaoGia;
 

@@ -468,7 +468,8 @@ const ModalThemBaoGia = ({
                         display: "flex",
                         justifyContent: "flex-end",
                         p: 2,
-                        bgcolor: "#f1f1f1",
+                        bgcolor: "background.default",
+                        color:"text.primary",
                       }}
                     >
                       <Typography variant="h6">
@@ -480,7 +481,8 @@ const ModalThemBaoGia = ({
                         display: "flex",
                         justifyContent: "flex-end",
                         p: 2,
-                        bgcolor: "#f1f1f1",
+                        bgcolor: "background.default",
+                        color:"text.primary",
                       }}
                     >
                       <Typography variant="h6">
@@ -493,7 +495,8 @@ const ModalThemBaoGia = ({
                         display: "flex",
                         justifyContent: "flex-end",
                         p: 2,
-                        bgcolor: "#f1f1f1",
+                        bgcolor: "background.default",
+                        color:"text.primary",
                       }}
                     >
                       <Typography variant="h6">

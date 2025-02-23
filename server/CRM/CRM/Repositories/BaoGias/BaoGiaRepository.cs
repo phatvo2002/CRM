@@ -75,13 +75,17 @@ namespace CRM.Repositories.BaoGias
 
         public async Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId)
         {
-            var db = await _crmDbContext.BaoGias.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).Include(r => r.KhachHangMucTieu).Include(r => r.CoHoi).ToListAsync();
+            var db = await _crmDbContext.BaoGias.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false)
+                .Include(r => r.KhachHangMucTieu)
+                .Include(r => r.CoHoi).Include(r => r.TinhTrangBaoGia).ToListAsync();
             return _mapper.Map<List<BaoGiaDTO>>(db);
         }
 
         public async Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId)
         {
-            var db = await _crmDbContext.BaoGias.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false).Include(r => r.KhachHangMucTieu).Include(r => r.CoHoi).ToListAsync();
+            var db = await _crmDbContext.BaoGias.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false)
+                .Include(r => r.KhachHangMucTieu)
+                .Include(r => r.CoHoi).Include(r => r.TinhTrangBaoGia).ToListAsync();
             return _mapper.Map<List<BaoGiaDTO>>(db);
         }
 
@@ -104,6 +108,52 @@ namespace CRM.Repositories.BaoGias
             {
                 return new ResultModal() { Status = 200, Message = ex.Message, Success = false };
 
+            }
+        }
+        public async Task<ResultModal> DeleteBaoGia(Guid id)
+        {
+            var db = _crmDbContext.BaoGias.Where(r => r.Id == id).Include(r => r.TinhTrangBaoGia).FirstOrDefault();
+            try
+            {
+                if (db != null)
+                {
+                    if (db.MaTinhTrangBaoGia != 2 || db.MaTinhTrangBaoGia != 3 || db.MaTinhTrangBaoGia != 7 || db.MaTinhTrangBaoGia != 8)
+                    {
+                        return new ResultModal() { Status = 200, Message = $"Báo giá đang ở trạng thái {db.TinhTrangBaoGia.Name} nên không thể xóa", Success = false };
+                    }
+                    else
+                    {
+                        db.IsDeleted = true;
+                        _crmDbContext.Update(db);
+                        await _crmDbContext.SaveChangesAsync();
+                        return new ResultModal() { Status = 200, Message = "Xóa báo giá thành công", Success = true };
+                    }
+                }
+                return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 202, Message = ex.Message, Success = false };
+            }
+        }
+
+        public async Task<ResultModal> PheDuyetBaoGia(Guid baoGiaId, int trangthaiId)
+        {
+            var db = _crmDbContext.BaoGias.Where(r => r.Id == baoGiaId).FirstOrDefault();
+            try
+            {
+                if (db != null)
+                {
+                    db.MaTinhTrangBaoGia = trangthaiId;
+                    _crmDbContext.BaoGias.Update(db);
+                    await _crmDbContext.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Cập nhật trạng thái thành công", Success = true };
+                }
+                return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
         }
     }

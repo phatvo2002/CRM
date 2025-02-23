@@ -70,7 +70,6 @@ const ModalSuaThongTinBaoGia = ({
   typeModal,
   refetch
 }) => {
-    console.log(selectedItem)
   const _isMounted = useRef(false),
     modalRef = useRef(null);
   const { data: dataKhachhangMucTieu, isLoading: isGetKhachHangIsFeatching } =
@@ -187,7 +186,7 @@ const ModalSuaThongTinBaoGia = ({
               name={modelObj.maTinhTrangBaoGia}
               label={labelObj.maTinhTrangBaoGia}
               isGetOnlyId
-              disabled={isLoading}
+              disabled
               data={commonMapDataAutocomplete(dataTinhTrangBaoGia, "name")}
               skeletonLoading={isGetTinhTrangBaoGiaIsFetching}
             />

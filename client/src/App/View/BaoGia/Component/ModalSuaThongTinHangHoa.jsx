@@ -19,7 +19,6 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
   const _isMounted = useRef(false),
     modalRef = useRef(null),
     [hangHoa, setHangHoa] = useState([]);
-   console.log(selectedItem[0]?.id)
   const { data: hangHoas } = useGetAllHangHoaQuery(undefined, {
     skip: showModal == false,
   });
@@ -306,7 +305,8 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
                         display: "flex",
                         justifyContent: "flex-end",
                         p: 2,
-                        bgcolor: "#f1f1f1",
+                        bgcolor: "background.default",
+                        color:"text.primary",
                       }}
                     >
                       <Typography variant="h6">
@@ -318,7 +318,8 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
                         display: "flex",
                         justifyContent: "flex-end",
                         p: 2,
-                        bgcolor: "#f1f1f1",
+                        bgcolor: "background.default",
+                        color:"text.primary",
                       }}
                     >
                       <Typography variant="h6">
@@ -331,7 +332,8 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
                         display: "flex",
                         justifyContent: "flex-end",
                         p: 2,
-                        bgcolor: "#f1f1f1",
+                        bgcolor: "background.default",
+                        color:"text.primary",
                       }}
                     >
                       <Typography variant="h6">

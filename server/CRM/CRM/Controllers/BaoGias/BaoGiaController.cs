@@ -19,6 +19,7 @@ namespace CRM.Controllers.BaoGias
             _baoGiaServices = baoGiaServices;
             _context = context;
         }
+
         [HttpGet("getbaogialist")]
         [JwtAuthorize]
         public async Task<IActionResult> GetBaoGiaList()
@@ -43,6 +44,20 @@ namespace CRM.Controllers.BaoGias
                     List<BaoGiaDTO> result = await _baoGiaServices.GetBaoGiaByNguoiDungId(userId);
                     return Ok(result);
                 }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaogiabyid/{id}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoGiaById(Guid id)
+        {
+            try
+            {
+                BaoGiaDTO result = await _baoGiaServices.GetBaoGiaById(id);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -93,6 +108,20 @@ namespace CRM.Controllers.BaoGias
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("pheduyetbaogia")]
+        [JwtAuthorize]
+        public async Task<IActionResult> PheDuyetBaoGia(Guid baoGiaId, int trangThaiId)
+        {
+            try
+            {
+                ResultModal result = await _baoGiaServices.PheDuyetBaoGia(baoGiaId, trangThaiId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpDelete("deletebaogia/{id}")]
         [JwtAuthorize]
@@ -100,7 +129,8 @@ namespace CRM.Controllers.BaoGias
         {
             try
             {
-                var result = await _baoGiaServices.DeleteById(id);
+                //var result = await _baoGiaServices.DeleteById(id);
+                ResultModal result = await _baoGiaServices.DeleteBaoGia(id);
                 return Ok(result);
             }
             catch (Exception ex)

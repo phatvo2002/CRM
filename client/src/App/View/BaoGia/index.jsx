@@ -1,5 +1,6 @@
 import {
   Button,
+  Chip,
   Divider,
   Grid2,
   IconButton,
@@ -11,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Person2Icon from "@mui/icons-material/Person2";
@@ -20,12 +21,10 @@ import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-import GetAppIcon from "@mui/icons-material/GetApp";
-import AttachEmailIcon from "@mui/icons-material/AttachEmail";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
-import { useDeleteBaoGiaMutation, useGetBaoGiaListQuery } from "src/App/Api/BaoGiaApi";
+import { useDeleteBaoGiaMutation, useGetBaoGiaByIdQuery, useGetBaoGiaListQuery } from "src/App/Api/BaoGiaApi";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import IconWord from "../../Assets/icon/word.png";
 import ModalThemBaoGia from "./Component/ModalThemBaoGia";
@@ -36,6 +35,21 @@ import Swal from "sweetalert2";
 import ModalSuaThongTinHangHoa from "./Component/ModalSuaThongTinHangHoa";
 import { useDownloadFileMutation } from "src/App/Api/FileApi";
 import { ModalNhanBanBaoGia } from "./Component/ModalNhanBanBaoGia";
+import ModalPheDuyetBaoGia from "./Component/ModalPheDuyetBaoGia";
+
+const statusColors = {
+  "Mới tạo": "#3498db", 
+  "Đang chờ duyệt": "#f1c40f",
+  "Đã duyệt": "#2ecc71", 
+  "Đã gửi khách hàng": "#2980b9", 
+  "Khách hàng phản hồi": "#8e44ad",
+  "Đang thương lượng": "#e67e22",
+  "Được chấp nhận": "#27ae60", 
+  "Từ chối": "#e74c3c", 
+  "Hết hạn": "#95a5a6", 
+  "Đã chuyển thành đơn hàng": "#1abc9c", 
+};
+const userData = JSON.parse(localStorage.getItem("authorizationData"));
 const index = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
@@ -44,6 +58,7 @@ const index = () => {
     [modalSuaThongTinBaoGia , setModalSuaThongTinBaoGia] = useState(false),
     [modalSuaThongTinHangHoa, setModalSuaThongTinHangHoa] = useState(false),
     [modalNhaBanBaoGia ,setModalNhanBanBaoGia] = useState(false),
+    [modalPheDuyet ,setModalPheDuyet] = useState(false),
     navigate = useNavigate(),
     [isActionOpen, setIsActionOpen] = useState(false),
     [deleteBaoGia] =useDeleteBaoGiaMutation(),
@@ -66,6 +81,10 @@ const index = () => {
 
     const handlleCLoseModalNhanBan = () => setModalNhanBanBaoGia(false)
 
+    const handleOpenModalPheDuyet = () => setModalPheDuyet(true)
+
+    const handleCloseModalPheDuyet = () => setModalPheDuyet(false)  
+
     const handleDeleteBaoGia = (id) => {
         Swal.fire({
              title: "Bạn có muốn xóa thông tin này?",
@@ -76,12 +95,20 @@ const index = () => {
              confirmButtonText: "Có",
            }).then(async (result) => {
              if (result.isConfirmed) {
-               await deleteBaoGia(id);
-               Swal.fire({
-                 title: "Xóa báo giá thành công",
-                 icon: "success",
-               });
-               refetch();
+              const res = await deleteBaoGia(id);
+              if(res.data?.success == false)
+              {
+                Swal.fire({
+                  title: res?.data?.message,
+                  icon: "warning",
+                });
+              }else{
+                Swal.fire({
+                  title: "Xóa báo giá thành công",
+                  icon: "success",
+                });
+                refetch();
+              }
              }
            });
     }
@@ -182,6 +209,45 @@ const index = () => {
       ),
     },
     {
+      field: "tongTien",
+      headerName: "Tổng tiền",
+      width: 200,
+      renderCell: (params) => (
+        <div style={{ alignItems: "center" }}> {params?.row?.tongTien ? params?.row?.tongTien.toLocaleString("vi-VN")  : 0}</div>
+      ),
+    },
+    // {
+    //   field: "tinhTrang",
+    //   headerName: "Tình trạng báo giá",
+    //   width: 200,
+    //   renderCell: (params) => (
+    //     <div style={{ alignItems: "center" }}>
+    //       {" "}
+    //       {params?.row?.tinhTrangBaoGia?.name}
+    //     </div>
+    //   ),
+    // },
+    {
+      field: "tinhTrang",
+      headerName: "Tình trạng báo giá",
+      width: 200,
+      renderCell: (params) => {
+        const status = params?.row?.tinhTrangBaoGia?.name || "Không xác định";
+        const color = statusColors[status] || "#bdc3c7"; 
+  
+        return (
+          <Chip
+            label={status}
+            sx={{
+              backgroundColor: color,
+              color: "#fff",
+              fontWeight: "bold",
+            }}
+          />
+        );
+      },
+    },
+    {
       field: "khachHang",
       headerName: "Khách hàng",
       width: 200,
@@ -203,14 +269,7 @@ const index = () => {
         </div>
       ),
     },
-    {
-      field: "tongTien",
-      headerName: "Tổng tiền",
-      width: 200,
-      renderCell: (params) => (
-        <div style={{ alignItems: "center" }}> {params?.row?.tongTien ? params?.row?.tongTien.toLocaleString("vi-VN")  : 0}</div>
-      ),
-    },
+    
   ];
   const { data: dataBaogia, refetch } = useGetBaoGiaListQuery();
   const open = Boolean(anchorEl);
@@ -226,6 +285,7 @@ const index = () => {
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
+
   return (
     <>
       <Grid2 container alignItems="center" spacing={3}>
@@ -251,7 +311,7 @@ const index = () => {
             >
               Thêm báo giá
             </Button>
-
+          
             <Button
               variant="outlined"
               color="primary"
@@ -262,6 +322,18 @@ const index = () => {
             >
               Nhân bản
             </Button>
+            {userData?.response?.checkIsTruongPhong == true && (
+               <Button
+               variant="outlined"
+               color="primary"
+               disabled={selectedRow.length == 0}
+               onClick={handleOpenModalPheDuyet}
+               sx={{ borderRadius: 2, textTransform: "none", boxShadow: 3 }}
+               startIcon={<ContentCopyIcon />}
+             >
+               Phê duyệt
+             </Button>
+            )}
             <Button
               sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
               variant="outlined"
@@ -369,6 +441,13 @@ const index = () => {
          selectedRow={selectedRow}
          showModal={modalNhaBanBaoGia}
          closeModal={handlleCLoseModalNhanBan}
+         refetch={refetch}
+       />
+       {/* Modal phê duyệt báo giá */}
+       <ModalPheDuyetBaoGia
+         selectedItem={selectedRow}
+         showModal={modalPheDuyet}
+         closeModal={handleCloseModalPheDuyet}
          refetch={refetch}
        />
     </>

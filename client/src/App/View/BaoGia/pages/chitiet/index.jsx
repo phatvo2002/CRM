@@ -20,31 +20,45 @@ import EmailIcon from '@mui/icons-material/Email';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IconWord from "../../../../Assets/icon/word.png";
+import ThongTinChiTietTab from "../Tabs/ThongTinChiTietTab";
+import DonHangTab from "../Tabs/DonHangTab";
+import HangHoaTab from "../Tabs/HangHoaTab";
+import CongViecDangThucHienTab from "../Tabs/CongViecDangThucHienTab";
+import CongViecDaHoanThanhTab from "../Tabs/CongViecDaHoanThanhTab";
+import { useNavigate, useParams } from "react-router-dom";
+import { useGetBaoGiaByIdQuery } from "src/App/Api/BaoGiaApi";
 const index = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const [tabIndex, setTabIndex] = useState(0);
-  
+    const navigate = useNavigate()
     const handleMenuOpen = (event) => {
       setAnchorEl(event.currentTarget);
     };
-  
+    const {id} = useParams(),
+    {data : dataBaoGia} = useGetBaoGiaByIdQuery(id) 
     const handleMenuClose = () => {
       setAnchorEl(null);
     };
-  
+    
+    const handlePreviousPage = ()=>
+    {
+        navigate("/baogia")
+    }
     const handleTabChange = (event, newValue) => {
       setTabIndex(newValue);
     };
+
+    console.log(dataBaoGia)
   
     return (
       <Box>
-        <AppBar position="static">
+        <AppBar position="static" style={{backgroundColor:"text.primary"}}>
           <Toolbar>
-          <IconButton>
+          <IconButton onClick={handlePreviousPage}>
             <ArrowBackIcon/>
           </IconButton>
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              BG0000008 - Công ty TNHH đầu tư xây dựng Đại dương
+              {dataBaoGia?.tenBaoGia}
             </Typography>
             <Button variant="contained" color="secondary" startIcon={<EmailIcon/>} sx={{marginLeft:2}}>Gửi mail</Button>
             <Button variant="contained" color="info" startIcon={<EditIcon/>} sx={{marginLeft:2}}>Sửa</Button>
@@ -63,36 +77,36 @@ const index = () => {
         
         <Tabs value={tabIndex} onChange={handleTabChange}>
           <Tab label="Thông tin chi tiết" />
-          <Tab label="Tài liệu đính kèm" />
+          <Tab label="Hàng hóa" />
+          <Tab label="Đơn hàng" />
           <Tab label="Công việc đang thực hiện" />
+          <Tab label="Công việc đã hoàn thành" />
         </Tabs>
   
         <Box sx={{ padding: 2 }}>
           {tabIndex === 0 && (
             <Paper sx={{ padding: 2 }}>
-              <Typography variant="h6">Thông tin chi tiết</Typography>
-              <Grid2 container spacing={2}>
-                <Grid2 item size={6}><Typography>Mã hàng hóa: GHEXOAY</Typography></Grid2>
-                <Grid2 item size={6}><Typography>Diễn giải: Ghế xoay</Typography></Grid2>
-                <Grid2 item size={6}><Typography>Đơn vị tính: Cái</Typography></Grid2>
-                <Grid2 item size={6}><Typography>Số lượng: 200</Typography></Grid2>
-                <Grid2 item size={6}><Typography>Đơn giá: 400.000</Typography></Grid2>
-                <Grid2 item size={6}><Typography>Thành tiền: 80.000.000</Typography></Grid2>
-                <Grid2 item size={6}><Typography>Thuế suất: 5%</Typography></Grid2>
-                <Grid2 item size={6}><Typography>Tổng tiền: 76.000.000</Typography></Grid2>
-              </Grid2>
+                <ThongTinChiTietTab baoGiaData={dataBaoGia}/>
             </Paper>
           )}
           {tabIndex === 1 && (
             <Paper sx={{ padding: 2 }}>
-              <Typography variant="h6">Tài liệu đính kèm</Typography>
-              <Typography>Không có tài liệu đính kèm.</Typography>
+               <HangHoaTab/>
             </Paper>
           )}
           {tabIndex === 2 && (
             <Paper sx={{ padding: 2 }}>
-              <Typography variant="h6">Công việc đang thực hiện</Typography>
-              <Typography>Không có công việc nào đang thực hiện.</Typography>
+               <DonHangTab/>
+            </Paper>
+          )}
+          {tabIndex === 3 && (
+            <Paper sx={{ padding: 2 }}>
+               <CongViecDangThucHienTab/>
+            </Paper>
+          )}
+          {tabIndex === 4 && (
+            <Paper sx={{ padding: 2 }}>
+               <CongViecDaHoanThanhTab/>
             </Paper>
           )}
         </Box>
