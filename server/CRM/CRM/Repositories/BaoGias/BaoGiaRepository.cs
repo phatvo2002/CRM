@@ -69,7 +69,10 @@ namespace CRM.Repositories.BaoGias
 
         public async Task<BaoGiaDTO> GetBaoGiaById(Guid id)
         {
-            var db = await _crmDbContext.BaoGias.Where(r => r.Id == id).AsNoTracking().Include(r => r.KhachHangMucTieu).Include(r => r.Nguoidung).FirstOrDefaultAsync();
+            var db = await _crmDbContext.BaoGias.Where(r => r.Id == id).AsNoTracking()
+                .Include(r => r.KhachHangMucTieu)
+                .Include(r => r.Nguoidung)
+                .Include(r => r.TinhTrangBaoGia).FirstOrDefaultAsync();
             return _mapper.Map<BaoGiaDTO>(db);
         }
 
@@ -154,6 +157,26 @@ namespace CRM.Repositories.BaoGias
             catch (Exception ex)
             {
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+        }
+
+        public async Task<ResultModal> UpdateTrangThaiBaoGia(Guid baoGiaId)
+        {
+            var db = _crmDbContext.BaoGias.Where(r => r.Id == baoGiaId).FirstOrDefault();
+            try
+            {
+                if (db != null)
+                {
+                    db.MaTinhTrangBaoGia = 5;
+                    _crmDbContext.BaoGias.Update(db);
+                    await _crmDbContext.SaveChangesAsync();
+                    return new ResultModal() { Success = true, Message = "Thay đổi trạng thái thành công", Status = 200 };
+                }
+                return new ResultModal() { Success = false, Message = "Không tìm thấy dữ liệu", Status = 202 };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Success = false, Message = ex.Message, Status = 500 };
             }
         }
     }

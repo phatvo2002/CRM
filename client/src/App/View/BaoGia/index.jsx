@@ -24,98 +24,106 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
-import { useDeleteBaoGiaMutation, useGetBaoGiaByIdQuery, useGetBaoGiaListQuery } from "src/App/Api/BaoGiaApi";
+import {
+  useDeleteBaoGiaMutation,
+  useGetBaoGiaByIdQuery,
+  useGetBaoGiaListQuery,
+} from "src/App/Api/BaoGiaApi";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import IconWord from "../../Assets/icon/word.png";
 import ModalThemBaoGia from "./Component/ModalThemBaoGia";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import Inventory2Icon from '@mui/icons-material/Inventory2';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
 import ModalSuaThongTinBaoGia from "./Component/ModalSuaThongTinBaoGia";
 import Swal from "sweetalert2";
 import ModalSuaThongTinHangHoa from "./Component/ModalSuaThongTinHangHoa";
 import { useDownloadFileMutation } from "src/App/Api/FileApi";
 import { ModalNhanBanBaoGia } from "./Component/ModalNhanBanBaoGia";
 import ModalPheDuyetBaoGia from "./Component/ModalPheDuyetBaoGia";
+import NoImage from "../../Assets/image/no-image.png";
 
 const statusColors = {
-  "Mới tạo": "#3498db", 
+  "Mới tạo": "#3498db",
   "Đang chờ duyệt": "#f1c40f",
-  "Đã duyệt": "#2ecc71", 
-  "Đã gửi khách hàng": "#2980b9", 
+  "Đã duyệt": "#2ecc71",
+  "Đã gửi khách hàng": "#2980b9",
   "Khách hàng phản hồi": "#8e44ad",
   "Đang thương lượng": "#e67e22",
-  "Được chấp nhận": "#27ae60", 
-  "Từ chối": "#e74c3c", 
-  "Hết hạn": "#95a5a6", 
-  "Đã chuyển thành đơn hàng": "#1abc9c", 
+  "Được chấp nhận": "#27ae60",
+  "Từ chối": "#e74c3c",
+  "Hết hạn": "#95a5a6",
+  "Đã chuyển thành đơn hàng": "#1abc9c",
 };
 const userData = JSON.parse(localStorage.getItem("authorizationData"));
 const index = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
     [anchorEl, setAnchorEl] = useState(null),
-    [modalThemMoi , setModalThemMoi] = useState(false),
-    [modalSuaThongTinBaoGia , setModalSuaThongTinBaoGia] = useState(false),
+    [modalThemMoi, setModalThemMoi] = useState(false),
+    [modalSuaThongTinBaoGia, setModalSuaThongTinBaoGia] = useState(false),
     [modalSuaThongTinHangHoa, setModalSuaThongTinHangHoa] = useState(false),
-    [modalNhaBanBaoGia ,setModalNhanBanBaoGia] = useState(false),
-    [modalPheDuyet ,setModalPheDuyet] = useState(false),
+    [modalNhaBanBaoGia, setModalNhanBanBaoGia] = useState(false),
+    [modalPheDuyet, setModalPheDuyet] = useState(false),
     navigate = useNavigate(),
     [isActionOpen, setIsActionOpen] = useState(false),
-    [deleteBaoGia] =useDeleteBaoGiaMutation(),
+    [deleteBaoGia] = useDeleteBaoGiaMutation(),
     [downloadBaoGia] = useDownloadFileMutation(),
     handleOpen = () => setIsActionOpen(true);
 
-    const handleOpenModalThemMoi = () => setModalThemMoi(true)
+  const handleOpenModalThemMoi = () => setModalThemMoi(true);
 
-    const handleCloseModalThemMoi = () => setModalThemMoi(false)
+  const handleCloseModalThemMoi = () => setModalThemMoi(false);
 
-    const handleOpenModalSuaThongTinBaoGia = () => setModalSuaThongTinBaoGia(true)
+  const handleOpenModalSuaThongTinBaoGia = () =>
+    setModalSuaThongTinBaoGia(true);
 
-    const handleCloseModalSuaThongTinBaoGia = () => setModalSuaThongTinBaoGia(false)
+  const handleCloseModalSuaThongTinBaoGia = () =>
+    setModalSuaThongTinBaoGia(false);
 
-    const handleOpenModalSuaThongTinHangHoa = () => setModalSuaThongTinHangHoa(true)
+  const handleOpenModalSuaThongTinHangHoa = () =>
+    setModalSuaThongTinHangHoa(true);
 
-    const handleCloseModalSuaThongTinHangHoa = () => setModalSuaThongTinHangHoa(false)
+  const handleCloseModalSuaThongTinHangHoa = () =>
+    setModalSuaThongTinHangHoa(false);
 
-    const handleOpenModalOpenModalNhanBan = () => setModalNhanBanBaoGia(true)
+  const handleOpenModalOpenModalNhanBan = () => setModalNhanBanBaoGia(true);
 
-    const handlleCLoseModalNhanBan = () => setModalNhanBanBaoGia(false)
+  const handlleCLoseModalNhanBan = () => setModalNhanBanBaoGia(false);
 
-    const handleOpenModalPheDuyet = () => setModalPheDuyet(true)
+  const handleOpenModalPheDuyet = () => setModalPheDuyet(true);
 
-    const handleCloseModalPheDuyet = () => setModalPheDuyet(false)  
+  const handleCloseModalPheDuyet = () => setModalPheDuyet(false);
 
-    const handleDeleteBaoGia = (id) => {
-        Swal.fire({
-             title: "Bạn có muốn xóa thông tin này?",
-             icon: "warning",
-             showCancelButton: true,
-             confirmButtonColor: "#3085d6",
-             cancelButtonColor: "#d33",
-             confirmButtonText: "Có",
-           }).then(async (result) => {
-             if (result.isConfirmed) {
-              const res = await deleteBaoGia(id);
-              if(res.data?.success == false)
-              {
-                Swal.fire({
-                  title: res?.data?.message,
-                  icon: "warning",
-                });
-              }else{
-                Swal.fire({
-                  title: "Xóa báo giá thành công",
-                  icon: "success",
-                });
-                refetch();
-              }
-             }
-           });
-    }
+  const handleDeleteBaoGia = (id) => {
+    Swal.fire({
+      title: "Bạn có muốn xóa thông tin này?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const res = await deleteBaoGia(id);
+        if (res.data?.success == false) {
+          Swal.fire({
+            title: res?.data?.message,
+            icon: "warning",
+          });
+        } else {
+          Swal.fire({
+            title: "Xóa báo giá thành công",
+            icon: "success",
+          });
+          refetch();
+        }
+      }
+    });
+  };
 
-    const handleDownLoadFileBaoGia = (id) => {
-        downloadBaoGia(id)
-    }
+  const handleDownLoadFileBaoGia = (id) => {
+    downloadBaoGia(id);
+  };
 
   const columns = [
     {
@@ -152,13 +160,62 @@ const index = () => {
           <Tooltip title="Xuất báo giá">
             <IconButton
               disabled={selectedRow.length === 0}
-             onClick={()=>handleDownLoadFileBaoGia(params?.id)}
+              onClick={() => handleDownLoadFileBaoGia(params?.id)}
             >
               <img src={IconWord} alt="Xuất báo giá" width={24} height={24} />
             </IconButton>
           </Tooltip>
         </div>
       ),
+    },
+    {
+      field: "",
+      headerName: "Nhân viên chăm sóc",
+      width: 200,
+      renderCell: (params) => {
+        return params?.row?.nguoiDung?.ten ? (
+          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "40px",
+                height: "40px",
+              }}
+            >
+              {params?.row?.nguoiDung?.hinhAnh == null ? (
+                <img
+                  src={NoImage}
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
+              ) : (
+                <img
+                  src={
+                    "data:image/jpeg;base64," + params?.row?.nguoiDung?.hinhAnh
+                  }
+                  style={{
+                    width: "30px",
+                    height: "30px",
+                    borderRadius: "50%",
+                    objectFit: "cover",
+                  }}
+                />
+              )}
+            </div>
+            <span>
+              {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}
+            </span>
+          </div>
+        ) : (
+          <div></div>
+        );
+      },
     },
     {
       field: "tenBaoGia",
@@ -213,7 +270,12 @@ const index = () => {
       headerName: "Tổng tiền",
       width: 200,
       renderCell: (params) => (
-        <div style={{ alignItems: "center" }}> {params?.row?.tongTien ? params?.row?.tongTien.toLocaleString("vi-VN")  : 0}</div>
+        <div style={{ alignItems: "center" }}>
+          {" "}
+          {params?.row?.tongTien
+            ? params?.row?.tongTien.toLocaleString("vi-VN")
+            : 0}
+        </div>
       ),
     },
     // {
@@ -233,8 +295,8 @@ const index = () => {
       width: 200,
       renderCell: (params) => {
         const status = params?.row?.tinhTrangBaoGia?.name || "Không xác định";
-        const color = statusColors[status] || "#bdc3c7"; 
-  
+        const color = statusColors[status] || "#bdc3c7";
+
         return (
           <Chip
             label={status}
@@ -269,7 +331,6 @@ const index = () => {
         </div>
       ),
     },
-    
   ];
   const { data: dataBaogia, refetch } = useGetBaoGiaListQuery();
   const open = Boolean(anchorEl);
@@ -285,7 +346,7 @@ const index = () => {
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
-
+  console.log(selectedRow[0]?.tinhTrangBaoGia?.name);
   return (
     <>
       <Grid2 container alignItems="center" spacing={3}>
@@ -311,7 +372,7 @@ const index = () => {
             >
               Thêm báo giá
             </Button>
-          
+
             <Button
               variant="outlined"
               color="primary"
@@ -323,27 +384,31 @@ const index = () => {
               Nhân bản
             </Button>
             {userData?.response?.checkIsTruongPhong == true && (
-               <Button
-               variant="outlined"
-               color="primary"
-               disabled={selectedRow.length == 0}
-               onClick={handleOpenModalPheDuyet}
-               sx={{ borderRadius: 2, textTransform: "none", boxShadow: 3 }}
-               startIcon={<ContentCopyIcon />}
-             >
-               Phê duyệt
-             </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                disabled={selectedRow.length == 0}
+                onClick={handleOpenModalPheDuyet}
+                sx={{ borderRadius: 2, textTransform: "none", boxShadow: 3 }}
+                startIcon={<ContentCopyIcon />}
+              >
+                Phê duyệt
+              </Button>
             )}
-            <Button
-              sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
-              variant="outlined"
-              color="primary"
-              disabled={selectedRow.length == 0}
-              onClick={handleOpenModalSuaThongTinHangHoa}
-              startIcon={<Inventory2Icon />}
-            >
-              Chỉnh sửa hàng hóa
-            </Button>
+            {(selectedRow[0]?.tinhTrangBaoGia?.name === "Đang chờ duyệt" ||
+              selectedRow[0]?.tinhTrangBaoGia?.name === "Bản thảo") && (
+              <Button
+                sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
+                variant="outlined"
+                color="primary"
+                disabled={selectedRow.length === 0}
+                onClick={handleOpenModalSuaThongTinHangHoa}
+                startIcon={<Inventory2Icon />}
+              >
+                Chỉnh sửa hàng hóa
+              </Button>
+            )}
+
             <Button
               sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
               variant="contained"
@@ -423,33 +488,33 @@ const index = () => {
         refetch={refetch}
       />
       {/* Modal Sửa thông tin báo giá */}
-       <ModalSuaThongTinBaoGia
-         selectedItem={selectedRow}
-         showModal={modalSuaThongTinBaoGia}
-         closeModal={handleCloseModalSuaThongTinBaoGia}
-         refetch={refetch}
-       />
-       {/* Modal sửa thông tin hàng hóa  */}
-       <ModalSuaThongTinHangHoa
-         selectedItem={selectedRow}
-         showModal={modalSuaThongTinHangHoa}
-         closeModal={handleCloseModalSuaThongTinHangHoa}
-         refetch={refetch}
-       />
-       {/* Modal nhân bản báo giá */}
-       <ModalNhanBanBaoGia
-         selectedRow={selectedRow}
-         showModal={modalNhaBanBaoGia}
-         closeModal={handlleCLoseModalNhanBan}
-         refetch={refetch}
-       />
-       {/* Modal phê duyệt báo giá */}
-       <ModalPheDuyetBaoGia
-         selectedItem={selectedRow}
-         showModal={modalPheDuyet}
-         closeModal={handleCloseModalPheDuyet}
-         refetch={refetch}
-       />
+      <ModalSuaThongTinBaoGia
+        selectedItem={selectedRow}
+        showModal={modalSuaThongTinBaoGia}
+        closeModal={handleCloseModalSuaThongTinBaoGia}
+        refetch={refetch}
+      />
+      {/* Modal sửa thông tin hàng hóa  */}
+      <ModalSuaThongTinHangHoa
+        selectedItem={selectedRow}
+        showModal={modalSuaThongTinHangHoa}
+        closeModal={handleCloseModalSuaThongTinHangHoa}
+        refetch={refetch}
+      />
+      {/* Modal nhân bản báo giá */}
+      <ModalNhanBanBaoGia
+        selectedRow={selectedRow}
+        showModal={modalNhaBanBaoGia}
+        closeModal={handlleCLoseModalNhanBan}
+        refetch={refetch}
+      />
+      {/* Modal phê duyệt báo giá */}
+      <ModalPheDuyetBaoGia
+        selectedItem={selectedRow}
+        showModal={modalPheDuyet}
+        closeModal={handleCloseModalPheDuyet}
+        refetch={refetch}
+      />
     </>
   );
 };

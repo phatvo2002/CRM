@@ -47,5 +47,10 @@ namespace CRM.Services.BaoGias
         {
             return await _baoGiaRepository.UpdateSoTienHangHoa(baoGiaId, soTien);
         }
+
+        public async Task<ResultModal> UpdateTrangThaiBaoGia(Guid baoGiaId)
+        {
+            return await _baoGiaRepository.UpdateTrangThaiBaoGia(baoGiaId);
+        }
     }
 }

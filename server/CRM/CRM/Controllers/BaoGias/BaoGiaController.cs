@@ -4,6 +4,7 @@ using CRM.Entities;
 using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.BaoGias;
+using CRM.Services.Mails;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers.BaoGias
@@ -13,11 +14,13 @@ namespace CRM.Controllers.BaoGias
     public class BaoGiaController : ControllerBase
     {
         private readonly IBaoGiaServices _baoGiaServices;
+        private readonly IMailServices _mailService;
         private readonly CrmDbContext _context;
-        public BaoGiaController(IBaoGiaServices baoGiaServices, CrmDbContext context)
+        public BaoGiaController(IBaoGiaServices baoGiaServices, CrmDbContext context, IMailServices mailService)
         {
             _baoGiaServices = baoGiaServices;
             _context = context;
+            _mailService = mailService;
         }
 
         [HttpGet("getbaogialist")]
@@ -74,6 +77,32 @@ namespace CRM.Controllers.BaoGias
                 Guid phongBanId = HttpContext.GetPhongBanId();
                 ResultModal result = await _baoGiaServices.ConvertBaoGia(baoGiaModal, userId, phongBanId);
                 return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPost("GuiMailBaoGia")]
+        [JwtAuthorize]
+        public async Task<IActionResult> SendMailBaoGia([FromForm] MailRequest mailRequest, Guid baoGiaId)
+        {
+            try
+            {
+                Guid nguoiDungID = HttpContext.GetUserId();
+                Guid phongBand = HttpContext.GetPhongBanId();
+                var db = _context.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungID);
+                if (db != null)
+                {
+                    if (db.Password != null)
+                    {
+                        await _baoGiaServices.UpdateTrangThaiBaoGia(baoGiaId);
+                        await _mailService.SendMailAsync(mailRequest, db.Email, db.Password, nguoiDungID, phongBand);
+                        return Ok(new ResultModal() { Status = 200, Message = "Gửi mail thành công", Success = true });
+                    }
+                    return Ok(new ResultModal() { Status = 202, Message = "Bạn chưa đăng ký dịch vụ mail cá nhân", Success = false });
+                }
+                return Ok(new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false });
             }
             catch (Exception ex)
             {
