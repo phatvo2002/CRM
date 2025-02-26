@@ -4,6 +4,7 @@
     {
         public Guid Id { get; set; }
         public string? MaHangHoaId { get; set; }
+        //public string? TenHangHoa { get; set; } // dòng mới
         public Guid? KhachHangTiemNangId { get; set; }
         public string? KhachHangId { get; set; }
         public string? CoHoiId { get; set; }

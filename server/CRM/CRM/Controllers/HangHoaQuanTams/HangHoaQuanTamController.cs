@@ -88,7 +88,7 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
         }
         [HttpGet("gethanghoaquantambybaogiaid/{id}")]
-        [JwtAuthorize]
+        //[JwtAuthorize]
         public async Task<IActionResult> GetHangHoaQuanTamByBaoGiaId(Guid id)
         {
             try

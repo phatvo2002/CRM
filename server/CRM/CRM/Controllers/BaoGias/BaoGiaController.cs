@@ -54,7 +54,7 @@ namespace CRM.Controllers.BaoGias
             }
         }
         [HttpGet("getbaogiabyid/{id}")]
-        [JwtAuthorize]
+        //[JwtAuthorize]
         public async Task<IActionResult> GetBaoGiaById(Guid id)
         {
             try
@@ -83,7 +83,7 @@ namespace CRM.Controllers.BaoGias
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost("GuiMailBaoGia")]
+        [HttpPost("GuiMailBaoGia/{baoGiaId}")]
         [JwtAuthorize]
         public async Task<IActionResult> SendMailBaoGia([FromForm] MailRequest mailRequest, Guid baoGiaId)
         {
@@ -138,7 +138,7 @@ namespace CRM.Controllers.BaoGias
             }
         }
         [HttpPut("pheduyetbaogia")]
-        [JwtAuthorize]
+        //[JwtAuthorize]
         public async Task<IActionResult> PheDuyetBaoGia(Guid baoGiaId, int trangThaiId)
         {
             try

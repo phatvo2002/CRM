@@ -41,11 +41,38 @@ export const apiMail = createApi({
             body: formData,
           };
         },
-      }),      
+      }),   
+      GuiMailBaoGia: builder.mutation({
+        query: (data) => {
+          const formData = new FormData();
+          formData.append('ToMail', data.ToMail);
+          formData.append('Subject', data.Subject);
+          formData.append('Body', data.Body);
+          
+          if (data.KhachHangTiemNangId) {
+            formData.append('KhachHangTiemNangId', data.KhachHangTiemNangId);
+          }
+          
+          if (data.KhachHangMucTieuId) {
+            formData.append('KhachHangMucTieuId', data.KhachHangMucTieuId);
+          }
+          if (data.AttachtMent && data.AttachtMent.length > 0) {
+            data.AttachtMent.forEach((file) => {
+              formData.append('AttachtMent', file);
+            });
+          }
+          return {
+            url: `/BaoGia/GuiMailBaoGia/${data?.BaoGiaId}`,
+            method: 'POST',
+            body: formData,
+          };
+        },
+      }),     
     }),
   });
   export const { 
    useAddMailMutation,
+   useGuiMailBaoGiaMutation
   } = apiMail;
 
 

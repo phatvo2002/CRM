@@ -27,10 +27,13 @@ import CongViecDaHoanThanhTab from "../Tabs/CongViecDaHoanThanhTab";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetBaoGiaByIdQuery } from "src/App/Api/BaoGiaApi";
 import { useDownloadFileMutation } from "src/App/Api/FileApi";
+import ReplyIcon from '@mui/icons-material/Reply';
+import { ModalGuiMailBaoGia } from "../../Component/ModalGuiMailBaoGia";
 const index = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
   const [downloadBaoGia] = useDownloadFileMutation();
+  const [modalMail , setModalMail] = useState(false);
   const navigate = useNavigate();
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,6 +41,8 @@ const index = () => {
   const handleDownLoadFileBaoGia = (id) => {
     downloadBaoGia(id);
   };
+  const handleOpenModalMailBaoGia = () => setModalMail(true);
+  const handleCloseModalMailBaoGia = () => setModalMail(false); 
   const { id } = useParams(),
     { data: dataBaoGia } = useGetBaoGiaByIdQuery(id);
   const handleMenuClose = () => {
@@ -50,7 +55,7 @@ const index = () => {
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
   };
-  console.log(dataBaoGia?.tinhTrangBaoGia?.name);
+
 
   return (
     <Box>
@@ -62,14 +67,19 @@ const index = () => {
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             {dataBaoGia?.tenBaoGia}
           </Typography>
-          <Button
-            variant="contained"
-            color="secondary"
-            startIcon={<EmailIcon />}
-            sx={{ marginLeft: 2 }}
-          >
-            Gửi mail
-          </Button>
+          
+          { dataBaoGia && dataBaoGia?.tinhTrangBaoGia?.name !== "Đang chờ duyệt" &&
+            dataBaoGia?.tinhTrangBaoGia?.name !== "Bản thảo"  && (
+                <Button
+                variant="contained"
+                color="secondary"
+                onClick={handleOpenModalMailBaoGia}
+                startIcon={<EmailIcon />}
+                sx={{ marginLeft: 2 }}
+              >
+                Gửi mail
+              </Button>
+            )}
           <Button
             variant="contained"
             color="info"
@@ -87,9 +97,18 @@ const index = () => {
             <img src={IconWord} alt="Xuất báo giá" width={24} height={24} />{" "}
             Xuất báo giá
           </Button>
+          <Button
+            variant="contained"
+            color="success"
+            sx={{ marginLeft: 2 }}
+            // onClick={() => downloadBaoGia(dataBaoGia?.id)}
+            startIcon={<ReplyIcon />}
+          >
+            Xuất link báo giá
+          </Button>
 
-          {dataBaoGia?.tinhTrangBaoGia?.name !== "Đang chờ duyệt" &&
-            dataBaoGia?.tinhTrangBaoGia?.name !== "Bản thảo" && (
+          { dataBaoGia && dataBaoGia?.tinhTrangBaoGia?.name !== "Đang chờ duyệt" &&
+            dataBaoGia?.tinhTrangBaoGia?.name !== "Bản thảo"  && (
               <Button
                 variant="contained"
                 color="info"
@@ -150,6 +169,12 @@ const index = () => {
           </Paper>
         )}
       </Box>
+      {/* Modal báo Giá */}
+      <ModalGuiMailBaoGia
+        showModal={modalMail}
+        closeModal={handleCloseModalMailBaoGia}
+        baoGiaData={dataBaoGia}
+      />
     </Box>
   );
 };

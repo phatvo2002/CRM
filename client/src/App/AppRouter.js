@@ -10,6 +10,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import RootLayout from "./View/Dashbroad/RootLayout";
 import RouteChild from "./Router";
 import NotFound from "./View/session/NotFound";
+import XacNhanPage from "./View/session/XacNhanPage";
 const AppRouter = () => {
   return (
     <Routes>
@@ -26,6 +27,7 @@ const AppRouter = () => {
       </Route>
      <Route path="/" element={<Navigate to="/user/profile" />} />
      <Route path="*" element={<NotFound />} />
+     <Route path="/XemBaoGia/:id" element={<XacNhanPage />} />
      <Route path="/login" element={<JwtLogin />} />
     </Routes>
   );

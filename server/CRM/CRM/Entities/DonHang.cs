@@ -3,10 +3,13 @@
     public class DonHang : BaseNguoiDung
     {
         public Guid Id { get; set; }
+        public string? MaQuanLy { get; set; }
         public string? TenDonHang { get; set; }
         public string? MoTaDonHang { get; set; }
         public DateTime? NgayDatHang { get; set; }
         public decimal GiaTriDonHang { get; set; }
+        public decimal SoTienConPhaiThu { get; set; } // dòng mới
+        public decimal ThucThuDonHang { get; set; } // dòng mới
         public DateTime? HanThanhToan { get; set; }
         public DateTime? HanGiaoHang { get; set; }
         public DateTime? NgayGhiDoanhSo { get; set; }

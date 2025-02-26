@@ -346,7 +346,6 @@ const index = () => {
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
   };
-  console.log(selectedRow[0]?.tinhTrangBaoGia?.name);
   return (
     <>
       <Grid2 container alignItems="center" spacing={3}>
