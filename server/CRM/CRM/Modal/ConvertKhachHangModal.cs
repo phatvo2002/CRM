@@ -24,7 +24,7 @@
         public int? MaNganhNghe { get; set; }
         public int? MaLinhVuc { get; set; }
         public int? MaDoanhThu { get; set; }
-
+        public Guid? KhachHangTiemNangId { get; set; }
         public List<HangHoaQuanTamModal>? HangHoaQuanTam { get; set; }
         public List<LienHeModal>? LienHe { get; set; }
     }

@@ -51,6 +51,10 @@ namespace CRM.Migrations
                     b.Property<int?>("MaTinhTrangBaoGia")
                         .HasColumnType("int");
 
+                    b.Property<string>("MoTa")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
                     b.Property<DateTime?>("NgayBaoGia")
                         .HasColumnType("datetime");
 
@@ -348,6 +352,9 @@ namespace CRM.Migrations
                     b.Property<int>("MaLoaiDonHang")
                         .HasColumnType("int");
 
+                    b.Property<string>("MaQuanLy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("MaTinhTrangDonHang")
                         .HasColumnType("int");
 
@@ -370,6 +377,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<decimal>("SoTienConPhaiThu")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("TenDonHang")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -381,6 +391,9 @@ namespace CRM.Migrations
                     b.Property<string>("ThongTinHoaDon")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<decimal>("ThucThuDonHang")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id")
                         .HasName("PK_DonHang");
@@ -557,9 +570,11 @@ namespace CRM.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("BaoGiaId")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<Guid?>("BaoGiaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("ChiecKhauDonHang")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("CoHoiId")
                         .HasMaxLength(100)
@@ -584,6 +599,10 @@ namespace CRM.Migrations
 
                     b.Property<int?>("SoLuong")
                         .HasColumnType("int");
+
+                    b.Property<string>("TenHangHoa")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal?>("ThanhTien")
                         .HasColumnType("decimal");

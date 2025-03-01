@@ -45,6 +45,8 @@ namespace CRM.Repositories.KhachhangMucTieus
                     khachHangMucTieu.PhongBanId = phongBanId;
                     khachHangMucTieu.IsDeleted = false;
                     khachHangMucTieu.CreateAt = DateTime.Now;
+
+                    // Đưa toàn bộ dữ liệu hàng hóa của tiềm năng đang quan tâm thành của KH mục tiêu 
                     foreach (var h in modal.HangHoaQuanTam)
                     {
                         var hangHoa = await _crmDbContext.HangHoaQuanTams.FirstOrDefaultAsync(r => r.Id == h.Id);
@@ -58,6 +60,7 @@ namespace CRM.Repositories.KhachhangMucTieus
                             HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
                             hangHoaQuanTam.Id = Guid.NewGuid();
                             hangHoaQuanTam.MaHangHoaId = h.MaHangHoaId;
+                            hangHoaQuanTam.TenHangHoa = h.TenHangHoa;
                             hangHoaQuanTam.KhachHangId = khachHangMucTieu.Id;
                             hangHoaQuanTam.KhachHangTiemNangId = h.KhachHangTiemNangId;
                             hangHoaQuanTam.SoLuong = h.SoLuong;
@@ -82,13 +85,20 @@ namespace CRM.Repositories.KhachhangMucTieus
                             continue;
                         }
                     }
+
                     _crmDbContext.KhachHangMucTieus.Add(khachHangMucTieu);
+
+                    // chuyển trạng thái của tiềm năng thành đã chuyển đổi
+                    var dbKhTiemnang = _crmDbContext.KhachHangTiemNangs.FirstOrDefault(r => r.Id == modal.KhachHangTiemNangId);
+                    dbKhTiemnang.IsChuyenDoi = true;
+                    _crmDbContext.KhachHangTiemNangs.Update(dbKhTiemnang);
+
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Chuyển đổi khách hàng thành công", Success = true };
                 }
                 else
                 {
-                    return new ResultModal() { Status = 202, Message = "Tiềm năng này đã được chuyển đổi thành khách hàng", Success = false };
+                    return new ResultModal() { Status = 202, Message = "Dữ liệu đã tồn tại trong hệ thống", Success = false };
                 }
             }
             catch (Exception ex)

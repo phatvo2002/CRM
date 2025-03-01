@@ -15,7 +15,6 @@ import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
-import EditIcon from "@mui/icons-material/Edit";
 import TabPanel from "@mui/lab/TabPanel";
 import { useParams } from "react-router-dom";
 import { useGetKhachHangTiemNangByIdQuery } from "src/App/Api/KhachHangTiemNangApi";
@@ -24,7 +23,6 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MarkunreadIcon from "@mui/icons-material/Markunread";
 import TextsmsIcon from "@mui/icons-material/Textsms";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ThongTInChiTietTab from "./Tab/ThongTInChiTietTab";
@@ -42,7 +40,7 @@ const KhachHangTiemNangDetail = () => {
   const { data: dataKhachHangById, isLoading } =
     useGetKhachHangTiemNangByIdQuery(id);
   const [modalConvert, setOpenModalConvert] = useState(false);
-  const [modalGuiMail , setModalGuiMail] = useState(false);
+  const [modalGuiMail, setModalGuiMail] = useState(false);
   const [modalEdit, setOpenModalEdit] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -71,12 +69,12 @@ const KhachHangTiemNangDetail = () => {
   const handleCloseModalEdit = () => {
     setOpenModalEdit(false);
   };
-  const handleOpenModalGuiMail = () =>{
-    setModalGuiMail(true)
-  }
+  const handleOpenModalGuiMail = () => {
+    setModalGuiMail(true);
+  };
   const handleCloseModalGuiMail = () => {
-    setModalGuiMail(false)
-  }
+    setModalGuiMail(false);
+  };
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -123,7 +121,7 @@ const KhachHangTiemNangDetail = () => {
               style={{
                 marginLeft: "auto",
                 gap: "8px",
-                marginTop:20
+                marginTop: 20,
               }}
               size={8}
             >
@@ -172,18 +170,20 @@ const KhachHangTiemNangDetail = () => {
                 }}
               >
                 <MenuItem onClick={handleCloseDrop}>
-                  <Button
-                    variant="text"
-                    style={{ margin: 5 , width:200 }}
-                    onClick={handleOpenModalConvert}
-                  >
-                    Chuyển đổi khách hàng
-                  </Button>
+                  {dataKhachHangById?.isChuyenDoi == true && (
+                    <Button
+                      variant="contained"
+                      style={{ margin: 2, width: 200 }}
+                      onClick={handleOpenModalConvert}
+                    >
+                      Chuyển đổi khách hàng
+                    </Button>
+                  )}
                 </MenuItem>
                 <MenuItem>
                   <Button
-                    variant="text"
-                    style={{ margin: 5 , width:200 }}
+                    variant="contained"
+                    style={{ margin: 2, width: 200 }}
                     onClick={handleOpenModalEdit}
                   >
                     Chỉnh sửa khách hàng

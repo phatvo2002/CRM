@@ -34,6 +34,7 @@ const HangHoaQuanTamTab = () => {
     const newRow = {
       id: uuidv4(),
       maHangHoaId: "",
+      tenHangHoa: "",
       khachHangTiemNangId: id,
       thueSuat:0,
       tienThue:0,
@@ -141,7 +142,17 @@ const HangHoaQuanTamTab = () => {
         [],
       renderCell: (params) => {
         const selectedItem = hangHoas?.find((item) => item.id === params.value);
-        return selectedItem ? selectedItem.tenHangHoa : "";
+        return selectedItem ? selectedItem.id : "";
+      },
+    },
+    {
+      field: "tenHangHoa",
+      headerName: "Tên hàng hóa",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
+        return selectedItem ? selectedItem.tenHangHoa : "" ;
       },
     },
     {

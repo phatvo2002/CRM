@@ -126,6 +126,7 @@ export const ModalSinhCoHoi = ({
     const newRow = {
       id: uuidv4(),
       maHangHoaId: "",
+      tenKhachHang:"",
       khachHangTiemNangId: null,
       khachHangId: id,
       soLuong: 0,
@@ -222,7 +223,7 @@ export const ModalSinhCoHoi = ({
     },
     {
       field: "maHangHoaId",
-      headerName: "Hàng Hóa",
+      headerName: "Mã Hàng Hóa",
       width: 200,
       editable: true,
       type: "singleSelect",
@@ -231,7 +232,17 @@ export const ModalSinhCoHoi = ({
         [],
       renderCell: (params) => {
         const selectedItem = hangHoas?.find((item) => item.id === params.value);
-        return selectedItem ? selectedItem.tenHangHoa : "";
+        return selectedItem ? selectedItem.id : "";
+      },
+    },
+    {
+      field: "tenHangHoa",
+      headerName: "Tên hàng hóa",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
+        return selectedItem ? selectedItem.tenHangHoa : "" ;
       },
     },
     {

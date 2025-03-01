@@ -40,6 +40,7 @@ const modelObj = {
   isDungChung: "isDungChung",
   isKhachHangCaNhan: "isKhachHangCaNhan",
   isNhaPhanPhoi: "isNhaPhanPhoi",
+  khachHangTiemNangId: "khachHangTiemNangId",
   thongTinHoaDon: "thongTinHoaDon",
   thongTinGiaoHang: "thongTinGiaoHang",
   maPhongbanKhachHang: "maPhongbanKhachHang",
@@ -87,7 +88,7 @@ const modelObj = {
     [modelObj.website]: "",
     [modelObj.moTa]: "",
     [modelObj.taiKhoanNganHang]: "",
-    [modelObj.ngayThanhLap]: "",
+    [modelObj.ngayThanhLap]: new Date(),
     [modelObj.isDungChung]: false,
     [modelObj.isKhachHangCaNhan]: false,
     [modelObj.isNhaPhanPhoi]: false,
@@ -115,9 +116,7 @@ const ModalConvertKhachHangTiemNang = (props) => {
     showModal,
     closeModal,
     typeModal,
-    setLoading,
     selectedItem,
-    setTypeModal,
     refetch,
   } = props,
     _isMounted = useRef(false),
@@ -164,7 +163,8 @@ const ModalConvertKhachHangTiemNang = (props) => {
       isFetching: { isGetDoanhThuFetching },
     } = useGetAllDoanhThuQuery(),
     [convertKhachHang] = useConvertKhachHangMucTieuMutation();
-  const isLoading = false;
+  const isLoading = ishangHoaQuanTamFetching || isdataLienheFetching || isGetNguonGocKhachHangFetching || isGetLoaiTiemNangFetching
+   ||  isGetLoaiHinhFetching || isGetLinhVucFetching || isGetNganhNgheFetching
   const generateRandomSequence = (length) => {
     let result = "";
     for (let i = 0; i < length; i++) {
@@ -194,6 +194,7 @@ const ModalConvertKhachHangTiemNang = (props) => {
       [modelObj.maNganhNghe]: data[modelObj.maNganhNghe],
       [modelObj.maLinhVuc]: data[modelObj.maLinhVuc],
       [modelObj.maDoanhThu]: data[modelObj.maDoanhThu],
+      [modelObj.khachHangTiemNangId] :id,
       [modelObj.hangHoaQuanTam] :dataHangHoaQuanTam,
       [modelObj.LienHe] : dataLienHe,
     };
@@ -202,11 +203,18 @@ const ModalConvertKhachHangTiemNang = (props) => {
   },
     callApiUpdate = async (paramData) => {
       try {
-        await convertKhachHang(paramData).unwrap();
-        toast.success("Chuyển đổi khách hàng thành công");
-        closeModalWithOtherFunc();
+        const response = await convertKhachHang(paramData).unwrap();
+        if(response?.status === 200)
+        {
+          toast.success(response?.message);
+          closeModalWithOtherFunc();
+        }
+         else
+         {
+           toast.success(response?.message);
+         }
       } catch (error) {
-        toast.error("Đã có lỗi xảy ra vui lòng liên hệ bộ phận");
+        toast.error(error);
       } 
     },
     closeModalWithOtherFunc = () => {
@@ -220,7 +228,7 @@ const ModalConvertKhachHangTiemNang = (props) => {
           [modelObj.tenKhachHang]: selectedItem[modelObj.tenKhachHang],
           [modelObj.soDienThoai]: selectedItem?.soDienThoaiDiDong,
           [modelObj.email]: selectedItem?.emailCaNhan,
-          [modelObj.ngayThanhLap]: selectedItem[modelObj.ngayThanhLap],
+          [modelObj.ngayThanhLap]: selectedItem[modelObj.ngayThanhLap] !== null || undefined ? selectedItem[modelObj.ngayThanhLap] : new Date(),
           [modelObj.thongTinMoTa]: selectedItem[modelObj.thongTinMoTa],
           [modelObj.thongTinGiaoHang]: selectedItem?.diaChi,
           [modelObj.maNguonGocKhachHang]: selectedItem[modelObj.maNguonGocKhachHang],

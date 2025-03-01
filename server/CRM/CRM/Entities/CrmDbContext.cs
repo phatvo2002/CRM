@@ -523,7 +523,7 @@ namespace CRM.Entities
                 entity.ToTable("HangHoaQuanTam");
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.MaHangHoaId).HasMaxLength(100);
-                //entity.Property(e => e.TenHangHoa).HasMaxLength(100);
+                entity.Property(e => e.TenHangHoa).HasMaxLength(100);
                 entity.Property(e => e.KhachHangTiemNangId).HasColumnType("uniqueidentifier");
                 entity.Property(e => e.MaHangHoaId).HasMaxLength(100);
                 entity.Property(e => e.CoHoiId).HasMaxLength(100);

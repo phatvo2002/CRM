@@ -44,6 +44,7 @@ namespace CRM.Repositories.HangHoaQuanTams
                     if (db != null)
                     {
                         db.MaHangHoaId = item.MaHangHoaId;
+                        db.TenHangHoa = item.TenHangHoa;
                         db.KhachHangId = item.KhachHangId;
                         db.CoHoiId = item.CoHoiId;
                         db.BaoGiaId = item.BaoGiaId;
@@ -62,6 +63,7 @@ namespace CRM.Repositories.HangHoaQuanTams
                         hangHoaQuanTamNew.Id = Guid.NewGuid();
                         hangHoaQuanTamNew.MaHangHoaId = item.MaHangHoaId;
                         hangHoaQuanTamNew.KhachHangId = item.KhachHangId;
+                        hangHoaQuanTamNew.TenHangHoa = item.TenHangHoa;
                         hangHoaQuanTamNew.CoHoiId = item.CoHoiId;
                         hangHoaQuanTamNew.BaoGiaId = item.BaoGiaId;
                         hangHoaQuanTamNew.DonGia = item.DonGia;
