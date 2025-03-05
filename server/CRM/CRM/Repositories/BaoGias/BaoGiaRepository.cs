@@ -160,14 +160,14 @@ namespace CRM.Repositories.BaoGias
             }
         }
 
-        public async Task<ResultModal> UpdateTrangThaiBaoGia(Guid baoGiaId)
+        public async Task<ResultModal> UpdateTrangThaiBaoGia(Guid baoGiaId, int trangThaiId)
         {
             var db = _crmDbContext.BaoGias.Where(r => r.Id == baoGiaId).FirstOrDefault();
             try
             {
                 if (db != null)
                 {
-                    db.MaTinhTrangBaoGia = 5;
+                    db.MaTinhTrangBaoGia = trangThaiId;
                     _crmDbContext.BaoGias.Update(db);
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Success = true, Message = "Thay đổi trạng thái thành công", Status = 200 };
@@ -179,5 +179,7 @@ namespace CRM.Repositories.BaoGias
                 return new ResultModal() { Success = false, Message = ex.Message, Status = 500 };
             }
         }
+
+
     }
 }

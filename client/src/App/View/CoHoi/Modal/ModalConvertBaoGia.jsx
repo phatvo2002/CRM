@@ -95,7 +95,8 @@ export const ModalConvertBaoGia = ({
   const _isMounted = useRef(false),
     modalRef = useRef(null),
     { id } = useParams(),
-    [hangHoa, setHangHoa] = useState([]);
+    [hangHoa, setHangHoa] = useState([]),
+    [isSave , setIsSave] = useState(false);
   const { data: hangHoas } = useGetAllHangHoaQuery(undefined, {
     skip: showModal == false,
   });
@@ -107,10 +108,6 @@ export const ModalConvertBaoGia = ({
     useGetKhachHangMucTieuByNguoiDungIdQuery(undefined, {
       skip: showModal == false,
     });
-  const {
-    data: dataTinhTrangBaoGia,
-    isLoading: isGetTinhTrangBaoGiaIsFetching,
-  } = useGetAllTinhTrangBaoGiaQuery({ skip: showModal == false });
   const { data: dataCoHoi, isLoading: isGetCoHoiIsFetching } =
       useGetCoHoiListQuery({ skip: showModal == false }),
     [convertBaoGia] = useConvertBaoGiaMutation();
@@ -148,8 +145,12 @@ export const ModalConvertBaoGia = ({
     if (currentRow.isNew === true) {
       updatedRow = await createData(currentRow).unwrap();
       currentRow.isNew = false;
+      setIsSave(true)
+      refetch()
     } else {
       updatedRow = await updateData(currentRow).unwrap();
+      setIsSave(true)
+      refetch()
     }
     toast.success("Lưu dữ liệu thành công!");
   };
@@ -187,6 +188,7 @@ export const ModalConvertBaoGia = ({
         await deleteData(id).unwrap();
         setHangHoa((prev) => prev.filter((row) => row.id !== id));
         toast.success("Xóa hàng hóa thành công!");
+        refetch()
       } catch (error) {
         toast.error("Đã có lỗi trong quá trình xóa!");
       }
@@ -208,28 +210,6 @@ export const ModalConvertBaoGia = ({
     0
   )
   const columns = [
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "Hành động",
-      width: 200,
-      getActions: ({ id }) => [
-        <IconButton
-          key={`edit-${id}`}
-          onClick={() => handleSaveClick(id)}
-          color="primary"
-        >
-          <SaveIcon />
-        </IconButton>,
-        <IconButton
-          key={`delete-${id}`}
-          onClick={handleDeleteClick(id)}
-          color="error"
-        >
-          <DeleteIcon />
-        </IconButton>,
-      ],
-    },
     {
       field: "maHangHoaId",
       headerName: "Hàng Hóa",
@@ -312,8 +292,36 @@ export const ModalConvertBaoGia = ({
       renderCell: (params) =>
         params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
+    {
+      field: "actions",
+      type: "actions",
+      headerName: "Hành động",
+      width: 200,
+      getActions: ({ id }) => [
+        <IconButton
+          key={`edit-${id}`}
+          onClick={() => handleSaveClick(id)}
+          color="primary"
+        >
+          <SaveIcon />
+        </IconButton>,
+        <IconButton
+          key={`delete-${id}`}
+          onClick={handleDeleteClick(id)}
+          color="error"
+        >
+          <DeleteIcon />
+        </IconButton>,
+      ],
+    },
   ];
   const submitForm = (data) => {
+    if(!isSave)
+    {
+      toast.warning("Bạn chưa lưu hàng hóa")
+    }
+    else
+    {
       const tempData = {
         [modelObj.tenBaoGia]: data[modelObj.tenBaoGia],
         [modelObj.ngayBaoGia]: data[modelObj.ngayBaoGia],
@@ -321,13 +329,14 @@ export const ModalConvertBaoGia = ({
         [modelObj.maSoThue]: data[modelObj.maSoThue],
         [modelObj.tongTien]: totalAmountFinal,
         [modelObj.maCoHoi]: data[modelObj.maCoHoi],
-        [modelObj.maTinhTrangBaoGia]: data[modelObj.maTinhTrangBaoGia],
+        [modelObj.maTinhTrangBaoGia]: 1,
         [modelObj.maKhachHang]: data[modelObj.maKhachHang],
         [modelObj.diaChi]: data[modelObj.diaChi],
         [modelObj.hangHoaQuanTams]: hangHoa,
       };
 
       callApiConvert(tempData);
+    }
     },
     callApiConvert = async (paramData) => {
       try {
@@ -403,16 +412,6 @@ export const ModalConvertBaoGia = ({
               label={labelObj.tenBaoGia}
               disabled={isLoading}
               required
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <AutocompleteRHF
-              name={modelObj.maTinhTrangBaoGia}
-              label={labelObj.maTinhTrangBaoGia}
-              isGetOnlyId
-              disabled={isLoading}
-              data={commonMapDataAutocomplete(dataTinhTrangBaoGia, "name")}
-              skeletonLoading={isGetTinhTrangBaoGiaIsFetching}
             />
           </Grid2>
           <Grid2 size={6}>
@@ -506,7 +505,7 @@ export const ModalConvertBaoGia = ({
                     }}
                   >
                     <Typography variant="h6">
-                      Thành tiền: {totalAmount.toLocaleString("vi-VN")} VND
+                      Thành tiền: {totalAmount.toLocaleString("vi-VN")} <span>&#x0111;</span>
                     </Typography>
                   </Box>
                   <Box
@@ -518,7 +517,7 @@ export const ModalConvertBaoGia = ({
                     }}
                   >
                     <Typography variant="h6">
-                      Tiền chiếc khấu:{totalChiecKhau.toLocaleString("vi-VN")} VND
+                      Tiền chiếc khấu:{totalChiecKhau.toLocaleString("vi-VN")} <span>&#x0111;</span>
                     </Typography>
                   </Box>
                   <Box
@@ -530,7 +529,7 @@ export const ModalConvertBaoGia = ({
                     }}
                   >
                     <Typography variant="h6">
-                      Tổng tiền: {totalAmountFinal.toLocaleString("vi-VN")} VND
+                      Tổng tiền: {totalAmountFinal.toLocaleString("vi-VN")} <span>&#x0111;</span>
                     </Typography>
                   </Box>
                   </>

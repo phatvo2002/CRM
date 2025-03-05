@@ -137,7 +137,7 @@ export const TabListCoHoi = ({ dataCoHoi , refetch }) => {
       headerName: "Số tiền",
       width: 200,
       renderCell: (params) => (
-        <div>{params.value.toLocaleString("vi-VN")} VND</div>
+        <div>{params.value.toLocaleString("vi-VN")} <span>&#x0111;</span></div>
       ),
     },
     {

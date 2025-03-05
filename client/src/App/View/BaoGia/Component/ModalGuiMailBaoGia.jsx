@@ -62,11 +62,11 @@ export const ModalGuiMailBaoGia = ({ showModal, typeModal, closeModal ,baoGiaDat
       AttachtMent: files,
       KhachHangMucTieuId: null,
       KhachHangTiemNangId: null,
-      BaoGiaId : id
+      BaoGiaId : id,
+      TrangThaiId : 3
     };
     callApiSentFile(tempData)
   };
-  console.log(baoGiaData)
   const callApiSentFile = async (params) => {
     try {
       const response =  await guiMail(params);

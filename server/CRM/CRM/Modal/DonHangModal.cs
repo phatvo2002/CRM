@@ -6,6 +6,8 @@
         public string? TenDonHang { get; set; }
         public string? MoTaDonHang { get; set; }
         public DateTime? NgayDatHang { get; set; }
+        public decimal SoTienConPhaiThu { get; set; }
+        public decimal ThucThuDonHang { get; set; }
         public decimal GiaTriDonHang { get; set; }
         public DateTime? HanThanhToan { get; set; }
         public DateTime? HanGiaoHang { get; set; }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Typography,
@@ -14,29 +14,85 @@ import {
   Button,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { useGetBaoGiaByIdQuery } from "src/App/Api/BaoGiaApi";
+import {
+  useGetBaoGiaByIdQuery,
+  useUpdatePheDuyetBaoGiaMutation,
+} from "src/App/Api/BaoGiaApi";
 import { useGetHangHoaQuanTamByBaoGiaIdQuery } from "src/App/Api/HangHoaQuanTam";
-
+import Swal from "sweetalert2";
 const XacNhanPage = () => {
   const { id } = useParams(),
     { data: dataBaoGia } = useGetBaoGiaByIdQuery(id),
-    { data: dataHangHoaQuanTam } = useGetHangHoaQuanTamByBaoGiaIdQuery(id);
-  const items = [
-    { id: 1, name: "ELA53 75EU", code: "", quantity: 10, price: 2990000 },
-    { id: 2, name: "ARKM _8GB_3200_PC", code: "", quantity: 10, price: 450000 },
-  ];
+    { data: dataHangHoaQuanTam } = useGetHangHoaQuanTamByBaoGiaIdQuery(id),
+    [xacNhanBaoGia] = useUpdatePheDuyetBaoGiaMutation();
+  const total = Array.isArray(dataHangHoaQuanTam)
+    ? dataHangHoaQuanTam.reduce(
+        (sum, item) => sum + item.soLuong * item.donGia,
+        0
+      )
+    : 0;
 
-  console.log(dataBaoGia);
-  console.log(dataHangHoaQuanTam);
-
-  const total = dataHangHoaQuanTam.reduce(
-    (sum, item) => sum + item.soLuong * item.donGia,
-    0
-  );
+  const handleXacNhan = (xacNhanId) => {
+    if (xacNhanId == 4) {
+      Swal.fire({
+        title: "Bạn có muốn xác nhận báo giá này",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await xacNhanBaoGia({
+            baoGiaId: id,
+            trangThaiId: xacNhanId,
+          });
+          console.log(response);
+          if (response?.data?.status == 200) {
+            Swal.fire({
+              title: "Xác nhận báo giá thành công",
+              icon: "success",
+            }).then(() => {
+              window.location.href = "https://mail.google.com/mail/";
+            });
+          } else {
+            Swal.fire({
+              title: "Từ chối thành công",
+              icon: "success",
+            });
+          }
+        }
+      });
+    } else {
+      Swal.fire({
+        title: "Bạn có muốn từ chối báo giá này",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const response = await xacNhanBaoGia({
+            baoGiaId: id,
+            trangThaiId: xacNhanId,
+          });
+          if (response?.data?.status == 200) {
+            Swal.fire({
+              title: "Từ chối đơn hàng thành công",
+              icon: "success",
+            }).then(() => {
+              window.location.href = "https://mail.google.com/mail/";
+            });
+          }
+        }
+      });
+    }
+  };
 
   return (
     <Container>
-      <Paper sx={{padding : 5}}>
+      <Paper sx={{ padding: 5 }}>
         <Box textAlign="center" mb={2}>
           <Typography variant="h6" fontWeight="bold">
             LOGO CÔNG TY
@@ -84,8 +140,12 @@ const XacNhanPage = () => {
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{item.maHangHoaId}</TableCell>
                     <TableCell>{item.soLuong}</TableCell>
-                    <TableCell>{item.donGia}</TableCell>
-                    <TableCell>{item.thanhTien.toLocaleString()}</TableCell>
+                    <TableCell>
+                      {item.donGia.toLocaleString()} <span>&#x0111;</span>
+                    </TableCell>
+                    <TableCell>
+                      {item.thanhTien.toLocaleString()} <span>&#x0111;</span>
+                    </TableCell>
                     <TableCell></TableCell>
                   </TableRow>
                 ))}
@@ -94,7 +154,7 @@ const XacNhanPage = () => {
                   Tổng cộng:
                 </TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>
-                  {total.toLocaleString()}
+                  {total.toLocaleString()} <span>&#x0111;</span>
                 </TableCell>
                 <TableCell></TableCell>
               </TableRow>
@@ -119,13 +179,21 @@ const XacNhanPage = () => {
           <Typography>Ngày 26 tháng 2 năm 2025</Typography>
           <Typography fontWeight="bold">CÔNG TY ............</Typography>
         </Box>
-        <Box>
+        <Box marginTop={10}>
           Vui lòng xác nhận báo giá Thông qua nút :{" "}
-          <Button variant="contained" color="success">
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => handleXacNhan(4)}
+          >
             Xác nhận{" "}
           </Button>{" "}
           Hoặc từ chối báo giá thông qua nút{" "}
-          <Button variant="contained" color="error">
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => handleXacNhan(5)}
+          >
             Từ chối
           </Button>{" "}
           nếu có sai sót trong phiếu báo giá

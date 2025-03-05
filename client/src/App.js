@@ -7,7 +7,7 @@ function App() {
   return (
     <AuthProvider>
       <AppRouter />
-      <ToastContainer position="top-center" />
+      <ToastContainer position="top-center"  style={{ zIndex: 9999 }}/>
     </AuthProvider>
     
   );

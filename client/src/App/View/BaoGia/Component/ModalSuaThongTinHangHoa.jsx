@@ -15,10 +15,12 @@ import { v4 as uuidv4 } from "uuid";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
 import { useUpdateTongTienMutation } from "src/App/Api/BaoGiaApi";
+import { setISODay } from "date-fns";
 const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch }) => {
   const _isMounted = useRef(false),
     modalRef = useRef(null),
-    [hangHoa, setHangHoa] = useState([]);
+    [hangHoa, setHangHoa] = useState([]),
+    [isSave , setIsSave] = useState(false);
   const { data: hangHoas } = useGetAllHangHoaQuery(undefined, {
     skip: showModal == false,
   });
@@ -57,8 +59,10 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
     if (currentRow.isNew === true) {
       updatedRow = await createData(currentRow).unwrap();
       currentRow.isNew = false;
+      setIsSave(true)
     } else {
       updatedRow = await updateData(currentRow).unwrap();
+      setIsSave(true)
     }
     toast.success("Lưu dữ liệu thành công!");
   };
@@ -256,12 +260,15 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
   },
   callApiChinhSua = async (paramData) => {
       try {
+        if(!isSave)
+        {
+          toast.warning("Bạn chưa lưu hàng hóa");
+        }
         await updateBaoGia({baoGiaId :selectedItem[0]?.id,tongTien : paramData?.tongTien}).unwrap();
         toast.success("Chỉnh sửa hàng hóa thành công");
         closeModalWithOtherFunc();
         refetch()
       } catch (error) {
-        console.log(error);
         toast.error(error);
       }
     }
@@ -321,7 +328,7 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
                       }}
                     >
                       <Typography variant="h6">
-                        Thành tiền: {totalAmount.toLocaleString("vi-VN")} VND
+                        Thành tiền: {totalAmount.toLocaleString("vi-VN")} <span>&#x0111;</span>
                       </Typography>
                     </Box>
                     <Box
@@ -335,7 +342,7 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
                     >
                       <Typography variant="h6">
                         Tiền chiếc khấu:{totalChiecKhau.toLocaleString("vi-VN")}{" "}
-                        VND
+                        <span>&#x0111;</span>
                       </Typography>
                     </Box>
                     <Box
@@ -349,7 +356,7 @@ const ModalSuaThongTinHangHoa = ({ showModal, closeModal, selectedItem , refetch
                     >
                       <Typography variant="h6">
                         Tổng tiền: {totalAmountFinal.toLocaleString("vi-VN")}{" "}
-                        VND
+                        <span>&#x0111;</span>
                       </Typography>
                     </Box>
                   </>

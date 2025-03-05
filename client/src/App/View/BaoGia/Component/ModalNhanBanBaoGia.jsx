@@ -498,11 +498,12 @@ selectedRow,
                       display: "flex",
                       justifyContent: "flex-end",
                       p: 2,
-                      bgcolor: "#f1f1f1",
+                      bgcolor: "background.default",
+                      color:"text.primary",
                     }}
                   >
                     <Typography variant="h6">
-                      Thành tiền: {totalAmount.toLocaleString("vi-VN")} VND
+                      Thành tiền: {totalAmount.toLocaleString("vi-VN")} <span>&#x0111;</span>
                     </Typography>
                   </Box>
                   <Box
@@ -510,11 +511,12 @@ selectedRow,
                       display: "flex",
                       justifyContent: "flex-end",
                       p: 2,
-                      bgcolor: "#f1f1f1",
+                      bgcolor: "background.default",
+                      color:"text.primary",
                     }}
                   >
                     <Typography variant="h6">
-                      Tiền chiếc khấu:{totalChiecKhau.toLocaleString("vi-VN")} VND
+                      Tiền chiếc khấu:{totalChiecKhau.toLocaleString("vi-VN")} <span>&#x0111;</span>
                     </Typography>
                   </Box>
                   <Box
@@ -522,11 +524,12 @@ selectedRow,
                       display: "flex",
                       justifyContent: "flex-end",
                       p: 2,
-                      bgcolor: "#f1f1f1",
+                      bgcolor: "background.default",
+                      color:"text.primary",
                     }}
                   >
                     <Typography variant="h6">
-                      Tổng tiền: {totalAmountFinal.toLocaleString("vi-VN")} VND
+                      Tổng tiền: {totalAmountFinal.toLocaleString("vi-VN")} <span>&#x0111;</span>
                     </Typography>
                   </Box>
                   </>

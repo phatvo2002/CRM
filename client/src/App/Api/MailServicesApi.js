@@ -62,7 +62,7 @@ export const apiMail = createApi({
             });
           }
           return {
-            url: `/BaoGia/GuiMailBaoGia/${data?.BaoGiaId}`,
+            url: `/BaoGia/GuiMailBaoGia/${data?.BaoGiaId}/${data?.TrangThaiId}`,
             method: 'POST',
             body: formData,
           };

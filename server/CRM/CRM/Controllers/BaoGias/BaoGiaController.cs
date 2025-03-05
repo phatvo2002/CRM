@@ -83,9 +83,9 @@ namespace CRM.Controllers.BaoGias
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost("GuiMailBaoGia/{baoGiaId}")]
+        [HttpPost("GuiMailBaoGia/{baoGiaId}/{trangThaiId}")]
         [JwtAuthorize]
-        public async Task<IActionResult> SendMailBaoGia([FromForm] MailRequest mailRequest, Guid baoGiaId)
+        public async Task<IActionResult> SendMailBaoGia([FromForm] MailRequest mailRequest, Guid baoGiaId, int trangThaiId)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace CRM.Controllers.BaoGias
                 {
                     if (db.Password != null)
                     {
-                        await _baoGiaServices.UpdateTrangThaiBaoGia(baoGiaId);
+                        await _baoGiaServices.UpdateTrangThaiBaoGia(baoGiaId, trangThaiId);
                         await _mailService.SendMailAsync(mailRequest, db.Email, db.Password, nguoiDungID, phongBand);
                         return Ok(new ResultModal() { Status = 200, Message = "Gửi mail thành công", Success = true });
                     }

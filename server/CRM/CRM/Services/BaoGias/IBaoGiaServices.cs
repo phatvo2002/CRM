@@ -13,7 +13,7 @@ namespace CRM.Services.BaoGias
         Task<BaoGiaDTO> GetBaoGiaById(Guid id);
         Task<ResultModal> DeleteBaoGia(Guid id);
         Task<ResultModal> PheDuyetBaoGia(Guid baoGiaId, int trangthaiId);
-        Task<ResultModal> UpdateTrangThaiBaoGia(Guid baoGiaId);
+        Task<ResultModal> UpdateTrangThaiBaoGia(Guid baoGiaId, int trangThaiId);
 
 
     }

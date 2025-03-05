@@ -203,7 +203,7 @@ const index = () => {
             <Typography variant="h6" component={"h6"}>
               {" "}
               <b>{dataCoHoi?.tenCoHoi}</b>{" "}
-              <span>- {dataCoHoi?.soTien.toLocaleString("vi-VN")} VND</span>
+              <span>- {dataCoHoi?.soTien.toLocaleString("vi-VN")} <span>&#x0111;</span></span>
             </Typography>
             <div
               style={{

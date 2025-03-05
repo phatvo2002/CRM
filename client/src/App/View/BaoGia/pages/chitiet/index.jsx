@@ -29,11 +29,13 @@ import { useGetBaoGiaByIdQuery } from "src/App/Api/BaoGiaApi";
 import { useDownloadFileMutation } from "src/App/Api/FileApi";
 import ReplyIcon from '@mui/icons-material/Reply';
 import { ModalGuiMailBaoGia } from "../../Component/ModalGuiMailBaoGia";
+import ModalXuatLinkBaoGia from "../../Component/ModalXuatLinkBaoGia";
 const index = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
   const [downloadBaoGia] = useDownloadFileMutation();
   const [modalMail , setModalMail] = useState(false);
+  const [modalXuatLink , setModalXuatLink] = useState(false);
   const navigate = useNavigate();
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -43,6 +45,8 @@ const index = () => {
   };
   const handleOpenModalMailBaoGia = () => setModalMail(true);
   const handleCloseModalMailBaoGia = () => setModalMail(false); 
+  const handleOpenModalXuatLinkBaoBaoGia = () => setModalXuatLink(true);
+  const handleCloselModalXuatLinkBaoGia = () => setModalXuatLink(false)
   const { id } = useParams(),
     { data: dataBaoGia } = useGetBaoGiaByIdQuery(id);
   const handleMenuClose = () => {
@@ -101,14 +105,13 @@ const index = () => {
             variant="contained"
             color="success"
             sx={{ marginLeft: 2 }}
-            // onClick={() => downloadBaoGia(dataBaoGia?.id)}
+            onClick={() => handleOpenModalXuatLinkBaoBaoGia()}
             startIcon={<ReplyIcon />}
           >
             Xuất link báo giá
           </Button>
 
-          { dataBaoGia && dataBaoGia?.tinhTrangBaoGia?.name !== "Đang chờ duyệt" &&
-            dataBaoGia?.tinhTrangBaoGia?.name !== "Bản thảo"  && (
+          { dataBaoGia && dataBaoGia?.tinhTrangBaoGia?.name === "Được chấp nhận" && (
               <Button
                 variant="contained"
                 color="info"
@@ -169,11 +172,16 @@ const index = () => {
           </Paper>
         )}
       </Box>
-      {/* Modal báo Giá */}
+      {/* Modal gửi mail báo Giá */}
       <ModalGuiMailBaoGia
         showModal={modalMail}
         closeModal={handleCloseModalMailBaoGia}
         baoGiaData={dataBaoGia}
+      />
+      {/* modal xuất link báo gía */}
+      <ModalXuatLinkBaoGia
+         showModal={modalXuatLink}
+         closeModal={handleCloselModalXuatLinkBaoGia}
       />
     </Box>
   );

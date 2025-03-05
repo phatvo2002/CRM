@@ -473,7 +473,7 @@ const ModalThemBaoGia = ({
                       }}
                     >
                       <Typography variant="h6">
-                        Thành tiền: {totalAmount.toLocaleString("vi-VN")} VND
+                        Thành tiền: {totalAmount.toLocaleString("vi-VN")} <span>&#x0111;</span>
                       </Typography>
                     </Box>
                     <Box
@@ -487,7 +487,7 @@ const ModalThemBaoGia = ({
                     >
                       <Typography variant="h6">
                         Tiền chiếc khấu:{totalChiecKhau.toLocaleString("vi-VN")}{" "}
-                        VND
+                        <span>&#x0111;</span>
                       </Typography>
                     </Box>
                     <Box
@@ -501,7 +501,7 @@ const ModalThemBaoGia = ({
                     >
                       <Typography variant="h6">
                         Tổng tiền: {totalAmountFinal.toLocaleString("vi-VN")}{" "}
-                        VND
+                        <span>&#x0111;</span>
                       </Typography>
                     </Box>
                   </>

@@ -48,9 +48,9 @@ namespace CRM.Services.BaoGias
             return await _baoGiaRepository.UpdateSoTienHangHoa(baoGiaId, soTien);
         }
 
-        public async Task<ResultModal> UpdateTrangThaiBaoGia(Guid baoGiaId)
+        public async Task<ResultModal> UpdateTrangThaiBaoGia(Guid baoGiaId, int trangThaiId)
         {
-            return await _baoGiaRepository.UpdateTrangThaiBaoGia(baoGiaId);
+            return await _baoGiaRepository.UpdateTrangThaiBaoGia(baoGiaId, trangThaiId);
         }
     }
 }

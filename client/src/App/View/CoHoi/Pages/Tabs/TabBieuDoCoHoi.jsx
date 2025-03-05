@@ -160,7 +160,7 @@ export const TabBieuDoCoHoi = () => {
                                     marginLeft: "54px",
                                   }}
                                 >
-                                  {item.soTien.toLocaleString("vi-VN")} VND
+                                  {item.soTien.toLocaleString("vi-VN")} <span>&#x0111;</span>
                                 </span>
                               </Typography>
                             </Stack>
