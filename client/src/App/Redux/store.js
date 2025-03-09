@@ -19,6 +19,7 @@ import { apiGiaiDoanBanHang } from '../Api/GiaiDoanBanHangApi';
 import { apiMail } from '../Api/MailServicesApi';
 import { apiCoHoi } from '../Api/CoHoiApi';
 import { apiBaoGia } from '../Api/BaoGiaApi';
+import { apiDonHang } from '../Api/DonHangApi';
 const apis = [
   apiPhongban,
   apiUser,
@@ -39,7 +40,8 @@ const apis = [
   apiGiaiDoanBanHang,
   apiMail,
   apiCoHoi,
-  apiBaoGia
+  apiBaoGia,
+  apiDonHang
 ];
 
 const store = configureStore({

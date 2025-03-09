@@ -21,5 +21,6 @@
         public bool IsGhiDoanhSo { get; set; }
         public string? ThongTinHoaDon { get; set; }
         public string? ThongTinGiaoHang { get; set; }
+        public List<HangHoaQuanTamModal>? HangHoaQuanTam { get; set; }
     }
 }

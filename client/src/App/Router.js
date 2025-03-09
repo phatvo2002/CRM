@@ -49,8 +49,10 @@ const CoHoi = lazy(() => import("./View/CoHoi/index"));
 const CoHoiDetail = lazy(() => import("./View/CoHoi/Pages/CoHoiDetail/index"));
 // báo giá 
 const BaoGia = lazy(() => import("./View/BaoGia/index"))
-
 const ChiTietBaoGia = lazy(() => import("./View/BaoGia/pages/chitiet/index"))
+
+// đơn hàng
+const DonHang = lazy(()=> import("./View/DonHang/index"))
 
 const NhiemVu = lazy(() => import("./View/NhiemVu/index"));
 
@@ -314,6 +316,30 @@ const RouteChild = [
         }
       >
         <ChiTietBaoGia />
+      </Suspense>
+    ),
+  },
+
+  // đơn hàng 
+  {
+    path: "/donhang",
+    element: (
+      <Suspense
+        fallback={
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              width: "100vw",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        }
+      >
+        <DonHang />
       </Suspense>
     ),
   },

@@ -8,8 +8,8 @@
         public string? DiaChi { get; set; }
         public string? SoDienThoai { get; set; }
         public string? Email { get; set; }
-        public string? DisplayName { get; set; } // mới
-        public string? Password { get; set; } // mới
+        public string? DisplayName { get; set; }
+        public string? Password { get; set; }
         public decimal? DoanhSoDuKien { get; set; }
         public decimal? DoanhSoThucTe { get; set; }
         public DateTime? NgayThuViec { get; set; }
@@ -18,7 +18,7 @@
         public string? MatKhau { get; set; }
         public bool IsActive { get; set; }
         public bool CheckIsTruongPhong { get; set; }
-        public byte[]? HinhAnh { get; set; } // mới
+        public byte[]? HinhAnh { get; set; }
         public bool CheckIsGiamDoc { get; set; }
         public Guid? MaChucVu { get; set; }
         public virtual ChucVu? ChucVu { get; set; }
@@ -36,5 +36,9 @@
         public virtual ICollection<LienHe> LienHes { get; set; } = new List<LienHe>();
         public virtual ICollection<EmailDaGui> EmailDaGuis { get; set; } = new List<EmailDaGui>();
         public virtual ICollection<DonHang> DonHangs { get; set; } = new List<DonHang>();
+
+        // kpi
+        public virtual ICollection<MucTieuDoanhSo> MucTieuDoanhSos { get; set; } = new List<MucTieuDoanhSo>();
+        public virtual ICollection<KPINhanVien> KPINhanViens { get; set; } = new List<KPINhanVien>();
     }
 }

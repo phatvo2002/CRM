@@ -66,6 +66,8 @@ namespace CRM.Helper
             CreateMap<BaoGia, BaoGiaDTO>();
             CreateMap<BaoGiaModal, BaoGia>().ReverseMap();
 
+            CreateMap<DonHang, DonHangDTO>();
+            CreateMap<DonHangModal, DonHangModal>();
         }
     }
 }

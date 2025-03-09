@@ -24,5 +24,9 @@
         public virtual ICollection<LichHen> LichHens { get; set; } = new List<LichHen>();
         public virtual ICollection<NhiemVu> NhiemVus { get; set; } = new List<NhiemVu>();
         public virtual ICollection<DonHang> DonHangs { get; set; } = new List<DonHang>();
+
+        // Kpi 
+        public virtual ICollection<MucTieuDoanhSo> MucTieuDoanhSos { get; set; } = new List<MucTieuDoanhSo>();
+        public virtual ICollection<KPINhanVien> KPINhanViens { get; set; } = new List<KPINhanVien>();
     }
 }

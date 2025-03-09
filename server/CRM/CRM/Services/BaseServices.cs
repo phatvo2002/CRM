@@ -48,6 +48,17 @@ namespace CRM.Services
         {
             return await _repository.GetById(id);
         }
+
+        public async Task<List<TDto>> GetByNguoiDungId(Guid id)
+        {
+            return await _repository.GetByNguoiDungId(id);
+        }
+
+        public async Task<List<TDto>> GetByPhongBanId(Guid id)
+        {
+            return await _repository.GetByPhongBanId(id);
+        }
+
         public async Task<ResultModal> Update(TModal modal)
         {
             return await _repository.Update(modal);

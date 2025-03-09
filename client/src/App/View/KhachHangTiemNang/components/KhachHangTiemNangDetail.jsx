@@ -1,267 +1,289 @@
+import React, { useState } from "react";
 import {
-  AppBar,
-  Button,
   Grid2,
+  Paper,
+  Stack,
+  Typography,
+  Button,
   IconButton,
   Menu,
   MenuItem,
-  Paper,
-  Stack,
+  Box,
   Tabs,
+  Tab,
 } from "@mui/material";
-import React, { useState } from "react";
-import image from "../../../Assets/image/person.png";
-import Box from "@mui/material/Box";
-import Tab from "@mui/material/Tab";
-import TabContext from "@mui/lab/TabContext";
-import TabList from "@mui/lab/TabList";
-import TabPanel from "@mui/lab/TabPanel";
-import { useParams } from "react-router-dom";
+
+import { useParams, useNavigate } from "react-router-dom";
 import { useGetKhachHangTiemNangByIdQuery } from "src/App/Api/KhachHangTiemNangApi";
-import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import MarkunreadIcon from "@mui/icons-material/Markunread";
-import TextsmsIcon from "@mui/icons-material/Textsms";
-import { useNavigate } from "react-router-dom";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import image from "../../../Assets/image/person.png";
 import ThongTInChiTietTab from "./Tab/ThongTInChiTietTab";
 import NguoiDaiDienTab from "./Tab/NguoiDaiDienTab";
 import HangHoaQuanTamTab from "./Tab/HangHoaQuanTamTab";
 import CongViecThucHienTab from "./Tab/CongViecThucHienTab";
-import ModalConvertKhachHangTiemNang from "./ModalConvertKhachHangTiemNang";
-import { ModalGuiMail } from "../Modal/ModalGuiMail";
 import EmailTab from "./Tab/EmailTab";
 import SMStab from "./Tab/SMStab";
+import ModalConvertKhachHangTiemNang from "./ModalConvertKhachHangTiemNang";
 import ModalEditKhachHangTiemNang from "../ModalEditKhachHangTiemNang";
+import { ModalGuiMail } from "../Modal/ModalGuiMail";
+
 const KhachHangTiemNangDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
-  const { data: dataKhachHangById, isLoading } =
-    useGetKhachHangTiemNangByIdQuery(id);
+  const { data: dataKhachHangById, isLoading } = useGetKhachHangTiemNangByIdQuery(id);
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [tabValue, setTabValue] = useState("1");
   const [modalConvert, setOpenModalConvert] = useState(false);
   const [modalGuiMail, setModalGuiMail] = useState(false);
   const [modalEdit, setOpenModalEdit] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
+
   const open = Boolean(anchorEl);
-  const gotoLink = () => {
-    navigate(-1);
-  };
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleCloseDrop = () => {
-    setAnchorEl(null);
-  };
-  const [value, setValue] = useState("1");
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  const handleOpenModalConvert = () => {
-    setOpenModalConvert(true);
-  };
-  const handleOpenModalEdit = () => {
-    setOpenModalEdit(true);
-  };
-  const handleCloseModalConvert = () => {
-    setOpenModalConvert(false);
-  };
-  const handleCloseModalEdit = () => {
-    setOpenModalEdit(false);
-  };
-  const handleOpenModalGuiMail = () => {
-    setModalGuiMail(true);
-  };
-  const handleCloseModalGuiMail = () => {
-    setModalGuiMail(false);
-  };
+
+  const handleClick = (event) => setAnchorEl(event.currentTarget);
+  const handleCloseDrop = () => setAnchorEl(null);
+  const handleTabChange = (event, newValue) => setTabValue(newValue);
+  const gotoLink = () => navigate(-1);
+
+  const handleOpenModalConvert = () => setOpenModalConvert(true);
+  const handleCloseModalConvert = () => setOpenModalConvert(false);
+  const handleOpenModalEdit = () => setOpenModalEdit(true);
+  const handleCloseModalEdit = () => setOpenModalEdit(false);
+  const handleOpenModalGuiMail = () => setModalGuiMail(true);
+  const handleCloseModalGuiMail = () => setModalGuiMail(false);
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <Box sx={{ p: 3, textAlign: "center" }}>
+        <Typography variant="h6">Đang tải...</Typography>
+      </Box>
+    );
   }
 
   if (!dataKhachHangById) {
-    return <div>Không tìm thấy dữ liệu</div>;
+    return (
+      <Box sx={{ p: 3, textAlign: "center" }}>
+        <Typography variant="h6">Không tìm thấy dữ liệu</Typography>
+      </Box>
+    );
   }
+
   return (
-    <>
-      <Grid2 container spacing={2}>
-        <Paper style={{ height: "100%", width: "100%" }}>
-          <Stack direction="row" spacing={2} style={{ padding: 10 }}>
-            <IconButton onClick={gotoLink}>
-              <ArrowBackIcon />
-            </IconButton>
-            <Grid2
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+    <Grid2 container spacing={2} sx={{ p: 2 }}>
+      <Paper
+        elevation={3}
+        sx={{
+          width: "100%",
+          borderRadius: 3,
+          overflow: "hidden",
+          bgcolor: "white",
+        }}
+      >
+        {/* Header */}
+        <Stack
+          direction="row"
+          spacing={2}
+          sx={{
+            p: 2,
+            bgcolor: "#f5f7fa",
+            borderBottom: "1px solid #e0e0e0",
+            alignItems: "center",
+          }}
+        >
+          <IconButton onClick={gotoLink} sx={{ color: "#1976d2" }}>
+            {/* <ArrowBackIcon /> */}
+          </IconButton>
+
+          <Stack direction="row" alignItems="center" spacing={2}>
+            <Box
+              component="img"
+              src={image}
+              alt="Customer Avatar"
+              sx={{
+                width: 100,
+                height: 100,
+                borderRadius: "50%",
+                border: "2px solid #e0e0e0",
+                objectFit: "cover",
               }}
-              size={4}
-            >
-              <img
-                src={image}
-                style={{
-                  width: "100px",
-                  height: "100px",
-                  borderRadius: "50%",
-                }}
-              ></img>
-              <span
-                style={{
-                  marginLeft: "16px",
-                  display: "flex",
-                  alignItems: "center",
-                  fontSize: "1.2rem",
-                }}
-              >
-                {dataKhachHangById?.tenKhachHang}
-              </span>
-            </Grid2>
-            <Grid2
-              style={{
-                marginLeft: "auto",
-                gap: "8px",
-                marginTop: 20,
-              }}
-              size={8}
-            >
-              <Button
-                variant="contained"
-                style={{ margin: 5 }}
-                endIcon={<LocalPhoneIcon />}
-              >
-                Gọi Điện thoại
-              </Button>
-              <Button
-                variant="contained"
-                style={{ margin: 5 }}
-                endIcon={<MarkunreadIcon />}
-                onClick={handleOpenModalGuiMail}
-              >
-                Gửi mail
-              </Button>
-              <Button
-                variant="contained"
-                style={{ margin: 5 }}
-                endIcon={<TextsmsIcon />}
-              >
-                Gửi SMS
-              </Button>
-              <Button
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-                sx={{ marginLeft: 1, width: "200px" }}
-                variant="outlined"
-                startIcon={<OpenInNewIcon />}
-                endIcon={<KeyboardArrowDownIcon />}
-              >
-                Mở rộng
-              </Button>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleCloseDrop}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                <MenuItem onClick={handleCloseDrop}>
-                  {dataKhachHangById?.isChuyenDoi == true && (
-                    <Button
-                      variant="contained"
-                      style={{ margin: 2, width: 200 }}
-                      onClick={handleOpenModalConvert}
-                    >
-                      Chuyển đổi khách hàng
-                    </Button>
-                  )}
-                </MenuItem>
-                <MenuItem>
-                  <Button
-                    variant="contained"
-                    style={{ margin: 2, width: 200 }}
-                    onClick={handleOpenModalEdit}
-                  >
-                    Chỉnh sửa khách hàng
-                  </Button>
-                </MenuItem>
-              </Menu>
-            </Grid2>
+            />
+            <Typography variant="h5" fontWeight={600}>
+              {dataKhachHangById.tenKhachHang}
+            </Typography>
           </Stack>
-          <Grid2
-            container
-            rowSpacing={2}
-            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-            padding={2}
-          >
-            <Grid2 size={6}>Email : {dataKhachHangById?.emailCaNhan}</Grid2>
-            <Grid2 size={6}>
-              Số điện thoại : {dataKhachHangById?.soDienThoaiDiDong}
-            </Grid2>
-            <Grid2 size={12}>
-              <Box sx={{ width: "100%", typography: "body1" }}>
-                <TabContext value={value}>
-                  <Box
-                    sx={{
-                      border: 0,
-                      borderColor: "Highlight",
-                      fontFamily: "inherit",
-                      boxShadow: 3,
-                    }}
-                  >
-                    <TabList onChange={handleChange} aria-label="lab">
-                      <Tab label="Thông tin chi tiết" value="1" />
-                      <Tab label="Người đại diện" value="2" />
-                      <Tab label="Hàng hóa quan tâm" value="3" />
-                      <Tab label="Email" value="4" />
-                      <Tab label="Công việc đang thực hiện" value="5" />
-                      <Tab label="SMS" value="6" />
-                    </TabList>
-                  </Box>
-                  <TabPanel value="1">
-                    <ThongTInChiTietTab />
-                  </TabPanel>
-                  <TabPanel value="2">
-                    <NguoiDaiDienTab />
-                  </TabPanel>
-                  <TabPanel value="3">
-                    <HangHoaQuanTamTab />
-                  </TabPanel>
-                  <TabPanel value="4">
-                    <EmailTab />
-                  </TabPanel>
-                  <TabPanel value="5">
-                    <CongViecThucHienTab />
-                  </TabPanel>
-                  <TabPanel value="6">
-                    <SMStab />
-                  </TabPanel>
-                </TabContext>
-              </Box>
-            </Grid2>
-            <ModalConvertKhachHangTiemNang
-              selectedItem={dataKhachHangById}
-              showModal={modalConvert}
-              closeModal={handleCloseModalConvert}
-            />
-            <ModalEditKhachHangTiemNang
-              selectedItem={dataKhachHangById}
-              showModal={modalEdit}
-              closeModal={handleCloseModalEdit}
-            />
+
+          <Stack direction="row" spacing={1.5} sx={{ ml: "auto" }}>
+            <Button
+              variant="contained"
+              // endIcon={<LocalPhoneIcon />}
+              sx={{
+                borderRadius: 2,
+                textTransform: "none",
+                px: 2.5,
+                bgcolor: "#1976d2",
+                "&:hover": { bgcolor: "#1565c0" },
+              }}
+            >
+              Gọi điện thoại
+            </Button>
+            <Button
+              variant="contained"
+              // endIcon={<MarkunreadIcon />}
+              onClick={handleOpenModalGuiMail}
+              sx={{
+                borderRadius: 2,
+                textTransform: "none",
+                px: 2.5,
+                bgcolor: "#43a047",
+                "&:hover": { bgcolor: "#388e3c" },
+              }}
+            >
+              Gửi mail
+            </Button>
+            <Button
+              variant="contained"
+              // endIcon={<TextsmsIcon />}
+              sx={{
+                borderRadius: 2,
+                textTransform: "none",
+                px: 2.5,
+                bgcolor: "#fb8c00",
+                "&:hover": { bgcolor: "#e07b00" },
+              }}
+            >
+              Gửi SMS
+            </Button>
+            <Button
+              id="expand-button"
+              variant="outlined"
+              // startIcon={<OpenInNewIcon />}
+              // endIcon={<KeyboardArrowDownIcon />}
+              onClick={handleClick}
+              sx={{
+                borderRadius: 2,
+                textTransform: "none",
+                px: 2.5,
+                borderColor: "#e0e0e0",
+                color: "#424242",
+              }}
+            >
+              Mở rộng
+            </Button>
+          </Stack>
+        </Stack>
+
+        {/* Dropdown Menu */}
+        <Menu
+          id="expand-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleCloseDrop}
+          PaperProps={{
+            elevation: 3,
+            sx: { mt: 1, borderRadius: 2, minWidth: 220 },
+          }}
+        >
+          {dataKhachHangById.isChuyenDoi && (
+            <MenuItem onClick={handleCloseDrop}>
+              <Button
+                variant="contained"
+                fullWidth
+                onClick={handleOpenModalConvert}
+                sx={{
+                  textTransform: "none",
+                  bgcolor: "#0288d1",
+                  "&:hover": { bgcolor: "#0277bd" },
+                }}
+              >
+                Chuyển đổi khách hàng
+              </Button>
+            </MenuItem>
+          )}
+          <MenuItem onClick={handleCloseDrop}>
+            <Button
+              variant="contained"
+              fullWidth
+              onClick={handleOpenModalEdit}
+              sx={{
+                textTransform: "none",
+                bgcolor: "#0288d1",
+                "&:hover": { bgcolor: "#0277bd" },
+              }}
+            >
+              Chỉnh sửa khách hàng
+            </Button>
+          </MenuItem>
+        </Menu>
+
+        {/* Main Content */}
+        <Grid2 container spacing={3} sx={{ p: 3 }}>
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <Typography variant="body1" color="text.secondary">
+              Email: <strong>{dataKhachHangById.emailCaNhan}</strong>
+            </Typography>
           </Grid2>
-        </Paper>
-      </Grid2>
-      {/* Modal Gửi mail  */}
+          <Grid2 size={{ xs: 12, md: 6 }}>
+            <Typography variant="body1" color="text.secondary">
+              Số điện thoại:{" "}
+              <strong>{dataKhachHangById.soDienThoaiDiDong}</strong>
+            </Typography>
+          </Grid2>
+
+          <Grid2 size={12}>
+            <Box sx={{ width: "100%" }}>
+              <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
+                variant="scrollable"
+                scrollButtons="auto"
+                sx={{
+                  bgcolor: "#fafafa",
+                  borderRadius: 2,
+                  boxShadow: 2,
+                  mb: 2,
+                  "& .MuiTab-root": {
+                    textTransform: "none",
+                    fontSize: "1rem",
+                    px: 3,
+                  },
+                  "& .Mui-selected": { color: "#1976d2", fontWeight: 600 },
+                }}
+                TabIndicatorProps={{ sx: { bgcolor: "#1976d2" } }}
+              >
+                <Tab label="Thông tin chi tiết" value="1" />
+                <Tab label="Người đại diện" value="2" />
+                <Tab label="Hàng hóa quan tâm" value="3" />
+                <Tab label="Email" value="4" />
+                <Tab label="Công việc đang thực hiện" value="5" />
+                <Tab label="SMS" value="6" />
+              </Tabs>
+
+              {tabValue === "1" && <ThongTInChiTietTab />}
+              {tabValue === "2" && <NguoiDaiDienTab />}
+              {tabValue === "3" && <HangHoaQuanTamTab />}
+              {tabValue === "4" && <EmailTab />}
+              {tabValue === "5" && <CongViecThucHienTab />}
+              {tabValue === "6" && <SMStab />}
+            </Box>
+          </Grid2>
+        </Grid2>
+      </Paper>
+
+      {/* Modals */}
+      <ModalConvertKhachHangTiemNang
+        selectedItem={dataKhachHangById}
+        showModal={modalConvert}
+        closeModal={handleCloseModalConvert}
+      />
+      <ModalEditKhachHangTiemNang
+        selectedItem={dataKhachHangById}
+        showModal={modalEdit}
+        closeModal={handleCloseModalEdit}
+      />
       <ModalGuiMail
         showModal={modalGuiMail}
         closeModal={handleCloseModalGuiMail}
       />
-    </>
+    </Grid2>
   );
 };
 

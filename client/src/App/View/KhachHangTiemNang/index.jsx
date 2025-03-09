@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { ActionComponents } from "./components/Action";
 import {
+  Box,
   Button,
+  Divider,
   Grid,
   Grid2,
   IconButton,
   Menu,
   MenuItem,
   Paper,
+  Stack,
   Typography,
 } from "@mui/material";
 import GetAppIcon from "@mui/icons-material/GetApp";
@@ -297,144 +300,191 @@ const KhachHangTiemNang = () => {
   };
 
   return (
-    <div className="customer-page">
-      <div>
-        <Grid2 xs={12}>
-          <Typography
-            variant="h5"
-            sx={{ padding: 0, margin: 0, fontWeight: 600 }}
-          >
-            Tất Cả Tiềm Năng
-          </Typography>
-        </Grid2>
-
-        <Grid2 xs={12} sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-          {/* Thêm mới */}
+    <Box className="modern-crm-page" sx={{ p: 3, bgcolor: '#f5f7fa' }}>
+      {/* Header Section */}
+      <Stack 
+        direction="row" 
+        justifyContent="space-between" 
+        alignItems="center"
+        mb={3}
+      >
+        <Typography
+          variant="h4"
+          sx={{ 
+            fontWeight: 700, 
+            color: '#1a237e',
+            letterSpacing: '-0.5px'
+          }}
+        >
+          Tất Cả Tiềm Năng
+        </Typography>
+        
+        <Stack direction="row" spacing={1.5}>
           <Button
             variant="contained"
+            color="primary"
             startIcon={<AddIcon />}
+            sx={{ 
+              borderRadius: 2,
+              textTransform: 'none',
+              px: 2.5,
+              py: 1,
+              bgcolor: '#1976d2',
+              '&:hover': { bgcolor: '#1565c0' }
+            }}
             onClick={gotoLink}
           >
             Thêm mới
           </Button>
 
-          {/* Tùy chỉnh (Dropdown) */}
-          <Button
-            id="basic-button"
-            aria-controls={open ? "basic-menu" : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? "true" : undefined}
-            onClick={handleClick}
-            variant="outlined"
-            startIcon={<OpenInNewIcon />}
-            endIcon={<KeyboardArrowDownIcon />}
-          >
-            Tùy chỉnh
-          </Button>
-
-          {/* Nhập dữ liệu */}
           <Button
             variant="outlined"
             color="primary"
             startIcon={<GetAppIcon />}
+            sx={{
+              borderRadius: 2,
+              textTransform: 'none',
+              px: 2.5,
+              py: 1,
+              borderColor: '#e0e0e0',
+              color: '#424242'
+            }}
             onClick={gotoLinkImport}
           >
-            Nhập Dữ Liệu
+            Nhập dữ liệu
           </Button>
 
-          {/* Menu dropdown */}
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleCloseDrop}
-            MenuListProps={{ "aria-labelledby": "basic-button" }}
-          >
-            <MenuItem onClick={handleCloseDrop}>
-              <Button
-                variant="outlined"
-                color="primary"
-                startIcon={<ImportExportIcon />}
-                onClick={handleGetTemplates}
-                fullWidth
-              >
-                Xuất Mẫu
-              </Button>
-            </MenuItem>
-            <MenuItem onClick={handleCloseDrop}>
-              <Button
-                variant="outlined"
-                color="primary"
-                startIcon={<AutoDeleteIcon />}
-                onClick={handleOpenModalXem}
-                fullWidth
-              >
-                Đã xóa
-              </Button>
-            </MenuItem>
-            <MenuItem onClick={handleCloseDrop}>
-              <Button
-                variant="outlined"
-                color="error"
-                startIcon={<DeleteOutlineIcon />}
-                disabled={selectedRow.length === 0}
-                onClick={handleDeleteMuliple}
-                fullWidth
-              >
-                Xóa hàng loạt
-              </Button>
-            </MenuItem>
-          </Menu>
-
-          {/* Lịch sử tương tác */}
           <Button
-            onClick={handleOpen}
             variant="outlined"
-            color="inherit"
+            startIcon={<OpenInNewIcon />}
+            endIcon={<KeyboardArrowDownIcon />}
+            sx={{
+              borderRadius: 2,
+              textTransform: 'none',
+              px: 2.5,
+              py: 1,
+              borderColor: '#e0e0e0',
+              color: '#424242'
+            }}
+            onClick={handleClick}
+          >
+            Tùy chỉnh
+          </Button>
+        </Stack>
+      </Stack>
+
+      {/* Dropdown Menu */}
+      <Menu
+        id="crm-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleCloseDrop}
+        PaperProps={{
+          elevation: 3,
+          sx: {
+            mt: 1,
+            borderRadius: 2,
+            minWidth: 200,
+            '& .MuiMenuItem-root': { py: 1 }
+          }
+        }}
+      >
+        <MenuItem onClick={handleGetTemplates}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <ImportExportIcon color="primary" />
+            <Typography>Xuất mẫu</Typography>
+          </Stack>
+        </MenuItem>
+        
+        <MenuItem onClick={handleOpenModalXem}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <AutoDeleteIcon color="primary" />
+            <Typography>Đã xóa</Typography>
+          </Stack>
+        </MenuItem>
+        
+        <Divider sx={{ my: 0.5 }} />
+        
+        <MenuItem 
+          onClick={handleDeleteMuliple}
+          disabled={selectedRow.length === 0}
+        >
+          <Stack direction="row" spacing={1} alignItems="center">
+            <DeleteOutlineIcon color={selectedRow.length ? "error" : "disabled"} />
+            <Typography color={selectedRow.length ? "error" : "text.disabled"}>
+              Xóa hàng loạt
+            </Typography>
+          </Stack>
+        </MenuItem>
+      </Menu>
+
+      {/* Main Content */}
+      <Paper 
+        elevation={2}
+        sx={{ 
+          borderRadius: 3, 
+          overflow: 'hidden',
+          bgcolor: 'white'
+        }}
+      >
+        <Box sx={{ p: 2, borderBottom: '1px solid #e0e0e0' }}>
+          <Button
+            variant="text"
             startIcon={<UpdateIcon />}
+            sx={{
+              textTransform: 'none',
+              color: '#616161',
+              '&:hover': { bgcolor: '#f5f5f5' }
+            }}
+            onClick={handleOpen}
           >
             Lịch sử tương tác
           </Button>
-        </Grid2>
+        </Box>
 
-        <Paper sx={{ marginTop: 1 }}>
-          <Grid2 size={12}>
-            <CustomDatagrid
-              rows={rows}
-              columns={columns}
-              height={500}
-              pageSizeOptions={[10, 25, 50]}
-              initialPageSize={25}
-              checkboxSelection={true}
-              showTopToolbar={true}
-              onRowSelectionChange={handleRowSelectionChange}
-            />
-          </Grid2>
-        </Paper>
+        <Box sx={{ p: 2 }}>
+          <CustomDatagrid
+            rows={rows}
+            columns={columns}
+            height={500}
+            pageSizeOptions={[10, 25, 50]}
+            initialPageSize={25}
+            checkboxSelection={true}
+            showTopToolbar={true}
+            onRowSelectionChange={handleRowSelectionChange}
+            sx={{
+              '& .MuiDataGrid-root': {
+                border: 'none',
+                '& .MuiDataGrid-cell': {
+                  borderBottom: '1px solid #f0f0f0'
+                }
+              }
+            }}
+          />
+        </Box>
+      </Paper>
 
-        {/* Bảng dữ liệu khách hàng */}
-        <UpdateKhachHangTiemNang
-          selectedItem={selectedRow}
-          closeModal={onCloseModalUpdateKhachHang}
-          typeModal={typeModal}
-          setTypeModal={setTypeModal}
-          showModal={openModalUpdate}
-          setLoading={setLoading}
-          refetch={refetchkh}
-        />
-        {/* Bàn giao khách hàng */}
-        <ModalBanGiaoKhachHang
-          selectedItem={selectedRow}
-          closeModal={handleCloseModalBanGiaoKhachHang}
-          typeModal={typeModal}
-          setTypeModal={setTypeModal}
-          showModal={openModalBanGiao}
-          setLoading={setLoading}
-          refetch={refetchkh}
-        />
-      </div>
-
-      {/* Phần lịch sử giao dịch */}
+      {/* Modals and Action Components */}
+      <UpdateKhachHangTiemNang
+        selectedItem={selectedRow}
+        closeModal={onCloseModalUpdateKhachHang}
+        typeModal={typeModal}
+        setTypeModal={setTypeModal}
+        showModal={openModalUpdate}
+        setLoading={setLoading}
+        refetch={refetchkh}
+      />
+      
+      <ModalBanGiaoKhachHang
+        selectedItem={selectedRow}
+        closeModal={handleCloseModalBanGiaoKhachHang}
+        typeModal={typeModal}
+        setTypeModal={setTypeModal}
+        showModal={openModalBanGiao}
+        setLoading={setLoading}
+        refetch={refetchkh}
+      />
+      
       {isActionOpen && (
         <ActionComponents
           selectedItem={selectedRow}
@@ -442,13 +492,13 @@ const KhachHangTiemNang = () => {
           isOpen={isActionOpen}
         />
       )}
-      {/* xem khách hàng đã xóa */}
+      
       <ModalXemKhachHangDaXoa
         handleClose={handleCloseModalXem}
         open={KhachHangDaXoaModal}
         refetch={refetchkh}
       />
-    </div>
+    </Box>
   );
 };
 

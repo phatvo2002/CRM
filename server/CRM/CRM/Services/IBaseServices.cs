@@ -8,6 +8,8 @@ namespace CRM.Services
         Task<TEntity> GetById(TId id);
         Task<TEntity> GetById(int id);
         Task<TEntity> GetById(string id);
+        Task<List<Tdto>> GetByNguoiDungId(Guid id);
+        Task<List<Tdto>> GetByPhongBanId(Guid id);
         Task<ResultModal> Create(TModal modal);
         Task<ResultModal> Update(TModal modal);
         Task<ResultModal> DeleteById(TId id);

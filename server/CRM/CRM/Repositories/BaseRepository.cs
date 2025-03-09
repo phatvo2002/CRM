@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CRM.Entities;
 using CRM.Modal;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,42 @@ namespace CRM.Repositories
                 return new ResultModal { Status = 500, Success = false, Message = ex.Message };
             }
 
+        }
+        public async Task<TEntity> GetById(TId id)
+        {
+            return await _crmDbContext.Set<TEntity>().FindAsync(id);
+        }
+        public async Task<TEntity> GetById(int id)
+        {
+            return await _crmDbContext.Set<TEntity>().FindAsync(id);
+        }
+        public async Task<TEntity> GetById(string id)
+        {
+            return await _crmDbContext.Set<TEntity>().FindAsync(id);
+        }
+        public async Task<List<TDto>> GetByNguoiDungId(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new ArgumentException("Dữ liệu không hợp lệ", nameof(id));
+            }
+
+            return await _crmDbContext.Set<TEntity>()
+                .Where(r => EF.Property<Guid>(r, "NguoiDungId") == id)
+                .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                .ToListAsync();
+        }
+
+        public async Task<List<TDto>> GetByPhongBanId(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                throw new ArgumentException("Dữ liệu không hợp lệ", nameof(id));
+            }
+            return await _crmDbContext.Set<TEntity>()
+               .Where(r => EF.Property<Guid>(r, "PhongBanId") == id)
+               .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+               .ToListAsync();
         }
         public async Task<ResultModal> DeleteById(TId id)
         {
@@ -168,18 +205,9 @@ namespace CRM.Repositories
             return _mapper.Map<List<TDto>>(db);
         }
 
-        public async Task<TEntity> GetById(TId id)
-        {
-            return await _crmDbContext.Set<TEntity>().FindAsync(id);
-        }
-        public async Task<TEntity> GetById(int id)
-        {
-            return await _crmDbContext.Set<TEntity>().FindAsync(id);
-        }
-        public async Task<TEntity> GetById(string id)
-        {
-            return await _crmDbContext.Set<TEntity>().FindAsync(id);
-        }
+
+
+
 
         public async Task<ResultModal> Update(TModal modal)
         {

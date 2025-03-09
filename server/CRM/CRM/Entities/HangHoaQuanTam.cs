@@ -9,7 +9,7 @@
         public string? KhachHangId { get; set; }
         public string? CoHoiId { get; set; }
         public Guid? BaoGiaId { get; set; }
-        public string? HoaDonId { get; set; }
+        public Guid? HoaDonId { get; set; } // chỉnh sửa 
         public decimal? DonGia { get; set; }
         public int? SoLuong { get; set; }
         public int? ThueSuat { get; set; }

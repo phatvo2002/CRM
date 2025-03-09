@@ -1,11 +1,13 @@
 ﻿namespace CRM.Entities
 {
-    public class KPINhanVien : BaseNguoiDung
+    public class MucTieuDoanhSo : BaseNguoiDung
     {
         public Guid Id { get; set; }
-        public string? TenNhanVien { get; set; }
-        public DateTime NgayBatDau { get; set; }
-        public DateTime NgayKetThuc { get; set; }
+        public string? TenKPI { get; set; }
+        public string? MaQuanLy { get; set; }
+        public string? TenPhongBan { get; set; }
+        public DateTime? NgayBatDau { get; set; }
+        public DateTime? NgayKetThuc { get; set; }
         public int SoCuocGoi { get; set; }
         public int SoCuocGoiThucTe { get; set; }
         public decimal TileCuocGoiThucTe { get; set; }
@@ -26,8 +28,6 @@
         public decimal TiLeDoanhSoThucTe { get; set; }
         public bool IsDatMucTieu { get; set; }
         public int MaTrangThaiKPI { get; set; }
-        public string? GhiChu { get; set; }
         public virtual TinhTrangKPI? TinhTrangKPI { get; set; }
-
     }
 }
