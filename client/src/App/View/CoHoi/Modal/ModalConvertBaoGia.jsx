@@ -2,13 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useConvertBaoGiaMutation } from "src/App/Api/BaoGiaApi";
 import { useGetCoHoiListQuery } from "src/App/Api/CoHoiApi";
-import { useGetAllTinhTrangBaoGiaQuery } from "src/App/Api/GetDataApi";
 import { useGetAllHangHoaQuery } from "src/App/Api/HangHoa";
 import {
   useAddHangHoaQuanTamMutation,
   useDeleteHangHoaQuanTamMutation,
   useGetHangHoaQuanTamByCoHoiIdQuery,
-  useGetHangHoaQuanTamByKhachHangIdQuery,
   useUpdateHangHoaQuanTamMutation,
 } from "src/App/Api/HangHoaQuanTam";
 import { useGetKhachHangMucTieuByNguoiDungIdQuery } from "src/App/Api/KhachHangMucTieuApi";

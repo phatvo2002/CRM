@@ -15,7 +15,13 @@ import "../DataGrid/CustomDatagrid.css"
 import { Box, MenuItem, Select } from '@mui/material';
 
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
-    fontSize:"1rem"
+  fontSize: "1rem",
+  "& .MuiDataGrid-row:nth-of-type(odd)": {
+    backgroundColor: "transparent", 
+  },
+  "& .MuiDataGrid-row:nth-of-type(even)": {
+    backgroundColor: "transparent",
+  },
 }));
 // const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 //   fontSize: '1rem',
@@ -161,6 +167,7 @@ const CustomDatagrid = ({
               justifyContent: "flex-start", 
             },
           },
+          
         }}
         onRowSelectionModelChange={handleRowSelectionChange}
         slots={{
@@ -171,7 +178,10 @@ const CustomDatagrid = ({
           toolbar: {
             showQuickFilter: true,
           },
-          
+          loadingOverlay: {
+            variant: 'linear-progress',
+            noRowsVariant: 'linear-progress',
+          },
         }}
       />
     </div>

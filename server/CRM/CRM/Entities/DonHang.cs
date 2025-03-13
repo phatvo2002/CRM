@@ -14,7 +14,7 @@
         public DateTime? HanGiaoHang { get; set; }
         public DateTime? NgayGhiDoanhSo { get; set; }
         public int MaLoaiDonHang { get; set; }
-        public string? MaBaoGia { get; set; }
+        public Guid? MaBaoGia { get; set; }
         public string? MaKhachHang { get; set; }
         public string? MaLienHe { get; set; }
         public int? MaTinhTrangDonHang { get; set; }

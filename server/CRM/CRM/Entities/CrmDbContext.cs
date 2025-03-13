@@ -901,6 +901,7 @@ namespace CRM.Entities
                 entity.Property(e => e.IsGhiDoanhSo).HasColumnType("bit");
                 entity.Property(e => e.ThongTinHoaDon).HasMaxLength(150);
                 entity.Property(e => e.ThongTinGiaoHang).HasMaxLength(150);
+                entity.Property(e => e.MaBaoGia).HasColumnType("uniqueidentifier");
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
                 entity.Property(e => e.IsDeleted).HasColumnType("bit");
                 entity.HasOne(d => d.LoaiDonHang).WithMany(p => p.DonHangs)

@@ -106,6 +106,24 @@ namespace CRM.Repositories.GetDatas
             var db = await _context.TinhTrangBaoGias.AsNoTracking().ToListAsync();
             return _mapper.Map<List<ClassDTO>>(db);
         }
+
+        public async Task<List<ClassDTO>> GetAllTinhTrangDonHang()
+        {
+            var db = await _context.TinhTrangDonHangs.AsNoTracking().ToListAsync();
+            return _mapper.Map<List<ClassDTO>>(db);
+        }
+
+        public async Task<List<ClassDTO>> GetAllLoaiDoanhang()
+        {
+            var db = await _context.LoaiDonHangs.AsNoTracking().ToListAsync();
+            return _mapper.Map<List<ClassDTO>>(db);
+        }
+
+        public async Task<List<ClassDTO>> GetAllTinhTrangGhiDoanhSo()
+        {
+            var db = await _context.TinhTrangGhiDoanhSos.AsNoTracking().ToListAsync();
+            return _mapper.Map<List<ClassDTO>>(db);
+        }
     }
 
 }

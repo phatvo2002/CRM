@@ -30,12 +30,14 @@ import { useDownloadFileMutation } from "src/App/Api/FileApi";
 import ReplyIcon from '@mui/icons-material/Reply';
 import { ModalGuiMailBaoGia } from "../../Component/ModalGuiMailBaoGia";
 import ModalXuatLinkBaoGia from "../../Component/ModalXuatLinkBaoGia";
+import { ModalSinhDonHang } from "../../Component/ModalSinhDonHang";
 const index = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
   const [downloadBaoGia] = useDownloadFileMutation();
   const [modalMail , setModalMail] = useState(false);
   const [modalXuatLink , setModalXuatLink] = useState(false);
+  const [modalConvertDonhang, setModalConvertDonHang] = useState(false);
   const navigate = useNavigate();
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -59,6 +61,10 @@ const index = () => {
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
   };
+
+  const handleOpenModalConvert = () => setModalConvertDonHang(true)
+
+  const handleCloseModalConvertDonhang = () => setModalConvertDonHang(false)
 
 
   return (
@@ -116,6 +122,7 @@ const index = () => {
                 variant="contained"
                 color="info"
                 startIcon={<ShoppingCartIcon />}
+                onClick={()=> handleOpenModalConvert()}
                 sx={{ marginLeft: 2 }}
               >
                 Sinh đơn hàng
@@ -182,6 +189,12 @@ const index = () => {
       <ModalXuatLinkBaoGia
          showModal={modalXuatLink}
          closeModal={handleCloselModalXuatLinkBaoGia}
+      />
+      {/* Modal sinh đơn hàng */}
+      <ModalSinhDonHang
+        baoGiaData={dataBaoGia}
+        showModal={modalConvertDonhang}
+        closeModal={handleCloseModalConvertDonhang}
       />
     </Box>
   );

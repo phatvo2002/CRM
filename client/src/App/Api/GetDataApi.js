@@ -61,6 +61,15 @@ export const apiGetData = createApi({
       getAllTinhTrangBaoGia: builder.query({
         query: () => `/GetData/getalltinhtrangbaogia`,
       }),
+      getAllTinhTrangDonHang: builder.query({
+        query: () => `/GetData/getalltinhtrangDonHang`,
+      }),
+      getAllLoaiDonHang: builder.query({
+        query: () => `/GetData/getallloaidonhang`,
+      }),
+      getAllTinhTrangGhiDoanhSo: builder.query({
+        query: () => `/GetData/getalltinhtrangghdoanhso`,
+      }),
     }),
   });
   export const { 
@@ -79,6 +88,9 @@ export const apiGetData = createApi({
     useGetAllPhanLoaiDuBaoQuery,
     useGetAllLoaiCoHoiQuery,
     useGetAllTinhTrangBaoGiaQuery,
+    useGetAllTinhTrangDonHangQuery,
+    useGetAllLoaiDonHangQuery,
+    useGetAllTinhTrangGhiDoanhSoQuery
   } = apiGetData;
 
 

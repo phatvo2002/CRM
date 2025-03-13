@@ -225,5 +225,47 @@ namespace CRM.Controllers.GetDatas
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getalltinhtrangDonHang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetAllTinhTrangDonHang()
+        {
+            try
+            {
+                List<ClassDTO> result = await _getDataServices.GetAllTinhTrangDonHang();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getallloaidonhang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetAllLoaiDonHang()
+        {
+            try
+            {
+                List<ClassDTO> result = await _getDataServices.GetAllLoaiDoanhang();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getalltinhtrangghdoanhso")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetAllTinhTrangGhiDoanhSo()
+        {
+            try
+            {
+                List<ClassDTO> result = await _getDataServices.GetAllTinhTrangGhiDoanhSo();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

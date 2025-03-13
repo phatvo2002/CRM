@@ -33,6 +33,13 @@ namespace CRM.Repositories.DonHangs
 
                     foreach (var item in modal.HangHoaQuanTam)
                     {
+                        var dbHangHoa = _crmDbContext.HangHoaQuanTams.Where(r => r.Id == item.Id).FirstOrDefault();
+                        if (dbHangHoa != null)
+                        {
+                            dbHangHoa.KhachHangId = donHang.MaKhachHang;
+                            dbHangHoa.HoaDonId = donHang.Id;
+                            _crmDbContext.HangHoaQuanTams.Update(dbHangHoa);
+                        }
                         HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
                         hangHoaQuanTam.Id = Guid.NewGuid();
                         hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
@@ -46,6 +53,7 @@ namespace CRM.Repositories.DonHangs
                         hangHoaQuanTam.ThueSuat = item.ThueSuat;
                         hangHoaQuanTam.TienThue = item.TienThue;
                         hangHoaQuanTam.DonGia = item.DonGia;
+                        hangHoaQuanTam.BaoGiaId = donHang.MaBaoGia;
                         hangHoaQuanTam.ChiecKhauDonHang = item.ChiecKhauDonHang;
                         hangHoaQuanTam.HoaDonId = donHang.Id;
                         _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
