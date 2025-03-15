@@ -24,6 +24,7 @@ const modelObj = {
     DonGia: "DonGia",
     MaLoaiHangHoa: "MaLoaiHangHoa",
     MaDonViTinh: "MaDonViTinh",
+    SoLuongTon:"SoLuongTon",
     File: "File",
   },
   labelObj = {
@@ -33,6 +34,7 @@ const modelObj = {
     NguonGoc: "Nguồn gốc",
     DonGia: "Đơn giá",
     MaLoaiHangHoa: "Loại hàng hóa",
+    SoLuongTon:"Số lượng tồn",
     MaDonViTinh: "Đơn vị tính",
   },
   initialFormState = {
@@ -41,6 +43,7 @@ const modelObj = {
     [modelObj.MoTa]: "",
     [modelObj.NguonGoc]: "",
     [modelObj.DonGia]: 0,
+    [modelObj.SoLuongTon]: 0,
     [modelObj.MaLoaiHangHoa]: 0,
     [modelObj.MaDonViTinh]: 0,
   },
@@ -92,6 +95,7 @@ const ModalAddhangHoa = (props) => {
         [modelObj.MaHangHoa]: data[modelObj.MaHangHoa],
         [modelObj.TenHangHoa]: data[modelObj.TenHangHoa],
         [modelObj.MoTa]: data[modelObj.MoTa],
+        [modelObj.SoLuongTon] : data[modelObj.SoLuongTon],
         [modelObj.NguonGoc]: data[modelObj.NguonGoc],
         [modelObj.DonGia] :data[modelObj.DonGia],
         [modelObj.MaLoaiHangHoa] : data [modelObj.MaLoaiHangHoa],
@@ -210,10 +214,18 @@ const ModalAddhangHoa = (props) => {
             required
           />
         </Grid2>
-        <Grid2 size={12}>
+        <Grid2 size={6}>
           <TextFieldRHF
             name={modelObj.DonGia}
             label={labelObj.DonGia}
+            disabled={isLoading}
+            required
+          />
+        </Grid2>
+        <Grid2 size={6}>
+          <TextFieldRHF
+            name={modelObj.SoLuongTon}
+            label={labelObj.SoLuongTon}
             disabled={isLoading}
             required
           />

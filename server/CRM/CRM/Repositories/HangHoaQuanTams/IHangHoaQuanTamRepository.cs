@@ -10,6 +10,7 @@ namespace CRM.Repositories.HangHoaQuanTams
         Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangId(string id);
         Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByCoHoiId(string id);
         Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByBaoGiaId(Guid id);
+        Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByDonHangid(Guid id);
         Task<ResultModal> UpdateHangHoaQuanTam(List<HangHoaQuanTamModal> hanghoaquantam);
     }
 }

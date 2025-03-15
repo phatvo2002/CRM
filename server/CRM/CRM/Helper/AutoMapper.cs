@@ -69,7 +69,7 @@ namespace CRM.Helper
             CreateMap<LoaiDonHang, ClassDTO>();
             CreateMap<TinhTrangGhiDoanhSo, ClassDTO>();
             CreateMap<DonHang, DonHangDTO>();
-            CreateMap<DonHangModal, DonHangModal>().ReverseMap();
+            CreateMap<DonHangModal, DonHang>().ReverseMap();
 
         }
     }

@@ -7,5 +7,6 @@ namespace CRM.Services.DonHangs
     public interface IDonHangServices : IBaseServices<DonHang, DonHangModal, Guid, DonHangDTO>
     {
         Task<ResultModal> ConvertDonHang(DonHangModal modal, Guid nguoiDungId, Guid phongBanId);
+        Task<DonHangDTO> GetDonHangId(Guid id);
     }
 }

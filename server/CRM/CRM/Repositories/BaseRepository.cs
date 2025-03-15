@@ -237,5 +237,20 @@ namespace CRM.Repositories
             return new ResultModal { Success = true, Message = "Chỉnh sửa dữ liệu thành công", Status = 200 };
         }
 
+        public async Task<TDto> GetByIdDTO(TId id)
+        {
+            if (typeof(TId) == typeof(Guid))
+            {
+                var guidId = (Guid)(object)id;
+
+                var db = await _crmDbContext.Set<TEntity>()
+                    .Where(r => EF.Property<Guid>(r, "id") == guidId)
+                    .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync();
+
+                return db;
+            }
+            return null;
+        }
     }
 }

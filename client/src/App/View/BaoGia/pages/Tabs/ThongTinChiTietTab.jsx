@@ -71,7 +71,7 @@ const ThongTinChiTietTab = ({ baoGiaData }) => {
     },
     {
       field: "chiecKhauDonHang",
-      headerName: "Chiếc khấu đơn hàng",
+      headerName: "Chiết Khấu đơn hàng",
       width: 200,
       editable: true,
       renderCell: (params) => {

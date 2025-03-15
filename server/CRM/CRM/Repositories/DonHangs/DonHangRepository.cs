@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repositories.DonHangs
 {
@@ -18,10 +19,21 @@ namespace CRM.Repositories.DonHangs
             try
             {
                 var db = _crmDbContext.DonHangs.Where(r => r.Id == modal.Id).FirstOrDefault();
-                if (db != null)
+                if (db == null)
                 {
                     DonHang donHang = new DonHang();
-                    _mapper.Map<DonHang>(modal);
+                    donHang.TenDonHang = modal.TenDonHang;
+                    donHang.MaQuanLy = Helper.Helper.GetUniqueKey(8);
+                    donHang.MoTaDonHang = modal.MoTaDonHang;
+                    donHang.NgayDatHang = modal.NgayDatHang;
+                    donHang.HanGiaoHang = modal.HanGiaoHang;
+                    donHang.HanThanhToan = modal.HanThanhToan;
+                    donHang.MaBaoGia = modal.MaBaoGia;
+                    donHang.MaTinhTrangDonHang = modal.MaTinhTrangDonHang;
+                    donHang.MaKhachHang = modal.MaKhachHang;
+                    donHang.MaLoaiDonHang = modal.MaLoaiDonHang;
+                    donHang.MaTinhTrangGhiDoanhSo = modal.MaTinhTrangGhiDoanhSo;
+                    donHang.MaLienHe = null;
                     donHang.Id = Guid.NewGuid();
                     donHang.SoTienConPhaiThu = modal.GiaTriDonHang;
                     donHang.ThucThuDonHang = 0;
@@ -40,23 +52,26 @@ namespace CRM.Repositories.DonHangs
                             dbHangHoa.HoaDonId = donHang.Id;
                             _crmDbContext.HangHoaQuanTams.Update(dbHangHoa);
                         }
-                        HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
-                        hangHoaQuanTam.Id = Guid.NewGuid();
-                        hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
-                        hangHoaQuanTam.TenHangHoa = item.TenHangHoa;
-                        hangHoaQuanTam.KhachHangId = donHang.MaKhachHang;
-                        hangHoaQuanTam.KhachHangTiemNangId = null;
-                        hangHoaQuanTam.CoHoiId = null;
-                        hangHoaQuanTam.SoLuong = item.SoLuong;
-                        hangHoaQuanTam.ThanhTien = item.ThanhTien;
-                        hangHoaQuanTam.TongTien = item.TongTien;
-                        hangHoaQuanTam.ThueSuat = item.ThueSuat;
-                        hangHoaQuanTam.TienThue = item.TienThue;
-                        hangHoaQuanTam.DonGia = item.DonGia;
-                        hangHoaQuanTam.BaoGiaId = donHang.MaBaoGia;
-                        hangHoaQuanTam.ChiecKhauDonHang = item.ChiecKhauDonHang;
-                        hangHoaQuanTam.HoaDonId = donHang.Id;
-                        _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
+                        else
+                        {
+                            HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
+                            hangHoaQuanTam.Id = Guid.NewGuid();
+                            hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
+                            hangHoaQuanTam.TenHangHoa = item.TenHangHoa;
+                            hangHoaQuanTam.KhachHangId = donHang.MaKhachHang;
+                            hangHoaQuanTam.KhachHangTiemNangId = null;
+                            hangHoaQuanTam.CoHoiId = null;
+                            hangHoaQuanTam.SoLuong = item.SoLuong;
+                            hangHoaQuanTam.ThanhTien = item.ThanhTien;
+                            hangHoaQuanTam.TongTien = item.TongTien;
+                            hangHoaQuanTam.ThueSuat = item.ThueSuat;
+                            hangHoaQuanTam.TienThue = item.TienThue;
+                            hangHoaQuanTam.DonGia = item.DonGia;
+                            hangHoaQuanTam.BaoGiaId = donHang.MaBaoGia;
+                            hangHoaQuanTam.ChiecKhauDonHang = item.ChiecKhauDonHang;
+                            hangHoaQuanTam.HoaDonId = donHang.Id;
+                            _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
+                        }
                     }
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Message = "Tạo đơn hàng thành công", Status = 200, Success = true };
@@ -67,6 +82,12 @@ namespace CRM.Repositories.DonHangs
             {
                 return new ResultModal() { Message = ex.Message, Status = 500, Success = true };
             }
+        }
+
+        public async Task<DonHangDTO> GetDonHangId(Guid id)
+        {
+            var db = _crmDbContext.DonHangs.Where(r => r.Id == id).Include(r => r.MaKhachHang).FirstOrDefaultAsync();
+            return _mapper.Map<DonHangDTO>(db);
         }
     }
 }

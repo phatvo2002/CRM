@@ -111,7 +111,6 @@ const modelObj = {
     [modelObj.thongTinGiaoHang]: validateString(),
   });
 export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
-  console.log(baoGiaData);
   const [khachHangId, setKhachHangId] = useState(null);
   const [isSave, setIsSave] = useState(false);
   const _isMounted = useRef(false),
@@ -122,7 +121,7 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
       skip: showModal == false,
     }),
     { data: rows, refetch } = useGetHangHoaQuanTamByBaoGiaIdQuery(
-      baoGiaData?.id
+      id
     ),
     { data: dataBaoGia, isLoading: isBaoGiaFetching } = useGetBaoGiaListQuery(
       undefined,
@@ -163,7 +162,8 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
       tenHangHoa: "",
       khachHangTiemNangId: null,
       khachHangId: null,
-      coHoiId: id,
+      baoGiaId : id,
+      coHoiId: null,
       soLuong: 0,
       thueSuat: 0,
       tienThue: 0,
@@ -315,7 +315,7 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
     },
     {
       field: "chiecKhauDonHang",
-      headerName: "Chiếc khấu đơn hàng",
+      headerName: "Chiết Khấu đơn hàng",
       width: 200,
       editable: true,
       renderCell: (params) => {
@@ -354,9 +354,7 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
     },
   ];
   const submitForm = (data) => {
-      if (!isSave) {
-        toast.warning("Bạn chưa lưu hàng hóa");
-      } else {
+     
         const tempData = {
           [modelObj.tenDonHang]: data[modelObj.tenDonHang],
           [modelObj.moTaDonHang]: data[modelObj.moTaDonHang],
@@ -377,10 +375,9 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
           [modelObj.maTinhTrangDonHang]: data[modelObj.maTinhTrangDonHang],
           [modelObj.maTinhTrangGhiDoanhSo]:
             data[modelObj.maTinhTrangGhiDoanhSo],
-          [modelObj.hangHoaQuanTam]: hangHoas,
+          [modelObj.hangHoaQuanTam]: hangHoa,
         };
         callApiConvert(tempData);
-      }
     },
     callApiConvert = async (paramData) => {
       try {
@@ -402,6 +399,10 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
           [modelObj.maBaoGia]: baoGiaData?.id,
           [modelObj.maKhachHang]: baoGiaData?.maKhachHang,
           [modelObj.thongTinGiaoHang]: baoGiaData?.diaChi,
+          [modelObj.maTinhTrangDonHang] :2,
+          [modelObj.maTinhTrangGhiDoanhSo]: 1,
+          [modelObj.maLoaiDonHang]: 1,
+          [modelObj.ngayDatHang] : new Date()
         },
         { keepDirty: true }
       );
@@ -569,7 +570,7 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
                         display: "flex",
                         justifyContent: "flex-end",
                         p: 2,
-                        bgcolor: "#f1f1f1",
+                        bgcolor: "background.default",
                       }}
                     >
                       <Typography variant="h6">
@@ -582,11 +583,11 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
                         display: "flex",
                         justifyContent: "flex-end",
                         p: 2,
-                        bgcolor: "#f1f1f1",
+                        bgcolor: "background.default",
                       }}
                     >
                       <Typography variant="h6">
-                        Tiền chiếc khấu:{totalChiecKhau.toLocaleString("vi-VN")}{" "}
+                        Tiền chiết khấu:{totalChiecKhau.toLocaleString("vi-VN")}{" "}
                         <span>&#x0111;</span>
                       </Typography>
                     </Box>
@@ -595,7 +596,7 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
                         display: "flex",
                         justifyContent: "flex-end",
                         p: 2,
-                        bgcolor: "#f1f1f1",
+                        bgcolor: "background.default",
                       }}
                     >
                       <Typography variant="h6">

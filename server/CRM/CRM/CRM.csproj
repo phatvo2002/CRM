@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="ClosedXML" Version="0.102.3" />
     <PackageReference Include="ClosedXML.Report" Version="0.2.10" />
     <PackageReference Include="ExcelDataReader" Version="3.7.0" />
     <PackageReference Include="MailKit" Version="4.7.0" />

@@ -6,6 +6,7 @@ using CRM.Repositories.BaoGias;
 using CRM.Repositories.ChucVus;
 using CRM.Repositories.CoHois;
 using CRM.Repositories.CuocGois;
+using CRM.Repositories.DonHangs;
 using CRM.Repositories.DonViTinhs;
 using CRM.Repositories.GetDatas;
 using CRM.Repositories.GiaiDoans;
@@ -28,6 +29,7 @@ using CRM.Services.BaoGias;
 using CRM.Services.ChucVus;
 using CRM.Services.CoHois;
 using CRM.Services.CuocGois;
+using CRM.Services.DonHangs;
 using CRM.Services.DonViTinhs;
 using CRM.Services.GetDatas;
 using CRM.Services.GIaiDoans;
@@ -159,6 +161,9 @@ builder.Services.AddScoped<ICoHoiServices, CoHoiServices>();
 
 builder.Services.AddScoped<IBaoGiaRepository, BaoGiaRepository>();
 builder.Services.AddScoped<IBaoGiaServices, BaoGiaServices>();
+
+builder.Services.AddScoped<IDonHangRepository, DonHangRepository>();
+builder.Services.AddScoped<IDonHangServices, DonHangServices>();
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 

@@ -49,7 +49,7 @@ namespace CRM.Controllers.HangHoas
         {
             try
             {
-                var result = await _hangHoaServices.CreateHangHoa(modal);
+                ResultModal result = await _hangHoaServices.CreateHangHoa(modal);
                 return Ok(result);
             }
             catch (Exception ex)

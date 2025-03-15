@@ -1,8 +1,9 @@
 ﻿namespace CRM.DTO
 {
-    public class DonHangDTO
+    public class ExportDonHangDTO
     {
         public Guid Id { get; set; }
+        public string? STT { get; set; }
         public string? TenDonHang { get; set; }
         public string? MoTaDonHang { get; set; }
         public DateTime? NgayDatHang { get; set; }

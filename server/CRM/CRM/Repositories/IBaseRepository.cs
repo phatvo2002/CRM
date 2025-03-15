@@ -6,6 +6,7 @@ namespace CRM.Repositories
     {
         Task<List<Tdto>> GetAll();
         Task<TEntity> GetById(TId id);
+        Task<Tdto> GetByIdDTO(TId id);
         Task<TEntity> GetById(int id);
         Task<TEntity> GetById(string id);
         Task<List<Tdto>> GetByNguoiDungId(Guid id);

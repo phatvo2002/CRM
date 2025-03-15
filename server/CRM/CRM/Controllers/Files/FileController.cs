@@ -3,6 +3,7 @@ using CRM.DTO;
 using CRM.Helper;
 using CRM.Modal;
 using CRM.Services.BaoGias;
+using CRM.Services.DonHangs;
 using CRM.Services.HangHoaQuanTams;
 using Microsoft.AspNetCore.Mvc;
 using OpenXmlPowerTools;
@@ -13,13 +14,17 @@ namespace CRM.Controllers.Files
     public class FileController : ControllerBase
     {
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public readonly IBaoGiaServices _baoGiaServices;
-        public readonly IHangHoaQuanTamServices _hangHoaQuanTamServices;
-        public FileController(IWebHostEnvironment webHostEnvironment, IBaoGiaServices baoGiaServices, IHangHoaQuanTamServices hangHoaQuanTamServices)
+        private readonly IBaoGiaServices _baoGiaServices;
+        private readonly IHangHoaQuanTamServices _hangHoaQuanTamServices;
+        private readonly IDonHangServices _donHangServices;
+        private readonly IHangHoaQuanTamServices _hoaQuanTamServices;
+        public FileController(IWebHostEnvironment webHostEnvironment, IBaoGiaServices baoGiaServices, IHangHoaQuanTamServices hangHoaQuanTamServices, IDonHangServices donHangServices, IHangHoaQuanTamServices hoaQuanTamServices)
         {
             _webHostEnvironment = webHostEnvironment;
             _baoGiaServices = baoGiaServices;
             _hangHoaQuanTamServices = hangHoaQuanTamServices;
+            _donHangServices = donHangServices;
+            _hoaQuanTamServices = hoaQuanTamServices;
         }
         [HttpGet("file")]
         [JwtAuthorize]
@@ -123,6 +128,42 @@ namespace CRM.Controllers.Files
                 return BadRequest(ex.Message);
             }
         }
+        //[HttpGet("exportdonhang")]
+        ////[JwtAuthorize]
+        //public async Task<IActionResult> ExportDonhang(Guid donHangId, int type)
+        //{
+        //    try
+        //    {
+        //        ExportDonHangModal modal = new ExportDonHangModal();
+        //        DonHangDTO result = await _donHangServices.GetDonHangId(donHangId);
+        //        List<HangHoaQuanTamDTO> hangHoa = await _hangHoaQuanTamServices.GetHangHoaQuanTamByDonHangid(donHangId);
+        //        modal.DonHangDTO = result;
+        //        var pathTemplate = $"{_webHostEnvironment.WebRootPath}\\Templates\\dondathang.docx";
+        //        if (type == 0)
+        //        {
+        //            FileInfo templateDoc = new(pathTemplate);
+        //            var obj = Until.ObjectToXml<ExportDonHangModal>(modal);
+        //            WmlDocument wmlDoc = new(templateDoc.FullName);
+        //            bool templateError;
+        //            WmlDocument wmlAssembledDoc = DocumentAssembler.AssembleDocument(wmlDoc, obj, out templateError);
+        //            string fileName = $"dondathang.docx";
+        //            byte[] data = wmlAssembledDoc.DocumentByteArray;
+        //            return File(data, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
+        //        }
+        //        else
+        //        {
+        //            var report = new XLTemplate(pathTemplate);
+        //            report.AddVariable("info", result);
+        //            report.AddVariable("data", hangHoa);
+        //        }
+
+        //    }
+        //    catch (Exception ex)
+        //    {
+
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
     }
 
 }

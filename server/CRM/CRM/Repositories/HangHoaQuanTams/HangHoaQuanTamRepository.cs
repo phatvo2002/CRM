@@ -85,5 +85,11 @@ namespace CRM.Repositories.HangHoaQuanTams
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
         }
+
+        public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByDonHangid(Guid id)
+        {
+            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.HoaDonId == id).ToListAsync();
+            return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
+        }
     }
 }

@@ -26,6 +26,7 @@ namespace CRM.Repositories.HangHoas
                     hangHoa.MaLoaiHangHoa = modal.MaLoaiHangHoa;
                     hangHoa.MaDonViTinh = modal.MaDonViTinh;
                     hangHoa.TenHangHoa = modal.TenHangHoa;
+                    hangHoa.SoLuongTon = modal.SoLuongTon;
                     hangHoa.MoTa = modal.MoTa;
                     hangHoa.NguonGoc = modal.NguonGoc;
                     hangHoa.DonGia = modal.DonGia;
@@ -66,6 +67,7 @@ namespace CRM.Repositories.HangHoas
                         db.MoTa = modal.MoTa;
                         db.TenHangHoa = modal.TenHangHoa;
                         db.NguonGoc = modal.NguonGoc;
+                        db.SoLuongTon = modal.SoLuongTon;
                         db.DonGia = modal.DonGia;
                         string url = db.DuongDanHinhAnh!;
                         if (!string.IsNullOrEmpty(db.DuongDanHinhAnh))

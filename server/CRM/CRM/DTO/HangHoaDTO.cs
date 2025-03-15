@@ -6,6 +6,7 @@
         public string? TenHangHoa { get; set; }
         public string? DuongDanHinhAnh { get; set; }
         public string? MoTa { get; set; }
+        public int SoLuongTon { get; set; }
         public string? NguonGoc { get; set; }
         public decimal? DonGia { get; set; }
         public int MaLoaiHangHoa { get; set; }

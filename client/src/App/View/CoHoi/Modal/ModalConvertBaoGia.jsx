@@ -275,7 +275,7 @@ export const ModalConvertBaoGia = ({
     },
     {
       field: "chiecKhauDonHang",
-      headerName: "Chiếc khấu đơn hàng",
+      headerName: "Chiết Khấu đơn hàng",
       width: 200,
       editable: true,
       renderCell: (params) => {
@@ -515,7 +515,7 @@ export const ModalConvertBaoGia = ({
                     }}
                   >
                     <Typography variant="h6">
-                      Tiền chiếc khấu:{totalChiecKhau.toLocaleString("vi-VN")} <span>&#x0111;</span>
+                      Tiền Chiết Khấu:{totalChiecKhau.toLocaleString("vi-VN")} <span>&#x0111;</span>
                     </Typography>
                   </Box>
                   <Box
