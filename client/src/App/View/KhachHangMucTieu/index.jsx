@@ -288,7 +288,7 @@ const KhachHangMucTieu = () => {
 
   return (
     <>
-     <Box sx={{ p: 3, bgcolor: '#f5f7fa', minHeight: '100vh' }}>
+     <Box sx={{ p: 3, bgcolor: 'background.default', minHeight: '100vh' }}>
       <Grid2 container spacing={3}>
         {/* Header Section */}
         <Grid2 size={12}>
@@ -420,7 +420,7 @@ const KhachHangMucTieu = () => {
             sx={{
               borderRadius: 3,
               overflow: 'hidden',
-              bgcolor: 'white'
+              bgcolor: 'background.default'
             }}
           >
             <Box sx={{ p: 2, borderBottom: '1px solid #e0e0e0' }}>

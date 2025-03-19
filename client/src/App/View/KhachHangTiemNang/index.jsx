@@ -300,7 +300,7 @@ const KhachHangTiemNang = () => {
   };
 
   return (
-    <Box className="modern-crm-page" sx={{ p: 3, bgcolor: '#f5f7fa' }}>
+    <Box className="modern-crm-page" sx={{ p: 3, bgcolor: 'background.default' }}>
       {/* Header Section */}
       <Stack 
         direction="row" 
@@ -424,7 +424,7 @@ const KhachHangTiemNang = () => {
         sx={{ 
           borderRadius: 3, 
           overflow: 'hidden',
-          bgcolor: 'white'
+          bgcolor: 'background.default'
         }}
       >
         <Box sx={{ p: 2, borderBottom: '1px solid #e0e0e0' }}>

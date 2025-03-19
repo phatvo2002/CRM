@@ -249,7 +249,7 @@ const DonHang = () => {
         container
         alignItems="center"
         spacing={3}
-        sx={{ p: 3, backgroundColor: "#f5f5f5", borderRadius: 2, boxShadow: 3 }}
+        sx={{ p: 3, backgroundColor: "background.default", borderRadius: 2, boxShadow: 3 }}
       >
         <Grid2 xs={12}>
           <Typography
