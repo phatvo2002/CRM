@@ -18,6 +18,21 @@ namespace CRM.Services.DonHangs
             return await _donHangRepository.ConvertDonHang(modal, nguoiDungId, phongBanId);
         }
 
+        public async Task<List<DonHangDTO>> GetAllDonHang()
+        {
+            return await _donHangRepository.GetAllDonHang();
+        }
+
+        public async Task<List<DonHangDTO>> GetDonHangByNguoiDungId(Guid nguoiDungId)
+        {
+            return await _donHangRepository.GetDonHangByNguoiDungId(nguoiDungId);
+        }
+
+        public async Task<List<DonHangDTO>> GetDonHangByPhongBanId(Guid phongBanId)
+        {
+            return await _donHangRepository.GetDonHangByPhongBanId(phongBanId);
+        }
+
         public async Task<DonHangDTO> GetDonHangId(Guid id)
         {
             return await _donHangRepository.GetDonHangId(id);

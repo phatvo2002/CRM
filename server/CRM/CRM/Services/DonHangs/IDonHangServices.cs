@@ -8,5 +8,8 @@ namespace CRM.Services.DonHangs
     {
         Task<ResultModal> ConvertDonHang(DonHangModal modal, Guid nguoiDungId, Guid phongBanId);
         Task<DonHangDTO> GetDonHangId(Guid id);
+        Task<List<DonHangDTO>> GetAllDonHang();
+        Task<List<DonHangDTO>> GetDonHangByNguoiDungId(Guid nguoiDungId);
+        Task<List<DonHangDTO>> GetDonHangByPhongBanId(Guid phongBanId);
     }
 }

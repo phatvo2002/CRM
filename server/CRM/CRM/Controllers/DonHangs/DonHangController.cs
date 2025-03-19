@@ -1,4 +1,5 @@
 ﻿using CRM.Attributes;
+using CRM.DTO;
 using CRM.Entities;
 using CRM.Extensions;
 using CRM.Modal;
@@ -43,17 +44,17 @@ namespace CRM.Controllers.DonHangs
                 var db = _crmDbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId);
                 if (db.CheckIsTruongPhong == true && db.CheckIsGiamDoc == false)
                 {
-                    var result = await _donHangServices.GetByPhongBanId(phongBanid);
+                    List<DonHangDTO> result = await _donHangServices.GetDonHangByPhongBanId(phongBanid);
                     return Ok(result);
                 }
                 else if (db.CheckIsTruongPhong == false && db.CheckIsGiamDoc == true)
                 {
-                    var result = await _donHangServices.GetAll();
+                    List<DonHangDTO> result = await _donHangServices.GetAllDonHang();
                     return Ok(result);
                 }
                 else
                 {
-                    var result = await _donHangServices.GetByNguoiDungId(nguoiDungId);
+                    List<DonHangDTO> result = await _donHangServices.GetDonHangByNguoiDungId(nguoiDungId);
                     return Ok(result);
                 }
             }

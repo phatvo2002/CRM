@@ -33,6 +33,7 @@ namespace CRM.Repositories.DonHangs
                     donHang.MaKhachHang = modal.MaKhachHang;
                     donHang.MaLoaiDonHang = modal.MaLoaiDonHang;
                     donHang.MaTinhTrangGhiDoanhSo = modal.MaTinhTrangGhiDoanhSo;
+                    donHang.GiaTriDonHang = modal.GiaTriDonHang;
                     donHang.MaLienHe = null;
                     donHang.Id = Guid.NewGuid();
                     donHang.SoTienConPhaiThu = modal.GiaTriDonHang;
@@ -84,9 +85,30 @@ namespace CRM.Repositories.DonHangs
             }
         }
 
+        public async Task<List<DonHangDTO>> GetAllDonHang()
+        {
+            var db = await _crmDbContext.DonHangs.AsNoTracking().Include(r => r.KhachHangMucTieu)
+                .Include(r => r.Nguoidung).Include(r => r.TinhTrangDonHang).ToListAsync();
+            return _mapper.Map<List<DonHangDTO>>(db);
+        }
+
+        public async Task<List<DonHangDTO>> GetDonHangByNguoiDungId(Guid nguoiDungId)
+        {
+            var db = await _crmDbContext.DonHangs.AsNoTracking().Where(r => r.NguoiDungId == nguoiDungId).Include(r => r.KhachHangMucTieu)
+                .Include(r => r.Nguoidung).Include(r => r.TinhTrangDonHang).ToListAsync();
+            return _mapper.Map<List<DonHangDTO>>(db);
+        }
+
+        public async Task<List<DonHangDTO>> GetDonHangByPhongBanId(Guid phongBanId)
+        {
+            var db = await _crmDbContext.DonHangs.AsNoTracking().Where(r => r.PhongBanId == phongBanId).Include(r => r.KhachHangMucTieu)
+                .Include(r => r.Nguoidung).Include(r => r.TinhTrangDonHang).ToListAsync();
+            return _mapper.Map<List<DonHangDTO>>(db);
+        }
+
         public async Task<DonHangDTO> GetDonHangId(Guid id)
         {
-            var db = _crmDbContext.DonHangs.Where(r => r.Id == id).Include(r => r.MaKhachHang).FirstOrDefaultAsync();
+            var db = await _crmDbContext.DonHangs.Where(r => r.Id == id).Include(r => r.MaKhachHang).FirstOrDefaultAsync();
             return _mapper.Map<DonHangDTO>(db);
         }
     }

@@ -3,6 +3,7 @@
     public class DonHangDTO
     {
         public Guid Id { get; set; }
+        public string? MaQuanLy { get; set; }
         public string? TenDonHang { get; set; }
         public string? MoTaDonHang { get; set; }
         public DateTime? NgayDatHang { get; set; }
@@ -21,6 +22,9 @@
         public bool IsGhiDoanhSo { get; set; }
         public string? ThongTinHoaDon { get; set; }
         public string? ThongTinGiaoHang { get; set; }
-        public KhachHangTiemNangDTO? KhachHang { get; set; }
+        public KhachHangTiemNangDTO? KhachHangTiemNang { get; set; }
+        public KhachHangMucTieuDTO? KhachHangMucTieu { get; set; }
+        public NguoiDungDTO? NguoiDung { get; set; }
+        public ClassDTO? TinhTrangDonHang { get; set; }
     }
 }
