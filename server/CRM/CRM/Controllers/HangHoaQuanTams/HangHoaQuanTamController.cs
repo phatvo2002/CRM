@@ -107,7 +107,7 @@ namespace CRM.Controllers.HangHoaQuanTams
         {
             try
             {
-                var result = await _hangHoaQuanTamServices.Create(modal);
+                ResultModal result = await _hangHoaQuanTamServices.CreateHangHoaQuanTam(modal);
                 return Ok(result);
             }
             catch (Exception ex)

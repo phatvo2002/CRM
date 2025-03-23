@@ -39,20 +39,33 @@ namespace CRM.Repositories.BaoGias
 
                     foreach (var item in baoGiaModal.HangHoaQuanTams)
                     {
-                        HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
-                        hangHoaQuanTam.Id = Guid.NewGuid();
-                        hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
-                        hangHoaQuanTam.KhachHangId = null;
-                        hangHoaQuanTam.CoHoiId = baoGiaModal.MaCoHoi;
-                        hangHoaQuanTam.BaoGiaId = baoGia.Id;
-                        hangHoaQuanTam.DonGia = item.DonGia;
-                        hangHoaQuanTam.SoLuong = item.SoLuong;
-                        hangHoaQuanTam.ThueSuat = item.ThueSuat;
-                        hangHoaQuanTam.TienThue = item.TienThue;
-                        hangHoaQuanTam.ThanhTien = item.ThanhTien;
-                        hangHoaQuanTam.TongTien = item.TongTien;
-                        hangHoaQuanTam.ChiecKhauDonHang = item.ChiecKhauDonHang;
-                        _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
+                        var dbhangHoa = _crmDbContext.HangHoaQuanTams.FirstOrDefault(r => r.Id == item.Id);
+                        if (dbhangHoa != null)
+                        {
+                            dbhangHoa.BaoGiaId = baoGia.Id;
+                            _crmDbContext.HangHoaQuanTams.Update(dbhangHoa);
+                        }
+                        else
+                        {
+                            HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
+                            hangHoaQuanTam.Id = Guid.NewGuid();
+                            hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
+
+                            var hanghoa = _crmDbContext.HangHoas.FirstOrDefault(r => r.Id == hangHoaQuanTam.MaHangHoaId);
+
+                            hangHoaQuanTam.TenHangHoa = hanghoa != null ? hanghoa.TenHangHoa : "";
+                            hangHoaQuanTam.KhachHangId = baoGia.MaKhachHang;
+                            hangHoaQuanTam.CoHoiId = baoGia.MaCoHoi;
+                            hangHoaQuanTam.BaoGiaId = baoGia.Id;
+                            hangHoaQuanTam.DonGia = item.DonGia;
+                            hangHoaQuanTam.SoLuong = item.SoLuong;
+                            hangHoaQuanTam.ThueSuat = item.ThueSuat;
+                            hangHoaQuanTam.TienThue = item.TienThue;
+                            hangHoaQuanTam.ThanhTien = item.ThanhTien;
+                            hangHoaQuanTam.TongTien = item.TongTien;
+                            hangHoaQuanTam.ChiecKhauDonHang = item.ChiecKhauDonHang;
+                            _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
+                        }
                     }
                     _crmDbContext.BaoGias.Add(baoGia);
                     await _crmDbContext.SaveChangesAsync();
@@ -80,7 +93,7 @@ namespace CRM.Repositories.BaoGias
         {
             var db = await _crmDbContext.BaoGias.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false)
                 .Include(r => r.KhachHangMucTieu)
-                .Include(r => r.CoHoi).Include(r => r.TinhTrangBaoGia).ToListAsync();
+                .Include(r => r.CoHoi).Include(r => r.TinhTrangBaoGia).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<BaoGiaDTO>>(db);
         }
 
@@ -88,7 +101,7 @@ namespace CRM.Repositories.BaoGias
         {
             var db = await _crmDbContext.BaoGias.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false)
                 .Include(r => r.KhachHangMucTieu)
-                .Include(r => r.CoHoi).Include(r => r.TinhTrangBaoGia).ToListAsync();
+                .Include(r => r.CoHoi).Include(r => r.TinhTrangBaoGia).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<BaoGiaDTO>>(db);
         }
 

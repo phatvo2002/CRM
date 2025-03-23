@@ -131,6 +131,7 @@ export const ModalConvertBaoGia = ({
       isNew: true,
     };
     setHangHoa((prev) => [...prev, newRow]);
+    console.log(newRow)
     
   };
   const handleSaveClick = async (id) => {
@@ -357,6 +358,8 @@ export const ModalConvertBaoGia = ({
           [modelObj.maCoHoi]: coHoiData?.id,
           [modelObj.maKhachHang]: coHoiData?.maKhachHang,
           [modelObj.diaChi]: coHoiData?.diaChi,
+          [modelObj.ngayBaoGia] : new Date(),
+          [modelObj.ngayHetHan] : new Date(new Date().setDate(new Date().getDate() + 15))
         },
         { keepDirty: true }
       );

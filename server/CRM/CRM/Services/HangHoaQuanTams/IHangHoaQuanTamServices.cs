@@ -6,6 +6,7 @@ namespace CRM.Services.HangHoaQuanTams
 {
     public interface IHangHoaQuanTamServices : IBaseServices<HangHoaQuanTam, HangHoaQuanTamModal, Guid, HangHoaQuanTamDTO>
     {
+        Task<ResultModal> CreateHangHoaQuanTam(HangHoaQuanTamModal modal);
         Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangTiemNangId(Guid id);
         Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangId(string id);
         Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByCoHoiId(string id);

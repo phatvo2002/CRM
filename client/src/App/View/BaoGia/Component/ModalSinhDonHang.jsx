@@ -111,6 +111,7 @@ const modelObj = {
     [modelObj.thongTinGiaoHang]: validateString(),
   });
 export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
+  console.log(baoGiaData)
   const [khachHangId, setKhachHangId] = useState(null);
   const [isSave, setIsSave] = useState(false);
   const _isMounted = useRef(false),

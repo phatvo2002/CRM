@@ -103,6 +103,7 @@ namespace CRM.Controllers.Files
                     h.MaHangHoaId = item.MaHangHoaId;
                     h.SoLuong = item.SoLuong;
                     h.DonGia = item.DonGia;
+                    h.TenHangHoa = item.TenHangHoa;
                     hanghoa.Add(h);
                 }
                 DateTime dateTime = DateTime.UtcNow.Date;

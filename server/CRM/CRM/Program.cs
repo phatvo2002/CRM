@@ -18,6 +18,7 @@ using CRM.Repositories.LichHens;
 using CRM.Repositories.LienHes;
 using CRM.Repositories.LoaiDuBaos;
 using CRM.Repositories.LoaiHangHoas;
+using CRM.Repositories.Mails;
 using CRM.Repositories.Menus;
 using CRM.Repositories.NguoiDungs;
 using CRM.Repositories.NhiemVus;
@@ -154,6 +155,7 @@ builder.Services.AddScoped<IPhanLoaiDuBaoServices, PhanLoaiDuBaoServices>();
 
 builder.Services.AddScoped<ILienHeServices, LienHeService>();
 
+builder.Services.AddScoped<IMailRepository, MailRepository>();
 builder.Services.AddTransient<IMailServices, MailServices>();
 
 builder.Services.AddScoped<ICoHoiRepository, CoHoiRepository>();

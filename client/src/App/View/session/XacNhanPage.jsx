@@ -137,7 +137,7 @@ const XacNhanPage = () => {
                 dataHangHoaQuanTam.map((item, index) => (
                   <TableRow key={item.id}>
                     <TableCell>{index + 1}</TableCell>
-                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.tenHangHoa}</TableCell>
                     <TableCell>{item.maHangHoaId}</TableCell>
                     <TableCell>{item.soLuong}</TableCell>
                     <TableCell>

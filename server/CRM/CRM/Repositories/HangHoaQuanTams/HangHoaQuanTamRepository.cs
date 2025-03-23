@@ -12,6 +12,8 @@ namespace CRM.Repositories.HangHoaQuanTams
         {
         }
 
+
+
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByCoHoiId(string id)
         {
             var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.CoHoiId == id && r.BaoGiaId == null).ToListAsync();
@@ -90,6 +92,46 @@ namespace CRM.Repositories.HangHoaQuanTams
         {
             var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.HoaDonId == id).ToListAsync();
             return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
+        }
+
+        public async Task<ResultModal> CreateHangHoaQuanTam(HangHoaQuanTamModal modal)
+        {
+            var db = _crmDbContext.HangHoaQuanTams.FirstOrDefault(r => r.Id == modal.Id);
+            try
+            {
+                if (db == null)
+                {
+                    HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
+                    hangHoaQuanTam.Id = modal.Id;
+                    hangHoaQuanTam.MaHangHoaId = modal.MaHangHoaId;
+                    var dataHangHoa = _crmDbContext.HangHoas.FirstOrDefault(r => r.Id == hangHoaQuanTam.MaHangHoaId);
+                    hangHoaQuanTam.TenHangHoa = dataHangHoa.TenHangHoa;
+                    hangHoaQuanTam.KhachHangTiemNangId = modal.KhachHangTiemNangId;
+                    hangHoaQuanTam.KhachHangId = modal.KhachHangId;
+                    hangHoaQuanTam.BaoGiaId = modal.BaoGiaId;
+                    hangHoaQuanTam.CoHoiId = modal.CoHoiId;
+                    hangHoaQuanTam.HoaDonId = modal.HoaDonId;
+                    hangHoaQuanTam.SoLuong = modal.SoLuong;
+                    hangHoaQuanTam.DonGia = modal.DonGia;
+                    hangHoaQuanTam.ThueSuat = modal.ThueSuat;
+                    hangHoaQuanTam.TienThue = modal.TienThue;
+                    hangHoaQuanTam.ChiecKhauDonHang = modal.ChiecKhauDonHang;
+                    hangHoaQuanTam.ThanhTien = modal.ThanhTien;
+                    hangHoaQuanTam.TongTien = modal.TongTien;
+
+                    _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
+                    await _crmDbContext.SaveChangesAsync();
+
+                    return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };
+
+                }
+                return new ResultModal() { Status = 202, Message = "Dữ liệu đã tồn tại trong hệ thống", Success = false };
+
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
         }
     }
 }
