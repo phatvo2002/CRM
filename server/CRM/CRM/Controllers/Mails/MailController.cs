@@ -44,7 +44,7 @@ namespace CRM.Controllers.Mails
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost("GuiMailDonHang")]
+        [HttpPost("GuiMailDonHang/{DonHangId}")]
         [JwtAuthorize]
         public async Task<IActionResult> SendMailDonhang([FromForm] MailRequest mailRequest, Guid DonHangId)
         {

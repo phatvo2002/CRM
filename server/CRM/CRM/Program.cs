@@ -156,7 +156,7 @@ builder.Services.AddScoped<IPhanLoaiDuBaoServices, PhanLoaiDuBaoServices>();
 builder.Services.AddScoped<ILienHeServices, LienHeService>();
 
 builder.Services.AddScoped<IMailRepository, MailRepository>();
-builder.Services.AddTransient<IMailServices, MailServices>();
+builder.Services.AddScoped<IMailServices, MailServices>();
 
 builder.Services.AddScoped<ICoHoiRepository, CoHoiRepository>();
 builder.Services.AddScoped<ICoHoiServices, CoHoiServices>();

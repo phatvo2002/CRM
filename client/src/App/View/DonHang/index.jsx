@@ -27,10 +27,11 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import NoImage from "../../Assets/image/no-image.png";
-import IconWord from "../../Assets/icon/word.png";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
-
+import { ModalThemMoiDonHang } from "./Modal/ModalThemMoiDonHang";
+import ModalChinhSuaDonHang from "./Modal/ModalChinhSuaDonHang";
+import { toast } from "react-toastify";
 const orderStatusColors = {
   Mới: "#3498db",
   "Ðang xử lý": "#f1c40f",
@@ -45,7 +46,9 @@ const orderStatusColors = {
 const userData = JSON.parse(localStorage.getItem("authorizationData"));
 
 const DonHang = () => {
-  const { data : dataDonHang } = useGetGetDonHangListQuery();
+  const { data : dataDonHang ,refetch} = useGetGetDonHangListQuery();
+  const [modalThemMoiDonHang, setModalThemMoiDonHang] = useState(false);
+  const [modalChinhSuaDonHang , setModalChinhSuaDonHang] = useState(false);
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
     [anchorEl, setAnchorEl] = useState(null);
@@ -56,6 +59,25 @@ const DonHang = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleOpenModalThemDonHang = ()=> {
+    setModalThemMoiDonHang(true)
+  }
+  const handleCloseModalThemMoi = () => {
+    setModalThemMoiDonHang(false)
+  }
+  const handleOpenModalChinhSuaDonHang = () => {
+    if(selectedRow[0]?.tinhTrangDonHang?.id == 2)
+    {
+      setModalChinhSuaDonHang(true)
+    }
+    else
+    {
+      toast.warning("Đơn hàng đã được xác nhận nên không thể chỉnh sửa")
+    }
+  }
+  const handleCloseModalChinhSuaDonHang = () =>{
+    setModalChinhSuaDonHang(false)
+  }
   const columns = [
     {
       field: "action",
@@ -74,7 +96,7 @@ const DonHang = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-              //  onClick={handleOpenModalSuaThongTinBaoGia}
+               onClick={handleOpenModalChinhSuaDonHang}
             >
               <EditIcon color="success" />
             </IconButton>
@@ -269,6 +291,7 @@ const DonHang = () => {
               variant="contained"
               color="primary"
               sx={{ borderRadius: 2, textTransform: "none", boxShadow: 3 }}
+              onClick={handleOpenModalThemDonHang}
               startIcon={<AddIcon />}
             >
               Thêm đơn hàng
@@ -355,6 +378,10 @@ const DonHang = () => {
           </Paper>
         </Grid2>
       </Grid2>
+      {/* Modal thêm mới đơn hàng */}
+      <ModalThemMoiDonHang showModal={modalThemMoiDonHang} closeModal={handleCloseModalThemMoi} refetch={refetch} />
+      {/* Modal chỉnh sửa đơn hàng */}
+      <ModalChinhSuaDonHang selectedItem={selectedRow} openModal={modalChinhSuaDonHang} handleClose={handleCloseModalChinhSuaDonHang} refetch={refetch} />
     </>
   );
 };

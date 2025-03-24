@@ -15,7 +15,11 @@ import {
   useGetHangHoaQuanTamByBaoGiaIdQuery,
   useUpdateHangHoaQuanTamMutation,
 } from "src/App/Api/HangHoaQuanTam";
-import { validateDatePicker, validateString } from "src/App/Until/validateYup";
+import {
+  validateAutocomplete,
+  validateDatePicker,
+  validateString,
+} from "src/App/Until/validateYup";
 import * as yup from "yup";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
@@ -40,6 +44,7 @@ import TextAreaRHF from "src/App/Components/ReactHookFormComp/TextAreaRHF";
 import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 import { useAddDonHangMutation } from "src/App/Api/DonHangApi";
+import Swal from "sweetalert2";
 const modelObj = {
     id: "id",
     tenDonHang: "tenDonHang",
@@ -75,7 +80,7 @@ const modelObj = {
     ngayGhiDoanhSo: "Ngày ghi doanh số",
     maLoaiDonHang: "loại đơn hàng",
     maBaoGia: "Báo giá",
-    maKhachHang: "Hhách hàng",
+    maKhachHang: "Khách hàng",
     maLienHe: "Liên hệ",
     maTinhTrangDonHang: "Tình trạng dơn hàng",
     maTinhTrangGhiDoanhSo: "Tình trạng ghi doanh số",
@@ -105,28 +110,21 @@ const modelObj = {
   },
   schema = yup.object().shape({
     [modelObj.tenDonHang]: validateString(),
+    [modelObj.maKhachHang]: validateString(),
     [modelObj.hanThanhToan]: validateDatePicker(),
     [modelObj.hanGiaoHang]: validateDatePicker(),
     [modelObj.thongTinHoaDon]: validateString(),
     [modelObj.thongTinGiaoHang]: validateString(),
   });
-export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
+export const ModalThemMoiDonHang = ({ showModal, closeModal, refetch }) => {
   const [khachHangId, setKhachHangId] = useState(null);
   const [isSave, setIsSave] = useState(false);
   const _isMounted = useRef(false),
     modalRef = useRef(null),
-    { id } = useParams(),
     [hangHoa, setHangHoa] = useState([]),
     { data: hangHoas } = useGetAllHangHoaQuery(undefined, {
       skip: showModal == false,
     }),
-    { data: rows, refetch } = useGetHangHoaQuanTamByBaoGiaIdQuery(
-      id
-    ),
-    { data: dataBaoGia, isLoading: isBaoGiaFetching } = useGetBaoGiaListQuery(
-      undefined,
-      { skip: showModal == false }
-    ),
     { data: dataTinhTrangDonHang, isLoading: isGetTinhTrangIsFetching } =
       useGetAllTinhTrangDonHangQuery(undefined, { skip: showModal == false }),
     {
@@ -150,7 +148,6 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
     [deleteData] = useDeleteHangHoaQuanTamMutation(),
     [convertDonHang] = useAddDonHangMutation();
   const isLoading =
-    isBaoGiaFetching ||
     isGetTinhTrangIsFetching ||
     isGetLoaiDonHangFetching ||
     isGetLienHeFetching ||
@@ -162,7 +159,7 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
       tenHangHoa: "",
       khachHangTiemNangId: null,
       khachHangId: null,
-      baoGiaId : id,
+      baoGiaId: null,
       coHoiId: null,
       soLuong: 0,
       thueSuat: 0,
@@ -186,11 +183,9 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
       updatedRow = await createData(currentRow).unwrap();
       currentRow.isNew = false;
       setIsSave(true);
-      refetch();
     } else {
       updatedRow = await updateData(currentRow).unwrap();
       setIsSave(true);
-      refetch();
     }
     toast.success("Lưu dữ liệu thành công!");
   };
@@ -228,7 +223,6 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
         await deleteData(id).unwrap();
         setHangHoa((prev) => prev.filter((row) => row.id !== id));
         toast.success("Xóa hàng hóa thành công!");
-        refetch();
       } catch (error) {
         toast.error("Đã có lỗi trong quá trình xóa!");
       }
@@ -354,35 +348,52 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
     },
   ];
   const submitForm = (data) => {
-        const tempData = {
-          [modelObj.tenDonHang]: data[modelObj.tenDonHang],
-          [modelObj.moTaDonHang]: data[modelObj.moTaDonHang],
-          [modelObj.ngayDatHang]: data[modelObj.ngayDatHang],
-          [modelObj.hanThanhToan]: data[modelObj.hanThanhToan],
-          [modelObj.hanGiaoHang]: data[modelObj.hanGiaoHang],
-          [modelObj.giaTriDonHang]: totalAmountFinal,
-          [modelObj.soTienConPhaiThu]: totalAmountFinal,
-          [modelObj.thucThuDonHang]: 0,
-          [modelObj.ngayGhiDoanhSo]: null,
-          [modelObj.thongTinGiaoHang]: data[modelObj.thongTinGiaoHang],
-          [modelObj.thongTinHoaDon]: data[modelObj.thongTinHoaDon],
-          [modelObj.maLoaiDonHang]: data[modelObj.maLoaiDonHang],
-          [modelObj.maBaoGia]: data[modelObj.maBaoGia],
-          [modelObj.maKhachHang]: data[modelObj.maKhachHang],
-          [modelObj.maLienHe]: data[modelObj.maLienHe],
-          [modelObj.maLoaiDonHang]: data[modelObj.maLoaiDonHang],
-          [modelObj.maTinhTrangDonHang]: data[modelObj.maTinhTrangDonHang],
-          [modelObj.maTinhTrangGhiDoanhSo]:
-            data[modelObj.maTinhTrangGhiDoanhSo],
-          [modelObj.hangHoaQuanTam]: hangHoa,
-        };
-        callApiConvert(tempData);
+      Swal.fire({
+        // title: titleChange(event),
+        text: "Bạn có muốn tạo hóa đơn này ? Lưu ý sau khi xác nhận bạn sẽ không thể chỉnh sửa hàng hóa",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const tempData = {
+            [modelObj.tenDonHang]: data[modelObj.tenDonHang],
+            [modelObj.moTaDonHang]: data[modelObj.moTaDonHang],
+            [modelObj.ngayDatHang]: data[modelObj.ngayDatHang],
+            [modelObj.hanThanhToan]: data[modelObj.hanThanhToan],
+            [modelObj.hanGiaoHang]: data[modelObj.hanGiaoHang],
+            [modelObj.giaTriDonHang]: totalAmountFinal,
+            [modelObj.soTienConPhaiThu]: totalAmountFinal,
+            [modelObj.thucThuDonHang]: 0,
+            [modelObj.ngayGhiDoanhSo]: null,
+            [modelObj.thongTinGiaoHang]: data[modelObj.thongTinGiaoHang],
+            [modelObj.thongTinHoaDon]: data[modelObj.thongTinHoaDon],
+            [modelObj.maLoaiDonHang]: data[modelObj.maLoaiDonHang],
+            [modelObj.maBaoGia]: data[modelObj.maBaoGia],
+            [modelObj.maKhachHang]: data[modelObj.maKhachHang],
+            [modelObj.maLienHe]: data[modelObj.maLienHe],
+            [modelObj.maLoaiDonHang]: data[modelObj.maLoaiDonHang],
+            [modelObj.maTinhTrangDonHang]: data[modelObj.maTinhTrangDonHang],
+            [modelObj.maTinhTrangGhiDoanhSo]:
+              data[modelObj.maTinhTrangGhiDoanhSo],
+            [modelObj.hangHoaQuanTam]: hangHoa,
+          };
+          callApiConvert(tempData);
+        }
+      });
     },
     callApiConvert = async (paramData) => {
       try {
-        await convertDonHang(paramData).unwrap();
-        toast.success("Chuyển đổi thành công");
-        closeModalWithOtherFunc();
+        var response = await convertDonHang(paramData).unwrap();
+        if (response?.status === 200) {
+          toast.success("Thêm mới đơn thành công");
+          closeModalWithOtherFunc();
+          refetch();
+        } else {
+          toast.warning(response?.message);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -391,31 +402,22 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
       modalRef.current.reset(initialFormState);
       closeModal();
     },
-    getInitialStateFromApiToUpdate = async (selectedItem) => {
+    getInitialStateFromApiToUpdate = async () => {
       modalRef.current?.reset(
         {
-          ...selectedItem,
-          [modelObj.maBaoGia]: baoGiaData?.id,
-          [modelObj.maKhachHang]: baoGiaData?.maKhachHang,
-          [modelObj.thongTinGiaoHang]: baoGiaData?.diaChi,
-          [modelObj.maTinhTrangDonHang] :2,
+          [modelObj.maTinhTrangDonHang]: 2,
           [modelObj.maTinhTrangGhiDoanhSo]: 1,
           [modelObj.maLoaiDonHang]: 1,
-          [modelObj.ngayDatHang] : new Date()
+          [modelObj.ngayDatHang]: new Date(),
+          [modelObj.hanThanhToan]: new Date(),
+          [modelObj.hanGiaoHang]: new Date(),
         },
         { keepDirty: true }
       );
     };
   useEffect(() => {
-    if (rows) {
-      setHangHoa(rows);
-    }
-  }, [rows]);
-  useEffect(() => {
-    if (baoGiaData) {
-      getInitialStateFromApiToUpdate(baoGiaData);
-    }
-  }, [baoGiaData]);
+    getInitialStateFromApiToUpdate();
+  }, []);
   useEffect(() => {
     _isMounted.current = true;
     return () => {
@@ -495,16 +497,16 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
               skeletonLoading={isGetLoaiDonHangFetching}
             />
           </Grid2>
-          <Grid2 size={6}>
-            <AutocompleteRHF
-              name={modelObj.maBaoGia}
-              label={labelObj.maBaoGia}
-              isGetOnlyId
-              disabled={isLoading}
-              data={commonMapDataAutocomplete(dataBaoGia, "name")}
-              skeletonLoading={isBaoGiaFetching}
-            />
-          </Grid2>
+          {/* <Grid2 size={6}>
+              <AutocompleteRHF
+                name={modelObj.maBaoGia}
+                label={labelObj.maBaoGia}
+                isGetOnlyId
+                disabled={isLoading}
+                data={commonMapDataAutocomplete(dataBaoGia, "name")}
+                skeletonLoading={isBaoGiaFetching}
+              />
+            </Grid2> */}
           <Grid2 size={6}>
             <DateTimePickerRHF
               name={modelObj.hanThanhToan}
@@ -520,16 +522,16 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
             />
           </Grid2>
           <Grid2 size={6}>
-              <TextField
-                label="Giá trị đơn hàng"
-                variant="outlined"
-                value={totalAmountFinal}
-                type="number"
-                disabled
-                fullWidth
-              />
+            <TextField
+              label="Giá trị đơn hàng"
+              variant="outlined"
+              value={totalAmountFinal}
+              type="number"
+              disabled
+              fullWidth
+            />
           </Grid2>
-          
+
           <Grid2 size={12}>
             <h3>Thông tin hàng hóa</h3>
           </Grid2>
