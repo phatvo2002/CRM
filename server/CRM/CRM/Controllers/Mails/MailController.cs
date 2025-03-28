@@ -44,9 +44,9 @@ namespace CRM.Controllers.Mails
                 return BadRequest(ex.Message);
             }
         }
-        [HttpPost("GuiMailDonHang/{DonHangId}")]
+        [HttpPost("GuiMailDonHang/{donHangId}")]
         [JwtAuthorize]
-        public async Task<IActionResult> SendMailDonhang([FromForm] MailRequest mailRequest, Guid DonHangId)
+        public async Task<IActionResult> SendMailDonhang([FromForm] MailRequest mailRequest, Guid donHangId)
         {
             try
             {
@@ -57,7 +57,7 @@ namespace CRM.Controllers.Mails
                 {
                     if (db.Password != null)
                     {
-                        await _mailService.SendMailDonHangAsync(mailRequest, db.Email, db.Password, DonHangId, nguoiDungID, phongBand);
+                        await _mailService.SendMailDonHangAsync(mailRequest, db.Email, db.Password, donHangId, nguoiDungID, phongBand);
                         return Ok(new ResultModal() { Status = 200, Message = "Gửi mail thành công", Success = true });
                     }
                     return Ok(new ResultModal() { Status = 202, Message = "Bạn chưa đăng ký dịch vụ mail cá nhân", Success = false });

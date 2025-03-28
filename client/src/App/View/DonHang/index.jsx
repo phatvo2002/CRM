@@ -14,7 +14,13 @@ import {
 import React, { useEffect, useState } from "react";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
-import { useGetAllDonHangQuery, useGetGetDonHangListQuery } from "src/App/Api/DonHangApi";
+import IconWord from "../../Assets/icon/word.png";
+import IconExcel from "../../Assets/icon/excel.png";
+import {
+  useDeleteDonHangMutation,
+  useGetAllDonHangQuery,
+  useGetGetDonHangListQuery,
+} from "src/App/Api/DonHangApi";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import EditIcon from "@mui/icons-material/Edit";
@@ -28,10 +34,12 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import NoImage from "../../Assets/image/no-image.png";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
-import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 import { ModalThemMoiDonHang } from "./Modal/ModalThemMoiDonHang";
 import ModalChinhSuaDonHang from "./Modal/ModalChinhSuaDonHang";
 import { toast } from "react-toastify";
+import Swal from "sweetalert2";
+import { useGuiMailDonHangMutation } from "src/App/Api/MailServicesApi";
 const orderStatusColors = {
   Mới: "#3498db",
   "Ðang xử lý": "#f1c40f",
@@ -46,9 +54,11 @@ const orderStatusColors = {
 const userData = JSON.parse(localStorage.getItem("authorizationData"));
 
 const DonHang = () => {
-  const { data : dataDonHang ,refetch} = useGetGetDonHangListQuery();
+  const { data: dataDonHang, refetch } = useGetGetDonHangListQuery();
+  const [deleteDonHang] = useDeleteDonHangMutation();
+  const [mailDonHang] = useGuiMailDonHangMutation();
   const [modalThemMoiDonHang, setModalThemMoiDonHang] = useState(false);
-  const [modalChinhSuaDonHang , setModalChinhSuaDonHang] = useState(false);
+  const [modalChinhSuaDonHang, setModalChinhSuaDonHang] = useState(false);
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
     [anchorEl, setAnchorEl] = useState(null);
@@ -59,25 +69,92 @@ const DonHang = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleOpenModalThemDonHang = ()=> {
-    setModalThemMoiDonHang(true)
-  }
+  const handleOpenModalThemDonHang = () => {
+    setModalThemMoiDonHang(true);
+  };
   const handleCloseModalThemMoi = () => {
-    setModalThemMoiDonHang(false)
-  }
+    setModalThemMoiDonHang(false);
+  };
   const handleOpenModalChinhSuaDonHang = () => {
-    if(selectedRow[0]?.tinhTrangDonHang?.id == 2)
-    {
-      setModalChinhSuaDonHang(true)
+    if (selectedRow[0]?.tinhTrangDonHang?.id == 2) {
+      setModalChinhSuaDonHang(true);
+    } else {
+      toast.warning("Đơn hàng đã được xác nhận nên không thể chỉnh sửa");
     }
-    else
-    {
-      toast.warning("Đơn hàng đã được xác nhận nên không thể chỉnh sửa")
+  };
+  const handleCloseModalChinhSuaDonHang = () => {
+    setModalChinhSuaDonHang(false);
+  };
+
+  const handleRowSelectionChange = (selectedRows) => {
+    setSelectedRow(selectedRows);
+  };
+  const handleDeleteDonhang = (id) => {
+    if (
+      userData.response.checkIsGiamDoc == false ||
+      userData.response.checkIsTruongPhong == false
+    ) {
+      toast.warning(
+        "Bạn không thể xóa đơn hàng , vui lòng liên hệ trưởng phòng để xóa đơn hàng"
+      );
+    } else {
+      Swal.fire({
+        title: "Bạn có muốn xóa đơn hàng này",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Có",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          await deleteDonHang(selectedRow[0]?.id);
+          Swal.fire({
+            title: "Xóa thành công",
+            icon: "success",
+          });
+          refetch();
+        }
+      });
     }
-  }
-  const handleCloseModalChinhSuaDonHang = () =>{
-    setModalChinhSuaDonHang(false)
-  }
+  };
+  const handleEmailDonHang = async (trangThaiId, donHangId) => {
+    switch (trangThaiId) {
+      case 2:
+        toast.warning(
+          "Đơn hàng đang trong trạng thái chưa xác nhận nên không thể gửi "
+        );
+        break;
+      case 3:
+        {
+          if (
+            selectedRow[0]?.khachHangMucTieu?.email !== "" ||
+            selectedRow[0]?.khachHangMucTieu?.email !== null
+          ) {
+            const response = await mailDonHang({mailRequest:null ,donHangId:donHangId });
+            try {
+              if (response.data.status === 200) {
+                toast.success("Gửi thành công");
+              } else {
+                toast.error(response.data.message);
+              }
+            } catch (error) {
+              toast.error(error);
+            }
+          } else {
+            toast.warning(
+              "Khách hàng chưa có email , vui lòng nhập email của khách hàng để tiếp tục thao tác !"
+            );
+          }
+        }
+        break;
+      default:
+        {
+          toast.success("Đơn hàng đã được gửi");
+        }
+        break;
+    }
+  };
+
   const columns = [
     {
       field: "action",
@@ -96,7 +173,7 @@ const DonHang = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-               onClick={handleOpenModalChinhSuaDonHang}
+              onClick={handleOpenModalChinhSuaDonHang}
             >
               <EditIcon color="success" />
             </IconButton>
@@ -105,7 +182,7 @@ const DonHang = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-              //  onClick={() => handleDeleteBaoGia(params?.id)}
+              onClick={handleDeleteDonhang}
             >
               <DeleteIcon color="error" />
             </IconButton>
@@ -114,7 +191,12 @@ const DonHang = () => {
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
-              //  onClick={handleOpenModalSuaThongTinBaoGia}
+              onClick={() =>
+                handleEmailDonHang(
+                  selectedRow[0]?.maTinhTrangDonHang,
+                  selectedRow[0]?.id
+                )
+              }
             >
               <ForwardToInboxIcon color="primary" />
             </IconButton>
@@ -262,16 +344,19 @@ const DonHang = () => {
   useEffect(() => {
     setRows(dataDonHang);
   }, [dataDonHang]);
-  const handleRowSelectionChange = (selectedRows) => {
-    setSelectedRow(selectedRows);
-  };
+
   return (
     <>
       <Grid2
         container
         alignItems="center"
         spacing={3}
-        sx={{ p: 3, backgroundColor: "background.default", borderRadius: 2, boxShadow: 3 }}
+        sx={{
+          p: 3,
+          backgroundColor: "background.default",
+          borderRadius: 2,
+          boxShadow: 3,
+        }}
       >
         <Grid2 xs={12}>
           <Typography
@@ -296,6 +381,24 @@ const DonHang = () => {
             >
               Thêm đơn hàng
             </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ marginLeft: 2 }}
+              //onClick={() => downloadBaoGia(dataBaoGia?.id)}
+            >
+              <img src={IconWord} alt="Xuất báo giá" width={24} height={24} />{" "}
+              Tải đơn đặt hàng
+            </Button>
+            {/* <Button
+              variant="contained"
+              color="success"
+              sx={{ marginLeft: 2 }}
+              //onClick={() => downloadBaoGia(dataBaoGia?.id)}
+            >
+              <img src={IconExcel} alt="Xuất báo giá" width={24} height={24} />{" "}
+              Tải đơn đặt hàng
+            </Button> */}
             {userData?.response?.checkIsTruongPhong == true && (
               <Button
                 variant="outlined"
@@ -379,9 +482,18 @@ const DonHang = () => {
         </Grid2>
       </Grid2>
       {/* Modal thêm mới đơn hàng */}
-      <ModalThemMoiDonHang showModal={modalThemMoiDonHang} closeModal={handleCloseModalThemMoi} refetch={refetch} />
+      <ModalThemMoiDonHang
+        showModal={modalThemMoiDonHang}
+        closeModal={handleCloseModalThemMoi}
+        refetch={refetch}
+      />
       {/* Modal chỉnh sửa đơn hàng */}
-      <ModalChinhSuaDonHang selectedItem={selectedRow} openModal={modalChinhSuaDonHang} handleClose={handleCloseModalChinhSuaDonHang} refetch={refetch} />
+      <ModalChinhSuaDonHang
+        selectedItem={selectedRow}
+        openModal={modalChinhSuaDonHang}
+        handleClose={handleCloseModalChinhSuaDonHang}
+        refetch={refetch}
+      />
     </>
   );
 };

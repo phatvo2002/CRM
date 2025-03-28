@@ -130,8 +130,7 @@ const ModalChinhSuaDonHang = ({
       [modelObj.maTinhTrangDonHang]: data[modelObj.maTinhTrangDonHang],
       [modelObj.maTinhTrangGhiDoanhSo]: data[modelObj.maTinhTrangGhiDoanhSo],
     };
-    console.log(tempData);
-    // callApiUpdate(tempData);
+    callApiUpdate(tempData);
   };
   const callApiUpdate = async (params) => {
     try {

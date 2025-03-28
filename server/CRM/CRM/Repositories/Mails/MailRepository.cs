@@ -114,7 +114,7 @@ namespace CRM.Repositories.Mails
                           <p style={{text-align : center}}>Xin chào {(db.KhachHangMucTieu.TenKhachHang != "" ? db.KhachHangMucTieu.TenKhachHang : "")}, đơn đặt hàng của bạn đã sẵn sàng để vận chuyển , chúng tôi sẽ cho bạn biết ngay khi nó dii chuyển đến vị trí của bạn</p>
                           <p>{request.Body}</p>
                           <p>Bấm vào nút dưới đây để xem chi tiết đơn đặt hàng:</p>
-                          <a href='http://localhost:3000/donhang/chitietdonhang' class='button'>Xem chi tiết đơn hàng</a>
+                          <a href='http://localhost:3000/donhang/chitietdonhang/{donHangId}' class='button'>Xem chi tiết đơn hàng</a>
                      </div>
                        <div> 
                      <table>
@@ -140,17 +140,25 @@ namespace CRM.Repositories.Mails
                   </html>";
                     var mail = new MimeMessage();
                     mail.Sender = MailboxAddress.Parse(Email);
-                    mail.To.Add(MailboxAddress.Parse(request.ToMail));
-                    mail.Subject = $"Báo giá đơn hàng : {db.TenDonHang}";
-                    var builder = new BodyBuilder();
+                    if (db.KhachHangMucTieu.Email != null || db.KhachHangMucTieu.Email != "")
+                    {
+                        mail.To.Add(MailboxAddress.Parse(db.KhachHangMucTieu.Email));
+                        mail.Subject = $"Báo giá đơn hàng : {db.TenDonHang}";
+                        var builder = new BodyBuilder();
 
-                    builder.HtmlBody = htmlContent;
-                    mail.Body = builder.ToMessageBody();
-                    using var smtp = new MailKit.Net.Smtp.SmtpClient();
-                    smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
-                    smtp.Authenticate(Email, Password);
-                    await smtp.SendAsync(mail);
-                    smtp.Disconnect(true);
+                        builder.HtmlBody = htmlContent;
+                        mail.Body = builder.ToMessageBody();
+                        using var smtp = new MailKit.Net.Smtp.SmtpClient();
+                        smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+                        smtp.Authenticate(Email, Password);
+                        await smtp.SendAsync(mail);
+                        smtp.Disconnect(true);
+                    }
+                    else
+                    {
+                        new Exception("Email không tồn tại");
+                    }
+
                 }
 
             }

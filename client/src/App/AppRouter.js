@@ -11,6 +11,7 @@ import RootLayout from "./View/Dashbroad/RootLayout";
 import RouteChild from "./Router";
 import NotFound from "./View/session/NotFound";
 import XacNhanPage from "./View/session/XacNhanPage";
+import ChiTietDonHang from "./View/session/ChiTietDonHang";
 const AppRouter = () => {
   return (
     <Routes>
@@ -28,6 +29,7 @@ const AppRouter = () => {
      <Route path="/" element={<Navigate to="/user/profile" />} />
      <Route path="*" element={<NotFound />} />
      <Route path="/XemBaoGia/:id" element={<XacNhanPage />} />
+     <Route path="/donhang/chitietdonhang/:id" element={<ChiTietDonHang />} />
      <Route path="/login" element={<JwtLogin />} />
     </Routes>
   );
