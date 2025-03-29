@@ -5,6 +5,7 @@ using MailKit.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using System.Globalization;
 
 namespace CRM.Repositories.Mails
 {
@@ -85,8 +86,8 @@ namespace CRM.Repositories.Mails
                             <tr>
                                <td>{ct.TenHangHoa}</td>
                                <td>{ct.SoLuong}</td>
-                               <td>{ct.DonGia}đ</td>
-                               <td>{ct.ThanhTien}đ</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.DonGia)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.ThanhTien)}</td>
                             </tr>";
                     }
 
@@ -109,9 +110,10 @@ namespace CRM.Repositories.Mails
                        </div>
                       <div class='content'>
                           <p>Đơn hàng số : {db.MaQuanLy}</p>
-                          <p>Giá trị đơn hàng : {db.GiaTriDonHang}</p>
+                          <p>Giá trị đơn hàng : {db.GiaTriDonHang.ToString("N0", new CultureInfo("vi-VN")) + " đ"}</p>
                           <p style={{text-align : center}}>Cảm ơn bạn đã đặt hàng thông qua hệ thống của chúng tôi</p>
-                          <p style={{text-align : center}}>Xin chào {(db.KhachHangMucTieu.TenKhachHang != "" ? db.KhachHangMucTieu.TenKhachHang : "")}, đơn đặt hàng của bạn đã sẵn sàng để vận chuyển , chúng tôi sẽ cho bạn biết ngay khi nó dii chuyển đến vị trí của bạn</p>
+                          <p style={{text-align : center}}>Xin chào {(db.KhachHangMucTieu.TenKhachHang != "" ? db.KhachHangMucTieu.TenKhachHang : "")}
+                                    , Bạn vui lòng kiểm tra thông tin chi tiết đơn hàng và nhấn nút xác nhận để xác nhận nếu bạn đồng ý với mức giá của chúng tôi.</p>
                           <p>{request.Body}</p>
                           <p>Bấm vào nút dưới đây để xem chi tiết đơn đặt hàng:</p>
                           <a href='http://localhost:3000/donhang/chitietdonhang/{donHangId}' class='button'>Xem chi tiết đơn hàng</a>
@@ -119,10 +121,10 @@ namespace CRM.Repositories.Mails
                        <div> 
                      <table>
                        <tr style={{margin-top:10px}}>
-                       <th style={{margin-left:5px}}>Tên sản phầm</th>
-                       <th style={{margin-left:5px}}>Số lượng</th>
-                       <th style={{margin-left:5px}}>Đơn giá</th>
-                       <th style={{margin-left:5px}}>Thành tiền</th>
+                       <th style={{margin-left:15px}}>Tên sản phầm</th>
+                       <th style={{margin-left:15px}}>Số lượng</th>
+                       <th style={{margin-left:15px}}>Đơn giá</th>
+                       <th style={{margin-left:15px}}>Thành tiền</th>
                     </tr>
                       {chiTietSanPhamRows}
                      

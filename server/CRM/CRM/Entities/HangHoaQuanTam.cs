@@ -17,6 +17,8 @@
         public decimal? ChiecKhauDonHang { get; set; }
         public decimal? ThanhTien { get; set; }
         public decimal? TongTien { get; set; }
+        public int? MaDonViTinh { get; set; }
         public virtual HangHoa? HangHoa { get; set; }
+        public virtual DonViTinh? DonViTinh { get; set; }
     }
 }

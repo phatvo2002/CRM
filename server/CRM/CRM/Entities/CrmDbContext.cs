@@ -77,7 +77,13 @@ namespace CRM.Entities
         public virtual DbSet<TinhTrangGhiDoanhSo> TinhTrangGhiDoanhSos { get; set; }
         public virtual DbSet<DonHang> DonHangs { get; set; }
 
+        // email
         public virtual DbSet<EmailDaGui> EmailDaGuis { get; set; }
+
+        // kpi 
+        public virtual DbSet<MucTieuDoanhSo> MucTieuDoanhSos { get; set; }
+        public virtual DbSet<TinhTrangKPI> TinhTrangKPIs { get; set; }
+        public virtual DbSet<KPINhanVien> KPINhanViens { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -529,15 +535,15 @@ namespace CRM.Entities
                 entity.Property(e => e.CoHoiId).HasMaxLength(100);
                 entity.Property(e => e.BaoGiaId).HasColumnType("uniqueidentifier");
                 entity.Property(e => e.HoaDonId).HasMaxLength(100);
-                entity.Property(e => e.SoLuong).HasColumnType("int");
+                entity.Property(e => e.SoLuong).HasColumnType("int")
                 entity.Property(e => e.ThueSuat).HasColumnType("int");
+                entity.Property(e => e.MaDonViTinh).HasColumnType("int");
                 entity.Property(e => e.TienThue).HasColumnType("decimal");
                 entity.Property(e => e.DonGia).HasColumnType("decimal");
                 entity.Property(e => e.ThanhTien).HasColumnType("decimal");
                 entity.Property(e => e.TongTien).HasColumnType("decimal");
-                entity.HasOne(d => d.HangHoa).WithMany(r => r.HangHoaQuanTams).HasForeignKey(r => r.MaHangHoaId)
-              .OnDelete(DeleteBehavior.ClientSetNull)
-              .HasConstraintName("FK_HangHoa_HangHoaQuanTam");
+                entity.HasOne(d => d.HangHoa).WithMany(r => r.HangHoaQuanTams).HasForeignKey(r => r.MaHangHoaId).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_HangHoa_HangHoaQuanTam");
+                entity.HasOne(d => d.DonViTinh).WithMany(r => r.HangHoaQuanTams).HasForeignKey(r => r.MaDonViTinh).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_DonViTinh_HangHoaQuanTam");
             });
             modelBuilder.Entity<DonViTinh>(entity =>
             {
@@ -935,6 +941,97 @@ namespace CRM.Entities
             });
             #endregion
 
+            #region KPI
+            modelBuilder.Entity<TinhTrangKPI>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_TinhTrangKPI");
+
+                entity.ToTable("TinhTrangKPI");
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Name).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<MucTieuDoanhSo>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_MucTieuDoanhSoId");
+
+                entity.ToTable("MucTieuDoanhSo");
+                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.TenKPI).HasMaxLength(100);
+                entity.Property(e => e.MaQuanLy).HasMaxLength(50);
+                entity.Property(e => e.TenPhongBan).HasMaxLength(100);
+                entity.Property(e => e.NgayBatDau).HasColumnType("datetime");
+                entity.Property(e => e.NgayKetThuc).HasColumnType("datetime");
+                entity.Property(e => e.SoCuocGoi).HasColumnType("int");
+                entity.Property(e => e.SoCuocGoiThucTe).HasColumnType("int");
+                entity.Property(e => e.TileCuocGoiThucTe).HasColumnType("decimal");
+                entity.Property(e => e.SoLichHen).HasColumnType("int");
+                entity.Property(e => e.SoLichHenThucTe).HasColumnType("int");
+                entity.Property(e => e.TileLichHenThucTe).HasColumnType("decimal");
+                entity.Property(e => e.SoEmailTuongTacKhachHang).HasColumnType("int");
+                entity.Property(e => e.SoEmailTruongTacKhachHangThucTe).HasColumnType("int");
+                entity.Property(e => e.TileEmailTuongTacThucTe).HasColumnType("decimal");
+                entity.Property(e => e.SoKhachHangTiemNangDaChuyenDoi).HasColumnType("int");
+                entity.Property(e => e.SoKhachHangTiemNangDaChuyenDoiThucTe).HasColumnType("int");
+                entity.Property(e => e.TiLeSoKhachHangTiemNangDaChuyenDoiThucTe).HasColumnType("decimal");
+                entity.Property(e => e.DoanhSo).HasColumnType("int");
+                entity.Property(e => e.DoanhSoThucTe).HasColumnType("int");
+                entity.Property(e => e.TiLeDoanhSoThucTe).HasColumnType("decimal");
+                entity.Property(e => e.IsDatMucTieu).HasColumnType("bit");
+                entity.Property(e => e.TongTiLeThucTe).HasColumnType("decimal");
+                entity.Property(e => e.IsDeleted).HasColumnType("bit");
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+                entity.HasOne(d => d.Nguoidung).WithMany(r => r.MucTieuDoanhSos).HasForeignKey(r => r.NguoiDungId)
+               .OnDelete(DeleteBehavior.ClientSetNull)
+               .HasConstraintName("FK_NguoiDung_MucTieuDoanhSo");
+                entity.HasOne(d => d.PhongBan).WithMany(r => r.MucTieuDoanhSos).HasForeignKey(r => r.PhongBanId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PhongBan_MucTieuDoanhSo");
+                entity.HasOne(d => d.TinhTrangKPI).WithMany(r => r.MucTieuDoanhSos).HasForeignKey(r => r.MaTrangThaiKPI)
+               .OnDelete(DeleteBehavior.ClientSetNull)
+               .HasConstraintName("FK_TinhTrangKPI_MucTieuDoanhSo");
+            });
+
+            modelBuilder.Entity<KPINhanVien>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_MucTieuDoanhSoId");
+
+                entity.ToTable("MucTieuDoanhSo");
+                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.TenNhanVien).HasMaxLength(100);
+                entity.Property(e => e.NgayBatDau).HasColumnType("datetime");
+                entity.Property(e => e.NgayKetThuc).HasColumnType("datetime");
+                entity.Property(e => e.SoCuocGoi).HasColumnType("int");
+                entity.Property(e => e.SoCuocGoiThucTe).HasColumnType("int");
+                entity.Property(e => e.TileCuocGoiThucTe).HasColumnType("decimal");
+                entity.Property(e => e.SoLichHen).HasColumnType("int");
+                entity.Property(e => e.SoLichHenThucTe).HasColumnType("int");
+                entity.Property(e => e.TileLichHenThucTe).HasColumnType("decimal");
+                entity.Property(e => e.SoEmailTuongTacKhachHang).HasColumnType("int");
+                entity.Property(e => e.SoEmailTruongTacKhachHangThucTe).HasColumnType("int");
+                entity.Property(e => e.TileEmailTuongTacThucTe).HasColumnType("decimal");
+                entity.Property(e => e.SoKhachHangTiemNangDaChuyenDoi).HasColumnType("int");
+                entity.Property(e => e.SoKhachHangTiemNangDaChuyenDoiThucTe).HasColumnType("int");
+                entity.Property(e => e.TiLeSoKhachHangTiemNangDaChuyenDoiThucTe).HasColumnType("decimal");
+                entity.Property(e => e.DoanhSo).HasColumnType("int");
+                entity.Property(e => e.DoanhSoThucTe).HasColumnType("int");
+                entity.Property(e => e.TiLeDoanhSoThucTe).HasColumnType("decimal");
+                entity.Property(e => e.IsDatMucTieu).HasColumnType("bit");
+                entity.Property(e => e.TongTiLeThucTe).HasColumnType("decimal");
+                entity.Property(e => e.IsDeleted).HasColumnType("bit");
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+                entity.HasOne(d => d.Nguoidung).WithMany(r => r.KPINhanViens).HasForeignKey(r => r.NguoiDungId)
+               .OnDelete(DeleteBehavior.ClientSetNull)
+               .HasConstraintName("FK_NguoiDung_KPINhanVien");
+                entity.HasOne(d => d.PhongBan).WithMany(r => r.KPINhanViens).HasForeignKey(r => r.PhongBanId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PhongBan_KPINhanVien");
+                entity.HasOne(d => d.TinhTrangKPI).WithMany(r => r.KPINhanViens).HasForeignKey(r => r.MaTrangThaiKPI)
+               .OnDelete(DeleteBehavior.ClientSetNull)
+               .HasConstraintName("FK_MucTieuDoanhSo_KPINhanVien");
+                entity.HasOne(d => d.MucTieuDoanhSo).WithMany(r => r.KPINhanViens).HasForeignKey(r => r.MaMucTieuDoanhSo).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_MucTieuDoanhSo_KPINhanVien");
+            });
+            #endregion
 
         }
 

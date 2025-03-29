@@ -63,8 +63,8 @@ namespace CRM.Controllers.DonHangs
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("getdonhangbyid")]
-        [JwtAuthorize]
+        [HttpGet("getdonhangbyid/{id}")]
+        //[JwtAuthorize]
         public async Task<IActionResult> GetDonHangById(Guid Id)
         {
             try

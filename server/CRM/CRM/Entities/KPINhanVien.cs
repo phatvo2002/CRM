@@ -27,7 +27,10 @@
         public bool IsDatMucTieu { get; set; }
         public int MaTrangThaiKPI { get; set; }
         public string? GhiChu { get; set; }
+        public Guid? MaMucTieuDoanhSo { get; set; }
+        public decimal TongTiLeThucTe { get; set; }
         public virtual TinhTrangKPI? TinhTrangKPI { get; set; }
+        public virtual MucTieuDoanhSo? MucTieuDoanhSo { get; set; }
 
     }
 }

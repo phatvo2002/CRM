@@ -15,8 +15,15 @@ import {
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import DownloadIcon from "@mui/icons-material/Download";
-import ReplayIcon from '@mui/icons-material/Replay';
+import ReplayIcon from "@mui/icons-material/Replay";
+import { useParams } from "react-router-dom";
+import { useGetGetDonHangByIdQuery } from "src/App/Api/DonHangApi";
+import { useGetHangHoaQuanTamByDonHangIdQuery } from "src/App/Api/HangHoaQuanTam";
 const ChiTietDonHang = () => {
+  const { id } = useParams(),
+    { data: dataDonhang, refetch } = useGetGetDonHangByIdQuery(id),
+    { data: dataHangHoa } = useGetHangHoaQuanTamByDonHangIdQuery(id);
+  console.log(dataDonhang, dataHangHoa);
   return (
     <>
       <Container>
@@ -31,11 +38,10 @@ const ChiTietDonHang = () => {
             ĐƠN ĐẶT HÀNG
           </Typography>
 
-          <Typography gutterBottom>Số: ........</Typography>
+          <Typography gutterBottom>Số: .........</Typography>
 
           <Typography gutterBottom>
-            Kính gửi: Công ty
-            .............................................................
+            Kính gửi: 
           </Typography>
           <Typography gutterBottom>
             Công ty ............................................................
@@ -55,40 +61,28 @@ const ChiTietDonHang = () => {
                   <TableCell>ĐVT</TableCell>
                   <TableCell>Số lượng</TableCell>
                   <TableCell>Đơn giá</TableCell>
-                  <TableCell>Tiền thuế</TableCell>
                   <TableCell>Thành tiền</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {[...Array(3)].map((_, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>...................................</TableCell>
-                    <TableCell>......</TableCell>
-                    <TableCell>......</TableCell>
-                    <TableCell>......</TableCell>
-                    <TableCell>......</TableCell>
-                    <TableCell>......</TableCell>
-                  </TableRow>
-                ))}
+               
               </TableBody>
             </Table>
           </TableContainer>
           <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-            Chiết khấu:
-            .............................................................
+            Tổng tiền hàng:
           </Typography>
           <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-            Tổng cộng:
-            .............................................................
+            Thuế VAT (nếu có):
           </Typography>
-
-          <Typography gutterBottom>
-            Thời gian giao hàng: ___________________________________________
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            Phí vận chuyển (nếu có): :
           </Typography>
-          <Typography gutterBottom>
-            Địa điểm giao hàng: ___________________________________________
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            Tổng tiền thanh toán: :
           </Typography>
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>Thời gian giao hàng:</Typography>
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>Địa điểm giao hàng:</Typography>
 
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Phương thức thanh toán:
@@ -98,13 +92,38 @@ const ChiTietDonHang = () => {
             <br />- Thanh toán trước 50% giá trị hợp đồng, 50% còn lại thanh
             toán sau khi giao hàng.
           </Typography>
-
-          <Box textAlign="right" sx={{ mt: 3 }}>
-            <Typography>..........., ngày ... tháng ... năm .......</Typography>
-            <Typography variant="h6" fontWeight="bold">
-              GIÁM ĐỐC
-            </Typography>
-          </Box>
+          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+            GHI CHÚ KHÁC :
+          </Typography>
+          <Stack
+            spacing={12}
+            direction={"row"}
+            alignItems={"center"}
+            justifyContent={"space-between"}
+          >
+            <Box textAlign="right" sx={{ mt: 3 }} style={{ marginBottom: 20 }}>
+              <Typography>
+                ..........., ngày ... tháng ... năm .......
+              </Typography>
+              <Typography variant="h6" fontWeight="bold" textAlign={"center"}>
+                BÊN BÁN
+              </Typography>
+              <Typography variant="h6" fontWeight="bold" textAlign={"center"}>
+                <i>(Ký ghi rõ họ tên)</i>
+              </Typography>
+            </Box>
+            <Box textAlign="right" sx={{ mt: 3 }} style={{ marginBottom: 20 }}>
+              <Typography>
+                ..........., ngày ... tháng ... năm .......
+              </Typography>
+              <Typography variant="h6" fontWeight="bold" textAlign={"center"}>
+                BÊN MUA
+              </Typography>
+              <Typography variant="h6" fontWeight="bold" textAlign={"center"}>
+                <i>(Ký ghi rõ họ tên)</i>
+              </Typography>
+            </Box>
+          </Stack>
           <Stack spacing={2} direction="row" justifyContent="center">
             <Button
               variant="contained"

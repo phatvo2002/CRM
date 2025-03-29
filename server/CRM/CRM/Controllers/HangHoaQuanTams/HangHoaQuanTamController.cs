@@ -101,6 +101,20 @@ namespace CRM.Controllers.HangHoaQuanTams
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("gethanghoaquantambydonhangid/{id}")]
+        //[JwtAuthorize]
+        public async Task<IActionResult> GetHangHoaQuanTamByDonhangId(Guid id)
+        {
+            try
+            {
+                List<HangHoaQuanTamDTO> result = await _hangHoaQuanTamServices.GetHangHoaQuanTamByDonHangid(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost("creathanghoaquantam")]
         [JwtAuthorize]
         public async Task<IActionResult> CreateHangHoaQuanTam(HangHoaQuanTamModal modal)
