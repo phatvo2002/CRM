@@ -209,7 +209,6 @@ const KhachHangTiemNang = () => {
   const [valueDenNgay, setValueDenNgay] = React.useState(
     dayjs().endOf("month")
   );
-  console.log(valueTuNgay , valueDenNgay)
   const [openModalBanGiao, setOpenModalBanGiao] = useState(false);
   const { data: getTemplate } = useGetTemplatesQuery({
     path: "Templates/ThongTinTiemNang.xlsx",

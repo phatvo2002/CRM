@@ -36,6 +36,7 @@ const HangHoaQuanTamTab = () => {
       maHangHoaId: "",
       tenHangHoa: "",
       khachHangTiemNangId: id,
+      maDonViTinh:0,
       thueSuat:0,
       tienThue:0,
       donGia : 0,
@@ -72,6 +73,7 @@ const HangHoaQuanTamTab = () => {
     }
       let updatedRow;
       if (currentRow.isNew === true) {
+        console.log(currentRow)
         updatedRow = await createData(currentRow).unwrap();
         currentRow.isNew = false; 
       } else {
@@ -96,6 +98,8 @@ const HangHoaQuanTamTab = () => {
     const updateTongTien = selectedItem ? updatedThanhTien + updateTienThue : 0;
     const updatedRow = {
       ...newRow,
+      tenHangHoa : selectedItem?.tenHangHoa,
+      maDonViTinh :selectedItem?.donViTinh?.id,
       tienThue : updateTienThue,
       thanhTien: updatedThanhTien,
       tongTien: updateTongTien,
@@ -153,6 +157,16 @@ const HangHoaQuanTamTab = () => {
       renderCell: (params) => {
         const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
         return selectedItem ? selectedItem.tenHangHoa : "" ;
+      },
+    },
+    {
+      field: "maDonViTinh",
+      headerName: "Đơn vị tính",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
+        return selectedItem ? selectedItem.donViTinh.name  : "" ;
       },
     },
     {

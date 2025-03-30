@@ -10,11 +10,12 @@ import {
   Paper,
   Menu,
   MenuItem,
+  Stack,
 } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import WbIncandescentIcon from '@mui/icons-material/WbIncandescent';
+import WbIncandescentIcon from "@mui/icons-material/WbIncandescent";
 import TodayIcon from "@mui/icons-material/Today";
 import { useParams } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -31,9 +32,9 @@ import TabLienHe from "./Tabs/TabLienHe";
 import TabBanHang from "./Tabs/TabBanHang";
 import TabHoatDong from "./Tabs/TabHoatDong";
 import TabLichSuMuaHang from "./Tabs/TabLichSuMuaHang";
-import ContactMailIcon from '@mui/icons-material/ContactMail';
-import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import CachedIcon from '@mui/icons-material/Cached';
+import ContactMailIcon from "@mui/icons-material/ContactMail";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
+import CachedIcon from "@mui/icons-material/Cached";
 import { useGetKhachHangMucTieuByIdQuery } from "src/App/Api/KhachHangMucTieuApi";
 import ModlaAddCuocGoi from "../Modal/ModalAddCuocGoi";
 import ModalAddLichHen from "../Modal/ModalAddLichHen";
@@ -43,9 +44,9 @@ const KhachHangMucTieuDetail = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [modalCuocGoi, setModalCuocGoi] = useState(false);
   const [modalLichHen, setModalLichHen] = useState(false);
-  const [modalSinhCoHoi ,setModalSinhCoHoi] = useState(false);
+  const [modalSinhCoHoi, setModalSinhCoHoi] = useState(false);
   const { id } = useParams();
-  const { data: KhachhangData } = useGetKhachHangMucTieuByIdQuery(id)
+  const { data: KhachhangData } = useGetKhachHangMucTieuByIdQuery(id);
   const navigate = useNavigate();
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -64,16 +65,16 @@ const KhachHangMucTieuDetail = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const handleOpenModalCuocGoi = () => setModalCuocGoi(true)
-  const handleCloseMoldalCuocGoi = () => setModalCuocGoi(false)
-  const handelOpenModalLichHen = () => setModalLichHen(true)
-  const handleCloseMdodalLichHen = () => setModalLichHen(false)
-  const handleOpenModalChuyenDoiCoHoi = () => setModalSinhCoHoi(true)
-  const handleCloseModalChuyenDoiCoHoi  = () => setModalSinhCoHoi(false)
+  const handleOpenModalCuocGoi = () => setModalCuocGoi(true);
+  const handleCloseMoldalCuocGoi = () => setModalCuocGoi(false);
+  const handelOpenModalLichHen = () => setModalLichHen(true);
+  const handleCloseMdodalLichHen = () => setModalLichHen(false);
+  const handleOpenModalChuyenDoiCoHoi = () => setModalSinhCoHoi(true);
+  const handleCloseModalChuyenDoiCoHoi = () => setModalSinhCoHoi(false);
   return (
     <>
       <Grid2 container spacing={2} sx={{ padding: 2 }}>
-        <Grid2 size={4}>
+        <Grid2 size={6}>
           <IconButton onClick={() => backPreviousPage()}>
             <ArrowBackIcon />
           </IconButton>
@@ -81,60 +82,67 @@ const KhachHangMucTieuDetail = () => {
             <CachedIcon />
           </IconButton>
         </Grid2>
-        <Grid2 size={8}>
-          <Button
-            variant="outlined"
-            style={{ margin: 5 }}
-            endIcon={<LocalPhoneIcon />}
-          >
-            Gọi Điện thoại
-          </Button>
-          <Button
-            variant="outlined"
-            style={{ margin: 5 }}
-            endIcon={<MarkunreadIcon />}
-          >
-            Gửi mail
-          </Button>
-          <Button
-            variant="outlined"
-            style={{ margin: 5 }}
-            endIcon={<TextsmsIcon />}
-          >
-            Gửi SMS
-          </Button>
-          <Button
-            variant="outlined"
-            id="basic-button"
-            aria-controls={open ? 'basic-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            endIcon={<ChangeCircleIcon />}
-          >
-            Chuyển đổi
-          </Button>
+        <Grid2 size={6}>
+          <Stack direction="row" spacing={2}>
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<LocalPhoneIcon />}
+              sx={{ textTransform: "none", borderRadius: 2 }}
+            >
+              Gọi Điện thoại
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              startIcon={<MarkunreadIcon />}
+              sx={{ textTransform: "none", borderRadius: 2 }}
+            >
+              Gửi mail
+            </Button>
+            <Button
+              variant="contained"
+              color="success"
+              startIcon={<TextsmsIcon />}
+              sx={{ textTransform: "none", borderRadius: 2 }}
+            >
+              Gửi SMS
+            </Button>
+            <Button
+              variant="contained"
+              color="warning"
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
+              startIcon={<ChangeCircleIcon />}
+              sx={{ textTransform: "none", borderRadius: 2 }}
+            >
+              Chuyển đổi
+            </Button>
+          </Stack>
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
-            MenuListProps={{
-              'aria-labelledby': 'basic-button',
-            }}
+            MenuListProps={{ "aria-labelledby": "basic-button" }}
           >
-            <MenuItem onClick={handleClose}><ContentPasteIcon sx={{margin : 1}}/> Sinh đơn hàng</MenuItem>
-            <MenuItem onClick={handleOpenModalChuyenDoiCoHoi}><WbIncandescentIcon sx={{margin : 1}}/> Sinh cơ hội</MenuItem>
+            <MenuItem onClick={handleClose}>
+              <ContentPasteIcon sx={{ mr: 1, color: "#0288d1" }}  /> Sinh đơn hàng
+            </MenuItem>
+            <MenuItem onClick={handleOpenModalChuyenDoiCoHoi}>
+              <WbIncandescentIcon sx={{ mr: 1, color: "#0288d1" }}  /> Sinh cơ hội
+            </MenuItem>
           </Menu>
-
         </Grid2>
       </Grid2>
       <Grid2 container spacing={2}>
         <Grid2 size={2}>
-          <Paper
-          >
+          <Paper>
             <Box
-              bgcolor="#f9f9f9"
+              bgcolor="background.primary"
               p={2}
               display="flex"
               flexDirection="column"
@@ -149,20 +157,55 @@ const KhachHangMucTieuDetail = () => {
                   {KhachhangData?.tenKhachHang}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  Mã số thuế: - {KhachhangData?.maSoThue ? <span>{KhachhangData?.maSoThue}</span> : <span></span>} <br />
-                  Điện thoại: - {KhachhangData?.soDienThoai ? <span>{KhachhangData?.soDienThoai}</span> : <span></span>}
+                  Mã số thuế: -{" "}
+                  {KhachhangData?.maSoThue ? (
+                    <span>{KhachhangData?.maSoThue}</span>
+                  ) : (
+                    <span></span>
+                  )}{" "}
+                  <br />
+                  Điện thoại: -{" "}
+                  {KhachhangData?.soDienThoai ? (
+                    <span>{KhachhangData?.soDienThoai}</span>
+                  ) : (
+                    <span></span>
+                  )}
                 </Typography>
               </Box>
               <Divider />
               <Box>
-                <IconButton sx={{ margin: 1, border: "1px solid #4caf50", alignItems: "center" }} onClick={handleOpenModalCuocGoi}>
-                  <LocalPhoneIcon sx={{ textAlign: "center", color: "#4caf50" }} />
+                <IconButton
+                  sx={{
+                    margin: 1,
+                    border: "1px solid #4caf50",
+                    alignItems: "center",
+                  }}
+                  onClick={handleOpenModalCuocGoi}
+                >
+                  <LocalPhoneIcon
+                    sx={{ textAlign: "center", color: "#4caf50" }}
+                  />
                 </IconButton>
-                <IconButton sx={{ margin: 1, border: "1px solid #2196f3", alignItems: "center" }} onClick={handelOpenModalLichHen}>
+                <IconButton
+                  sx={{
+                    margin: 1,
+                    border: "1px solid #2196f3",
+                    alignItems: "center",
+                  }}
+                  onClick={handelOpenModalLichHen}
+                >
                   <TodayIcon sx={{ textAlign: "center", color: "#2196f3" }} />
                 </IconButton>
-                <IconButton sx={{ margin: 1, border: "1px solid #f44336", alignItems: "center" }}>
-                  <ContactMailIcon sx={{ textAlign: "center", color: "#f44336" }} />
+                <IconButton
+                  sx={{
+                    margin: 1,
+                    border: "1px solid #f44336",
+                    alignItems: "center",
+                  }}
+                >
+                  <ContactMailIcon
+                    sx={{ textAlign: "center", color: "#f44336" }}
+                  />
                 </IconButton>
               </Box>
               <Box mt={2}>
@@ -182,48 +225,56 @@ const KhachHangMucTieuDetail = () => {
           </Paper>
         </Grid2>
         <Grid2 size={10}>
-            {/* Tabs */}
-            <Paper style={{ width: "100%",height: "100vh" }} >
-              <Box sx={{  typography: "body1" }}>
-                <TabContext value={value} >
-                  <Box
-                    sx={{ border: 0, borderColor: "Highlight", fontFamily: "inherit", boxShadow: 3 }}
+          {/* Tabs */}
+          <Paper style={{ width: "100%", height: "100vh" }}>
+            <Box sx={{ typography: "body1" }}>
+              <TabContext value={value}>
+                <Box
+                  sx={{
+                    border: 0,
+                    borderColor: "Highlight",
+                    fontFamily: "inherit",
+                    boxShadow: 3,
+                  }}
+                >
+                  <TabList
+                    onChange={handleChange}
+                    aria-label="lab"
+                    scrollButtons={"auto"}
                   >
-                    <TabList onChange={handleChange} aria-label="lab" scrollButtons={"auto"}>
-                      <Tab label="Tổng quan" value="1" />
-                      <Tab label="Thông tin chi tiết" value="2" />
-                      <Tab label="Liên hệ" value="3" />
-                      <Tab label="Hoạt động" value="4" />
-                      <Tab label="Bán hàng" value="5" />
-                      <Tab label="Lịch sử mua hàng" value="6" />
-                      <Tab label="Ghi chú" value="7" />
-                    </TabList>
-                  </Box>
-                  <TabPanel value="1">
-                    <TabTongQuan />
-                  </TabPanel>
-                  <TabPanel value="2">
-                    <TabThongTinChiTiet />
-                  </TabPanel>
-                  <TabPanel value="3">
-                    <TabLienHe />
-                  </TabPanel>
-                  <TabPanel value="4">
-                    <TabHoatDong />
-                  </TabPanel>
-                  <TabPanel value="5">
-                    <TabBanHang />
-                  </TabPanel>
-                  <TabPanel value="6">
-                    <TabLichSuMuaHang />
-                  </TabPanel>
-                </TabContext>
-              </Box>
-            </Paper>
+                    <Tab label="Tổng quan" value="1" />
+                    <Tab label="Thông tin chi tiết" value="2" />
+                    <Tab label="Liên hệ" value="3" />
+                    <Tab label="Hoạt động" value="4" />
+                    <Tab label="Bán hàng" value="5" />
+                    <Tab label="Lịch sử mua hàng" value="6" />
+                    <Tab label="Ghi chú" value="7" />
+                  </TabList>
+                </Box>
+                <TabPanel value="1">
+                  <TabTongQuan />
+                </TabPanel>
+                <TabPanel value="2">
+                  <TabThongTinChiTiet />
+                </TabPanel>
+                <TabPanel value="3">
+                  <TabLienHe />
+                </TabPanel>
+                <TabPanel value="4">
+                  <TabHoatDong />
+                </TabPanel>
+                <TabPanel value="5">
+                  <TabBanHang />
+                </TabPanel>
+                <TabPanel value="6">
+                  <TabLichSuMuaHang />
+                </TabPanel>
+              </TabContext>
+            </Box>
+          </Paper>
         </Grid2>
       </Grid2>
-      <Box>
-      </Box>
+      <Box></Box>
       {/* Modal thêm cuộc gọi */}
       <ModlaAddCuocGoi
         showModal={modalCuocGoi}

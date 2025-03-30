@@ -9,5 +9,6 @@ namespace CRM.Services.HangHoas
         Task<ResultModal> CreateHangHoa(HangHoaModal modal);
 
         Task<ResultModal> UpdateHangHoa(HangHoaModal modal);
+        Task<List<HangHoaDTO>> GetAllHangHoa();
     }
 }

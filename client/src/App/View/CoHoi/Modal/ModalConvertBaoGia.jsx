@@ -98,7 +98,7 @@ export const ModalConvertBaoGia = ({
   const { data: hangHoas } = useGetAllHangHoaQuery(undefined, {
     skip: showModal == false,
   });
-  const { data: rows, refetch } = useGetHangHoaQuanTamByCoHoiIdQuery(id);
+  const { data: rows, refetch } = useGetHangHoaQuanTamByCoHoiIdQuery(id ,{ skip: showModal == false});
   const [createData] = useAddHangHoaQuanTamMutation();
   const [updateData] = useUpdateHangHoaQuanTamMutation();
   const [deleteData] = useDeleteHangHoaQuanTamMutation();
@@ -502,7 +502,7 @@ export const ModalConvertBaoGia = ({
                       display: "flex",
                       justifyContent: "flex-end",
                       p: 2,
-                      bgcolor: "#f1f1f1",
+                      bgcolor: "background.primary",
                     }}
                   >
                     <Typography variant="h6">
@@ -514,7 +514,7 @@ export const ModalConvertBaoGia = ({
                       display: "flex",
                       justifyContent: "flex-end",
                       p: 2,
-                      bgcolor: "#f1f1f1",
+                      bgcolor: "background.primary",
                     }}
                   >
                     <Typography variant="h6">
@@ -526,7 +526,7 @@ export const ModalConvertBaoGia = ({
                       display: "flex",
                       justifyContent: "flex-end",
                       p: 2,
-                      bgcolor: "#f1f1f1",
+                      bgcolor: "background.primary",
                     }}
                   >
                     <Typography variant="h6">

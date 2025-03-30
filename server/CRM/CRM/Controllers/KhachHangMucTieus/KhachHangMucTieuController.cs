@@ -56,7 +56,7 @@ namespace CRM.Controllers.KhachHangMucTieus
 
         [HttpGet("getkhachhangmuctieubynguoidungid")]
         [JwtAuthorize]
-        public async Task<IActionResult> GetKhachHangMucTieuByNguoiDungId()
+        public async Task<IActionResult> GetKhachHangMucTieuByNguoiDungId(DateTime tuNgay, DateTime denNgay)
         {
             try
             {
@@ -65,12 +65,12 @@ namespace CRM.Controllers.KhachHangMucTieus
                 var db = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId && r.MaPhongBan == phongBanId).FirstOrDefaultAsync();
                 if (db?.CheckIsTruongPhong == true)
                 {
-                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByPhongBanId(phongBanId);
+                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByPhongBanId(phongBanId, tuNgay, denNgay);
                     return Ok(result);
                 }
                 else
                 {
-                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByNguoiDungId(nguoiDungId);
+                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByNguoiDungId(nguoiDungId, tuNgay, denNgay);
                     return Ok(result);
                 }
             }
@@ -101,18 +101,19 @@ namespace CRM.Controllers.KhachHangMucTieus
             {
                 Guid nguoiDungId = HttpContext.GetUserId();
                 Guid phongBanId = HttpContext.GetPhongBanId();
-                var userData = _context.Nguoidungs.FirstOrDefault(r=> r.Id == nguoiDungId);
-                if(userData.CheckIsTruongPhong == true)
+                var userData = _context.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId);
+                if (userData.CheckIsTruongPhong == true)
                 {
                     List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuDaXoaByNguoiDungId(nguoiDungId);
                     return Ok(result);
-                }    
+                }
                 else
                 {
                     List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuDaXoaByPhongBanId(phongBanId);
                     return Ok(result);
-                }    
-            }catch (Exception ex)
+                }
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
