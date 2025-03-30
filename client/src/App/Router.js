@@ -1,5 +1,6 @@
 import { Box, CircularProgress } from "@mui/material";
 import { lazy, Suspense } from "react";
+import { Lazy } from "yup";
 
 //quản trị hệ thống
 const BanLamViec = lazy(() => import("./View/BanLamViec/BanLamViec"));
@@ -53,8 +54,9 @@ const ChiTietBaoGia = lazy(() => import("./View/BaoGia/pages/chitiet/index"))
 
 // đơn hàng
 const DonHang = lazy(()=> import("./View/DonHang/index"))
-
 const NhiemVu = lazy(() => import("./View/NhiemVu/index"));
+// Mục tiêu
+const MucTieu = lazy(()=> import("./View/MucTieu/index"))
 
 const RouteChild = [
   {
@@ -340,6 +342,28 @@ const RouteChild = [
         }
       >
         <DonHang />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/muctieu",
+    element: (
+      <Suspense
+        fallback={
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              width: "100vw",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        }
+      >
+        <MucTieu />
       </Suspense>
     ),
   },

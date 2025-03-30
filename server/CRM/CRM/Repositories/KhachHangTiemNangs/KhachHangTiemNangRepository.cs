@@ -16,9 +16,9 @@ namespace CRM.Repositories.KhachHangTiemNangs
             _mapper = mapper;
             _logger = logger;
         }
-        public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync()
+        public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync(DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _context.KhachHangTiemNangs.AsNoTracking().Where(r => r.IsDeleted == false).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.AsNoTracking().Where(r => r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
 
@@ -28,15 +28,15 @@ namespace CRM.Repositories.KhachHangTiemNangs
             return _mapper.Map<KhachHangTiemNangDTO>(db);
         }
 
-        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByNguoiDungIdAsync(Guid nguoiDungId)
+        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByNguoiDungIdAsync(Guid nguoiDungId, DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).Include(r => r.Nguoidung).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
 
-        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByPhongBanIdAsync(Guid phongBanId)
+        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByPhongBanIdAsync(Guid phongBanId, DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _context.KhachHangTiemNangs.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false).Include(r => r.Nguoidung).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
 
@@ -73,6 +73,7 @@ namespace CRM.Repositories.KhachHangTiemNangs
                     khachHangTiemNang.CreateAt = DateTime.Now;
                     khachHangTiemNang.NguoiDungId = nguoiDungId;
                     khachHangTiemNang.PhongBanId = phongBanId;
+                    khachHangTiemNang.IsChuyenDoi = false;
                     _context.KhachHangTiemNangs.Add(khachHangTiemNang);
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };

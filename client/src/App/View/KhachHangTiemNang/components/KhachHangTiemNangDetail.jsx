@@ -25,6 +25,7 @@ import SMStab from "./Tab/SMStab";
 import ModalConvertKhachHangTiemNang from "./ModalConvertKhachHangTiemNang";
 import ModalEditKhachHangTiemNang from "../ModalEditKhachHangTiemNang";
 import { ModalGuiMail } from "../Modal/ModalGuiMail";
+import { MoreVert, Edit, SyncAlt } from "@mui/icons-material";
 
 const KhachHangTiemNangDetail = () => {
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ const KhachHangTiemNangDetail = () => {
           width: "100%",
           borderRadius: 3,
           overflow: "hidden",
-          bgcolor: "white",
+          bgcolor: "background.primary",
         }}
       >
         {/* Header */}
@@ -84,7 +85,7 @@ const KhachHangTiemNangDetail = () => {
           spacing={2}
           sx={{
             p: 2,
-            bgcolor: "#f5f7fa",
+            bgcolor: "background.primary",
             borderBottom: "1px solid #e0e0e0",
             alignItems: "center",
           }}
@@ -182,36 +183,16 @@ const KhachHangTiemNangDetail = () => {
             sx: { mt: 1, borderRadius: 2, minWidth: 220 },
           }}
         >
-          {dataKhachHangById.isChuyenDoi && (
-            <MenuItem onClick={handleCloseDrop}>
-              <Button
-                variant="contained"
-                fullWidth
-                onClick={handleOpenModalConvert}
-                sx={{
-                  textTransform: "none",
-                  bgcolor: "#0288d1",
-                  "&:hover": { bgcolor: "#0277bd" },
-                }}
-              >
-                Chuyển đổi khách hàng
-              </Button>
-            </MenuItem>
-          )}
-          <MenuItem onClick={handleCloseDrop}>
-            <Button
-              variant="contained"
-              fullWidth
-              onClick={handleOpenModalEdit}
-              sx={{
-                textTransform: "none",
-                bgcolor: "#0288d1",
-                "&:hover": { bgcolor: "#0277bd" },
-              }}
-            >
-              Chỉnh sửa khách hàng
-            </Button>
+         {dataKhachHangById.isChuyenDoi === false && (
+          <MenuItem onClick={handleOpenModalConvert} >
+            <SyncAlt sx={{ mr: 1, color: "#0288d1" }} />
+            Chuyển đổi khách hàng
           </MenuItem>
+        )}
+          <MenuItem onClick={handleOpenModalEdit} >
+          <Edit sx={{ mr: 1, color: "#0288d1" }} />
+          Chỉnh sửa khách hàng
+        </MenuItem>
         </Menu>
 
         {/* Main Content */}
@@ -236,7 +217,7 @@ const KhachHangTiemNangDetail = () => {
                 variant="scrollable"
                 scrollButtons="auto"
                 sx={{
-                  bgcolor: "#fafafa",
+                  bgcolor: "background.primary",
                   borderRadius: 2,
                   boxShadow: 2,
                   mb: 2,

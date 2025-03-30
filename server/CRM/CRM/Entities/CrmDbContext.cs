@@ -535,7 +535,7 @@ namespace CRM.Entities
                 entity.Property(e => e.CoHoiId).HasMaxLength(100);
                 entity.Property(e => e.BaoGiaId).HasColumnType("uniqueidentifier");
                 entity.Property(e => e.HoaDonId).HasMaxLength(100);
-                entity.Property(e => e.SoLuong).HasColumnType("int")
+                entity.Property(e => e.SoLuong).HasColumnType("int");
                 entity.Property(e => e.ThueSuat).HasColumnType("int");
                 entity.Property(e => e.MaDonViTinh).HasColumnType("int");
                 entity.Property(e => e.TienThue).HasColumnType("decimal");
@@ -994,9 +994,9 @@ namespace CRM.Entities
 
             modelBuilder.Entity<KPINhanVien>(entity =>
             {
-                entity.HasKey(e => e.Id).HasName("PK_MucTieuDoanhSoId");
+                entity.HasKey(e => e.Id).HasName("PK_KPINhanVien");
 
-                entity.ToTable("MucTieuDoanhSo");
+                entity.ToTable("KPINhanVien");
                 entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e => e.TenNhanVien).HasMaxLength(100);
                 entity.Property(e => e.NgayBatDau).HasColumnType("datetime");
@@ -1028,7 +1028,7 @@ namespace CRM.Entities
                 .HasConstraintName("FK_PhongBan_KPINhanVien");
                 entity.HasOne(d => d.TinhTrangKPI).WithMany(r => r.KPINhanViens).HasForeignKey(r => r.MaTrangThaiKPI)
                .OnDelete(DeleteBehavior.ClientSetNull)
-               .HasConstraintName("FK_MucTieuDoanhSo_KPINhanVien");
+               .HasConstraintName("FK_TinhTrangKPI_KPINhanVien");
                 entity.HasOne(d => d.MucTieuDoanhSo).WithMany(r => r.KPINhanViens).HasForeignKey(r => r.MaMucTieuDoanhSo).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_MucTieuDoanhSo_KPINhanVien");
             });
             #endregion

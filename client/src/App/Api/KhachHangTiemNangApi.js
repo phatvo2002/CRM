@@ -32,7 +32,7 @@ export const apiKhachHangTiemNang = createApi({
         query: () => `/KhachHangTiemNang/getkhachhangtiemnangbyphongbanidcontext`,
       }),
       getKhachHangTiemNangByrole: builder.query({
-        query: () => `/KhachHangTiemNang/getkhachhangbyrole`,
+        query: ({tuNgay, denNgay}) => `/KhachHangTiemNang/getkhachhangbyrole?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
       getKhachHangTiemNangDaXoa: builder.query({
         query: () => `/KhachHangTiemNang/getkhachhangtiemnangdaxoa`,

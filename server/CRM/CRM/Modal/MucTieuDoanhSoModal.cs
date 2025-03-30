@@ -1,6 +1,6 @@
-﻿namespace CRM.Entities
+﻿namespace CRM.Modal
 {
-    public class MucTieuDoanhSo : BaseNguoiDung
+    public class MucTieuDoanhSoModal
     {
         public Guid Id { get; set; }
         public string? TenKPI { get; set; }
@@ -29,7 +29,5 @@
         public bool? IsDatMucTieu { get; set; }
         public int? MaTrangThaiKPI { get; set; }
         public decimal? TongTiLeThucTe { get; set; }
-        public virtual TinhTrangKPI? TinhTrangKPI { get; set; }
-        public ICollection<KPINhanVien> KPINhanViens { get; set; } = new List<KPINhanVien>();
     }
 }

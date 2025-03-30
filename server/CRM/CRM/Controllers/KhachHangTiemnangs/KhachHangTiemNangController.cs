@@ -26,11 +26,11 @@ namespace CRM.Controllers.KhachHangTiemnangs
         }
         [HttpGet("getallkhachhangtiemnang")]
         [JwtAuthorize]
-        public async Task<IActionResult> GetAllKhachHangTiemNang()
+        public async Task<IActionResult> GetAllKhachHangTiemNang(DateTime tuNgay, DateTime denNgay)
         {
             try
             {
-                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetAllKhachHangTiemNangAsync();
+                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetAllKhachHangTiemNangAsync(tuNgay, denNgay);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -103,11 +103,11 @@ namespace CRM.Controllers.KhachHangTiemnangs
         }
         [HttpGet("getkhachhangtiemnangbynguoidungid/{id}")]
         [JwtAuthorize]
-        public async Task<IActionResult> GetKhachHangTiemNangByNguoiDungId(Guid Id)
+        public async Task<IActionResult> GetKhachHangTiemNangByNguoiDungId(Guid Id, DateTime tuNgay, DateTime denNgay)
         {
             try
             {
-                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByNguoiDungIdAsync(Id);
+                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByNguoiDungIdAsync(Id, tuNgay, denNgay);
                 return Ok(result);
             }
             catch
@@ -118,11 +118,11 @@ namespace CRM.Controllers.KhachHangTiemnangs
         }
         [HttpGet("getkhachhangtiemnangbyPhongbanId/{phongBanId}")]
         [JwtAuthorize]
-        public async Task<IActionResult> GetKhachHangTiemNangByPhongBanId(Guid phongBanId)
+        public async Task<IActionResult> GetKhachHangTiemNangByPhongBanId(Guid phongBanId, DateTime tuNgay, DateTime denNgay)
         {
             try
             {
-                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId);
+                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
                 return Ok(result);
             }
             catch
@@ -133,12 +133,12 @@ namespace CRM.Controllers.KhachHangTiemnangs
         }
         [HttpGet("getkhachhangtiemnangbyphongbanidcontext")]
         [JwtAuthorize]
-        public async Task<IActionResult> GetKhachHangTiemNangByPhongBanIdContext()
+        public async Task<IActionResult> GetKhachHangTiemNangByPhongBanIdContext(DateTime tuNgay, DateTime denNgay)
         {
             try
             {
                 Guid phongBanId = HttpContext.GetPhongBanId();
-                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId);
+                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
                 return Ok(result);
             }
             catch
@@ -149,7 +149,7 @@ namespace CRM.Controllers.KhachHangTiemnangs
         }
         [HttpGet("getkhachhangbyrole")]
         [JwtAuthorize]
-        public async Task<IActionResult> GetKhachHangTiemNangByRole()
+        public async Task<IActionResult> GetKhachHangTiemNangByRole(DateTime tuNgay, DateTime denNgay)
         {
             try
             {
@@ -158,12 +158,12 @@ namespace CRM.Controllers.KhachHangTiemnangs
                 var db = _dbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId);
                 if (db.CheckIsTruongPhong == true)
                 {
-                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId);
+                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
                     return Ok(result);
                 }
                 else
                 {
-                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByNguoiDungIdAsync(nguoiDungId);
+                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByNguoiDungIdAsync(nguoiDungId, tuNgay, denNgay);
                     return Ok(result);
                 }
             }
@@ -388,6 +388,7 @@ namespace CRM.Controllers.KhachHangTiemnangs
                                 khachHangTiemNang.IsDungChung = false;
                                 khachHangTiemNang.CreateAt = DateTime.Now;
                                 khachHangTiemNang.IsDeleted = false;
+                                khachHangTiemNang.IsChuyenDoi = false;
                                 _dbContext.KhachHangTiemNangs.Add(khachHangTiemNang);
                                 await _dbContext.SaveChangesAsync();
 

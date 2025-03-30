@@ -22,9 +22,9 @@ namespace CRM.Services.KhahHangTiemNangs
             return await _khachHangTiemNang.ChinhSuaKhachHangTiemNangAsync(model);
         }
 
-        public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync()
+        public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync(DateTime tuNgay, DateTime denNgay)
         {
-            return await _khachHangTiemNang.GetAllKhachHangTiemNangAsync();
+            return await _khachHangTiemNang.GetAllKhachHangTiemNangAsync(tuNgay, denNgay);
         }
 
         public async Task<KhachHangTiemNangDTO> GetKhachHangTiemNangByIdAsync(Guid id)
@@ -32,14 +32,14 @@ namespace CRM.Services.KhahHangTiemNangs
             return await _khachHangTiemNang.GetKhachHangTiemNangByIdAsync(id);
         }
 
-        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByNguoiDungIdAsync(Guid nguoiDungId)
+        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByNguoiDungIdAsync(Guid nguoiDungId, DateTime tuNgay, DateTime denNgay)
         {
-            return await _khachHangTiemNang.GetKhachHangTiemNangByNguoiDungIdAsync(nguoiDungId);
+            return await _khachHangTiemNang.GetKhachHangTiemNangByNguoiDungIdAsync(nguoiDungId, tuNgay, denNgay);
         }
 
-        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByPhongBanIdAsync(Guid phongBanId)
+        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByPhongBanIdAsync(Guid phongBanId, DateTime tuNgay, DateTime denNgay)
         {
-            return await _khachHangTiemNang.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId);
+            return await _khachHangTiemNang.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
         }
 
 

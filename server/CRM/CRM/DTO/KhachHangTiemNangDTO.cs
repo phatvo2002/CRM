@@ -23,6 +23,7 @@
         public int? MaLinhVuc { get; set; }
         public int? MaDoanhThu { get; set; }
         public bool? IsDungChung { get; set; }
+        public bool? IsChuyenDoi { get; set; }
         public Guid? NguoiDungId { get; set; }
         public NguoiDungDTO? NguoiDung { get; set; }
     }

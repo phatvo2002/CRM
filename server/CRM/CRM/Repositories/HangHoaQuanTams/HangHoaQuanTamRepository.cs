@@ -16,23 +16,23 @@ namespace CRM.Repositories.HangHoaQuanTams
 
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByCoHoiId(string id)
         {
-            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.CoHoiId == id && r.BaoGiaId == null).ToListAsync();
+            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.CoHoiId == id && r.BaoGiaId == null).Include(r => r.DonViTinh).ToListAsync();
             return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
         }
 
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangId(string id)
         {
-            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.KhachHangId == id && r.CoHoiId == null).ToListAsync();
+            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.KhachHangId == id && r.CoHoiId == null).Include(r => r.DonViTinh).ToListAsync();
             return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
         }
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByBaoGiaId(Guid id)
         {
-            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.BaoGiaId == id).ToListAsync();
+            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.BaoGiaId == id).Include(r => r.DonViTinh).ToListAsync();
             return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
         }
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByKhachHangTiemNangId(Guid id)
         {
-            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.KhachHangTiemNangId == id).ToListAsync();
+            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.KhachHangTiemNangId == id).Include(r => r.DonViTinh).ToListAsync();
             return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
         }
 
@@ -56,6 +56,7 @@ namespace CRM.Repositories.HangHoaQuanTams
                         db.TienThue = item.TienThue;
                         db.ThanhTien = item.ThanhTien;
                         db.TongTien = item.TongTien;
+                        db.MaDonViTinh = item.MaDonViTinh;
                         db.ChiecKhauDonHang = item.ChiecKhauDonHang;
                         _crmDbContext.HangHoaQuanTams.Update(db);
                     }
@@ -75,6 +76,7 @@ namespace CRM.Repositories.HangHoaQuanTams
                         hangHoaQuanTamNew.ThanhTien = item.ThanhTien;
                         hangHoaQuanTamNew.TongTien = item.TongTien;
                         hangHoaQuanTamNew.ChiecKhauDonHang = item.ChiecKhauDonHang;
+                        hangHoaQuanTamNew.MaDonViTinh = item.MaDonViTinh;
                         _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTamNew);
 
                     }
@@ -118,6 +120,7 @@ namespace CRM.Repositories.HangHoaQuanTams
                     hangHoaQuanTam.ChiecKhauDonHang = modal.ChiecKhauDonHang;
                     hangHoaQuanTam.ThanhTien = modal.ThanhTien;
                     hangHoaQuanTam.TongTien = modal.TongTien;
+                    hangHoaQuanTam.MaDonViTinh = modal.MaDonViTinh;
 
                     _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
                     await _crmDbContext.SaveChangesAsync();

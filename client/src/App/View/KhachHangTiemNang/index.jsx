@@ -46,6 +46,12 @@ import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import NoImage from "../../Assets/image/no-image.png";
+import dayjs from "dayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import SearchIcon from '@mui/icons-material/Search';
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -197,13 +203,20 @@ const KhachHangTiemNang = () => {
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [typeModal, setTypeModal] = useState("");
   const [loading, setLoading] = useState(false);
+  const [valueTuNgay, setValueTuNgay] = React.useState(
+    dayjs().startOf("month")
+  );
+  const [valueDenNgay, setValueDenNgay] = React.useState(
+    dayjs().endOf("month")
+  );
+  console.log(valueTuNgay , valueDenNgay)
   const [openModalBanGiao, setOpenModalBanGiao] = useState(false);
   const { data: getTemplate } = useGetTemplatesQuery({
     path: "Templates/ThongTinTiemNang.xlsx",
     filename: "ThongTinTiemNang",
   });
   const { data: dataKHByRole, refetch: refetchkh } =
-    useGetKhachHangTiemNangByroleQuery();
+    useGetKhachHangTiemNangByroleQuery({tuNgay:valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),denNgay : valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS")});
   const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation();
   const [deleteHangLoat] = useDeletehangLoatKhachHangTiemNangMutation();
   const onOpenModalUpdateKhachHang = () => {
@@ -300,37 +313,40 @@ const KhachHangTiemNang = () => {
   };
 
   return (
-    <Box className="modern-crm-page" sx={{ p: 3, bgcolor: 'background.default' }}>
+    <Box
+      className="modern-crm-page"
+      sx={{ p: 3, bgcolor: "background.default" }}
+    >
       {/* Header Section */}
-      <Stack 
-        direction="row" 
-        justifyContent="space-between" 
+      <Stack
+        direction="row"
+        justifyContent="space-between"
         alignItems="center"
         mb={3}
       >
         <Typography
           variant="h4"
-          sx={{ 
-            fontWeight: 700, 
-            color: '#1a237e',
-            letterSpacing: '-0.5px'
+          sx={{
+            fontWeight: 700,
+            color: "#1a237e",
+            letterSpacing: "-0.5px",
           }}
         >
           Tất Cả Tiềm Năng
         </Typography>
-        
+
         <Stack direction="row" spacing={1.5}>
           <Button
             variant="contained"
             color="primary"
             startIcon={<AddIcon />}
-            sx={{ 
+            sx={{
               borderRadius: 2,
-              textTransform: 'none',
+              textTransform: "none",
               px: 2.5,
               py: 1,
-              bgcolor: '#1976d2',
-              '&:hover': { bgcolor: '#1565c0' }
+              bgcolor: "#1976d2",
+              "&:hover": { bgcolor: "#1565c0" },
             }}
             onClick={gotoLink}
           >
@@ -343,11 +359,11 @@ const KhachHangTiemNang = () => {
             startIcon={<GetAppIcon />}
             sx={{
               borderRadius: 2,
-              textTransform: 'none',
+              textTransform: "none",
               px: 2.5,
               py: 1,
-              borderColor: '#e0e0e0',
-              color: '#424242'
+              borderColor: "#e0e0e0",
+              color: "#424242",
             }}
             onClick={gotoLinkImport}
           >
@@ -360,11 +376,11 @@ const KhachHangTiemNang = () => {
             endIcon={<KeyboardArrowDownIcon />}
             sx={{
               borderRadius: 2,
-              textTransform: 'none',
+              textTransform: "none",
               px: 2.5,
               py: 1,
-              borderColor: '#e0e0e0',
-              color: '#424242'
+              borderColor: "#e0e0e0",
+              color: "#424242",
             }}
             onClick={handleClick}
           >
@@ -385,8 +401,8 @@ const KhachHangTiemNang = () => {
             mt: 1,
             borderRadius: 2,
             minWidth: 200,
-            '& .MuiMenuItem-root': { py: 1 }
-          }
+            "& .MuiMenuItem-root": { py: 1 },
+          },
         }}
       >
         <MenuItem onClick={handleGetTemplates}>
@@ -395,22 +411,24 @@ const KhachHangTiemNang = () => {
             <Typography>Xuất mẫu</Typography>
           </Stack>
         </MenuItem>
-        
+
         <MenuItem onClick={handleOpenModalXem}>
           <Stack direction="row" spacing={1} alignItems="center">
             <AutoDeleteIcon color="primary" />
             <Typography>Đã xóa</Typography>
           </Stack>
         </MenuItem>
-        
+
         <Divider sx={{ my: 0.5 }} />
-        
-        <MenuItem 
+
+        <MenuItem
           onClick={handleDeleteMuliple}
           disabled={selectedRow.length === 0}
         >
           <Stack direction="row" spacing={1} alignItems="center">
-            <DeleteOutlineIcon color={selectedRow.length ? "error" : "disabled"} />
+            <DeleteOutlineIcon
+              color={selectedRow.length ? "error" : "disabled"}
+            />
             <Typography color={selectedRow.length ? "error" : "text.disabled"}>
               Xóa hàng loạt
             </Typography>
@@ -419,28 +437,50 @@ const KhachHangTiemNang = () => {
       </Menu>
 
       {/* Main Content */}
-      <Paper 
+      <Paper
         elevation={2}
-        sx={{ 
-          borderRadius: 3, 
-          overflow: 'hidden',
-          bgcolor: 'background.default'
+        sx={{
+          borderRadius: 3,
+          overflow: "hidden",
+          bgcolor: "background.default",
         }}
       >
-        <Box sx={{ p: 2, borderBottom: '1px solid #e0e0e0' }}>
+        <Box sx={{ p: 2, borderBottom: "1px solid #e0e0e0" }}>
           <Button
             variant="text"
             startIcon={<UpdateIcon />}
             sx={{
-              textTransform: 'none',
-              color: '#616161',
-              '&:hover': { bgcolor: '#f5f5f5' }
+              textTransform: "none",
+              color: "#616161",
+              "&:hover": { bgcolor: "#f5f5f5" },
             }}
             onClick={handleOpen}
           >
             Lịch sử tương tác
           </Button>
         </Box>
+        <Grid2 size={12} sx={{marginTop:3, marginLeft:3}}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={2}
+                alignItems={{ xs: "stretch", sm: "center" }}
+              >
+                <DateTimePicker
+                  label="Từ ngày"
+                  value={valueTuNgay}
+                  onChange={(newValue) => setValueTuNgay(newValue)}
+                />
+                <DateTimePicker
+                  label="Đến ngày"
+                  value={valueDenNgay}
+                  onChange={(newValue) => setValueDenNgay(newValue)}
+                />
+              </Stack>
+            </DemoContainer>
+          </LocalizationProvider>
+        </Grid2>
 
         <Box sx={{ p: 2 }}>
           <CustomDatagrid
@@ -453,12 +493,12 @@ const KhachHangTiemNang = () => {
             showTopToolbar={true}
             onRowSelectionChange={handleRowSelectionChange}
             sx={{
-              '& .MuiDataGrid-root': {
-                border: 'none',
-                '& .MuiDataGrid-cell': {
-                  borderBottom: '1px solid #f0f0f0'
-                }
-              }
+              "& .MuiDataGrid-root": {
+                border: "none",
+                "& .MuiDataGrid-cell": {
+                  borderBottom: "1px solid #f0f0f0",
+                },
+              },
             }}
           />
         </Box>
@@ -474,7 +514,7 @@ const KhachHangTiemNang = () => {
         setLoading={setLoading}
         refetch={refetchkh}
       />
-      
+
       <ModalBanGiaoKhachHang
         selectedItem={selectedRow}
         closeModal={handleCloseModalBanGiaoKhachHang}
@@ -484,7 +524,7 @@ const KhachHangTiemNang = () => {
         setLoading={setLoading}
         refetch={refetchkh}
       />
-      
+
       {isActionOpen && (
         <ActionComponents
           selectedItem={selectedRow}
@@ -492,7 +532,7 @@ const KhachHangTiemNang = () => {
           isOpen={isActionOpen}
         />
       )}
-      
+
       <ModalXemKhachHangDaXoa
         handleClose={handleCloseModalXem}
         open={KhachHangDaXoaModal}

@@ -22,7 +22,6 @@ import {
   useGetGetDonHangListQuery,
 } from "src/App/Api/DonHangApi";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import Inventory2Icon from "@mui/icons-material/Inventory2";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Person2Icon from "@mui/icons-material/Person2";
@@ -40,6 +39,11 @@ import ModalChinhSuaDonHang from "./Modal/ModalChinhSuaDonHang";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 import { useGuiMailDonHangMutation } from "src/App/Api/MailServicesApi";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import dayjs from "dayjs";
 const orderStatusColors = {
   Mới: "#3498db",
   "Ðang xử lý": "#f1c40f",
@@ -59,6 +63,12 @@ const DonHang = () => {
   const [mailDonHang] = useGuiMailDonHangMutation();
   const [modalThemMoiDonHang, setModalThemMoiDonHang] = useState(false);
   const [modalChinhSuaDonHang, setModalChinhSuaDonHang] = useState(false);
+    const [valueTuNgay, setValueTuNgay] = React.useState(
+      dayjs().startOf("month")
+    );
+    const [valueDenNgay, setValueDenNgay] = React.useState(
+      dayjs().endOf("month")
+    );
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
     [anchorEl, setAnchorEl] = useState(null);
@@ -130,7 +140,10 @@ const DonHang = () => {
             selectedRow[0]?.khachHangMucTieu?.email !== "" ||
             selectedRow[0]?.khachHangMucTieu?.email !== null
           ) {
-            const response = await mailDonHang({mailRequest:null ,donHangId:donHangId });
+            const response = await mailDonHang({
+              mailRequest: null,
+              donHangId: donHangId,
+            });
             try {
               if (response.data.status === 200) {
                 toast.success("Gửi thành công");
@@ -469,6 +482,30 @@ const DonHang = () => {
         </Grid2>
         <Grid2 size={12}>
           <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
+            <Grid2 size={12}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer
+                  components={["DateTimePicker", "DateTimePicker"]}
+                >
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    alignItems={{ xs: "stretch", sm: "center" }}
+                  >
+                    <DateTimePicker
+                      label="Từ ngày"
+                      value={valueTuNgay}
+                      onChange={(newValue) => setValueTuNgay(newValue)}
+                    />
+                    <DateTimePicker
+                      label="Đến ngày"
+                      value={valueDenNgay}
+                      onChange={(newValue) => setValueDenNgay(newValue)}
+                    />
+                  </Stack>
+                </DemoContainer>
+              </LocalizationProvider>
+            </Grid2>
             <CustomDatagrid
               rows={rows}
               columns={columns}
