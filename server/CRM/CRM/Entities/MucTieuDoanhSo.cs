@@ -1,4 +1,6 @@
-﻿namespace CRM.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace CRM.Entities
 {
     public class MucTieuDoanhSo : BaseNguoiDung
     {
@@ -10,21 +12,27 @@
         public DateTime? NgayKetThuc { get; set; }
         public int? SoCuocGoi { get; set; }
         public int? SoCuocGoiThucTe { get; set; }
-        public decimal? TileCuocGoiThucTe { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public decimal? TileCuocGoiThucTe { get; private set; }
         public int? SoLichHen { get; set; }
         public int? SoLichHenThucTe { get; set; }
-        public decimal? TileLichHenThucTe { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public decimal? TileLichHenThucTe { get; private set; }
         public int? SoEmailTuongTacKhachHang { get; set; }
         public int? SoEmailTruongTacKhachHangThucTe { get; set; }
-        public decimal? TileEmailTuongTacThucTe { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public decimal? TileEmailTuongTacThucTe { get; private set; }
         public int? SoEmailBaoGia { get; set; }
         public int? SoEmailBaoGiaThucTe { get; set; }
-        public decimal? TiLeEmailBaoGiaThucTe { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public decimal? TiLeEmailBaoGiaThucTe { get; private set; }
         public int? SoKhachHangTiemNangDaChuyenDoi { get; set; }
         public int? SoKhachHangTiemNangDaChuyenDoiThucTe { get; set; }
-        public decimal? TiLeSoKhachHangTiemNangDaChuyenDoiThucTe { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public decimal? TiLeSoKhachHangTiemNangDaChuyenDoiThucTe { get; private set; }
         public double? DoanhSo { get; set; }
         public double? DoanhSoThucTe { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public decimal? TiLeDoanhSoThucTe { get; set; }
         public bool? IsDatMucTieu { get; set; }
         public int? MaTrangThaiKPI { get; set; }

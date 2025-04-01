@@ -6,5 +6,6 @@ namespace CRM.Repositories.MucTieuDoanhSos
 {
     public interface IMucTieuDoanhSoRepository : IBaseRepository<MucTieuDoanhSo, MucTieuDoanhSoModal, Guid, MucTieuDoanhSoDTO>
     {
+        Task<ResultModal> CreateMucTieuDoanhSo(MucTieuDoanhSoModal modal);
     }
 }

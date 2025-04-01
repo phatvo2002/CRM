@@ -20,6 +20,7 @@ using CRM.Repositories.LoaiDuBaos;
 using CRM.Repositories.LoaiHangHoas;
 using CRM.Repositories.Mails;
 using CRM.Repositories.Menus;
+using CRM.Repositories.MucTieuDoanhSos;
 using CRM.Repositories.NguoiDungs;
 using CRM.Repositories.NhiemVus;
 using CRM.Repositories.PhanLoaiDuBaos;
@@ -44,6 +45,7 @@ using CRM.Services.LoaiDuBaos;
 using CRM.Services.LoaiHangHoas;
 using CRM.Services.Mails;
 using CRM.Services.Menus;
+using CRM.Services.MucTieuDoanhSos;
 using CRM.Services.NguoiDungs;
 using CRM.Services.NhiemVus;
 using CRM.Services.PhanLoaiDuBaos;
@@ -166,6 +168,9 @@ builder.Services.AddScoped<IBaoGiaServices, BaoGiaServices>();
 
 builder.Services.AddScoped<IDonHangRepository, DonHangRepository>();
 builder.Services.AddScoped<IDonHangServices, DonHangServices>();
+
+builder.Services.AddScoped<IMucTieuDoanhSoRepository, MucTieuDoanhSoRepository>();
+builder.Services.AddScoped<IMucTieuDoanhSoServices, MucTieuDoanhSoServices>();
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
