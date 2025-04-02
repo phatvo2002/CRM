@@ -17,5 +17,15 @@ namespace CRM.Services.MucTieuDoanhSos
         {
             return await _repository.CreateMucTieuDoanhSo(modal);
         }
+
+        public async Task<List<MucTieuDoanhSoDTO>> GetAll(DateTime tuNgay, DateTime denNgay)
+        {
+            return await _repository.GetAll(tuNgay, denNgay);
+        }
+
+        public async Task<List<MucTieuDoanhSoDTO>> GetAllByPhongBan(DateTime tuNgay, DateTime denNgay, Guid phongBanId)
+        {
+            return await _repository.GetAllByPhongBan(tuNgay, denNgay, phongBanId);
+        }
     }
 }

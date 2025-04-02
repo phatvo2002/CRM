@@ -1,13 +1,11 @@
 ﻿namespace CRM.DTO
 {
-    public class MucTieuDoanhSoDTO
+    public class KPINhanVienDTO
     {
         public Guid Id { get; set; }
-        public string? TenKPI { get; set; }
-        public string? MaQuanLy { get; set; }
-        public string? TenPhongBan { get; set; }
-        public DateTime? NgayBatDau { get; set; }
-        public DateTime? NgayKetThuc { get; set; }
+        public string? TenNhanVien { get; set; }
+        public DateTime NgayBatDau { get; set; }
+        public DateTime NgayKetThuc { get; set; }
         public int? SoCuocGoi { get; set; }
         public int? SoCuocGoiThucTe { get; set; }
         public decimal? TileCuocGoiThucTe { get; set; }
@@ -28,7 +26,8 @@
         public decimal? TiLeDoanhSoThucTe { get; set; }
         public bool? IsDatMucTieu { get; set; }
         public int? MaTrangThaiKPI { get; set; }
+        public string? GhiChu { get; set; }
+        public Guid? MaMucTieuDoanhSo { get; set; }
         public decimal? TongTiLeThucTe { get; set; }
-        public List<KPINhanVienDTO>? kPINhanViens { get; set; }
     }
 }

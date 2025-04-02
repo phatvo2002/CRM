@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repositories.MucTieuDoanhSos
 {
@@ -53,6 +54,18 @@ namespace CRM.Repositories.MucTieuDoanhSos
             {
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
+        }
+
+        public async Task<List<MucTieuDoanhSoDTO>> GetAll(DateTime tuNgay, DateTime denNgay)
+        {
+            var db = await _crmDbContext.MucTieuDoanhSos.Where(m => m.CreateAt >= tuNgay && m.CreateAt <= denNgay && m.IsDeleted == false).Include(r => r.KPINhanViens).ToListAsync();
+            return _mapper.Map<List<MucTieuDoanhSoDTO>>(db);
+        }
+
+        public async Task<List<MucTieuDoanhSoDTO>> GetAllByPhongBan(DateTime tuNgay, DateTime denNgay, Guid phongBanId)
+        {
+            var db = await _crmDbContext.MucTieuDoanhSos.Where(m => m.PhongBanId == phongBanId && m.CreateAt >= tuNgay && m.CreateAt <= denNgay && m.IsDeleted == false).Include(r => r.KPINhanViens).ToListAsync();
+            return _mapper.Map<List<MucTieuDoanhSoDTO>>(db);
         }
     }
 }
