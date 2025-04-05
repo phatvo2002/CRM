@@ -2,7 +2,7 @@
 {
     public class MucTieuDoanhSoDTO
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
         public string? TenKPI { get; set; }
         public string? MaQuanLy { get; set; }
         public string? TenPhongBan { get; set; }
@@ -29,6 +29,8 @@
         public bool? IsDatMucTieu { get; set; }
         public int? MaTrangThaiKPI { get; set; }
         public decimal? TongTiLeThucTe { get; set; }
-        public List<KPINhanVienDTO>? kPINhanViens { get; set; }
+        public List<KPINhanVienDTO>? KPINhanViens { get; set; }
+        public NguoiDungDTO? NguoiDung { get; set; }
+        public PhongBanDTO? PhongBan { get; set; }
     }
 }

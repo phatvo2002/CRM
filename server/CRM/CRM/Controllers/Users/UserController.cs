@@ -33,6 +33,20 @@ namespace CRM.Controllers.Users
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getAllUserIsTruongPhong")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetAllUserIsTruongPhong()
+        {
+            try
+            {
+                List<UserDTO> result = await _userService.GetUserIsTruongPhong();
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet("getUserById")]
         [JwtAuthorize]

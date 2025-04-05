@@ -7,25 +7,25 @@ namespace CRM.Services.MucTieuDoanhSos
 {
     public class MucTieuDoanhSoServices : BaseServices<MucTieuDoanhSo, MucTieuDoanhSoModal, Guid, MucTieuDoanhSoDTO>, IMucTieuDoanhSoServices
     {
-        private readonly IMucTieuDoanhSoRepository _repository;
+        private readonly IMucTieuDoanhSoRepository _mucTieuDoanhSoRepository;
         public MucTieuDoanhSoServices(IMucTieuDoanhSoRepository repository) : base(repository)
         {
-            _repository = repository;
+            _mucTieuDoanhSoRepository = repository;
         }
 
-        public async Task<ResultModal> CreateMucTieuDoanhSo(MucTieuDoanhSoModal modal)
+        public async Task<ResultModal> CreateMucTieuDoanhSo(MucTieuDoanhSoModal modal, Guid nguoiDungId)
         {
-            return await _repository.CreateMucTieuDoanhSo(modal);
+            return await _mucTieuDoanhSoRepository.CreateMucTieuDoanhSo(modal, nguoiDungId);
         }
 
         public async Task<List<MucTieuDoanhSoDTO>> GetAll(DateTime tuNgay, DateTime denNgay)
         {
-            return await _repository.GetAll(tuNgay, denNgay);
+            return await _mucTieuDoanhSoRepository.GetAll(tuNgay, denNgay);
         }
 
         public async Task<List<MucTieuDoanhSoDTO>> GetAllByPhongBan(DateTime tuNgay, DateTime denNgay, Guid phongBanId)
         {
-            return await _repository.GetAllByPhongBan(tuNgay, denNgay, phongBanId);
+            return await _mucTieuDoanhSoRepository.GetAllByPhongBan(tuNgay, denNgay, phongBanId);
         }
     }
 }

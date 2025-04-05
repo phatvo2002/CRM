@@ -19,10 +19,26 @@ import {
   TableRow,
 } from "@mui/material";
 import { KeyboardArrowDown, KeyboardArrowUp } from "@mui/icons-material";
+import ModalThemMoi from "./modal/ModalThemMoi";
+import { useGetAllMucTieuDoanhSoQuery } from "src/App/Api/MucTieuDoanhSo.Api";
 const index = () => {
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
   const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
+
+  const { data: dataMucTieu, refetch: refetch } = useGetAllMucTieuDoanhSoQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+    denNgay: valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+  });
+
   const [open, setOpen] = useState(false);
+  const [modalThemMoiMucTieu, setModalThemMoiMucTieu] = useState();
+
+  const handleOpenModalThemMoiMucTieu = () => {
+    setModalThemMoiMucTieu(true);
+  };
+  const handleCloseModalThemMoi = () => {
+    setModalThemMoiMucTieu(false);
+  };
 
   const getSampleData = () => [
     {
@@ -78,7 +94,7 @@ const index = () => {
               variant="contained"
               color="primary"
               sx={{ borderRadius: 2, textTransform: "none", boxShadow: 3 }}
-              // onClick={handleOpenModalThemDonHang}
+              onClick={handleOpenModalThemMoiMucTieu}
               startIcon={<AddIcon />}
             >
               Thêm mục tiêu
@@ -109,85 +125,200 @@ const index = () => {
         </Grid2>
         <Grid2 xs={12}>
           <Paper sx={{ width: "100%", overflow: "auto" }}>
-            <Table>
+            <Table
+              sx={{
+                minWidth: 650,
+                border: "1px solid #e0e0e0",
+                borderRadius: "8px",
+                overflow: "hidden",
+              }}
+            >
               <TableHead>
-                <TableCell></TableCell>
-                <TableCell>Tên KPI</TableCell>
-                <TableCell align="center">Tên phòng ban</TableCell>
-                <TableCell align="center">Ngày bắt đầu</TableCell>
-                <TableCell align="center">Ngày kết thúc</TableCell>
-                <TableCell align="center">SL cuộc gọi / Thực tế</TableCell>
-                <TableCell align="center">SL lịch hẹn / Thực tế</TableCell>
-                <TableCell align="center">SL Email Báo giá/ thực tế</TableCell>
-                <TableCell align="center">
-                  SL Tiềm năng chuyển đổi / Thực tế
-                </TableCell>
-                <TableCell align="center">
-                  Doanh số / Doanh số thực tế
-                </TableCell>
-                <TableCell align="center">Tổng tỉ lệ phần trăm</TableCell>
+                <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                  <TableCell sx={{ width: "5%" }} />
+                  <TableCell sx={{ fontWeight: "bold", color: "#333" }}>
+                    Tên KPI
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", color: "#333" }}
+                  >
+                    Tên phòng ban
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", color: "#333" }}
+                  >
+                    Ngày bắt đầu
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", color: "#333" }}
+                  >
+                    Ngày kết thúc
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", color: "#333" }}
+                  >
+                    SL cuộc gọi / Thực tế
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", color: "#333" }}
+                  >
+                    SL lịch hẹn / Thực tế
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", color: "#333" }}
+                  >
+                    SL Email báo giá / Thực tế
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", color: "#333" }}
+                  >
+                    SL tiềm năng chuyển đổi / Thực tế
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", color: "#333" }}
+                  >
+                    Doanh số / Thực tế
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ fontWeight: "bold", color: "#333" }}
+                  >
+                    Tổng tỷ lệ (%)
+                  </TableCell>
+                </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow>
+                <TableRow sx={{ "&:hover": { backgroundColor: "#fafafa" } }}>
                   <TableCell>
                     <IconButton size="small" onClick={() => setOpen(!open)}>
                       {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                     </IconButton>
                   </TableCell>
-                  <TableCell>KPI phòng kinh doanh 1</TableCell>
-                  <TableCell align="center">Phòng kinh doanh 1</TableCell>
-                  <TableCell align="center">02/04/2025</TableCell>
-                  <TableCell align="center">10/04/2025</TableCell>
-                  <TableCell align="center">50 / 0</TableCell>
-                  <TableCell align="center">50 / 0</TableCell>
-                  <TableCell align="center">50 / 0</TableCell>
-                  <TableCell align="center">50 / 0</TableCell>
-                  <TableCell align="center">50 / 0</TableCell>
-                  <TableCell align="center">0</TableCell>
+                  <TableCell sx={{ color: "#555" }}>
+                    KPI phòng kinh doanh 1
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#555" }}>
+                    Phòng kinh doanh 1
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#555" }}>
+                    02/04/2025
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#555" }}>
+                    10/04/2025
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#555" }}>
+                    50 / 0
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#555" }}>
+                    50 / 0
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#555" }}>
+                    50 / 0
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#555" }}>
+                    50 / 0
+                  </TableCell>
+                  <TableCell align="center" sx={{ color: "#555" }}>
+                    50 / 0
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{ color: "#555", fontWeight: "bold" }}
+                  >
+                    0%
+                  </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell
-                    colSpan={12}
-                    style={{ paddingBottom: 0, paddingTop: 0 }}
-                  >
+                  <TableCell colSpan={12} sx={{ padding: 0 }}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                      <Box margin={1}>
-                        <Typography variant="h6">Thông tin KPI chi tiết</Typography>
+                      <Box
+                        sx={{
+                          margin: 2,
+                          backgroundColor: "#fff",
+                          borderRadius: "4px",
+                          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          gutterBottom
+                          sx={{ padding: "8px 16px", color: "#1976d2" }}
+                        >
+                          Thông tin KPI chi tiết
+                        </Typography>
                         <Table size="small">
                           <TableHead>
-                            <TableRow>
-                              <TableCell></TableCell>
-                              <TableCell></TableCell>
-                              <TableCell>Nhân viên</TableCell>
-                              <TableCell>Ngày bắt đầu</TableCell>
-                              <TableCell align="center">Ngày kết thúc</TableCell>
-                              <TableCell align="center">
-                                Sl Cuộc Gọi / Thực Tế
+                            <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                              <TableCell sx={{ width: "5%" }} />
+                              <TableCell />
+                              <TableCell sx={{ fontWeight: "bold" }}>
+                                Nhân viên
                               </TableCell>
-                              <TableCell align="center">
-                                Sl Lịch Hẹn / Thực Tế
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                Ngày bắt đầu
                               </TableCell>
-                              <TableCell align="center">
-                                Sl Email Tương tác / Thực tế
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                Ngày kết thúc
                               </TableCell>
-                              <TableCell align="center">
-                                Sl Báo giá / Thực tế
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                SL cuộc gọi / Thực tế
                               </TableCell>
-                              <TableCell align="center">
-                                Sl Tiềm Năng Đã Chuyển Đổi / Thực tế
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                SL lịch hẹn / Thực tế
                               </TableCell>
-                              <TableCell align="center">
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                SL Email tương tác / Thực tế
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                SL báo giá / Thực tế
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "bold" }}
+                              >
+                                SL tiềm năng đã chuyển đổi / Thực tế
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "bold" }}
+                              >
                                 Doanh số / Thực tế
                               </TableCell>
-                              <TableCell align="center">
+                              <TableCell
+                                align="center"
+                                sx={{ fontWeight: "bold" }}
+                              >
                                 Tổng phần trăm
                               </TableCell>
-
                             </TableRow>
                           </TableHead>
-                          <TableBody>
-                            
-                          </TableBody>
+                          <TableBody>{/* Dữ liệu chi tiết KPI */}</TableBody>
                         </Table>
                       </Box>
                     </Collapse>
@@ -198,6 +329,13 @@ const index = () => {
           </Paper>
         </Grid2>
       </Grid2>
+
+      {/* Modal thêm mới */}
+      <ModalThemMoi
+        showModal={modalThemMoiMucTieu}
+        closeModal={handleCloseModalThemMoi}
+        refetch={refetch}
+      />
     </>
   );
 };

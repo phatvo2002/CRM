@@ -294,7 +294,13 @@ namespace CRM.Repositories.NguoiDungs
                 _logger.LogError(ex, ex.Message);
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+        }
+
+        public async Task<List<UserDTO>> GetUserIsTruongPhong()
+        {
+            var db = await _context.Nguoidungs.Where(r => r.CheckIsTruongPhong == true).ToListAsync();
+            return _mapper.Map<List<UserDTO>>(db);
         }
     }
 }

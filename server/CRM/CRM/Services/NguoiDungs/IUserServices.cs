@@ -13,6 +13,7 @@ namespace CRM.Services.NguoiDungs
         Task<List<UserDTO>> GetUserByPhongBanId(Guid id);
 
         Task<ResultModal> DeleteUser(Guid id);
+        Task<List<UserDTO>> GetUserIsTruongPhong();
 
         Task<UserDTO> GetUserById(Guid Id);
 

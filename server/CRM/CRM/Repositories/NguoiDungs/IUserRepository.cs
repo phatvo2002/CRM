@@ -16,6 +16,8 @@ namespace CRM.Repositories.NguoiDungs
 
         Task<List<UserDTO>> GetUsers();
 
+        Task<List<UserDTO>> GetUserIsTruongPhong();
+
         Task<List<UserDTO>> GetUserByPhongBanId(Guid id);
 
         Task<ResultModal> DeleteUser(Guid id);

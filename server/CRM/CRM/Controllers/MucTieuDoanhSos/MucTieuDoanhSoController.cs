@@ -31,16 +31,20 @@ namespace CRM.Controllers.MucTieuDoanhSos
                 Guid phongBanId = HttpContext.GetPhongBanId();
                 Guid nguoiDungId = HttpContext.GetUserId();
                 var userData = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefaultAsync();
-                if (userData.CheckIsGiamDoc == true && userData.CheckIsTruongPhong == false || userData.MaPhongBan == Guid.Parse("4D086C61-CC35-40D4-B9D9-816063DF1C32"))
+                if (userData != null)
                 {
-                    List<MucTieuDoanhSoDTO> result = await _mucTieuDoanhSoservices.GetAll(tuNgay, denNgay);
-                    return Ok(result);
+                    if (userData?.CheckIsGiamDoc == true && userData?.CheckIsTruongPhong == false || userData?.MaPhongBan == Guid.Parse("4D086C61-CC35-40D4-B9D9-816063DF1C32"))
+                    {
+                        List<MucTieuDoanhSoDTO> result = await _mucTieuDoanhSoservices.GetAll(tuNgay, denNgay);
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        List<MucTieuDoanhSoDTO> result = await _mucTieuDoanhSoservices.GetAllByPhongBan(tuNgay, denNgay, phongBanId);
+                        return Ok(result);
+                    }
                 }
-                else
-                {
-                    List<MucTieuDoanhSoDTO> result = await _mucTieuDoanhSoservices.GetAllByPhongBan(tuNgay, denNgay, phongBanId);
-                    return Ok(result);
-                }
+                else return Ok(new ResultModal() { Status = 202, Message = "Không có dữ liệu", Success = false });
             }
             catch (ArgumentException ex)
             {
@@ -67,7 +71,8 @@ namespace CRM.Controllers.MucTieuDoanhSos
         {
             try
             {
-                ResultModal result = await _mucTieuDoanhSoservices.CreateMucTieuDoanhSo(modal);
+                Guid nguoiDungId = HttpContext.GetUserId();
+                ResultModal result = await _mucTieuDoanhSoservices.CreateMucTieuDoanhSo(modal, nguoiDungId);
                 return Ok(result);
             }
             catch (ArgumentException ex)

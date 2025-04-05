@@ -981,6 +981,8 @@ namespace CRM.Entities
                 entity.Property(e => e.TongTiLeThucTe).HasColumnType("decimal");
                 entity.Property(e => e.IsDeleted).HasColumnType("bit");
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
+                entity.Property(e => e.NguoiTaoId).HasColumnType("uniqueidentifier");
+                entity.Property(e => e.TenNguoiTao).HasMaxLength(50);
                 entity.HasOne(d => d.Nguoidung).WithMany(r => r.MucTieuDoanhSos).HasForeignKey(r => r.NguoiDungId)
                .OnDelete(DeleteBehavior.ClientSetNull)
                .HasConstraintName("FK_NguoiDung_MucTieuDoanhSo");

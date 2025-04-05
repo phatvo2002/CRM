@@ -12,7 +12,7 @@ namespace CRM.Repositories.MucTieuDoanhSos
         {
         }
 
-        public async Task<ResultModal> CreateMucTieuDoanhSo(MucTieuDoanhSoModal modal)
+        public async Task<ResultModal> CreateMucTieuDoanhSo(MucTieuDoanhSoModal modal, Guid nguoiDungId)
         {
             var db = _crmDbContext.MucTieuDoanhSos.FirstOrDefault(m => m.Id == modal.Id);
             try
@@ -35,6 +35,7 @@ namespace CRM.Repositories.MucTieuDoanhSos
                     mucTieuDoanhSo.SoEmailBaoGia = modal.SoEmailBaoGia;
                     mucTieuDoanhSo.SoEmailBaoGiaThucTe = 0;
                     mucTieuDoanhSo.SoKhachHangTiemNangDaChuyenDoi = modal.SoKhachHangTiemNangDaChuyenDoi;
+                    mucTieuDoanhSo.SoKhachHangTiemNangDaChuyenDoiThucTe = 0;
                     mucTieuDoanhSo.DoanhSo = modal.DoanhSo;
                     mucTieuDoanhSo.DoanhSoThucTe = 0;
                     mucTieuDoanhSo.IsDatMucTieu = false;
@@ -44,6 +45,7 @@ namespace CRM.Repositories.MucTieuDoanhSos
                     mucTieuDoanhSo.PhongBanId = modal.PhongBanId;
                     mucTieuDoanhSo.CreateAt = DateTime.UtcNow;
                     mucTieuDoanhSo.IsDeleted = false;
+                    mucTieuDoanhSo.NguoiTaoId = nguoiDungId;
                     _crmDbContext.MucTieuDoanhSos.Add(mucTieuDoanhSo);
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm mục tiêu thành công", Success = true };
@@ -58,13 +60,17 @@ namespace CRM.Repositories.MucTieuDoanhSos
 
         public async Task<List<MucTieuDoanhSoDTO>> GetAll(DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _crmDbContext.MucTieuDoanhSos.Where(m => m.CreateAt >= tuNgay && m.CreateAt <= denNgay && m.IsDeleted == false).Include(r => r.KPINhanViens).ToListAsync();
+            var db = await _crmDbContext.MucTieuDoanhSos.Where(m => m.CreateAt >= tuNgay && m.CreateAt <= denNgay && m.IsDeleted == false)
+                .Include(r => r.KPINhanViens).Include(r => r.Nguoidung).Include(r => r.PhongBan).ToListAsync();
+
             return _mapper.Map<List<MucTieuDoanhSoDTO>>(db);
+
         }
 
         public async Task<List<MucTieuDoanhSoDTO>> GetAllByPhongBan(DateTime tuNgay, DateTime denNgay, Guid phongBanId)
         {
-            var db = await _crmDbContext.MucTieuDoanhSos.Where(m => m.PhongBanId == phongBanId && m.CreateAt >= tuNgay && m.CreateAt <= denNgay && m.IsDeleted == false).Include(r => r.KPINhanViens).ToListAsync();
+            var db = await _crmDbContext.MucTieuDoanhSos.Where(m => m.PhongBanId == phongBanId && m.CreateAt >= tuNgay && m.CreateAt <= denNgay && m.IsDeleted == false)
+                .Include(r => r.KPINhanViens).Include(r => r.Nguoidung).Include(r => r.PhongBan).ToListAsync();
             return _mapper.Map<List<MucTieuDoanhSoDTO>>(db);
         }
     }
