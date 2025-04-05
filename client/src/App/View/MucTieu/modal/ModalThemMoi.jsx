@@ -78,7 +78,7 @@ const modelObj = {
     [modelObj.nguoiDungId]: validateString(),
     [modelObj.phongBanId]: validateString(),
   });
-const ModalThemMoi = ({ showModal, closeModal, refetch , checkpermission }) => {
+const ModalThemMoi = ({ showModal, closeModal, refetch , checkpermission , checkAdminPerMission }) => {
   const { data: userData , isLoading : isUserLoading } = useGetUserIsTruongPhongQuery();
   const {data : phongBanData , isLoading : isPhongBanLoading} = useGetPhongBanQuery();
   const [addMucTieu] = useAddMucTieuDoanhSoMutation()
