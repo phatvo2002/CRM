@@ -73,5 +73,7 @@ namespace CRM.Repositories.MucTieuDoanhSos
                 .Include(r => r.KPINhanViens).Include(r => r.Nguoidung).Include(r => r.PhongBan).ToListAsync();
             return _mapper.Map<List<MucTieuDoanhSoDTO>>(db);
         }
+
+
     }
 }

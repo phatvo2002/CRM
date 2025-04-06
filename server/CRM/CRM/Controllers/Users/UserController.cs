@@ -47,6 +47,21 @@ namespace CRM.Controllers.Users
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getAllUserIsNhanVien")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetAllUserIsNhanVien()
+        {
+            try
+            {
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                var result = await _userService.GetUserIsNhanVien(phongBanId);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
         [HttpGet("getUserById")]
         [JwtAuthorize]

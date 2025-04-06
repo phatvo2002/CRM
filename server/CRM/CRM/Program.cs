@@ -14,6 +14,7 @@ using CRM.Repositories.HangHoaQuanTams;
 using CRM.Repositories.HangHoas;
 using CRM.Repositories.KhachhangMucTieus;
 using CRM.Repositories.KhachHangTiemNangs;
+using CRM.Repositories.KPINhanViens;
 using CRM.Repositories.LichHens;
 using CRM.Repositories.LienHes;
 using CRM.Repositories.LoaiDuBaos;
@@ -39,6 +40,7 @@ using CRM.Services.HangHoaQuanTams;
 using CRM.Services.HangHoas;
 using CRM.Services.KhachHangMucTieus;
 using CRM.Services.KhahHangTiemNangs;
+using CRM.Services.KPINhanViens;
 using CRM.Services.LichHens;
 using CRM.Services.LienHes;
 using CRM.Services.LoaiDuBaos;
@@ -171,6 +173,9 @@ builder.Services.AddScoped<IDonHangServices, DonHangServices>();
 
 builder.Services.AddScoped<IMucTieuDoanhSoRepository, MucTieuDoanhSoRepository>();
 builder.Services.AddScoped<IMucTieuDoanhSoServices, MucTieuDoanhSoServices>();
+
+builder.Services.AddScoped<IKPINhanVienRepository, KPINhanVienRepository>();
+builder.Services.AddScoped<IKPIServices, KPINhanVienServices>();
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 

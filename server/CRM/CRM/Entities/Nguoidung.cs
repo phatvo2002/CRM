@@ -17,6 +17,7 @@
         public string? TaiKhoan { get; set; }
         public string? MatKhau { get; set; }
         public bool IsActive { get; set; }
+        public bool IsDelete { get; set; } // hàng mới
         public bool CheckIsTruongPhong { get; set; }
         public byte[]? HinhAnh { get; set; }
         public bool CheckIsGiamDoc { get; set; }

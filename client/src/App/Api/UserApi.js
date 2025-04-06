@@ -25,6 +25,9 @@ export const apiUser = createApi({
     getUserIsTruongPhong: builder.query({
       query: () => `/User/getAllUserIsTruongPhong`,
     }),
+    getUserIsNhanVien: builder.query({
+      query: () => `/User/getAllUserIsNhanVien`,
+    }),
     // Fetch user by ID
     getUserById: builder.query({
       query: () => `/User/getUserById`,
@@ -81,6 +84,7 @@ export const apiUser = createApi({
 export const { 
   useGetUserAllQuery, 
   useGetUserIsTruongPhongQuery,
+  useGetUserIsNhanVienQuery,
   useGetUserByIdQuery, 
   useGetUserByPhongBanIdQuery,
   useAddUserMutation, 

@@ -193,7 +193,7 @@ namespace CRM.Entities
                 entity.Property(e => e.DisplayName).HasMaxLength(100);
                 entity.Property(e => e.Password).HasMaxLength(100);
                 entity.Property(e => e.IsActive);
-
+                entity.Property(e => e.IsDelete).HasColumnType("bit");
                 entity.Property(e => e.CheckIsTruongPhong);
 
                 entity.Property(e => e.CheckIsGiamDoc);

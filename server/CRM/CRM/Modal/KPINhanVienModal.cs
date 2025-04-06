@@ -1,6 +1,6 @@
 ﻿namespace CRM.Modal
 {
-    public class KPINhanVienModal
+    public class KPINhanVienModal : BaseModel
     {
         public Guid Id { get; set; }
         public string? TenNhanVien { get; set; }

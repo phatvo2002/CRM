@@ -56,7 +56,7 @@ const index = () => {
     }
   }, [dataMucTieu]);
 
-  console.log(row);
+
   return (
     <>
       <Grid2

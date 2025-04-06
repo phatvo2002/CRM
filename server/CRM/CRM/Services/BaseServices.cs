@@ -11,10 +11,16 @@ namespace CRM.Services
         {
             _repository = repository;
         }
-        public async Task<ResultModal> Create(TModal modal)
+        public async Task<ResultModal> Create(TModal modal, Guid phongBanId)
         {
             return await _repository.Create(modal);
         }
+
+        public Task<ResultModal> Create(TModal modal)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<ResultModal> DeleteById(TId id)
         {
             return await _repository.DeleteById(id);

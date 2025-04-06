@@ -21,6 +21,7 @@ import { apiCoHoi } from '../Api/CoHoiApi';
 import { apiBaoGia } from '../Api/BaoGiaApi';
 import { apiDonHang } from '../Api/DonHangApi';
 import { apiMucTieuDoanhSo } from '../Api/MucTieuDoanhSo.Api';
+import { apiKPINhanVien } from '../Api/KPINhanVien.api';
 const apis = [
   apiPhongban,
   apiUser,
@@ -43,7 +44,8 @@ const apis = [
   apiCoHoi,
   apiBaoGia,
   apiDonHang,
-  apiMucTieuDoanhSo
+  apiMucTieuDoanhSo,
+  apiKPINhanVien
 ];
 
 const store = configureStore({

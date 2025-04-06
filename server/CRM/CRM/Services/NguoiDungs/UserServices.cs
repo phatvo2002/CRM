@@ -79,5 +79,10 @@ namespace CRM.Services.NguoiDungs
         {
             return await _userRepository.GetUserIsTruongPhong();
         }
+
+        public async Task<List<UserDTO>> GetUserIsNhanVien(Guid phongBanId)
+        {
+            return await _userRepository.GetUserIsNhanVien(phongBanId);
+        }
     }
 }
