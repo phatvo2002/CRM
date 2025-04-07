@@ -74,5 +74,15 @@ namespace CRM.Services.NguoiDungs
         {
             return await _userRepository.UploadImage(userId, formFile);
         }
+
+        public async Task<List<UserDTO>> GetUserIsTruongPhong()
+        {
+            return await _userRepository.GetUserIsTruongPhong();
+        }
+
+        public async Task<List<UserDTO>> GetUserIsNhanVien(Guid phongBanId)
+        {
+            return await _userRepository.GetUserIsNhanVien(phongBanId);
+        }
     }
 }

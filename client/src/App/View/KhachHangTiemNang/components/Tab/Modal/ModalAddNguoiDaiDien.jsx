@@ -6,7 +6,6 @@ import { useGetLichHenByKhachHangTiemNangIdQuery } from "src/App/Api/LichhenApi"
 import { useAddLienHeMutation } from "src/App/Api/LienHeApi";
 import { TextFieldRHF } from "src/App/Components/ReactHookFormComp";
 import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
-import { TYPE_MODAL } from "src/App/Until/constant";
 import { validateString } from "src/App/Until/validateYup";
 import * as yup from "yup";
 const modelObj = {

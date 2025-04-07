@@ -1,4 +1,5 @@
 ﻿using CRM.Attributes;
+using CRM.DTO;
 using CRM.Modal;
 using CRM.Services.HangHoas;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +22,7 @@ namespace CRM.Controllers.HangHoas
         {
             try
             {
-                var result = await _hangHoaServices.GetAll();
+                List<HangHoaDTO> result = await _hangHoaServices.GetAllHangHoa();
                 return Ok(result);
             }
             catch (Exception ex)

@@ -7,27 +7,18 @@ namespace CRM.Repositories.NguoiDungs
     {
 
         Task<LoginDTO> Login(LoginViewModal loginViewModel);
-
         Task<ResultModal> ChangePassword(Guid id, string oldpass, string newpass);
-
         Task<ResultModal> ActiveMailServices(Guid Id, string passEmail, string email);
-
         Task<ResultModal> CreateUser(UserModal userModal);
-
         Task<List<UserDTO>> GetUsers();
-
+        Task<List<UserDTO>> GetUserIsTruongPhong();
+        Task<List<UserDTO>> GetUserIsNhanVien(Guid phongBanId);
         Task<List<UserDTO>> GetUserByPhongBanId(Guid id);
-
         Task<ResultModal> DeleteUser(Guid id);
-
         Task<UserDTO> GetUserById(Guid id);
-
         Task<ResultModal> ActiveAccount(AcviteModal modal);
-
         Task<ResultModal> UserRolePermission(Guid userId, Guid roleId, string roleName);
-
         Task<ResultModal> UserDepartment(Guid userId, Guid departmentId);
-
         Task<ResultModal> UploadImage(Guid userId, IFormFile formFile);
 
     }

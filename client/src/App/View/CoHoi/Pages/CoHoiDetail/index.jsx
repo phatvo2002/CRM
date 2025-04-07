@@ -34,6 +34,9 @@ import BanHangTab from "./ComponentTabs/BanHangTab";
 import ThongTinChung from "./ComponentTabs/ThongTinChungTab";
 import CuocGoiHoanThanhTab from "./ComponentTabs/CuocGoiHoanThanh";
 import CuocGoiChuaHoanThanhTab from "./ComponentTabs/CuocGoiChuaHoanThanh";
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 const index = () => {
   const navigate = useNavigate();
   const { id } = useParams();
@@ -146,6 +149,7 @@ const index = () => {
               <Button
                 variant="outlined"
                 startIcon={<ArrowBackIcon />}
+                sx={{ textTransform: "none", borderRadius: 2 }}
                 onClick={handleReturn}
               >
                 Quay về
@@ -154,6 +158,7 @@ const index = () => {
                 variant="outlined"
                 startIcon={<CachedIcon />}
                 style={{ marginLeft: 3 }}
+                sx={{ textTransform: "none", borderRadius: 2 }}
                 onclick={handleReload}
               >
                 Reload
@@ -161,12 +166,42 @@ const index = () => {
             </div>
             <div>
               <Button
+                variant="contained"
+                color="success"
+                startIcon={<LocalPhoneIcon />}
+                style={{ marginLeft: 3 }}
+                onclick={handleReload}
+                sx={{ textTransform: "none", borderRadius: 2 ,marginRight:1}}
+              >
+                Cuộc gọi
+              </Button>
+              <Button
+                variant="contained"
+                color="warning"
+                startIcon={<AssignmentTurnedInIcon />}
+                style={{ marginLeft: 3 }}
+                sx={{ textTransform: "none", borderRadius: 2 ,marginRight:1}}
+                onclick={handleReload}
+              >
+               Nhiệm vụ
+              </Button>
+              <Button
+                variant="contained"
+                color="info"
+                startIcon={<EditCalendarIcon />}
+                sx={{ textTransform: "none", borderRadius: 2 , marginRight:1}}
+                onclick={handleReload}
+              >
+               Lịch hẹn
+              </Button>
+              <Button
                 id="basic-button"
                 aria-controls={open ? "basic-menu" : undefined}
                 aria-haspopup="true"
                 aria-expanded={open ? "true" : undefined}
                 onClick={handleClick}
                 variant="outlined"
+                sx={{ textTransform: "none", borderRadius: 2 , marginRight:1}}
                 color="text.primary"
                 startIcon={<OpenInNewIcon />}
               >
@@ -321,33 +356,31 @@ const index = () => {
                     scrollButtons="auto"
                   >
                     <Tab label="Thông tin chung " value="1" />
-                    <Tab label="Lịch sử giao dịch" value="2" />
-                    <Tab label="Báo giá" value="3" />
-                    <Tab label="Liên hệ" value="4" />
-                    <Tab label="Bán hàng" value="5" />
-                    <Tab label="Đơn hàng" value="6" />
-                    <Tab label="Công việc đang thực hiện" value="7" />
-                    <Tab label="Công việc đã hoàn thành" value="8" />
-                    <Tab label="Ghi chú" value="9" />
+                    <Tab label="Báo giá" value="2" />
+                    <Tab label="Liên hệ" value="3" />
+                    <Tab label="Bán hàng" value="4" />
+                    <Tab label="Đơn hàng" value="5" />
+                    <Tab label="Công việc đang thực hiện" value="6" />
+                    <Tab label="Công việc đã hoàn thành" value="7" />
+                    <Tab label="Ghi chú" value="8" />
                   </TabList>
                 </Box>
                 <TabPanel value="1">
                   <ThongTinChung />
                 </TabPanel>
-                <TabPanel value="2">Lịch sử giao dịch</TabPanel>
-                <TabPanel value="3">Báo giá </TabPanel>
-                <TabPanel value="4">Liên hệ</TabPanel>
-                <TabPanel value="5">
+                <TabPanel value="2">Báo giá </TabPanel>
+                <TabPanel value="3">Liên hệ</TabPanel>
+                <TabPanel value="4">
                   <BanHangTab dataCoHoi={dataCoHoi} refetchCoHoi={refetch} />
                 </TabPanel>
-                <TabPanel value="6">Đơn hàng </TabPanel>
-                <TabPanel value="7">
+                <TabPanel value="5">Đơn hàng </TabPanel>
+                <TabPanel value="6">
                   <CuocGoiChuaHoanThanhTab />
                 </TabPanel>
-                <TabPanel value="8">
+                <TabPanel value="7">
                   <CuocGoiHoanThanhTab />
                 </TabPanel>
-                <TabPanel value="9">Ghi chú</TabPanel>
+                <TabPanel value="8">Ghi chú</TabPanel>
               </TabContext>
             </Box>
           </Paper>

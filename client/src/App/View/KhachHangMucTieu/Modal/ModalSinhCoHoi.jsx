@@ -11,7 +11,7 @@ import { validateDatePicker, validateString } from "src/App/Until/validateYup";
 import * as yup from "yup";
 import { v4 as uuidv4 } from "uuid";
 import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
-import { useGetKhachHangMucTieuByNguoiDungIdQuery } from "src/App/Api/KhachHangMucTieuApi";
+import { useGetKhachHangMucTieuByNguoiDungIdQuery, useGetKhachHangMucTieuByNguoiDungIdQueryQuery } from "src/App/Api/KhachHangMucTieuApi";
 import {
   AutocompleteRHF,
   TextFieldRHF,
@@ -33,6 +33,7 @@ import { useGetAllGiaiDoanBanHangQuery } from "src/App/Api/GiaiDoanBanHangApi";
 import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 import { useConvertCoHoiMutation } from "src/App/Api/CoHoiApi";
+import dayjs from "dayjs";
 
 const modelObj = {
     id: "id",
@@ -105,10 +106,12 @@ export const ModalSinhCoHoi = ({
   const [createData] = useAddHangHoaQuanTamMutation();
   const [updateData] = useUpdateHangHoaQuanTamMutation();
   const [deleteData] = useDeleteHangHoaQuanTamMutation();
+  const [valueTuNgay, setValueTuNgay] =  useState(dayjs("1900-01-01"));
+  const [valueDenNgay, setValueDenNgay] =useState(dayjs("2100-12-31"));
   const [selectedGiaiDoan, setSelectedGiaiDoan] = useState(null);
   const [tiLeThanhCong, setTiLeThanhCong] = useState(0);
   const { data: dataKhachhangMucTieu, isLoading: isGetKhachHangIsFeatching } =
-    useGetKhachHangMucTieuByNguoiDungIdQuery(undefined, {
+  useGetKhachHangMucTieuByNguoiDungIdQuery({tuNgay:valueTuNgay, denNgay:valueDenNgay}, {
       skip: showModal == false,
     });
   const { data: dataLienHe, isLoading: isGetLienHeIsFetching } =
@@ -129,6 +132,7 @@ export const ModalSinhCoHoi = ({
       tenKhachHang:"",
       khachHangTiemNangId: null,
       khachHangId: id,
+      donViTinh: 0, 
       soLuong: 0,
       thueSuat: 0,
       tienThue: 0,
@@ -170,6 +174,8 @@ export const ModalSinhCoHoi = ({
     const updateTongTien = selectedItem ? updatedThanhTien + updateTienThue : 0;
     const updatedRow = {
       ...newRow,
+      tenHangHoa : selectedItem?.tenHangHoa,
+      maDonViTinh :selectedItem?.donViTinh?.id,
       tienThue: updateTienThue,
       thanhTien: updatedThanhTien,
       tongTien: updateTongTien,
@@ -243,6 +249,16 @@ export const ModalSinhCoHoi = ({
       renderCell: (params) => {
         const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
         return selectedItem ? selectedItem.tenHangHoa : "" ;
+      },
+    },
+    {
+      field: "maDonViTinh",
+      headerName: "Đơn vị tính",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
+        return selectedItem ? selectedItem.donViTinh.name  : "" ;
       },
     },
     {
@@ -516,7 +532,7 @@ export const ModalSinhCoHoi = ({
                   </GridToolbarContainer>
                 ),
                 footer: () => (
-                  <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2, bgcolor: "#f1f1f1" }}>
+                  <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2, bgcolor: "background.primary" }}>
                     <Typography variant="h6">
                       Tổng tiền: {totalAmount.toLocaleString("vi-VN")} <span>&#x0111;</span>
                     </Typography>

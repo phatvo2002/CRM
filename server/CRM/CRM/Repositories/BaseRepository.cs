@@ -222,17 +222,30 @@ namespace CRM.Repositories
             {
                 return new ResultModal { Success = false, Message = "Giá trị Id không hợp lệ", Status = 400 };
             }
-
-            var existingEntity = await GetById((TId)idValue);
-            if (existingEntity == null)
+            if (idValue.GetType() == typeof(Guid))
             {
-                return new ResultModal { Success = false, Message = "Dữ liệu không tồn tại", Status = 404 };
+                var existingEntity = await GetById((TId)idValue);
+
+                if (existingEntity == null)
+                {
+                    return new ResultModal { Success = false, Message = "Dữ liệu không tồn tại", Status = 404 };
+                }
+                _mapper.Map(modal, existingEntity);
+                _crmDbContext.Set<TEntity>().Update(existingEntity);
+                await _crmDbContext.SaveChangesAsync();
+            }
+            else
+            {
+                var existingEntity = await GetById((string)idValue);
+                if (existingEntity == null)
+                {
+                    return new ResultModal { Success = false, Message = "Dữ liệu không tồn tại", Status = 404 };
+                }
+                _mapper.Map(modal, existingEntity);
+                _crmDbContext.Set<TEntity>().Update(existingEntity);
+                await _crmDbContext.SaveChangesAsync();
             }
 
-            _mapper.Map(modal, existingEntity);
-
-            _crmDbContext.Set<TEntity>().Update(existingEntity);
-            await _crmDbContext.SaveChangesAsync();
 
             return new ResultModal { Success = true, Message = "Chỉnh sửa dữ liệu thành công", Status = 200 };
         }

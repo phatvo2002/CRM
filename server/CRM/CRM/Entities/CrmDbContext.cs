@@ -193,7 +193,7 @@ namespace CRM.Entities
                 entity.Property(e => e.DisplayName).HasMaxLength(100);
                 entity.Property(e => e.Password).HasMaxLength(100);
                 entity.Property(e => e.IsActive);
-
+                entity.Property(e => e.IsDelete).HasColumnType("bit");
                 entity.Property(e => e.CheckIsTruongPhong);
 
                 entity.Property(e => e.CheckIsGiamDoc);
@@ -981,6 +981,8 @@ namespace CRM.Entities
                 entity.Property(e => e.TongTiLeThucTe).HasColumnType("decimal");
                 entity.Property(e => e.IsDeleted).HasColumnType("bit");
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
+                entity.Property(e => e.NguoiTaoId).HasColumnType("uniqueidentifier");
+                entity.Property(e => e.TenNguoiTao).HasMaxLength(50);
                 entity.HasOne(d => d.Nguoidung).WithMany(r => r.MucTieuDoanhSos).HasForeignKey(r => r.NguoiDungId)
                .OnDelete(DeleteBehavior.ClientSetNull)
                .HasConstraintName("FK_NguoiDung_MucTieuDoanhSo");
@@ -998,6 +1000,8 @@ namespace CRM.Entities
 
                 entity.ToTable("KPINhanVien");
                 entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.TenKPI).HasMaxLength(100);
+                entity.Property(e => e.MaQuanLy).HasMaxLength(50);
                 entity.Property(e => e.TenNhanVien).HasMaxLength(100);
                 entity.Property(e => e.NgayBatDau).HasColumnType("datetime");
                 entity.Property(e => e.NgayKetThuc).HasColumnType("datetime");

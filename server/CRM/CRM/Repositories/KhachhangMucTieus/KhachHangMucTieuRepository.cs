@@ -61,6 +61,7 @@ namespace CRM.Repositories.KhachhangMucTieus
                             hangHoaQuanTam.Id = Guid.NewGuid();
                             hangHoaQuanTam.MaHangHoaId = h.MaHangHoaId;
                             hangHoaQuanTam.TenHangHoa = h.TenHangHoa;
+                            hangHoaQuanTam.MaDonViTinh = h.MaDonViTinh;
                             hangHoaQuanTam.KhachHangId = khachHangMucTieu.Id;
                             hangHoaQuanTam.KhachHangTiemNangId = h.KhachHangTiemNangId;
                             hangHoaQuanTam.SoLuong = h.SoLuong;
@@ -155,9 +156,9 @@ namespace CRM.Repositories.KhachhangMucTieus
             }
         }
 
-        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId)
+        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId, DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.NguoiDungId == NguoiDungId && r.IsDeleted == false)
+            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.NguoiDungId == NguoiDungId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
                 .Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
@@ -169,9 +170,9 @@ namespace CRM.Repositories.KhachhangMucTieus
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
 
-        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByPhongBanId(Guid PhongBanId)
+        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByPhongBanId(Guid PhongBanId, DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.PhongBanId == PhongBanId && r.IsDeleted == false)
+            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.PhongBanId == PhongBanId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
                 .Include(r => r.NguonGocKhachHang)
                 .Include(r => r.LoaiTiemNang).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);

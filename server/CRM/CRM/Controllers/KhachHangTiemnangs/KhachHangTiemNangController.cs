@@ -69,7 +69,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
         //        return BadRequest(ex.Message);
         //    }
         //}
-        [HttpGet("getTemplate")]
+        [HttpPost("getTemplate")]
+        [JwtAuthorize]
         public IActionResult GetFile(string path, string filename)
         {
             try

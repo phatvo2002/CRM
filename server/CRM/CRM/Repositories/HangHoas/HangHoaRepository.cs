@@ -3,6 +3,7 @@ using CRM.DTO;
 using CRM.Entities;
 using CRM.Helper;
 using CRM.Modal;
+using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repositories.HangHoas
 {
@@ -51,6 +52,12 @@ namespace CRM.Repositories.HangHoas
             }
 
             throw new NotImplementedException();
+        }
+
+        public async Task<List<HangHoaDTO>> GetAllHangHoa()
+        {
+            var db = await _crmDbContext.HangHoas.Include(r => r.DonViTinh).ToListAsync();
+            return _mapper.Map<List<HangHoaDTO>>(db);
         }
 
         public async Task<ResultModal> UpdateHangHoa(HangHoaModal modal)

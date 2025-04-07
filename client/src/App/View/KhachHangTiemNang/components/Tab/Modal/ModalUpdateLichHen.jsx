@@ -13,8 +13,6 @@ import { validateDatePicker } from "../../../../../Until/validateYup";
 import AutocompleteRHF from "src/App/Components/ReactHookFormComp/AutocompleteRHF";
 import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
 import {
-  useGetAllKetQuaCuocGoiQuery,
-  useGetAllLoaiCuocGoiQuery,
   useGetAllTrangThaiThucHienQuery,
 } from "src/App/Api/GetDataApi";
 import { useUpdateCuocGoiMutation } from "src/App/Api/CuocGoiApi";

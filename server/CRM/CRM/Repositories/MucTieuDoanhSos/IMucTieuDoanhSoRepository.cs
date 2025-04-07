@@ -6,5 +6,9 @@ namespace CRM.Repositories.MucTieuDoanhSos
 {
     public interface IMucTieuDoanhSoRepository : IBaseRepository<MucTieuDoanhSo, MucTieuDoanhSoModal, Guid, MucTieuDoanhSoDTO>
     {
+        Task<List<MucTieuDoanhSoDTO>> GetAll(DateTime tuNgay, DateTime denNgay);
+        Task<List<MucTieuDoanhSoDTO>> GetAllByPhongBan(DateTime tuNgay, DateTime denNgay, Guid phongBanId);
+        Task<ResultModal> CreateMucTieuDoanhSo(MucTieuDoanhSoModal modal, Guid nguoiDungId);
+        Task<ResultModal> UpdateMucTieuDoanhSo(MucTieuDoanhSoModal modal);
     }
 }

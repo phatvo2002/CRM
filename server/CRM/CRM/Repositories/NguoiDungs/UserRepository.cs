@@ -101,6 +101,7 @@ namespace CRM.Repositories.NguoiDungs
                     nguoidung.NgayThuViec = userModal.NgayThuViec;
                     nguoidung.SoDienThoai = userModal.SoDienThoai;
                     nguoidung.Email = userModal.Email;
+                    nguoidung.IsDelete = false;
                     //nguoidung.MatKhau = userModal.MatKhau 
                     nguoidung.MatKhau = Helper.Helper.GetMd5Hash(userModal.MatKhau);
                     _context.Nguoidungs.Add(nguoidung);
@@ -126,7 +127,8 @@ namespace CRM.Repositories.NguoiDungs
                 var db = _context.Nguoidungs.FirstOrDefault(r => r.Id == id);
                 if (db != null)
                 {
-                    _context.Nguoidungs.Remove(db);
+                    db.IsDelete = true;
+                    _context.Nguoidungs.Update(db);
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Message = "Xóa thành công ", Status = 200, Success = true };
                 }
@@ -153,7 +155,7 @@ namespace CRM.Repositories.NguoiDungs
 
         public async Task<List<UserDTO>> GetUsers()
         {
-            var data = await _context.Nguoidungs.Include(r => r.PhongBan).Include(r => r.ChucVu).ToListAsync();
+            var data = await _context.Nguoidungs.Where(r => r.IsDelete == false).Include(r => r.PhongBan).Include(r => r.ChucVu).ToListAsync();
             return _mapper.Map<List<UserDTO>>(data);
         }
 
@@ -294,7 +296,20 @@ namespace CRM.Repositories.NguoiDungs
                 _logger.LogError(ex, ex.Message);
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+        }
+
+        public async Task<List<UserDTO>> GetUserIsTruongPhong()
+        {
+            var db = await _context.Nguoidungs.Where(r => r.CheckIsTruongPhong == true).ToListAsync();
+            return _mapper.Map<List<UserDTO>>(db);
+        }
+
+        public async Task<List<UserDTO>> GetUserIsNhanVien(Guid phongBanId)
+        {
+            var db = await _context.Nguoidungs.Where(r => r.MaPhongBan == phongBanId && r.CheckIsGiamDoc == false && r.CheckIsTruongPhong == false && r.IsDelete == false)
+                .ToListAsync();
+            return _mapper.Map<List<UserDTO>>(db);
         }
     }
 }

@@ -53,6 +53,7 @@ const modelObj = {
     [modelObj.MoTa]: validateString(),
     [modelObj.NguonGoc]: validateString(),
     [modelObj.DonGia]: validateString(),
+    [modelObj.SoLuongTon]: validateString(),
     [modelObj.MaLoaiHangHoa]: validateString(),
     [modelObj.MaDonViTinh]: validateString(),
   });

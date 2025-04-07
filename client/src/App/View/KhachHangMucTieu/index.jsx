@@ -30,16 +30,21 @@ import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import ThreePIcon from "@mui/icons-material/ThreeP";
 import { ActionComponents } from "./Components/Action";
 import UpdateIcon from "@mui/icons-material/Update";
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useNavigate } from "react-router-dom";
 import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
 import ModalBanGiaoKhachHangMucTieu from "./Modal/ModalBanGiaoKhachHangMucTieu";
-import { useGetTemplatesQuery } from "src/App/Api/KhachHangTiemNangApi";
+import { useGetTemplatesMutation, useGetTemplatesQuery } from "src/App/Api/KhachHangTiemNangApi";
 import ModalImportKhachHang from "./Modal/ModalImportKhachHang";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import ModalKhachHangMucTieuDaXoa from "./Modal/ModalKhachHangMucTieuDaXoa";
-import NoImage from "../../Assets/image/no-image.png"
+import NoImage from "../../Assets/image/no-image.png";
+import dayjs from "dayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
@@ -47,6 +52,8 @@ const KhachHangMucTieu = () => {
     [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false),
     [modalbanGiao, setModalBanGiao] = useState(false),
     [modalKhDaXoa, setModalKhDaXoa] = useState(false),
+    [valueTuNgay, setValueTuNgay] = React.useState(dayjs().startOf("month")),
+    [valueDenNgay, setValueDenNgay] = React.useState(dayjs().endOf("month")),
     [modalImportKhachHangMucTeu, setModalImportKhachHangMucTeu] =
       useState(false),
     navigate = useNavigate(),
@@ -56,6 +63,7 @@ const KhachHangMucTieu = () => {
     handleCloseModalBanGiao = () => setModalBanGiao(false),
     handleOpenKhDaXoa = () => setModalKhDaXoa(true),
     handleCloseKhDaXoa = () => setModalKhDaXoa(false);
+
   const handleCloseAction = () => {
     setIsActionOpen(false);
   };
@@ -112,12 +120,34 @@ const KhachHangMucTieu = () => {
         return params?.row?.nguoiDung?.ten ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <div>
-              {params?.row?.nguoiDung?.hinhAnh == null ?
+              {params?.row?.nguoiDung?.hinhAnh == null ? (
                 <div>
-                  <img src={NoImage} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: 2 }} />
-                </div> : <div>
-                  <img src={'data:image/jpeg;base64,' + params?.row?.nguoiDung?.hinhAnh} style={{ width: "40px", height: "40px", borderRadius: "50%", margin: 2 }} />
-                </div>}
+                  <img
+                    src={NoImage}
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      margin: 2,
+                    }}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <img
+                    src={
+                      "data:image/jpeg;base64," +
+                      params?.row?.nguoiDung?.hinhAnh
+                    }
+                    style={{
+                      width: "40px",
+                      height: "40px",
+                      borderRadius: "50%",
+                      margin: 2,
+                    }}
+                  />
+                </div>
+              )}
             </div>
             <span>
               {" "}
@@ -198,8 +228,8 @@ const KhachHangMucTieu = () => {
     setAnchorEl(null);
   };
   const { data: dataKhachHangByNguoiDung, refetch } =
-    useGetKhachHangMucTieuByNguoiDungIdQuery();
-  const { data: getTemplate } = useGetTemplatesQuery({
+    useGetKhachHangMucTieuByNguoiDungIdQuery({tuNgay : valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"), denNgay:valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS")});
+  const [ getTemplate ] = useGetTemplatesMutation({
     path: "Templates/ThongTinKhachHang.xlsx",
     filename: "ThongTinKhachHang",
   });
@@ -288,214 +318,242 @@ const KhachHangMucTieu = () => {
 
   return (
     <>
-     <Box sx={{ p: 3, bgcolor: 'background.default', minHeight: '100vh' }}>
-      <Grid2 container spacing={3}>
-        {/* Header Section */}
-        <Grid2 size={12}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            mb={2}
-          >
-            <Typography
-              variant="h4"
-              sx={{
-                fontWeight: 700,
-                color: '#1a237e',
-                letterSpacing: '-0.5px'
-              }}
+      <Box sx={{ p: 3, bgcolor: "background.default", minHeight: "100vh" }}>
+        <Grid2 container spacing={3}>
+          {/* Header Section */}
+          <Grid2 size={12}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+              mb={2}
             >
-              Tất Cả Khách Hàng
-            </Typography>
-
-            <Stack direction="row" spacing={1.5}>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<AddIcon />}
+              <Typography
+                variant="h4"
                 sx={{
-                  borderRadius: 2,
-                  textTransform: 'none',
-                  px: 2.5,
-                  py: 1,
-                  bgcolor: '#1976d2',
-                  '&:hover': { bgcolor: '#1565c0' }
+                  fontWeight: 700,
+                  color: "#1a237e",
+                  letterSpacing: "-0.5px",
                 }}
-                onClick={gotoLink}
               >
-                Thêm mới
-              </Button>
-
-              <Button
-                variant="outlined"
-                color="primary"
-                startIcon={<FileDownloadDoneIcon />}
-                sx={{
-                  borderRadius: 2,
-                  textTransform: 'none',
-                  px: 2.5,
-                  py: 1,
-                  borderColor: '#e0e0e0',
-                  color: '#424242'
-                }}
-                onClick={handleOpenModalImportKhachHang}
-              >
-                Nhập dữ liệu
-              </Button>
-
-              <Button
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                variant="outlined"
-                startIcon={<OpenInNewIcon />}
-                endIcon={<KeyboardArrowDownIcon />}
-                sx={{
-                  borderRadius: 2,
-                  textTransform: 'none',
-                  px: 2.5,
-                  py: 1,
-                  borderColor: '#e0e0e0',
-                  color: '#424242'
-                }}
-                onClick={handleClick}
-              >
-                Tùy chỉnh
-              </Button>
-            </Stack>
-          </Stack>
-        </Grid2>
-
-        {/* Dropdown Menu */}
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          PaperProps={{
-            elevation: 3,
-            sx: {
-              mt: 1,
-              borderRadius: 2,
-              minWidth: 220,
-              '& .MuiMenuItem-root': { py: 1 }
-            }
-          }}
-        >
-          <MenuItem onClick={handleGetTemplates}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <GetAppIcon color="primary" />
-              <Typography>Xuất mẫu</Typography>
-            </Stack>
-          </MenuItem>
-
-          <MenuItem onClick={handleOpenKhDaXoa}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <AutoDeleteIcon color="error" />
-              <Typography>Đã xóa</Typography>
-            </Stack>
-          </MenuItem>
-
-          <Divider sx={{ my: 0.5 }} />
-
-          <MenuItem 
-            onClick={handleDeleteMuliple}
-            disabled={selectedRow.length === 0}
-          >
-            <Stack direction="row" spacing={1} alignItems="center">
-              <DeleteOutlineIcon color={selectedRow.length ? "error" : "disabled"} />
-              <Typography color={selectedRow.length ? "error" : "text.disabled"}>
-                Xóa hàng loạt
+                Tất Cả Khách Hàng
               </Typography>
-            </Stack>
-          </MenuItem>
-        </Menu>
 
-        {/* Data Grid Section */}
-        <Grid2 size={12}>
-          <Paper
-            elevation={2}
-            sx={{
-              borderRadius: 3,
-              overflow: 'hidden',
-              bgcolor: 'background.default'
+              <Stack direction="row" spacing={1.5}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<AddIcon />}
+                  sx={{
+                    borderRadius: 2,
+                    textTransform: "none",
+                    px: 2.5,
+                    py: 1,
+                    bgcolor: "#1976d2",
+                    "&:hover": { bgcolor: "#1565c0" },
+                  }}
+                  onClick={gotoLink}
+                >
+                  Thêm mới
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  startIcon={<FileDownloadDoneIcon />}
+                  sx={{
+                    borderRadius: 2,
+                    textTransform: "none",
+                    px: 2.5,
+                    py: 1,
+                    borderColor: "#e0e0e0",
+                    color: "#424242",
+                  }}
+                  onClick={handleOpenModalImportKhachHang}
+                >
+                  Nhập dữ liệu
+                </Button>
+
+                <Button
+                  id="basic-button"
+                  aria-controls={open ? "basic-menu" : undefined}
+                  aria-haspopup="true"
+                  aria-expanded={open ? "true" : undefined}
+                  variant="outlined"
+                  startIcon={<OpenInNewIcon />}
+                  endIcon={<KeyboardArrowDownIcon />}
+                  sx={{
+                    borderRadius: 2,
+                    textTransform: "none",
+                    px: 2.5,
+                    py: 1,
+                    borderColor: "#e0e0e0",
+                    color: "#424242",
+                  }}
+                  onClick={handleClick}
+                >
+                  Tùy chỉnh
+                </Button>
+              </Stack>
+            </Stack>
+          </Grid2>
+
+          {/* Dropdown Menu */}
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            PaperProps={{
+              elevation: 3,
+              sx: {
+                mt: 1,
+                borderRadius: 2,
+                minWidth: 220,
+                "& .MuiMenuItem-root": { py: 1 },
+              },
             }}
           >
-            <Box sx={{ p: 2, borderBottom: '1px solid #e0e0e0' }}>
-              <Button
-                variant="text"
-                startIcon={<UpdateIcon />}
-                sx={{
-                  textTransform: 'none',
-                  color: '#616161',
-                  '&:hover': { bgcolor: '#f5f5f5' }
-                }}
-                onClick={handleOpen}
-              >
-                Lịch sử mua hàng
-              </Button>
-            </Box>
+            <MenuItem onClick={handleGetTemplates}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <GetAppIcon color="primary" />
+                <Typography>Xuất mẫu</Typography>
+              </Stack>
+            </MenuItem>
 
-            <Box sx={{ p: 2 }}>
-              <CustomDatagrid
-                rows={rows}
-                columns={columns}
-                pageSizeOptions={[10, 25, 50]}
-                initialPageSize={25}
-                checkboxSelection={true}
-                showTopToolbar={true}
-                onRowSelectionChange={handleRowSelectionChange}
-                sx={{
-                  '& .MuiDataGrid-root': {
-                    border: 'none',
-                    '& .MuiDataGrid-cell': {
-                      borderBottom: '1px solid #f0f0f0'
-                    }
-                  }
-                }}
-              />
-            </Box>
-          </Paper>
+            <MenuItem onClick={handleOpenKhDaXoa}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <AutoDeleteIcon color="error" />
+                <Typography>Đã xóa</Typography>
+              </Stack>
+            </MenuItem>
+
+            <Divider sx={{ my: 0.5 }} />
+
+            <MenuItem
+              onClick={handleDeleteMuliple}
+              disabled={selectedRow.length === 0}
+            >
+              <Stack direction="row" spacing={1} alignItems="center">
+                <DeleteOutlineIcon
+                  color={selectedRow.length ? "error" : "disabled"}
+                />
+                <Typography
+                  color={selectedRow.length ? "error" : "text.disabled"}
+                >
+                  Xóa hàng loạt
+                </Typography>
+              </Stack>
+            </MenuItem>
+          </Menu>
+
+          {/* Data Grid Section */}
+          <Grid2 size={12}>
+            <Paper
+              elevation={2}
+              sx={{
+                borderRadius: 3,
+                overflow: "hidden",
+                bgcolor: "background.default",
+              }}
+            >
+              <Box sx={{ p: 2, borderBottom: "1px solid #e0e0e0" }}>
+                <Button
+                  variant="text"
+                  startIcon={<UpdateIcon />}
+                  sx={{
+                    textTransform: "none",
+                    color: "#616161",
+                    "&:hover": { bgcolor: "#f5f5f5" },
+                  }}
+                  onClick={handleOpen}
+                >
+                  Lịch sử mua hàng
+                </Button>
+              </Box>
+              <Grid2 size={12} sx={{ marginTop: 3, marginLeft: 3 }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    components={["DateTimePicker", "DateTimePicker"]}
+                  >
+                    <Stack
+                      direction={{ xs: "column", sm: "row" }}
+                      spacing={2}
+                      alignItems={{ xs: "stretch", sm: "center" }}
+                    >
+                      <DateTimePicker
+                        label="Từ ngày"
+                        value={valueTuNgay}
+                        onChange={(newValue) => setValueTuNgay(newValue)}
+                      />
+                      <DateTimePicker
+                        label="Đến ngày"
+                        value={valueDenNgay}
+                        onChange={(newValue) => setValueDenNgay(newValue)}
+                      />
+                    </Stack>
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Grid2>
+
+              <Box sx={{ p: 2 }}>
+                <CustomDatagrid
+                  rows={rows}
+                  columns={columns}
+                  pageSizeOptions={[10, 25, 50]}
+                  initialPageSize={25}
+                  checkboxSelection={true}
+                  showTopToolbar={true}
+                  onRowSelectionChange={handleRowSelectionChange}
+                  sx={{
+                    "& .MuiDataGrid-root": {
+                      border: "none",
+                      "& .MuiDataGrid-cell": {
+                        borderBottom: "1px solid #f0f0f0",
+                      },
+                    },
+                  }}
+                />
+              </Box>
+            </Paper>
+          </Grid2>
         </Grid2>
-      </Grid2>
 
-      {/* Action Components and Modals */}
-      {isActionOpen && (
-        <ActionComponents
+        {/* Action Components and Modals */}
+        {isActionOpen && (
+          <ActionComponents
+            selectedItem={selectedRow}
+            onClose={handleCloseAction}
+            isOpen={isActionOpen}
+          />
+        )}
+
+        <ModalUpdateKHMucTieu
+          showModal={modalUpdateKhachHang}
+          closeModal={handleCloseModalUpdateKhachHang}
           selectedItem={selectedRow}
-          onClose={handleCloseAction}
-          isOpen={isActionOpen}
+          refetch={refetch}
         />
-      )}
 
-      <ModalUpdateKHMucTieu
-        showModal={modalUpdateKhachHang}
-        closeModal={handleCloseModalUpdateKhachHang}
-        selectedItem={selectedRow}
-        refetch={refetch}
-      />
+        <ModalImportKhachHang
+          showModal={modalImportKhachHangMucTeu}
+          closeModal={handleCloseOpenModalImportKhachHang}
+          refetch={refetch}
+        />
 
-      <ModalImportKhachHang
-        showModal={modalImportKhachHangMucTeu}
-        closeModal={handleCloseOpenModalImportKhachHang}
-        refetch={refetch}
-      />
+        <ModalBanGiaoKhachHangMucTieu
+          showModal={modalbanGiao}
+          closeModal={handleCloseModalBanGiao}
+          refetch={refetch}
+          selectedItem={selectedRow}
+        />
 
-      <ModalBanGiaoKhachHangMucTieu
-        showModal={modalbanGiao}
-        closeModal={handleCloseModalBanGiao}
-        refetch={refetch}
-        selectedItem={selectedRow}
-      />
-
-      <ModalKhachHangMucTieuDaXoa
-        open={modalKhDaXoa}
-        handleClose={handleCloseKhDaXoa}
-        refetch={refetch}
-      />
-    </Box>
+        <ModalKhachHangMucTieuDaXoa
+          open={modalKhDaXoa}
+          handleClose={handleCloseKhDaXoa}
+          refetch={refetch}
+        />
+      </Box>
     </>
   );
 };

@@ -18,6 +18,11 @@ namespace CRM.Services.HangHoas
             return await _hangHoaRepository.CreateHangHoa(modal);
         }
 
+        public async Task<List<HangHoaDTO>> GetAllHangHoa()
+        {
+            return await _hangHoaRepository.GetAllHangHoa();
+        }
+
         public async Task<ResultModal> UpdateHangHoa(HangHoaModal modal)
         {
             return await _hangHoaRepository.UpdateHangHoa(modal);

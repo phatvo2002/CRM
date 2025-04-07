@@ -106,8 +106,8 @@ namespace CRM.Repositories.HangHoaQuanTams
                     HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
                     hangHoaQuanTam.Id = modal.Id;
                     hangHoaQuanTam.MaHangHoaId = modal.MaHangHoaId;
-                    var dataHangHoa = _crmDbContext.HangHoas.FirstOrDefault(r => r.Id == hangHoaQuanTam.MaHangHoaId);
-                    hangHoaQuanTam.TenHangHoa = dataHangHoa.TenHangHoa;
+                    hangHoaQuanTam.TenHangHoa = modal.TenHangHoa;
+                    hangHoaQuanTam.MaDonViTinh = modal.MaDonViTinh;
                     hangHoaQuanTam.KhachHangTiemNangId = modal.KhachHangTiemNangId;
                     hangHoaQuanTam.KhachHangId = modal.KhachHangId;
                     hangHoaQuanTam.BaoGiaId = modal.BaoGiaId;

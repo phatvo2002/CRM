@@ -28,9 +28,9 @@ namespace CRM.Services.KhachHangMucTieus
             return await _khachHangMucTieuRepository.CreateKhachHangMucTieu(modal, nguoiDungId, phongBanId);
         }
 
-        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId)
+        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId, DateTime tuNgay, DateTime denNgay)
         {
-            return await _khachHangMucTieuRepository.GetKhachHangMucTieuByNguoiDungId(NguoiDungId);
+            return await _khachHangMucTieuRepository.GetKhachHangMucTieuByNguoiDungId(NguoiDungId, tuNgay, denNgay);
         }
 
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungIdQuery(Guid NguoiDungId)
@@ -38,9 +38,9 @@ namespace CRM.Services.KhachHangMucTieus
             return await _khachHangMucTieuRepository.GetKhachHangMucTieuByNguoiDungIdQuery(NguoiDungId);
         }
 
-        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByPhongBanId(Guid PhongBanId)
+        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByPhongBanId(Guid PhongBanId, DateTime tuNgay, DateTime denNgay)
         {
-            return await _khachHangMucTieuRepository.GetKhachHangMucTieuByPhongBanId(PhongBanId);
+            return await _khachHangMucTieuRepository.GetKhachHangMucTieuByPhongBanId(PhongBanId, tuNgay, denNgay);
         }
 
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuDaXoaByNguoiDungId(Guid NguoiDungId)

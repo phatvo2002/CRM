@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   Grid,
+  Grid2,
   IconButton,
   List,
   ListItem,
@@ -23,15 +24,18 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import { useGetUserByIdQuery, useUpLoadImageMutation } from "src/App/Api/UserApi";
+import {
+  useGetUserByIdQuery,
+  useUpLoadImageMutation,
+} from "src/App/Api/UserApi";
 import PhoneIphoneIcon from "@mui/icons-material/PhoneIphone";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import ContactsIcon from "@mui/icons-material/Contacts";
 import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import Groups3Icon from "@mui/icons-material/Groups3";
 import ModalUpdateUser from "./Modal/ModalUpdateUser";
-import NoImage from "../../Assets/image/no-image.png"
-import UploadIcon from '@mui/icons-material/Upload';
+import NoImage from "../../Assets/image/no-image.png";
+import UploadIcon from "@mui/icons-material/Upload";
 import { toast } from "react-toastify";
 const ThongTinNguoiDung = () => {
   const [openModalUpdateUser, setOpenModalUpdateUser] = useState(false);
@@ -39,20 +43,20 @@ const ThongTinNguoiDung = () => {
   const [file, setFile] = useState([]);
   const [typeModal, setTypeModal] = useState("");
   const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageUrl, setImageUrl] = useState("");
   const navigate = useNavigate();
   const { data: dataUser, refetch } = useGetUserByIdQuery();
-  const [uploadImage] = useUpLoadImageMutation()
+  const [uploadImage] = useUpLoadImageMutation();
 
-  const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
+  const VisuallyHiddenInput = styled("input")({
+    clip: "rect(0 0 0 0)",
+    clipPath: "inset(50%)",
     height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
+    overflow: "hidden",
+    position: "absolute",
     bottom: 0,
     left: 0,
-    whiteSpace: 'nowrap',
+    whiteSpace: "nowrap",
     width: 1,
   });
 
@@ -69,26 +73,24 @@ const ThongTinNguoiDung = () => {
 
   useEffect(() => {
     if (dataUser && dataUser?.hinhAnh) {
-      setImageUrl('data:image/jpeg;base64,' + dataUser?.hinhAnh)
+      setImageUrl("data:image/jpeg;base64," + dataUser?.hinhAnh);
     }
   }, [dataUser]);
 
   const handleUploadImage = async () => {
     const data = {
-      file: file[0]
-    }
+      file: file[0],
+    };
     try {
-      const response = await uploadImage(data)
+      const response = await uploadImage(data);
       if (response.data.status === 200) {
-        toast.success(response.data.message)
-        refetch()
-      }
-      else toast.success(response.message)
-
+        toast.success(response.data.message);
+        refetch();
+      } else toast.success(response.message);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
   const { logout } = React.useContext(AuthContext);
   return (
     <Grid>
@@ -288,6 +290,7 @@ const ThongTinNguoiDung = () => {
         </Paper>
       </Grid>
     </Grid>
+  
   );
 };
-export default ThongTinNguoiDung
+export default ThongTinNguoiDung;

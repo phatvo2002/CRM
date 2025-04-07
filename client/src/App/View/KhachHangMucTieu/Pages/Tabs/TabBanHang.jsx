@@ -38,6 +38,7 @@ const TabBanHang = () => {
       tenHangHoa : "",
       khachHangTiemNangId: null,
       khachHangId: id,
+      maDonViTinh:0,
       thueSuat:0,
       tienThue:0,
       donGia : 0,
@@ -80,6 +81,8 @@ const TabBanHang = () => {
     const updateTongTien = selectedItem ? updatedThanhTien + updateTienThue : 0;
     const updatedRow = {
       ...newRow,
+      tenHangHoa : selectedItem?.tenHangHoa,
+      maDonViTinh :selectedItem?.donViTinh?.id,
       tienThue : updateTienThue,
       thanhTien: updatedThanhTien,
       tongTien: updateTongTien,
@@ -150,6 +153,16 @@ const TabBanHang = () => {
       renderCell: (params) => {
         const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
         return selectedItem ? selectedItem.tenHangHoa : "" ;
+      },
+    },
+    {
+      field: "maDonViTinh",
+      headerName: "Đơn vị tính",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
+        return selectedItem ? selectedItem.donViTinh.name  : "" ;
       },
     },
     {

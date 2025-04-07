@@ -48,6 +48,9 @@ namespace CRM.Repositories.CoHois
                         hangHoaQuanTam.KhachHangId = modal.MaKhachHang;
                         hangHoaQuanTam.CoHoiId = modal.Id;
                         hangHoaQuanTam.SoLuong = item.SoLuong;
+                        hangHoaQuanTam.TienThue = item.TienThue;
+                        hangHoaQuanTam.TenHangHoa = item.TenHangHoa;
+                        hangHoaQuanTam.MaDonViTinh = item.MaDonViTinh;
                         hangHoaQuanTam.ThanhTien = item.ThanhTien;
                         hangHoaQuanTam.TongTien = item.TongTien;
                         _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);

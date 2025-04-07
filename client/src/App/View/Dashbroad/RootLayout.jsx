@@ -15,19 +15,10 @@ import { useLocation } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Breadcrumbs,
-  Fab,
-  Grid,
-  Link,
-  Stack,
-  Popover,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Grid2,
-  Icon,
-  Tooltip,
-  Paper,
   Button,
+  Fab,
+  Grid2,
+  Link
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -253,7 +244,6 @@ export default function RootLayout() {
             <Breadcrumbs
               maxItems={2}
               aria-label="breadcrumb"
-              style={{ width: "200px" }}
             >
               {pathParts.map((item, index) => {
                 const href = "/" + pathParts.slice(0, index + 1).join("/");
@@ -373,24 +363,6 @@ export default function RootLayout() {
               </Menu>
             </IconButton>
           </Toolbar>
-          {/* <Toolbar style={{height:"10px"}}>
-          {menu.map((item, index)=>{
-            return (
-              <Typography
-              component="h6"
-              variant="caption"
-              color="white"
-             
-              key={index}
-            >
-            <Icon color="text.primary" style={{height:"20px"}}>
-            {item.menu.icon}
-            </Icon>
-              <Link component={RouterLink} style={{textDecoration:"none" ,color:"text.primary" , padding:"10px" ,fontSize:"1rem" }} to={item.menu.url}>{item.menu.name}</Link>
-            </Typography>
-            )
-          })}
-          </Toolbar> */}
         </AppBar>
         <Drawer
           variant="permanent"

@@ -23,7 +23,7 @@ export const apiKhachHangMucTieu = createApi({
         query: (id) => `/KhachHangMucTieu/getkhachhangmuctieubyid/${id}`,
       }),
       getKhachHangMucTieuByNguoiDungId: builder.query({
-        query: () => `/KhachHangMucTieu/getkhachhangmuctieubynguoidungid`,
+        query: ({tuNgay,denNgay}) => `/KhachHangMucTieu/getkhachhangmuctieubynguoidungid?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
       getKhachHangMucTieuByNguoiDungIdQuery: builder.query({
         query: (id) => `/KhachHangMucTieu/getkhachhangmuctieubynguoidungidquery/${id}`,
