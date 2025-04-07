@@ -19,6 +19,11 @@ namespace CRM.Services.KPINhanViens
             return await _kPINhanVienRepository.CreateKPINhanVien(modal, phongBanId);
         }
 
+        public async Task<KPINhanVienDTO> GetByNhanVienId(Guid id, DateTime tuNgay, DateTime denNgay)
+        {
+            return await _kPINhanVienRepository.GetByNhanVienId(id, tuNgay, denNgay);
+        }
+
         public async Task<ResultModal> UpdateKPINhanVien(KPINhanVienModal modal)
         {
             return await _kPINhanVienRepository.UpdateKPINhanVien(modal);

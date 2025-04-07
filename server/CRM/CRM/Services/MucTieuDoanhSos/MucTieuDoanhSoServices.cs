@@ -32,5 +32,10 @@ namespace CRM.Services.MucTieuDoanhSos
         {
             return await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSo(modal);
         }
+
+        public Task<ResultModal> UpdateMucTieuDoanhSoData(Guid nguoiDungId, Guid phongBanId, DateTime tuNgay, DateTime denNgay, int type)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

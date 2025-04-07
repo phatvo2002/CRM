@@ -88,5 +88,33 @@ namespace CRM.Repositories.MucTieuDoanhSos
             }
             else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
         }
+
+        public async Task<ResultModal> UpdateMucTieuDoanhSoData(Guid nguoiDungId, Guid phongBanId, DateTime tuNgay, DateTime denNgay, int type)
+        {
+            var dbNguoiDung = _crmDbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId && r.IsDelete == false);
+            if ((dbNguoiDung?.CheckIsTruongPhong == false && dbNguoiDung.CheckIsGiamDoc == true) || (dbNguoiDung?.CheckIsGiamDoc == true && dbNguoiDung?.CheckIsTruongPhong == false) || dbNguoiDung?.MaPhongBan != Guid.Parse("4D086C61-CC35-40D4-B9D9-816063DF1C32"))
+            {
+                var dbKPi = _crmDbContext.KPINhanViens.FirstOrDefault(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false && r.CreateAt >= firstDayOfMonth && r.CreateAt <= lastDayOfMonth);
+                if (dbKPi != null)
+                {
+                    dbKPi.SoCuocGoiThucTe += 1;
+                    _crmDbContext.KPINhanViens.Update(dbKPi);
+                }
+                else throw new Exception("Không tìm thấy dữ liệu");
+
+                var dbMucTieu = _crmDbContext.MucTieuDoanhSos.FirstOrDefault(r => r.PhongBanId == phongBanId && r.IsDeleted == false && r.CreateAt >= firstDayOfMonth && r.CreateAt <= lastDayOfMonth);
+                if (dbMucTieu != null)
+                {
+                    dbMucTieu.SoCuocGoiThucTe += 1;
+                    _crmDbContext.MucTieuDoanhSos.Update(dbMucTieu);
+                }
+                else throw new Exception("Không tìm thấy dữ liệu");
+
+                await _crmDbContext.SaveChangesAsync();
+
+                return new ResultModal() { Status = 200, Message = "Chỉnh sủa thành công", Success = true };
+            }
+            else return new ResultModal() { Status = 202, Message = "Dữ liệu không phù hợp", Success = true };
+        }
     }
 }

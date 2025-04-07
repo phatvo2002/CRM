@@ -21,6 +21,7 @@ namespace CRM.Repositories.CuocGois
         public async Task<ResultModal> CreateCuocGoi(CuocGoiModal modal, Guid nguoiDungId, Guid phongBanId)
         {
             var db = _context.CuocGois.FirstOrDefault(r => r.Id == modal.Id);
+            // lấy thời gian đầu tháng và cuối tháng 
             try
             {
                 if (db == null)
@@ -43,6 +44,16 @@ namespace CRM.Repositories.CuocGois
                     cuocGoi.PhongBanId = phongBanId;
                     cuocGoi.CreateAt = DateTime.Now;
                     _context.CuocGois.Add(cuocGoi);
+
+                    // cập nhật dữ liệu kpi khi cuộc gọi đã hoàn thành
+                    if (cuocGoi.IsHoanThanh == true)
+                    {
+                        DateTime now = DateTime.Now;
+                        DateTime firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
+                        DateTime lastDayOfMonth = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
+
+                    }
+
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };
                 }
