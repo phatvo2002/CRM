@@ -1,0 +1,409 @@
+import {
+  LineChart,
+  Line,
+  PieChart,
+  Pie,
+  Cell,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Legend,
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  BarChart,
+  CartesianGrid,
+  Bar,
+} from "recharts";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Button from "@mui/material/Button";
+import ShowChartIcon from "@mui/icons-material/ShowChart";
+import PersonIcon from "@mui/icons-material/Person";
+import CallIcon from "@mui/icons-material/Call";
+import AssignmentIcon from "@mui/icons-material/Assignment";
+import dayjs from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Autocomplete, Grid2, Paper, Stack, TextField } from "@mui/material";
+import { Grid } from "@mui/joy";
+import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
+import { useState } from "react";
+const BanLamViecTrPhong = () => {
+  const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"];
+  const [rows, setRows] = useState([]);
+  const [selectedRow, setSelectedRow] = useState([]);
+  const revenueData = [
+    { month: "Quý 1", revenue: 32000 },
+    { month: "Quý 2", revenue: 45000 },
+    { month: "Quý 3", revenue: 39000 },
+    { month: "Quý 4", revenue: 52000 },
+  ];
+
+  const salesData = [
+    { name: "Product A", value: 2400 },
+    { name: "Product B", value: 1398 },
+    { name: "Product C", value: 9800 },
+    { name: "Product D", value: 3908 },
+    { name: "Product E", value: 4800 },
+  ];
+  const years = [
+    {
+      id: "2020",
+      name: "2020",
+    },
+    {
+      id: "2021",
+      name: "2021",
+    },
+    {
+      id: "2022",
+      name: "2022",
+    },
+    {
+      id: "2023",
+      name: "2023",
+    },
+    {
+      id: "2025",
+      name: "2025",
+    },
+    {
+      id: "2026",
+      name: "2026",
+    },
+    {
+      id: "2027",
+      name: "2027",
+    },
+  ];
+  const dataNV = [
+    {
+      ten: "Nguyễn An",
+      phongBan: "Phòng Kinh doanh 1",
+      doanhThu: 2500,
+      dealThanhCong: 10,
+      hopDong: 150,
+      khachHangMoi: 75,
+    },
+    {
+      ten: "Trần Bình",
+      phongBan: "Phòng kinh doanh 2",
+      doanhThu: 1800,
+      dealThanhCong: 15,
+      hopDong: 120,
+      khachHangMoi: 60,
+    },
+    {
+      ten: "Lê Cường",
+      phongBan: "Phòng kinh doanh 3",
+      doanhThu: 1200,
+      dealThanhCong: 20,
+      hopDong: 90,
+      khachHangMoi: 45,
+    },
+  ];
+
+  // KPI data
+  const dataKPI = [
+    { subject: "Doanh số", A: 120, fullMark: 150 },
+    { subject: "Khách hàng mới", A: 98, fullMark: 150 },
+    { subject: "Cuộc gọi", A: 86, fullMark: 150 },
+    { subject: "Email gửi", A: 99, fullMark: 150 },
+    { subject: "Cuộc hẹn", A: 85, fullMark: 150 },
+    { subject: "Tư vấn hoàn tất", A: 65, fullMark: 150 },
+  ];
+
+  const taskData = [
+    { name: "Hoàn thành đúng hạn", value: 18 },
+    { name: "Trễ hạn", value: 4 },
+    { name: "Đang thực hiện", value: 8 },
+  ];
+
+  const columns = [
+    {
+      field: "hoVaDem",
+      headerName: "Họ và đệm",
+      width: 150,
+      headerAlign: "center",
+    },
+    {
+      field: "ten",
+      headerName: "Tên nhân viên",
+      width: 200,
+      headerAlign: "center",
+    },
+    {
+      field: "chucVu",
+      headerName: "Chức vụ",
+      width: 200,
+      headerAlign: "center",
+    },
+    {
+      field: "sokh",
+      headerName: "Số lượng khách hàng đã chăm sóc",
+      width: 200,
+      headerAlign: "center",
+    },
+    {
+      field: "dealthanhcong",
+      headerName: "Deal thành công",
+      width: 200,
+      headerAlign: "center",
+    },
+    {
+      field: "doanhso",
+      headerName: "Doanh số mang về",
+      width: 210,
+      headerAlign: "center",
+    },
+    {
+      field: "xephang",
+      headerName: "Xếp hạng đánh giá",
+      width: 210,
+      headerAlign: "center",
+    },
+  ];
+
+  const handleRowSelectionChange = (selectedRows) => {
+    setSelectedRow(selectedRows);
+  };
+
+  return (
+    <>
+      <Paper>
+        <Grid2 container spacing={2}>
+          <Grid2 size={12}>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Autocomplete
+                disablePortal
+                options={years}
+                style={{ margin: 15 }}
+                sx={{ width: 100 }}
+                getOptionLabel={(option) => option.name}
+                renderInput={(params) => <TextField {...params} label="Năm" />}
+              />
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker label="Từ ngày" defaultValue={dayjs().date(1)} />
+                </DemoContainer>
+              </LocalizationProvider>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker
+                    label="Dến ngày"
+                    defaultValue={dayjs().endOf("month")}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+              <Button variant="contained">Lọc</Button>
+            </Stack>
+          </Grid2>
+
+          <Grid2 size={12} sx={{ padding: 2 }}>
+            <Stack
+              direction="row"
+              spacing={2}
+              alignItems="center"
+              justifyContent="space-between" // Căn đều khoảng cách giữa các Card
+            >
+              <Card
+                sx={{
+                  backgroundColor: "#5a76f2",
+                  flex: 1,
+                  minWidth: 200,
+                  textAlign: "center",
+                }}
+              >
+                <CardContent>
+                  <ShowChartIcon
+                    style={{ color: "#fff" }}
+                    className="text-3xl"
+                  />
+                  <div style={{ color: "#fff" }}>
+                    <h3 className="text-lg font-bold">
+                      Doanh số theo tháng/quý
+                    </h3>
+                    <p className="text-2xl font-semibold">25000$</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card
+                sx={{
+                  backgroundColor: "#37c8a1",
+                  flex: 1,
+                  minWidth: 200,
+                  textAlign: "center",
+                }}
+              >
+                <CardContent>
+                  <PersonIcon
+                    style={{ color: "#fff" }}
+                    className="text-green-500 text-3xl"
+                  />
+                  <div style={{ color: "#fff" }}>
+                    <h3 className="text-lg font-bold">
+                      Số lượng khách hàng mới
+                    </h3>
+                    <p className="text-2xl font-semibold">350</p>
+                  </div>
+                </CardContent>
+              </Card>
+              <Card
+                sx={{
+                  backgroundColor: "#f28c5a",
+                  flex: 1,
+                  minWidth: 200,
+                  textAlign: "center",
+                }}
+              >
+                <CardContent>
+                  <CallIcon
+                    style={{ color: "#fff" }}
+                    className="text-yellow-500 text-3xl"
+                  />
+                  <div style={{ color: "#fff" }}>
+                    <h3 className="text-lg font-bold">
+                      Tổng cuộc gọi đã thực hiện trong tháng
+                    </h3>
+                    <p className="text-2xl font-semibold">5</p>
+                  </div>
+                </CardContent>
+              </Card>
+            </Stack>
+          </Grid2>
+
+          <Grid2 size={12} sx={{ padding: 2 }}>
+            <h2>DANH SÁCH NHÂN VIÊN TIÊU BIỂU</h2>
+            <p>Quản lý danh sách nhân viên tiêu biểu của LPCRM</p>
+            <CustomDatagrid
+              rows={rows}
+              columns={columns}
+              pageSizeOptions={[10, 25, 50]}
+              initialPageSize={25}
+              //   checkboxSelection={true}
+              showTopToolbar={true}
+              onRowSelectionChange={handleRowSelectionChange}
+            />
+          </Grid2>
+
+          <Grid2 size={6} sx={{ padding: 1 }}>
+            <Card>
+              <CardContent className="p-4">
+                <h3 className="text-lg font-bold mb-2">Doanh thu theo quý</h3>
+                <ResponsiveContainer width="100%" height={250}>
+                  <LineChart data={revenueData}>
+                    <XAxis dataKey="month" />
+                    <YAxis />
+                    <Tooltip />
+                    <Line
+                      type="monotone"
+                      dataKey="revenue"
+                      stroke="#8884d8"
+                      strokeWidth={2}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </Grid2>
+          {/* Sales Chart */}
+          <Grid2 size={6} sx={{ padding: 1 }}>
+            <Card>
+              <CardContent>
+                <h3 className="text-lg font-bold mb-2">Hiệu suất nhân viên</h3>
+                <ResponsiveContainer width="100%" height={250}>
+                  <BarChart
+                    data={dataNV}
+                    barCategoryGap="20%"
+                    barGap={5}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+                  >
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="ten" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar
+                      dataKey="dealThanhCong"
+                      fill="#8884d8"
+                      name="Deal thành công"
+                    />
+                    <Bar
+                      dataKey="doanhThu"
+                      fill="#82ca9d"
+                      name="Doanh thu ($)"
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </Grid2>
+          <Grid2 size={6} sx={{ padding: 3 }}>
+            <Card>
+              <CardContent>
+                <h3 className="text-lg font-bold mb-2">Tiến độ công việc</h3>
+                <ResponsiveContainer width="100%" height={400}>
+                  <PieChart>
+                    <Pie
+                      data={taskData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={140}
+                      label
+                    >
+                      {taskData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={["#00C49F", "#FF8042", "#0088FE"][index % 3]}
+                        />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend verticalAlign="bottom" />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </Grid2>
+          <Grid2 size={6} sx={{ padding: 1 }}>
+            <Card>
+              <CardContent>
+                <h3 className="text-lg font-bold mb-2">KPI Cá Nhân</h3>
+                <ResponsiveContainer width="100%" height={400}>
+                  <RadarChart
+                    cx="50%"
+                    cy="50%"
+                    outerRadius="80%"
+                    data={dataKPI}
+                  >
+                    <PolarGrid />
+                    <PolarAngleAxis dataKey="subject" />
+                    <PolarRadiusAxis angle={30} domain={[0, 150]} />
+                    <Tooltip />
+                    <Radar
+                      name="Nhân viên A"
+                      dataKey="A"
+                      stroke="#8884d8"
+                      fill="#8884d8"
+                      fillOpacity={0.6}
+                    />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </Grid2>
+        </Grid2>
+      </Paper>
+    </>
+  );
+};
+
+export default BanLamViecTrPhong;

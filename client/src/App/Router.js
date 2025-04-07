@@ -4,6 +4,8 @@ import { Lazy } from "yup";
 
 //quản trị hệ thống
 const BanLamViec = lazy(() => import("./View/BanLamViec/BanLamViec"));
+const BanLamViecNV = lazy(() => import("./View/BanLamViec/NhanVien"));
+const BanLamViecTP = lazy(() => import("./View/BanLamViec/TruongPhong"));
 const ThongTinNguoiDung = lazy(() => import("./View/ThongTinNguoiDung"));
 const ThietLapNhanVien = lazy(() => import("./View/ThietLap/ThietLap"));
 const ThemMoiNguoiDung = lazy(() => import("./View/ThietLap/AddNguoiDung"));
@@ -48,15 +50,15 @@ const ThongBaoDetail = lazy(
 const CoHoi = lazy(() => import("./View/CoHoi/index"));
 
 const CoHoiDetail = lazy(() => import("./View/CoHoi/Pages/CoHoiDetail/index"));
-// báo giá 
-const BaoGia = lazy(() => import("./View/BaoGia/index"))
-const ChiTietBaoGia = lazy(() => import("./View/BaoGia/pages/chitiet/index"))
+// báo giá
+const BaoGia = lazy(() => import("./View/BaoGia/index"));
+const ChiTietBaoGia = lazy(() => import("./View/BaoGia/pages/chitiet/index"));
 
 // đơn hàng
-const DonHang = lazy(()=> import("./View/DonHang/index"))
+const DonHang = lazy(() => import("./View/DonHang/index"));
 const NhiemVu = lazy(() => import("./View/NhiemVu/index"));
 // Mục tiêu
-const MucTieu = lazy(()=> import("./View/MucTieu/index"))
+const MucTieu = lazy(() => import("./View/MucTieu/index"));
 
 const RouteChild = [
   {
@@ -64,6 +66,22 @@ const RouteChild = [
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <BanLamViec />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/nvbanlamviec",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <BanLamViecNV />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/tpbanlamviecj",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <BanLamViecTP />
       </Suspense>
     ),
   },
@@ -276,7 +294,7 @@ const RouteChild = [
     ),
   },
 
-  // báo giá 
+  // báo giá
   {
     path: "/baogia",
     element: (
@@ -322,7 +340,7 @@ const RouteChild = [
     ),
   },
 
-  // đơn hàng 
+  // đơn hàng
   {
     path: "/donhang",
     element: (
