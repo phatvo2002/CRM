@@ -73,6 +73,8 @@ namespace CRM.Helper
 
             CreateMap<MucTieuDoanhSo, MucTieuDoanhSoDTO>();
             CreateMap<MucTieuDoanhSoModal, MucTieuDoanhSo>().ReverseMap();
+            CreateMap<KPINhanVien, KPINhanVienDTO>();
+            CreateMap<KPINhanVienModal, KPINhanVien>().ReverseMap();
 
         }
     }

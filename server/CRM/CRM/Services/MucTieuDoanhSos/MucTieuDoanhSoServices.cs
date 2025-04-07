@@ -27,5 +27,10 @@ namespace CRM.Services.MucTieuDoanhSos
         {
             return await _mucTieuDoanhSoRepository.GetAllByPhongBan(tuNgay, denNgay, phongBanId);
         }
+
+        public async Task<ResultModal> UpdateMucTieuDoanhSo(MucTieuDoanhSoModal modal)
+        {
+            return await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSo(modal);
+        }
     }
 }

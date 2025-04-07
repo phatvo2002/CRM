@@ -1000,6 +1000,8 @@ namespace CRM.Entities
 
                 entity.ToTable("KPINhanVien");
                 entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.TenKPI).HasMaxLength(100);
+                entity.Property(e => e.MaQuanLy).HasMaxLength(50);
                 entity.Property(e => e.TenNhanVien).HasMaxLength(100);
                 entity.Property(e => e.NgayBatDau).HasColumnType("datetime");
                 entity.Property(e => e.NgayKetThuc).HasColumnType("datetime");

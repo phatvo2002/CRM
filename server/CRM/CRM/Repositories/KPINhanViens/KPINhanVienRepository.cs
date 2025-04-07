@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using System.Linq.Dynamic.Core;
 
 namespace CRM.Repositories.KPINhanViens
 {
@@ -20,6 +21,8 @@ namespace CRM.Repositories.KPINhanViens
                 {
                     KPINhanVien data = new KPINhanVien();
                     data.Id = Guid.NewGuid();
+                    data.TenKPI = modal.TenKPI;
+                    data.MaQuanLy = modal.MaQuanLy;
                     data.TenNhanVien = modal.TenNhanVien;
                     data.NgayBatDau = modal.NgayBatDau;
                     data.NgayKetThuc = modal.NgayKetThuc;
@@ -61,6 +64,20 @@ namespace CRM.Repositories.KPINhanViens
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
 
             }
+        }
+
+        public async Task<ResultModal> UpdateKPINhanVien(KPINhanVienModal modal)
+        {
+            var db = _crmDbContext.KPINhanViens.FirstOrDefault(r => r.Id == modal.Id);
+            if (db != null)
+            {
+                _mapper.Map(modal, db);
+                db.CreateAt = DateTime.Now;
+                _crmDbContext.KPINhanViens.Update(db);
+                await _crmDbContext.SaveChangesAsync();
+                return new ResultModal() { Status = 200, Message = "Chỉnh sửa dữ liệu thành công", Success = true };
+            }
+            else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
         }
     }
 }

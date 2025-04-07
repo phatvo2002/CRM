@@ -61,7 +61,8 @@ namespace CRM.Repositories.MucTieuDoanhSos
         public async Task<List<MucTieuDoanhSoDTO>> GetAll(DateTime tuNgay, DateTime denNgay)
         {
             var db = await _crmDbContext.MucTieuDoanhSos.Where(m => m.CreateAt >= tuNgay && m.CreateAt <= denNgay && m.IsDeleted == false)
-                .Include(r => r.KPINhanViens).Include(r => r.Nguoidung).Include(r => r.PhongBan).ToListAsync();
+                .Include(r => r.KPINhanViens).Include(r => r.Nguoidung).Include(r => r.PhongBan)
+                .ThenInclude(r => r.KPINhanViens).ThenInclude(r => r.Nguoidung).ThenInclude(r => r.PhongBan).ToListAsync();
 
             return _mapper.Map<List<MucTieuDoanhSoDTO>>(db);
 
@@ -70,10 +71,22 @@ namespace CRM.Repositories.MucTieuDoanhSos
         public async Task<List<MucTieuDoanhSoDTO>> GetAllByPhongBan(DateTime tuNgay, DateTime denNgay, Guid phongBanId)
         {
             var db = await _crmDbContext.MucTieuDoanhSos.Where(m => m.PhongBanId == phongBanId && m.CreateAt >= tuNgay && m.CreateAt <= denNgay && m.IsDeleted == false)
-                .Include(r => r.KPINhanViens).Include(r => r.Nguoidung).Include(r => r.PhongBan).ToListAsync();
+                .Include(r => r.KPINhanViens).Include(r => r.Nguoidung).Include(r => r.PhongBan)
+                .ThenInclude(r => r.KPINhanViens).ThenInclude(r => r.Nguoidung).ThenInclude(r => r.PhongBan).ToListAsync();
             return _mapper.Map<List<MucTieuDoanhSoDTO>>(db);
         }
 
-
+        public async Task<ResultModal> UpdateMucTieuDoanhSo(MucTieuDoanhSoModal modal)
+        {
+            var db = _crmDbContext.MucTieuDoanhSos.Where(r => r.Id == modal.Id).FirstOrDefault();
+            if (db != null)
+            {
+                _mapper.Map(modal, db);
+                _crmDbContext.MucTieuDoanhSos.Update(db);
+                await _crmDbContext.SaveChangesAsync();
+                return new ResultModal() { Status = 200, Message = "Chỉnh sửa dữ liệu thành công", Success = true };
+            }
+            else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+        }
     }
 }

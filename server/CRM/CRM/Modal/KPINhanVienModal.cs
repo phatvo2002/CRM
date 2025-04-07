@@ -3,9 +3,11 @@
     public class KPINhanVienModal : BaseModel
     {
         public Guid Id { get; set; }
+        public string? TenKPI { get; set; }
+        public string? MaQuanLy { get; set; }
         public string? TenNhanVien { get; set; }
-        public DateTime NgayBatDau { get; set; }
-        public DateTime NgayKetThuc { get; set; }
+        public DateTime? NgayBatDau { get; set; }
+        public DateTime? NgayKetThuc { get; set; }
         public int? SoCuocGoi { get; set; }
         public int? SoCuocGoiThucTe { get; set; }
         public int? SoLichHen { get; set; }

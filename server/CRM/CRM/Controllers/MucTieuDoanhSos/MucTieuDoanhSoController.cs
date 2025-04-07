@@ -86,7 +86,7 @@ namespace CRM.Controllers.MucTieuDoanhSos
         {
             try
             {
-                var result = await _mucTieuDoanhSoservices.Update(modal);
+                var result = await _mucTieuDoanhSoservices.UpdateMucTieuDoanhSo(modal);
                 return Ok(result);
             }
             catch (ArgumentException ex)

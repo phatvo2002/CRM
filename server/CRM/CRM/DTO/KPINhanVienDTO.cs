@@ -3,6 +3,8 @@
     public class KPINhanVienDTO
     {
         public Guid Id { get; set; }
+        public string? TenKPI { get; set; }
+        public string? MaQuanLy { get; set; }
         public string? TenNhanVien { get; set; }
         public DateTime NgayBatDau { get; set; }
         public DateTime NgayKetThuc { get; set; }
@@ -29,5 +31,8 @@
         public string? GhiChu { get; set; }
         public Guid? MaMucTieuDoanhSo { get; set; }
         public decimal? TongTiLeThucTe { get; set; }
+
+        public NguoiDungDTO? NguoiDung { get; set; }
+        public PhongBanDTO? PhongBan { get; set; }
     }
 }

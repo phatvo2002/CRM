@@ -65,7 +65,7 @@ namespace CRM.Controllers
         {
             try
             {
-                var result = await _kPINhanVienServices.Update(modal);
+                var result = await _kPINhanVienServices.UpdateKPINhanVien(modal);
                 return Ok(result);
             }
             catch (Exception ex)

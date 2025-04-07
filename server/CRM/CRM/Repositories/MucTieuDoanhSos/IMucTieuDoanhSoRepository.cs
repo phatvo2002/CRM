@@ -9,5 +9,6 @@ namespace CRM.Repositories.MucTieuDoanhSos
         Task<List<MucTieuDoanhSoDTO>> GetAll(DateTime tuNgay, DateTime denNgay);
         Task<List<MucTieuDoanhSoDTO>> GetAllByPhongBan(DateTime tuNgay, DateTime denNgay, Guid phongBanId);
         Task<ResultModal> CreateMucTieuDoanhSo(MucTieuDoanhSoModal modal, Guid nguoiDungId);
+        Task<ResultModal> UpdateMucTieuDoanhSo(MucTieuDoanhSoModal modal);
     }
 }

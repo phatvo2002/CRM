@@ -2,27 +2,22 @@ import { Grid2 } from "@mui/material";
 import dayjs from "dayjs";
 import React, { useEffect, useRef } from "react";
 import { toast } from "react-toastify";
-import { useAddKPINhanVienMutation } from "src/App/Api/KPINhanVien.api";
+import { useUpdateKPINhanVienMutation } from "src/App/Api/KPINhanVien.api";
 import {
-  useAddMucTieuDoanhSoMutation,
   useGetAllMucTieuDoanhSoQuery,
+  useUpdateMucTieuDoanhSoMutation,
 } from "src/App/Api/MucTieuDoanhSo.Api";
 import { useGetPhongBanQuery } from "src/App/Api/Phongban";
 import {
-  useGetUserAllQuery,
   useGetUserIsNhanVienQuery,
   useGetUserIsTruongPhongQuery,
 } from "src/App/Api/UserApi";
-import {
-  AutocompleteRHF,
-  TextFieldRHF,
-} from "src/App/Components/ReactHookFormComp";
+import { AutocompleteRHF, TextFieldRHF } from "src/App/Components/ReactHookFormComp";
 import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
 import TextAreaRHF from "src/App/Components/ReactHookFormComp/TextAreaRHF";
 import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
 import {
-  validateAutocomplete,
   validateDatePicker,
   validateNumber,
   validateString,
@@ -46,7 +41,7 @@ const modelObj = {
     nguoiDungId: "nguoiDungId",
     phongBanId: "phongBanId",
     MaMucTieuDoanhSo: "MaMucTieuDoanhSo",
-    GhiChu: "GhiChu"
+    GhiChu: "GhiChu",
   },
   labelObj = {
     tenKPI: "Tên KPI",
@@ -64,7 +59,7 @@ const modelObj = {
     nguoiDungId: "Bàn giao cho",
     phongBanId: "Phòng ban thực hiện",
     MaMucTieuDoanhSo: "Mục tiêu",
-    GhiChu: "Ghi chú"
+    GhiChu: "Ghi chú",
   },
   initialFormState = {
     [modelObj.tenKPI]: "",
@@ -97,45 +92,47 @@ const modelObj = {
     [modelObj.nguoiDungId]: validateString(),
     // [modelObj.phongBanId]: validateString(),
   });
-const ModalThemMoi = ({
-  showModal,
-  closeModal,
+const ModalChinhSua = ({
+    showModal,
+    closeModal,
   refetch,
   checkpermission,
-  checkAdminPerMission,
+  selectedRow,
 }) => {
   const valueTuNgay = dayjs("1900-01-01");
   const valueDenNgay = dayjs("2100-12-31");
+  const _isMounted = useRef(false);
+  const modalRef = useRef(null);
   const { data: userData, isLoading: isUserLoading } =
-    useGetUserIsTruongPhongQuery(null, { skip: checkpermission == true });
+    useGetUserIsTruongPhongQuery(null, { skip: checkpermission == true && showModal == false });
   const { data: dataNhanVien, isLoading: isUserNhanVienLoading } =
-    useGetUserIsNhanVienQuery(null, { skip: checkpermission == false });
+    useGetUserIsNhanVienQuery(null, { skip: checkpermission == false && showModal == false });
   const { data: phongBanData, isLoading: isPhongBanLoading } =
-    useGetPhongBanQuery();
+    useGetPhongBanQuery(null , {skip:showModal == false});
   const { data: dataMucTieu, isLoading: isMucTieuLoading } =
     useGetAllMucTieuDoanhSoQuery(
       {
         tuNgay: valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
         denNgay: valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
       },
-      { skip: checkpermission == false }
+      { skip: checkpermission == false && showModal == false}
     );
-
-  const [addMucTieu] = useAddMucTieuDoanhSoMutation();
-  const [addKPINhanVien] = useAddKPINhanVienMutation();
-
-  const _isMounted = useRef(false);
-  const modalRef = useRef(null);
-
+  const [updateKPI] = useUpdateMucTieuDoanhSoMutation();
+  const [updateKPINhanVien] = useUpdateKPINhanVienMutation();
   const closeModalWithOtherFunc = () => {
       modalRef.current.reset(initialFormState);
       closeModal();
     },
-    getInitialStateFromApiToUpdate = async () => {
+    getInitialStateFromApiToUpdate = async (selectedRow) => {
       modalRef.current?.reset(
         {
-          [modelObj.ngayBatDau]: new Date(),
-          [modelObj.ngayKetThuc]: new Date(),
+          ...selectedRow,
+          [modelObj.tenKPI]: selectedRow?.tenKPI,
+          [modelObj.ngayBatDau]: selectedRow?.ngayBatDau,
+          [modelObj.ngayKetThuc]: selectedRow?.ngayKetThuc,
+          [modelObj.nguoiDungId]: selectedRow?.nguoiDung?.id,
+          [modelObj.phongBanId]: selectedRow?.phongBan?.id,
+          [modelObj.MaMucTieuDoanhSo] : selectedRow?.maMucTieuDoanhSo
         },
         { keepDirty: true }
       );
@@ -147,7 +144,9 @@ const ModalThemMoi = ({
     isUserNhanVienLoading;
 
   const submitForm = (data) => {
-      const tempData = {
+    const tempData = {
+        ...data,
+        id : data?.id,
         [modelObj.tenKPI]: data[modelObj.tenKPI],
         [modelObj.tenPhongBan]: data[modelObj.tenPhongBan],
         [modelObj.maQuanLy]: data[modelObj.maQuanLy],
@@ -164,8 +163,10 @@ const ModalThemMoi = ({
         [modelObj.nguoiDungId]: data[modelObj.nguoiDungId],
         [modelObj.phongBanId]: data[modelObj.phongBanId],
         [modelObj.maTrangThaiKPI]: 1,
-      };
-      const tempDataKPINhanVien = {
+      }
+    const tempDataKpiNhanVien = {
+        ...data,
+        id : data?.id,
         [modelObj.tenKPI]: data[modelObj.tenKPI],
         [modelObj.maQuanLy]: data[modelObj.maQuanLy],
         [modelObj.ngayBatDau]: data[modelObj.ngayBatDau],
@@ -180,37 +181,42 @@ const ModalThemMoi = ({
         [modelObj.doanhSo]: data[modelObj.doanhSo],
         [modelObj.nguoiDungId]: data[modelObj.nguoiDungId],
         [modelObj.MaMucTieuDoanhSo]: data[modelObj.MaMucTieuDoanhSo],
-        [modelObj.maTrangThaiKPI]: 1,
-      };
-      if(checkpermission == true)
-      {
-        callApiAddKPINhanVien(tempDataKPINhanVien)
-      }else callApiConvert(tempData);
+    }
+     if(checkpermission == true)
+     {
+        callApiUpdateKPiNhanVien(tempDataKpiNhanVien)
+     }
+     else callApiConvert(tempData);
     },
     callApiConvert = async (paramData) => {
       try {
-        await addMucTieu(paramData).unwrap();
-        toast.success("Thêm mới mục tiêu thành công");
+        await updateKPI(paramData).unwrap();
+        toast.success("Chỉnh sửa thành công");
         closeModalWithOtherFunc();
         refetch();
       } catch (error) {
         console.log(error);
       }
-    };
-  const callApiAddKPINhanVien = async (paramData) => {
-    try {
-      await addKPINhanVien(paramData).unwrap();
-      toast.success("Thêm mới thành công");
-      closeModalWithOtherFunc();
-      refetch();
-    } catch (error) {
-      console.log(error);
+    },
+    callApiUpdateKPiNhanVien = async (paramData)=>
+    {
+       try
+        {
+            await updateKPINhanVien(paramData).unwrap();
+            toast.success("Chỉnh sửa thành công");
+            closeModalWithOtherFunc();
+            refetch();
+        }catch(error)
+        {
+            console.log(error);
+        }
     }
-  };
 
   useEffect(() => {
-    getInitialStateFromApiToUpdate();
-  }, []);
+    if (selectedRow) {
+      getInitialStateFromApiToUpdate(selectedRow);
+    }
+  }, [selectedRow]);
   useEffect(() => {
     _isMounted.current = true;
     return () => {
@@ -223,7 +229,7 @@ const ModalThemMoi = ({
         handleClose={closeModalWithOtherFunc}
         submitForm={submitForm}
         isOpen={showModal}
-        header={"Thêm mục tiêu"}
+        header={"Cập nhật mục tiêu"}
         type={null}
         fullScreen={true}
         loading={isLoading}
@@ -391,4 +397,4 @@ const ModalThemMoi = ({
   );
 };
 
-export default ModalThemMoi;
+export default ModalChinhSua;

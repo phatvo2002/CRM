@@ -18,5 +18,10 @@ namespace CRM.Services.KPINhanViens
         {
             return await _kPINhanVienRepository.CreateKPINhanVien(modal, phongBanId);
         }
+
+        public async Task<ResultModal> UpdateKPINhanVien(KPINhanVienModal modal)
+        {
+            return await _kPINhanVienRepository.UpdateKPINhanVien(modal);
+        }
     }
 }
