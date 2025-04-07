@@ -1,8 +1,6 @@
 import {
   LineChart,
   Line,
-  BarChart,
-  Bar,
   PieChart,
   Pie,
   Cell,
@@ -12,6 +10,11 @@ import {
   ResponsiveContainer,
   CartesianGrid,
   Legend,
+  Radar,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
 } from "recharts";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -19,6 +22,7 @@ import Button from "@mui/material/Button";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import PersonIcon from "@mui/icons-material/Person";
 import PaidIcon from "@mui/icons-material/Paid";
+import AssignmentIcon from "@mui/icons-material/Assignment";
 import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -26,21 +30,22 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Autocomplete, Grid2, Paper, Stack, TextField } from "@mui/material";
 import { Grid } from "@mui/joy";
-const BanLamViec = () => {
+const BanLamViecNhanVien = () => {
+  const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"];
   const revenueData = [
-    { month: "Tháng 1", revenue: 12000 },
-    { month: "Tháng 2", revenue: 18000 },
-    { month: "Tháng 3", revenue: 15000 },
-    { month: "Tháng 4", revenue: 22000 },
-    { month: "Tháng 5", revenue: 25000 },
+    { month: "Quý 1", revenue: 32000 },
+    { month: "Quý 2", revenue: 45000 },
+    { month: "Quý 3", revenue: 39000 },
+    { month: "Quý 4", revenue: 52000 },
   ];
 
   const salesData = [
-    { name: "Product A", value: 400 },
-    { name: "Product B", value: 300 },
-    { name: "Product C", value: 200 },
+    { name: "Product A", value: 2400 },
+    { name: "Product B", value: 1398 },
+    { name: "Product C", value: 9800 },
+    { name: "Product D", value: 3908 },
+    { name: "Product E", value: 4800 },
   ];
-
   const years = [
     {
       id: "2020",
@@ -99,6 +104,22 @@ const BanLamViec = () => {
     { month: "Tháng 5", revenue: 140000000, customers: 700 },
   ];
 
+  // KPI data
+  const dataKPI = [
+    { subject: "Doanh số", A: 120, fullMark: 150 },
+    { subject: "Khách hàng mới", A: 98, fullMark: 150 },
+    { subject: "Cuộc gọi", A: 86, fullMark: 150 },
+    { subject: "Email gửi", A: 99, fullMark: 150 },
+    { subject: "Cuộc hẹn", A: 85, fullMark: 150 },
+    { subject: "Tư vấn hoàn tất", A: 65, fullMark: 150 },
+  ];
+
+  const taskData = [
+    { name: "Hoàn thành đúng hạn", value: 18 },
+    { name: "Trễ hạn", value: 4 },
+    { name: "Đang thực hiện", value: 8 },
+  ];
+
   return (
     <>
       <Paper>
@@ -136,30 +157,66 @@ const BanLamViec = () => {
               alignItems="center"
               justifyContent="space-between" // Căn đều khoảng cách giữa các Card
             >
-              <Card sx={{ flex: 1, minWidth: 200, textAlign: "center" }}>
+              <Card
+                sx={{
+                  backgroundColor: "#5a76f2",
+                  flex: 1,
+                  minWidth: 200,
+                  textAlign: "center",
+                }}
+              >
                 <CardContent>
-                  <ShowChartIcon className="text-blue-500 text-3xl" />
-                  <div>
-                    <h3 className="text-lg font-bold">Doanh thu</h3>
-                    <p className="text-2xl font-semibold">$25,000</p>
+                  <ShowChartIcon
+                    style={{ color: "#fff" }}
+                    className="text-3xl"
+                  />
+                  <div style={{ color: "#fff" }}>
+                    <h3 className="text-lg font-bold">
+                      Doanh số theo tháng/quý
+                    </h3>
+                    <p className="text-2xl font-semibold">25000$</p>
                   </div>
                 </CardContent>
               </Card>
-              <Card sx={{ flex: 1, minWidth: 200, textAlign: "center" }}>
+              <Card
+                sx={{
+                  backgroundColor: "#37c8a1",
+                  flex: 1,
+                  minWidth: 200,
+                  textAlign: "center",
+                }}
+              >
                 <CardContent>
-                  <PersonIcon className="text-green-500 text-3xl" />
-                  <div>
-                    <h3 className="text-lg font-bold">Khách hàng mới</h3>
+                  <PersonIcon
+                    style={{ color: "#fff" }}
+                    className="text-green-500 text-3xl"
+                  />
+                  <div style={{ color: "#fff" }}>
+                    <h3 className="text-lg font-bold">
+                      Số lượng khách hàng mới
+                    </h3>
                     <p className="text-2xl font-semibold">350</p>
                   </div>
                 </CardContent>
               </Card>
-              <Card sx={{ flex: 1, minWidth: 200, textAlign: "center" }}>
+              <Card
+                sx={{
+                  backgroundColor: "#f28c5a",
+                  flex: 1,
+                  minWidth: 200,
+                  textAlign: "center",
+                }}
+              >
                 <CardContent>
-                  <PaidIcon className="text-yellow-500 text-3xl" />
-                  <div>
-                    <h3 className="text-lg font-bold">Hợp đồng mới</h3>
-                    <p className="text-2xl font-semibold">15</p>
+                  <AssignmentIcon
+                    style={{ color: "#fff" }}
+                    className="text-yellow-500 text-3xl"
+                  />
+                  <div style={{ color: "#fff" }}>
+                    <h3 className="text-lg font-bold">
+                      Số lượng công việc đang xử lý
+                    </h3>
+                    <p className="text-2xl font-semibold">5</p>
                   </div>
                 </CardContent>
               </Card>
@@ -168,8 +225,8 @@ const BanLamViec = () => {
           <Grid2 size={6} sx={{ padding: 1 }}>
             <Card>
               <CardContent className="p-4">
-                <h3 className="text-lg font-bold mb-2">Doanh thu theo tháng</h3>
-                <ResponsiveContainer width="100%" height={250}>
+                <h3 className="text-lg font-bold mb-2">Doanh thu theo quý</h3>
+                <ResponsiveContainer width="100%" height={400}>
                   <LineChart data={revenueData}>
                     <XAxis dataKey="month" />
                     <YAxis />
@@ -188,17 +245,26 @@ const BanLamViec = () => {
           {/* Sales Chart */}
           <Grid2 size={6} sx={{ padding: 1 }}>
             <Card>
-              <CardContent className="p-4">
+              <CardContent>
                 <h3 className="text-lg font-bold mb-2">
                   Doanh số theo sản phẩm
                 </h3>
-                <ResponsiveContainer width="100%" height={250}>
+                <ResponsiveContainer width="100%" height={400}>
                   <PieChart>
-                    <Pie data={salesData} dataKey="value" outerRadius={80}>
+                    <Pie
+                      data={salesData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={120}
+                      fill="#8884d8"
+                      label
+                    >
                       {salesData.map((entry, index) => (
                         <Cell
                           key={`cell-${index}`}
-                          fill={["#0088FE", "#00C49F", "#FFBB28"][index % 3]}
+                          fill={COLORS[index % COLORS.length]}
                         />
                       ))}
                     </Pie>
@@ -208,48 +274,58 @@ const BanLamViec = () => {
               </CardContent>
             </Card>
           </Grid2>
-          <Grid2 size={12} sx={{ padding: 3 }}>
+          <Grid2 size={6} sx={{ padding: 3 }}>
             <Card>
               <CardContent>
-                <h3 className="text-lg font-bold mb-2">
-                  Doanh số theo từng phòng ban
-                </h3>
-                <ResponsiveContainer width="100%" height={250}>
-                  <BarChart width={600} height={300} data={data}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="phongBan" />
-                    <YAxis />
+                <h3 className="text-lg font-bold mb-2">Công việc trong tuần</h3>
+                <ResponsiveContainer width="100%" height={400}>
+                  <PieChart>
+                    <Pie
+                      data={taskData}
+                      dataKey="value"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={140}
+                      label
+                    >
+                      {taskData.map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={["#00C49F", "#FF8042", "#0088FE"][index % 3]}
+                        />
+                      ))}
+                    </Pie>
                     <Tooltip />
-                    <Legend />
-                    <Bar dataKey="doanhThu" fill="#8884d8" />
-                  </BarChart>
+                    <Legend verticalAlign="bottom" />
+                  </PieChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
           </Grid2>
-          <Grid2 size={12} sx={{ padding: 3 }}>
+          <Grid2 size={6} sx={{ padding: 1 }}>
             <Card>
               <CardContent>
-                <h3 className="text-lg font-bold mb-2">Dự đoán doanh thu</h3>
+                <h3 className="text-lg font-bold mb-2">KPI Cá Nhân</h3>
                 <ResponsiveContainer width="100%" height={400}>
-                  <LineChart data={dataDuDoan}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
+                  <RadarChart
+                    cx="50%"
+                    cy="50%"
+                    outerRadius="80%"
+                    data={dataKPI}
+                  >
+                    <PolarGrid />
+                    <PolarAngleAxis dataKey="subject" />
+                    <PolarRadiusAxis angle={30} domain={[0, 150]} />
                     <Tooltip />
-                    <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="revenue"
+                    <Radar
+                      name="Nhân viên A"
+                      dataKey="A"
                       stroke="#8884d8"
-                      activeDot={{ r: 8 }}
+                      fill="#8884d8"
+                      fillOpacity={0.6}
                     />
-                    <Line
-                      type="monotone"
-                      dataKey="customers"
-                      stroke="#82ca9d"
-                    />
-                  </LineChart>
+                  </RadarChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
@@ -260,4 +336,4 @@ const BanLamViec = () => {
   );
 };
 
-export default BanLamViec;
+export default BanLamViecNhanVien;
