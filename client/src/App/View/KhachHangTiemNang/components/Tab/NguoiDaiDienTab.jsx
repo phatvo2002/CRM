@@ -8,6 +8,7 @@ import { Button, Grid2, IconButton } from '@mui/material';
 import CustomDatagrid from 'src/App/Components/DataGrid/CustomDatagrid';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import ModalAddNguoiDaiDien from './Modal/ModalAddNguoiDaiDien';
+import ModalUpdateNguoiDaiDien from './Modal/ModalUpdateNguoiDaiDien';
 import Swal from 'sweetalert2';
 const NguoiDaiDienTab = () => {
   const { id } = useParams()
@@ -26,14 +27,16 @@ const NguoiDaiDienTab = () => {
         <div style={{ alignItems: "center" }}>
           <IconButton
             style={{}}
-            // disabled={selectedRowCuocGoi.length === 0}
-            // onClick={onOpenModalUpdateCuocGoi}
+            color='success'
+            disabled={selectedRow.length === 0}
+            onClick={handleOpenModalUpdate}
           >
             <CreateIcon></CreateIcon>
           </IconButton>
           <IconButton
             style={{ margin: "0 10px" }}
-            // disabled={selectedRowCuocGoi.length === 0}
+             disabled={selectedRow.length === 0}
+             color='error'
              onClick={handelDelete}
           >
             <DeleteIcon></DeleteIcon>
@@ -53,6 +56,13 @@ const NguoiDaiDienTab = () => {
   }
   const handleCloseModalAdd = () => {
     setModalAdd(false)
+  }
+  const handleOpenModalUpdate = ()=>{
+    setModalUpdate(true)
+  }
+  const handleCloseModalUpdate = ()=>
+  {
+    setModalUpdate(false)
   }
     const handelDelete = () => {
       Swal.fire({
@@ -104,13 +114,22 @@ const NguoiDaiDienTab = () => {
           showTopToolbar={true}
           onRowSelectionChange={handleRowSelectionChange}
         />
+        {/* Modal thêm mới */}
       </Grid2>
       <ModalAddNguoiDaiDien
         showModal={modalAdd}
         closeModal={handleCloseModalAdd}
         refetch={retchLienHe}
       />
+      {/* Modal update */}
+      <ModalUpdateNguoiDaiDien 
+        showModal={modalUpdate}
+        closeModal={handleCloseModalUpdate}
+        selectedItem={selectedRow}
+        refetch={retchLienHe}
+      />
     </Grid2>
+    
   )
 }
 

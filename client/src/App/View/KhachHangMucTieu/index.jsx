@@ -34,7 +34,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useNavigate } from "react-router-dom";
 import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
 import ModalBanGiaoKhachHangMucTieu from "./Modal/ModalBanGiaoKhachHangMucTieu";
-import { useGetTemplatesQuery } from "src/App/Api/KhachHangTiemNangApi";
+import { useGetTemplatesMutation, useGetTemplatesQuery } from "src/App/Api/KhachHangTiemNangApi";
 import ModalImportKhachHang from "./Modal/ModalImportKhachHang";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
@@ -229,7 +229,7 @@ const KhachHangMucTieu = () => {
   };
   const { data: dataKhachHangByNguoiDung, refetch } =
     useGetKhachHangMucTieuByNguoiDungIdQuery({tuNgay : valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"), denNgay:valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS")});
-  const { data: getTemplate } = useGetTemplatesQuery({
+  const [ getTemplate ] = useGetTemplatesMutation({
     path: "Templates/ThongTinKhachHang.xlsx",
     filename: "ThongTinKhachHang",
   });

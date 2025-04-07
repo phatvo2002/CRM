@@ -3,6 +3,7 @@ import { ActionComponents } from "./components/Action";
 import {
   Box,
   Button,
+  Chip,
   Divider,
   Grid,
   Grid2,
@@ -37,7 +38,7 @@ import {
   useDeletehangLoatKhachHangTiemNangMutation,
   useDeleteKhachHangTiemNangMutation,
   useGetKhachHangTiemNangByroleQuery,
-  useGetTemplatesQuery,
+  useGetTemplatesMutation,
 } from "src/App/Api/KhachHangTiemNangApi";
 import UpdateKhachHangTiemNang from "./components/UpdateKhachHangTiemNang";
 import ModalBanGiaoKhachHang from "./Modal/ModalBanGiaoKhachHang";
@@ -51,7 +52,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -86,28 +87,34 @@ const KhachHangTiemNang = () => {
             }}
           >
             <Tooltip title="Sửa thông tin ">
-              <IconButton
-                disabled={selectedRow.length === 0}
-                onClick={onOpenModalUpdateKhachHang}
-              >
-                <EditIcon color="success" />
-              </IconButton>
+              <span>
+                <IconButton
+                  disabled={selectedRow.length === 0}
+                  onClick={onOpenModalUpdateKhachHang}
+                >
+                  <EditIcon color="success" />
+                </IconButton>
+              </span>
             </Tooltip>
             <Tooltip title="Xóa">
-              <IconButton
-                disabled={selectedRow.length === 0}
-                onClick={() => handleDeletePhongBan(params?.id)}
-              >
-                <DeleteIcon color="error" />
-              </IconButton>
+              <span>
+                <IconButton
+                  disabled={selectedRow.length === 0}
+                  onClick={() => handleDeletePhongBan(params?.id)}
+                >
+                  <DeleteIcon color="error" />
+                </IconButton>
+              </span>
             </Tooltip>
             <Tooltip title="Bàn giao tiềm năng">
-              <IconButton
-                disabled={selectedRow.length === 0}
-                onClick={handleOpenModalBanGiaoKhachHang}
-              >
-                <ThreePIcon color="primary" />
-              </IconButton>
+              <span>
+                <IconButton
+                  disabled={selectedRow.length === 0}
+                  onClick={handleOpenModalBanGiaoKhachHang}
+                >
+                  <ThreePIcon color="primary" />
+                </IconButton>
+              </span>
             </Tooltip>
           </div>
         ),
@@ -187,7 +194,30 @@ const KhachHangTiemNang = () => {
       { field: "EmailCoQuan", headerName: "Tài khoản", width: 200 },
       { field: "nguonGoc", headerName: "Nguồn gốc khách hàng", width: 200 },
       { field: "linhVuc", headerName: "Lĩnh vực", width: 200 },
-      { field: "nghenghiep", headerName: "Nghề nghiệp", width: 200 },
+      {
+        field: "isChuyenDoi",
+        headerName: "Chuyển đổi ",
+        width: 200,
+        renderCell: (params) => {
+          return (
+            <>
+              {params?.value == false ? (
+                <Chip
+                  label="Chưa chuyển đổi"
+                  variant="outlined"
+                  color="error"
+                />
+              ) : (
+                <Chip
+                  label="Đã chuyển đổi"
+                  variant="outlined"
+                  color="success"
+                />
+              )}
+            </>
+          );
+        },
+      },
     ],
     [selectedRow]
   );
@@ -210,12 +240,12 @@ const KhachHangTiemNang = () => {
     dayjs().endOf("month")
   );
   const [openModalBanGiao, setOpenModalBanGiao] = useState(false);
-  const { data: getTemplate } = useGetTemplatesQuery({
-    path: "Templates/ThongTinTiemNang.xlsx",
-    filename: "ThongTinTiemNang",
-  });
+  const [getTemplate] = useGetTemplatesMutation();
   const { data: dataKHByRole, refetch: refetchkh } =
-    useGetKhachHangTiemNangByroleQuery({tuNgay:valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),denNgay : valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS")});
+    useGetKhachHangTiemNangByroleQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+      denNgay: valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+    });
   const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation();
   const [deleteHangLoat] = useDeletehangLoatKhachHangTiemNangMutation();
   const onOpenModalUpdateKhachHang = () => {
@@ -283,25 +313,28 @@ const KhachHangTiemNang = () => {
       }
     });
   };
-  const handleGetTemplates = () => {
-    if (getTemplate) {
-      const url = window.URL.createObjectURL(getTemplate);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "ThongTinTiemNang.xlsx";
-      a.click();
-      window.URL.revokeObjectURL(url);
-    } else {
-      console.error("Không có dữ liệu để tải file.");
+
+  const handleGetTemplates = async () => {
+    try {
+      const result = await getTemplate({
+        path: "Templates/ThongTinTiemNang.xlsx",
+        filename: "ThongTinTiemNang",
+      }).unwrap();
+
+      if (result instanceof Blob) {
+        const url = window.URL.createObjectURL(result);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "ThongTinTiemNang.xlsx";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error("Không có dữ liệu để tải file.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải template:", error);
     }
   };
-  // useEffect(() => {
-  //   if (userData?.response?.checkIsTruongPhong === true) {
-  //     setRows(dataKhachHangPhongBan);
-  //   } else {
-  //     setRows(dataKhachHangByNguoiDung);
-  //   }
-  // }, [dataKhachHangByNguoiDung, dataKhachHangPhongBan, userData]);
 
   useEffect(() => {
     setRows(dataKHByRole);
@@ -458,7 +491,7 @@ const KhachHangTiemNang = () => {
             Lịch sử tương tác
           </Button>
         </Box>
-        <Grid2 size={12} sx={{marginTop:3, marginLeft:3}}>
+        <Grid2 size={12} sx={{ marginTop: 3, marginLeft: 3 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
               <Stack

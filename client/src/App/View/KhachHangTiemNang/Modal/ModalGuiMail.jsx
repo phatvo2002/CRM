@@ -8,8 +8,6 @@ import TextAreaRHF from "src/App/Components/ReactHookFormComp/TextAreaRHF";
 import RHFDrawer from "src/App/Components/ReactHookFormComp/RHFDrawer";
 import { Grid2 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import * as yup from "yup";
 import { Dropzone, FileMosaic } from "@files-ui/react";
 const VisuallyHiddenInput = styled("input")({
@@ -63,13 +61,15 @@ export const ModalGuiMail = ({ showModal, typeModal, closeModal }) => {
       KhachHangMucTieuId: null,
       KhachHangTiemNangId: id,
     };
-    console.log(tempData)
-    callApiSentFile(tempData)
+    console.log(tempData);
+    callApiSentFile(tempData);
   };
   const callApiSentFile = async (params) => {
     try {
-      await guiMail(params);
-      toast.success("Gửi mail thành công");
+      const response = await guiMail(params);
+      if (response?.data?.status == 200) {
+        toast.success("Gửi mail thành công");
+      } else toast.warning(response?.data?.message);
       closeModalWithOtherFunc();
     } catch (err) {
       toast.error(
@@ -87,7 +87,7 @@ export const ModalGuiMail = ({ showModal, typeModal, closeModal }) => {
 
   const closeModalWithOtherFunc = () => {
     modalRef.current.reset(initialFormState);
-    setFiles([])
+    setFiles([]);
     closeModal();
   };
   useEffect(() => {
