@@ -36,6 +36,7 @@ namespace CRM.Entities
         public decimal? TiLeDoanhSoThucTe { get; set; }
         public bool? IsDatMucTieu { get; set; }
         public int? MaTrangThaiKPI { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public decimal? TongTiLeThucTe { get; set; }
         public Guid? NguoiTaoId { get; set; } // dòng mới
         public string? TenNguoiTao { get; set; } // dòng mới

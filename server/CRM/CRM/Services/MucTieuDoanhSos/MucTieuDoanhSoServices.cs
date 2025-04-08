@@ -33,9 +33,9 @@ namespace CRM.Services.MucTieuDoanhSos
             return await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSo(modal);
         }
 
-        public Task<ResultModal> UpdateMucTieuDoanhSoData(Guid nguoiDungId, Guid phongBanId, DateTime tuNgay, DateTime denNgay, int type)
+        public async Task<ResultModal> UpdateMucTieuDoanhSoData(Guid nguoiDungId, Guid phongBanId, DateTime tuNgay, DateTime denNgay, int type, double? doanhSo)
         {
-            throw new NotImplementedException();
+            return await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, tuNgay, denNgay, type, doanhSo);
         }
     }
 }

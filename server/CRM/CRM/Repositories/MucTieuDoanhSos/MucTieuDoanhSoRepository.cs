@@ -40,7 +40,6 @@ namespace CRM.Repositories.MucTieuDoanhSos
                     mucTieuDoanhSo.DoanhSoThucTe = 0;
                     mucTieuDoanhSo.IsDatMucTieu = false;
                     mucTieuDoanhSo.MaTrangThaiKPI = modal.MaTrangThaiKPI;
-                    mucTieuDoanhSo.TongTiLeThucTe = 0;
                     mucTieuDoanhSo.NguoiDungId = modal.NguoiDungId;
                     mucTieuDoanhSo.PhongBanId = modal.PhongBanId;
                     mucTieuDoanhSo.CreateAt = DateTime.UtcNow;
@@ -89,23 +88,68 @@ namespace CRM.Repositories.MucTieuDoanhSos
             else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
         }
 
-        public async Task<ResultModal> UpdateMucTieuDoanhSoData(Guid nguoiDungId, Guid phongBanId, DateTime tuNgay, DateTime denNgay, int type)
+        public async Task<ResultModal> UpdateMucTieuDoanhSoData(Guid nguoiDungId, Guid phongBanId, DateTime tuNgay, DateTime denNgay, int type, double? doanhSo)
         {
             var dbNguoiDung = _crmDbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId && r.IsDelete == false);
-            if ((dbNguoiDung?.CheckIsTruongPhong == false && dbNguoiDung.CheckIsGiamDoc == true) || (dbNguoiDung?.CheckIsGiamDoc == true && dbNguoiDung?.CheckIsTruongPhong == false) || dbNguoiDung?.MaPhongBan != Guid.Parse("4D086C61-CC35-40D4-B9D9-816063DF1C32"))
+            if ((dbNguoiDung?.CheckIsTruongPhong == false && dbNguoiDung.CheckIsGiamDoc == false) || dbNguoiDung?.MaPhongBan != Guid.Parse("4D086C61-CC35-40D4-B9D9-816063DF1C32"))
             {
-                var dbKPi = _crmDbContext.KPINhanViens.FirstOrDefault(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false && r.CreateAt >= firstDayOfMonth && r.CreateAt <= lastDayOfMonth);
+                var dbKPi = _crmDbContext.KPINhanViens.FirstOrDefault(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay);
                 if (dbKPi != null)
                 {
-                    dbKPi.SoCuocGoiThucTe += 1;
+                    switch (type)
+                    {
+                        case 1:
+                            { dbKPi.SoCuocGoiThucTe += 1; }
+                            break;
+                        case 2:
+                            { dbKPi.SoLichHenThucTe += 1; }
+                            break;
+                        case 3:
+                            { dbKPi.SoKhachHangTiemNangDaChuyenDoiThucTe += 1; }
+                            break;
+                        case 4:
+                            { dbKPi.SoEmailBaoGiaThucTe += 1; }
+                            break;
+                        case 5:
+                            { dbKPi.SoEmailTruongTacKhachHangThucTe += 1; }
+                            break;
+                        case 6:
+                            { dbKPi.DoanhSoThucTe += doanhSo; }
+                            break;
+                        default:
+                            break;
+                    }
+
                     _crmDbContext.KPINhanViens.Update(dbKPi);
                 }
                 else throw new Exception("Không tìm thấy dữ liệu");
 
-                var dbMucTieu = _crmDbContext.MucTieuDoanhSos.FirstOrDefault(r => r.PhongBanId == phongBanId && r.IsDeleted == false && r.CreateAt >= firstDayOfMonth && r.CreateAt <= lastDayOfMonth);
+                var dbMucTieu = _crmDbContext.MucTieuDoanhSos.FirstOrDefault(r => r.PhongBanId == phongBanId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay);
                 if (dbMucTieu != null)
                 {
-                    dbMucTieu.SoCuocGoiThucTe += 1;
+                    switch (type)
+                    {
+                        case 1:
+                            { dbMucTieu.SoCuocGoiThucTe += 1; }
+                            break;
+                        case 2:
+                            { dbMucTieu.SoLichHenThucTe += 1; }
+                            break;
+                        case 3:
+                            { dbMucTieu.SoKhachHangTiemNangDaChuyenDoiThucTe += 1; }
+                            break;
+                        case 4:
+                            { dbMucTieu.SoEmailBaoGiaThucTe += 1; }
+                            break;
+                        case 5:
+                            { dbMucTieu.SoEmailTruongTacKhachHangThucTe += 1; }
+                            break;
+                        case 6:
+                            { dbMucTieu.DoanhSoThucTe += doanhSo; }
+                            break;
+                        default:
+                            break;
+                    }
                     _crmDbContext.MucTieuDoanhSos.Update(dbMucTieu);
                 }
                 else throw new Exception("Không tìm thấy dữ liệu");

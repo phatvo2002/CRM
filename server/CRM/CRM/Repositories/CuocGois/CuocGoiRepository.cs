@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using CRM.Repositories.MucTieuDoanhSos;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repositories.CuocGois
@@ -11,12 +12,14 @@ namespace CRM.Repositories.CuocGois
         private readonly CrmDbContext _context;
         private readonly ILogger<CuocGoiRepository> _logger;
         private readonly IMapper _mapper;
+        private readonly IMucTieuDoanhSoRepository _mucTieuDoanhSoRepository;
 
-        public CuocGoiRepository(CrmDbContext context, IMapper mapper, ILogger<CuocGoiRepository> logger)
+        public CuocGoiRepository(CrmDbContext context, IMapper mapper, ILogger<CuocGoiRepository> logger, IMucTieuDoanhSoRepository mucTieuDoanhSoRepository)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _mucTieuDoanhSoRepository = mucTieuDoanhSoRepository;
         }
         public async Task<ResultModal> CreateCuocGoi(CuocGoiModal modal, Guid nguoiDungId, Guid phongBanId)
         {
@@ -52,8 +55,8 @@ namespace CRM.Repositories.CuocGois
                         DateTime firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
                         DateTime lastDayOfMonth = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
 
+                        await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, firstDayOfMonth, lastDayOfMonth, 1, 0);
                     }
-
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };
                 }

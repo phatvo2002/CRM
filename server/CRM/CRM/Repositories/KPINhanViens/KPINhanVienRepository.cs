@@ -43,7 +43,6 @@ namespace CRM.Repositories.KPINhanViens
                     data.IsDatMucTieu = false;
                     data.MaTrangThaiKPI = modal.MaTrangThaiKPI;
                     data.MaMucTieuDoanhSo = modal.MaMucTieuDoanhSo;
-                    data.TongTiLeThucTe = 0;
                     data.NguoiDungId = modal.NguoiDungId;
                     data.PhongBanId = phongBanId;
                     data.CreateAt = DateTime.Now;
