@@ -88,12 +88,15 @@ namespace CRM.Repositories.MucTieuDoanhSos
             else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
         }
 
-        public async Task<ResultModal> UpdateMucTieuDoanhSoData(Guid nguoiDungId, Guid phongBanId, DateTime tuNgay, DateTime denNgay, int type, double? doanhSo)
+        public async Task<ResultModal> UpdateMucTieuDoanhSoData(Guid nguoiDungId, Guid phongBanId, int type, double? doanhSo)
         {
+            DateTime now = DateTime.Now;
+            DateTime firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
+            DateTime lastDayOfMonth = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
             var dbNguoiDung = _crmDbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId && r.IsDelete == false);
             if ((dbNguoiDung?.CheckIsTruongPhong == false && dbNguoiDung.CheckIsGiamDoc == false) || dbNguoiDung?.MaPhongBan != Guid.Parse("4D086C61-CC35-40D4-B9D9-816063DF1C32"))
             {
-                var dbKPi = _crmDbContext.KPINhanViens.FirstOrDefault(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay);
+                var dbKPi = _crmDbContext.KPINhanViens.FirstOrDefault(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false && r.CreateAt >= firstDayOfMonth && r.CreateAt <= lastDayOfMonth);
                 if (dbKPi != null)
                 {
                     switch (type)
@@ -124,7 +127,7 @@ namespace CRM.Repositories.MucTieuDoanhSos
                 }
                 else throw new Exception("Không tìm thấy dữ liệu");
 
-                var dbMucTieu = _crmDbContext.MucTieuDoanhSos.FirstOrDefault(r => r.PhongBanId == phongBanId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay);
+                var dbMucTieu = _crmDbContext.MucTieuDoanhSos.FirstOrDefault(r => r.PhongBanId == phongBanId && r.IsDeleted == false && r.CreateAt >= firstDayOfMonth && r.CreateAt <= lastDayOfMonth);
                 if (dbMucTieu != null)
                 {
                     switch (type)
@@ -158,7 +161,7 @@ namespace CRM.Repositories.MucTieuDoanhSos
 
                 return new ResultModal() { Status = 200, Message = "Chỉnh sủa thành công", Success = true };
             }
-            else return new ResultModal() { Status = 202, Message = "Dữ liệu không phù hợp", Success = true };
+            else return new ResultModal() { Status = 202, Message = "Dữ liệu không hợp lệ", Success = true };
         }
     }
 }

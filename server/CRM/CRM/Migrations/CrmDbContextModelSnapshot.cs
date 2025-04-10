@@ -445,6 +445,9 @@ namespace CRM.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("BaoGiaId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime2");
 
@@ -655,13 +658,17 @@ namespace CRM.Migrations
                     b.Property<Guid?>("MaMucTieuDoanhSo")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("MaQuanLy")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<int?>("MaTrangThaiKPI")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("NgayBatDau")
+                    b.Property<DateTime?>("NgayBatDau")
                         .HasColumnType("datetime");
 
-                    b.Property<DateTime>("NgayKetThuc")
+                    b.Property<DateTime?>("NgayKetThuc")
                         .HasColumnType("datetime");
 
                     b.Property<Guid?>("NguoiDungId")
@@ -700,29 +707,40 @@ namespace CRM.Migrations
                     b.Property<int?>("SoLichHenThucTe")
                         .HasColumnType("int");
 
+                    b.Property<string>("TenKPI")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("TenNhanVien")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal?>("TiLeDoanhSoThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.Property<decimal?>("TiLeEmailBaoGiaThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("TiLeSoKhachHangTiemNangDaChuyenDoiThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.Property<decimal?>("TileCuocGoiThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.Property<decimal?>("TileEmailTuongTacThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.Property<decimal?>("TileLichHenThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.Property<decimal?>("TongTiLeThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.HasKey("Id")
@@ -1382,6 +1400,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiTaoId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1419,29 +1440,40 @@ namespace CRM.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("TenNguoiTao")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("TenPhongBan")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal?>("TiLeDoanhSoThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.Property<decimal?>("TiLeEmailBaoGiaThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<decimal?>("TiLeSoKhachHangTiemNangDaChuyenDoiThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.Property<decimal?>("TileCuocGoiThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.Property<decimal?>("TileEmailTuongTacThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.Property<decimal?>("TileLichHenThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.Property<decimal?>("TongTiLeThucTe")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
 
                     b.HasKey("Id")
@@ -1519,6 +1551,9 @@ namespace CRM.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("MaChucVu")
@@ -1854,6 +1889,34 @@ namespace CRM.Migrations
                         .HasName("PK_TrangThaiThucHien");
 
                     b.ToTable("TrangThaiThucHien", (string)null);
+                });
+
+            modelBuilder.Entity("CRM.Entities.XepLoai", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<double>("DenDiem")
+                        .HasColumnType("float");
+
+                    b.Property<string>("MaMau")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TenXepLoai")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<double>("TuDiem")
+                        .HasColumnType("float");
+
+                    b.HasKey("Id")
+                        .HasName("PK_XepLoai");
+
+                    b.ToTable("XepLoai", (string)null);
                 });
 
             modelBuilder.Entity("CRM.Entities.BaoGia", b =>

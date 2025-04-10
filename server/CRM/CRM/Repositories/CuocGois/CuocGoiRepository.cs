@@ -51,11 +51,7 @@ namespace CRM.Repositories.CuocGois
                     // cập nhật dữ liệu kpi khi cuộc gọi đã hoàn thành
                     if (cuocGoi.IsHoanThanh == true)
                     {
-                        DateTime now = DateTime.Now;
-                        DateTime firstDayOfMonth = new DateTime(now.Year, now.Month, 1);
-                        DateTime lastDayOfMonth = new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month));
-
-                        await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, firstDayOfMonth, lastDayOfMonth, 1, 0);
+                        await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, 1, 0);
                     }
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };
@@ -110,6 +106,12 @@ namespace CRM.Repositories.CuocGois
                 db.NguoiDungId = nguoiDungId;
                 db.PhongBanId = phongBanId;
                 _context.CuocGois.Update(db);
+
+                if (db.IsHoanThanh == modal.IsHoanThanh == true)
+                {
+                    await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, 1, 0);
+                }
+
                 await _context.SaveChangesAsync();
                 return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công", Success = true };
             }

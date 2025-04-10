@@ -412,7 +412,7 @@ const index = () => {
 
                           <TableCell align="center">
                             <Typography variant="body2">
-                              {item?.tongTiLeThucTe} %
+                              {item?.tongTiLeThucTe.toFixed(2)} %
                             </Typography>
                           </TableCell>
 
@@ -597,7 +597,7 @@ const index = () => {
                                           {kpi.tiLeDoanhSoThucTe} %
                                         </TableCell>
                                         <TableCell align="center">
-                                          {kpi.tongTiLeThucTe} %
+                                          {kpi.tongTiLeThucTe.toFixed(2)} %
                                         </TableCell>
                                         <TableCell align="center">
                                           {kpi.ghiChu || ""}

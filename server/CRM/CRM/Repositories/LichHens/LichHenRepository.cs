@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using CRM.Repositories.MucTieuDoanhSos;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repositories.LichHens
@@ -11,12 +12,14 @@ namespace CRM.Repositories.LichHens
         private readonly CrmDbContext _context;
         private readonly ILogger<LichHenRepository> _logger;
         private readonly IMapper _mapper;
+        private readonly IMucTieuDoanhSoRepository _mucTieuDoanhSoRepository;
 
-        public LichHenRepository(CrmDbContext context, IMapper mapper, ILogger<LichHenRepository> logger)
+        public LichHenRepository(CrmDbContext context, IMapper mapper, ILogger<LichHenRepository> logger, IMucTieuDoanhSoRepository mucTieuDoanhSoRepository)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _mucTieuDoanhSoRepository = mucTieuDoanhSoRepository;
         }
         public async Task<ResultModal> CreateLichHen(LichHenModal modal, Guid nguoiDungId, Guid phongBanId)
         {
@@ -41,6 +44,11 @@ namespace CRM.Repositories.LichHens
                     lichHen.PhongBanId = phongBanId;
                     lichHen.CreateAt = DateTime.Now;
                     _context.LichHens.Add(lichHen);
+
+                    if (lichHen.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5"))
+                    {
+                        await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, 2, 0);
+                    }
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };
                 }
@@ -113,6 +121,10 @@ namespace CRM.Repositories.LichHens
                 db.KhachHangTiemNangId = modal.KhachHangTiemNangId;
                 db.NguoiDungId = nguoiDungId;
                 db.PhongBanId = phongBanId;
+                if (db.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5"))
+                {
+                    await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, 2, 0);
+                }
                 _context.LichHens.Update(db);
                 await _context.SaveChangesAsync();
                 return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công", Success = true };

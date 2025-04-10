@@ -17,6 +17,7 @@ import Groups2Icon from '@mui/icons-material/Groups2';
 import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import MenuIcon from '@mui/icons-material/Menu';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 const DashBoardThietLap = () => {
   return (
     <Container style={{ maxWidth: "100%" , fontFamily: "inherit",}}>
@@ -116,6 +117,25 @@ const DashBoardThietLap = () => {
                     style={{ textDecoration: "none", color: "primary.main"  }}
                   >
                      Quy trình bán hàng
+                  </Link>
+                </Button>
+              </CardActions>
+            </Card>
+          
+            </Stack>
+            <Stack>
+            <Card sx={{ minWidth: 275 }}>
+              <CardContent>
+                 <ThumbUpOffAltIcon style={{width:"100%" ,fontSize:"5rem"}}></ThumbUpOffAltIcon>
+              </CardContent>
+              <CardActions>
+                <Button size="small"  style={{textAlign:"center" }}>
+                  <Link
+                    component={RouterLink}
+                    to={"/quantrihethong/xeploai"}
+                    style={{ textDecoration: "none", color: "primary.main"  }}
+                  >
+                    Xếp loại
                   </Link>
                 </Button>
               </CardActions>

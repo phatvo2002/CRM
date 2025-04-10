@@ -10,6 +10,7 @@ const ThongTinNguoiDung = lazy(() => import("./View/ThongTinNguoiDung"));
 const ThietLapNhanVien = lazy(() => import("./View/ThietLap/ThietLap"));
 const ThemMoiNguoiDung = lazy(() => import("./View/ThietLap/AddNguoiDung"));
 const ChangePassword = lazy(() => import("./View/session/ChangePassword"));
+const XepLoai = lazy(()=> import("./View/ThietLap/QuanLyXepLoai"))
 const ThietLapVaiTro = lazy(
   () => import("./View/ThietLap/ThietLapVaiTro/Index")
 );
@@ -173,6 +174,14 @@ const RouteChild = [
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ThietLapMail />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/quantrihethong/xeploai",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <XepLoai />
       </Suspense>
     ),
   },
