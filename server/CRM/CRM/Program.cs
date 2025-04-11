@@ -28,6 +28,7 @@ using CRM.Repositories.PhanLoaiDuBaos;
 using CRM.Repositories.PhongBans;
 using CRM.Repositories.ThongBaos;
 using CRM.Repositories.TinhTrangs;
+using CRM.Repositories.XepLoais;
 using CRM.Services.BaoGias;
 using CRM.Services.ChucVus;
 using CRM.Services.CoHois;
@@ -54,6 +55,7 @@ using CRM.Services.PhanLoaiDuBaos;
 using CRM.Services.PhongBans;
 using CRM.Services.ThongBaos;
 using CRM.Services.TinhTrangs;
+using CRM.Services.XepLoais;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -176,6 +178,9 @@ builder.Services.AddScoped<IMucTieuDoanhSoServices, MucTieuDoanhSoServices>();
 
 builder.Services.AddScoped<IKPINhanVienRepository, KPINhanVienRepository>();
 builder.Services.AddScoped<IKPIServices, KPINhanVienServices>();
+
+builder.Services.AddScoped<IXepLoaiRepository, XepLoaiRepository>();
+builder.Services.AddScoped<IXepLoaiServices, XepLoaiServices>();
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 

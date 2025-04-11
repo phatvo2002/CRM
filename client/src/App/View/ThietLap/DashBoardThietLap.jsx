@@ -18,6 +18,7 @@ import VerifiedUserIcon from '@mui/icons-material/VerifiedUser';
 import MenuIcon from '@mui/icons-material/Menu';
 import Inventory2Icon from '@mui/icons-material/Inventory2';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import PercentIcon from '@mui/icons-material/Percent';
 const DashBoardThietLap = () => {
   return (
     <Container style={{ maxWidth: "100%" , fontFamily: "inherit",}}>
@@ -126,7 +127,7 @@ const DashBoardThietLap = () => {
             <Stack>
             <Card sx={{ minWidth: 275 }}>
               <CardContent>
-                 <ThumbUpOffAltIcon style={{width:"100%" ,fontSize:"5rem"}}></ThumbUpOffAltIcon>
+                 <PercentIcon style={{width:"100%" ,fontSize:"5rem"}}></PercentIcon>
               </CardContent>
               <CardActions>
                 <Button size="small"  style={{textAlign:"center" }}>
