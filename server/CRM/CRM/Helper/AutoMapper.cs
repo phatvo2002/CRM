@@ -79,6 +79,9 @@ namespace CRM.Helper
             CreateMap<XepLoai, XepLoaiDTO>();
             CreateMap<XepLoaiModal, XepLoai>().ReverseMap();
 
+            CreateMap<EmailDaGui, MailDaGuiDTO>();
+            CreateMap<MailDaGuiModal, EmailDaGui>().ReverseMap();
+
         }
     }
 }

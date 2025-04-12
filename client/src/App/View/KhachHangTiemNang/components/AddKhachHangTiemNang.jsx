@@ -5,7 +5,7 @@ import {
   TextField,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useNavigate } from "react-router-dom";
 import { FormProvider, useForm } from "react-hook-form";
@@ -26,6 +26,9 @@ import {
   useGetAllNganhNgheByLinhVucIdQuery,
   useGetAllNguonGocKhachHangQuery,
   useGetAllPhongBanKhachHangQuery,
+  useLazyGetAllLoaiTiemNangQuery,
+  useLazyGetAllNguonGocKhachHangQuery,
+  useLazyGetAllPhongBanKhachHangQuery,
 } from "src/App/Api/GetDataApi";
 import { toast } from "react-toastify";
 import { useAddKhachHangTiemNangMutation } from "src/App/Api/KhachHangTiemNangApi";
@@ -110,18 +113,13 @@ const AddKhachHangTiemNang = () => {
         reset(initialFormState);
       }
     },
-    {
-      data: dataPhongBanKhachHang,
-      isFetching: { isGetPhongBanKhachHangFetching },
-    } = useGetAllPhongBanKhachHangQuery(),
-    {
-      data: dataNguonGocKhachHang,
-      isFetching: { isGetNguonGocKhachHangFetching },
-    } = useGetAllNguonGocKhachHangQuery(),
-    {
-      data: dataLoaiTiemNang,
-      isFetching: { isGetLoaiTiemNangFetching },
-    } = useGetAllLoaiTiemNangQuery(),
+    [getPhongBanKhachHang, { data: dataPhongBanKhachHang, isFetching: isGetPhongBanKhachHangFetching }] = useLazyGetAllPhongBanKhachHangQuery(),
+    [getNguonGocKhachHang, { data: dataNguonGocKhachHang, isFetching: isGetNguonGocKhachHangFetching }] = useLazyGetAllNguonGocKhachHangQuery(),
+    [getLoaiTiemNang, {data: dataLoaiTiemNang , isFetching:  isGetLoaiTiemNangFetching }] =useLazyGetAllLoaiTiemNangQuery(),
+    // {
+    //   data: dataNguonGocKhachHang,
+    //   isFetching: { isGetNguonGocKhachHangFetching },
+    // } = useGetAllNguonGocKhachHangQuery(),
     {
       data: dataLoaiHinh,
       isFetching: { isGetLoaiHinhFetching },
@@ -141,7 +139,7 @@ const AddKhachHangTiemNang = () => {
       isFetching: { isGetDoanhThuFetching },
     } = useGetAllDoanhThuQuery(),
     [createKhachHangTiemNang] = useAddKhachHangTiemNangMutation(),
-    
+ 
     schema = yup.object().shape({
       [modelObj.tenKhachHang]: validateString(),
       [modelObj.soDienThoaiDiDong]: validateString(),
@@ -160,7 +158,6 @@ const AddKhachHangTiemNang = () => {
       reset,
       formState: { isDirty, isValid },
     } = methods;
-
   const submitForm = (data) => {
     const tempData = {
       [modelObj.tenKhachHang]: data[modelObj.tenKhachHang],
@@ -205,7 +202,11 @@ const AddKhachHangTiemNang = () => {
         toast.error("Đã có lỗi xảy ra , vui lòng liên hệ nhân viên quản trị hệ thống để nhận hỗ trợ") 
        }
   }
-
+  useEffect(() => {
+    getPhongBanKhachHang();
+    getNguonGocKhachHang();
+    getLoaiTiemNang();
+  }, []);
   return (
     <>
       <Grid2 container alignItems="center" spacing={2}>
@@ -241,7 +242,6 @@ const AddKhachHangTiemNang = () => {
                     dataPhongBanKhachHang,
                     "name"
                   )}
-                  skeletonLoading={isGetPhongBanKhachHangFetching}
                 />
               </Grid2>
               <Grid2 size={6}>

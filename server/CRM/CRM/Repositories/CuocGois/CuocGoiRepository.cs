@@ -53,6 +53,7 @@ namespace CRM.Repositories.CuocGois
                     {
                         await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, 1, 0);
                     }
+
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };
                 }

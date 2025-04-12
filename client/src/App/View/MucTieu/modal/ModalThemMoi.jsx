@@ -117,8 +117,7 @@ const ModalThemMoi = ({
       {
         tuNgay: valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
         denNgay: valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
-      },
-      { skip: checkpermission == false }
+      }
     );
 
   const [addMucTieu] = useAddMucTieuDoanhSoMutation();

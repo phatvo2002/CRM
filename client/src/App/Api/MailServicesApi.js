@@ -21,7 +21,7 @@ export const apiMail = createApi({
         formData.append("ToMail", data.ToMail);
         formData.append("Subject", data.Subject);
         formData.append("Body", data.Body);
-
+     
         if (data.KhachHangTiemNangId) {
           formData.append("KhachHangTiemNangId", data.KhachHangTiemNangId);
         }
@@ -30,10 +30,12 @@ export const apiMail = createApi({
           formData.append("KhachHangMucTieuId", data.KhachHangMucTieuId);
         }
         if (data.AttachtMent && data.AttachtMent.length > 0) {
-          data.AttachtMent.forEach((file) => {
-            formData.append("AttachtMent", file);
+          data.AttachtMent.forEach((item) => {
+            if (item.file instanceof File) {
+              formData.append("AttachtMent", item.file, item.file.name);
+            }
           });
-        }
+        }             
         return {
           url: "/Mail/GuiMail",
           method: "POST",

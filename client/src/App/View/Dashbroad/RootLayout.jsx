@@ -13,13 +13,7 @@ import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
-import {
-  Breadcrumbs,
-  Button,
-  Fab,
-  Grid2,
-  Link
-} from "@mui/material";
+import { Breadcrumbs, Button, Fab, Grid2, Link } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -241,10 +235,7 @@ export default function RootLayout() {
             >
               <MenuIcon />
             </IconButton>
-            <Breadcrumbs
-              maxItems={2}
-              aria-label="breadcrumb"
-            >
+            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
               {pathParts.map((item, index) => {
                 const href = "/" + pathParts.slice(0, index + 1).join("/");
                 return (
@@ -298,24 +289,16 @@ export default function RootLayout() {
               color="white"
               sx={{ flexGrow: 1 }}
             ></Typography>
-            <IconButton>
-              <IconButton onClick={toggleTheme}>
-                {darkMode ? (
-                  <WbSunnyIcon style={{ color: "white" }} />
-                ) : (
-                  <DarkModeIcon style={{ color: "black" }} />
-                )}
-              </IconButton>
+            <IconButton onClick={toggleTheme}>
+              {darkMode ? (
+                <WbSunnyIcon style={{ color: "white" }} />
+              ) : (
+                <DarkModeIcon style={{ color: "black" }} />
+              )}
             </IconButton>
-            <IconButton color="black">
-              <SettingsIcon
-                // id="basic-button"
-                // onClick={gotoLinkThietLap}
-                // aria-expanded={open ? "true" : undefined}
-                // aria-controls={open ? "basic-menu" : undefined}
-                // aria-haspopup="true"
-                onClick={handleOpenSetting}
-              ></SettingsIcon>
+
+            <IconButton color="black" onClick={handleOpenSetting}>
+              <SettingsIcon />
               <Menu
                 id="basic-menu"
                 anchorEl={openSetting}
@@ -328,6 +311,7 @@ export default function RootLayout() {
                 <MenuItem onClick={linkToMail}>Thiết lập Mail</MenuItem>
               </Menu>
             </IconButton>
+
             <CustomNotification
               openNoti={openNoti}
               handleOpenNoti={handleOpenNoti}
@@ -335,33 +319,33 @@ export default function RootLayout() {
               intitialNoti={intitialNoti}
             />
             <IconButton
+              onClick={handleClick}
               style={{ border: "1px solid", padding: 10, marginLeft: "20px" }}
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
             >
-              <PersonIcon
-                id="basic-button"
-                aria-controls={open ? "basic-menu" : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? "true" : undefined}
-                onClick={handleClick}
-              ></PersonIcon>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={opens}
-                onClose={handleClose}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
-              >
-                <MenuItem>
-                  <Link component={RouterLink} to="/user/profile">
-                    Thông tin tài khoản
-                  </Link>
-                </MenuItem>
-                <MenuItem onClick={gotoLink}>Đổi mật khẩu</MenuItem>
-                <MenuItem onClick={logout}>Logout</MenuItem>
-              </Menu>
+              <PersonIcon />
             </IconButton>
+
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={opens}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem>
+                <Link component={RouterLink} to="/user/profile">
+                  Thông tin tài khoản
+                </Link>
+              </MenuItem>
+              <MenuItem onClick={gotoLink}>Đổi mật khẩu</MenuItem>
+              <MenuItem onClick={logout}>Logout</MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
         <Drawer
