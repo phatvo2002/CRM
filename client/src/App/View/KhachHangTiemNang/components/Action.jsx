@@ -26,8 +26,8 @@ export const ActionComponents = ({selectedItem , isOpen,onClose}) => {
       right: 0,
       width: "350px",
       height: "100%",
-      backgroundColor: theme.palette.background.default, // Sử dụng theme
-      color: theme.palette.text.primary, // Đồng bộ màu chữ
+      backgroundColor: theme.palette.background.default, 
+      color: theme.palette.text.primary, 
       boxShadow: "-2px 0 5px rgba(0, 0, 0, 0.1)",
       padding: "20px",
       overflowY: "auto",

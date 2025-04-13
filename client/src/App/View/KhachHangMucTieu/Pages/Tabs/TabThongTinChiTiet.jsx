@@ -1,6 +1,6 @@
 import React from 'react'
 
-const TabThongTinChiTiet = () => {
+const TabThongTinChiTiet = ({id}) => {
   return (
     <div>TabThongTinChiTiet</div>
   )

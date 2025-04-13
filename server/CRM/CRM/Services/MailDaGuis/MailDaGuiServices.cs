@@ -13,6 +13,11 @@ namespace CRM.Services.MailDaGuis
             _mailDaGuiRepository = mailDaGuiRepository;
         }
 
+        public async Task<ResultModal> Delete(Guid Id)
+        {
+            return await _mailDaGuiRepository.Delete(Id);
+        }
+
         public async Task<List<MailDaGuiDTO>> GetByTiemNangid(Guid tiemNangId)
         {
             return await _mailDaGuiRepository.GetByTiemNangid(tiemNangId);

@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
   Paper,
+  Slide,
   Stack,
   Typography,
 } from "@mui/material";
@@ -534,7 +535,27 @@ const KhachHangTiemNang = () => {
           />
         </Box>
       </Paper>
-
+      <Slide direction="left" in={isActionOpen} mountOnEnter unmountOnExit>
+        <Box
+          sx={{
+            width: "360px",
+            position: "fixed",
+            right: 0,
+            top: 0,
+            bottom: 0,
+            zIndex: 1300,
+            bgcolor: "background.paper",
+            boxShadow: 3,
+            overflowY: "auto",
+          }}
+        >
+          <ActionComponents
+            selectedItem={selectedRow}
+            onClose={handleClose}
+            isOpen={isActionOpen}
+          />
+        </Box>
+      </Slide>
       {/* Modals and Action Components */}
       <UpdateKhachHangTiemNang
         selectedItem={selectedRow}
@@ -555,14 +576,6 @@ const KhachHangTiemNang = () => {
         setLoading={setLoading}
         refetch={refetchkh}
       />
-
-      {isActionOpen && (
-        <ActionComponents
-          selectedItem={selectedRow}
-          onClose={handleClose}
-          isOpen={isActionOpen}
-        />
-      )}
 
       <ModalXemKhachHangDaXoa
         handleClose={handleCloseModalXem}

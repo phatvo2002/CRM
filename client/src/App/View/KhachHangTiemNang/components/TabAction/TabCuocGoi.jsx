@@ -22,6 +22,7 @@ const TabCuocGoi = ({ selectedItem }) => {
               border:
                 selectedCard === index ? "2px solid #1976d2" : "1px solid #ddd",
               borderRadius: 2,
+              marginTop:4
             }}
           >
             <CardActionArea onClick={() => setSelectedCard(index)}>

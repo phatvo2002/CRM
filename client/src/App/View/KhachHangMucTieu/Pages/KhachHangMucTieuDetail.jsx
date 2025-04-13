@@ -39,12 +39,16 @@ import { useGetKhachHangMucTieuByIdQuery } from "src/App/Api/KhachHangMucTieuApi
 import ModlaAddCuocGoi from "../Modal/ModalAddCuocGoi";
 import ModalAddLichHen from "../Modal/ModalAddLichHen";
 import { ModalSinhCoHoi } from "../Modal/ModalSinhCoHoi";
+import { ModalGuiMail } from "../Modal/ModalGuiMail";
+import TabMailDaGui from "./Tabs/TabMailDaGui";
+import { ModalSinhDonHang } from "../Modal/ModalSinhDonHang";
 const KhachHangMucTieuDetail = () => {
   const [activeTab, setActiveTab] = React.useState(0);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [modalCuocGoi, setModalCuocGoi] = useState(false);
   const [modalLichHen, setModalLichHen] = useState(false);
   const [modalSinhCoHoi, setModalSinhCoHoi] = useState(false);
+  const [modalGuiMail , setModalGuiMail] = useState(false);
   const { id } = useParams();
   const { data: KhachhangData } = useGetKhachHangMucTieuByIdQuery(id);
   const navigate = useNavigate();
@@ -71,6 +75,8 @@ const KhachHangMucTieuDetail = () => {
   const handleCloseMdodalLichHen = () => setModalLichHen(false);
   const handleOpenModalChuyenDoiCoHoi = () => setModalSinhCoHoi(true);
   const handleCloseModalChuyenDoiCoHoi = () => setModalSinhCoHoi(false);
+  const handleOpenModalGuiMail = () => setModalGuiMail(true);
+  const handleCloseModalGuiMail = ()=> setModalGuiMail(false)
   return (
     <>
       <Grid2 container spacing={2} sx={{ padding: 2 }}>
@@ -96,6 +102,7 @@ const KhachHangMucTieuDetail = () => {
               variant="contained"
               color="secondary"
               startIcon={<MarkunreadIcon />}
+              onClick={handleOpenModalGuiMail}
               sx={{ textTransform: "none", borderRadius: 2 }}
             >
               Gửi mail
@@ -248,14 +255,15 @@ const KhachHangMucTieuDetail = () => {
                     <Tab label="Hoạt động" value="4" />
                     <Tab label="Bán hàng" value="5" />
                     <Tab label="Lịch sử mua hàng" value="6" />
-                    <Tab label="Ghi chú" value="7" />
+                    <Tab label="Mail Đã gửi" value="7" />
+                    <Tab label="Ghi chú" value="8" />
                   </TabList>
                 </Box>
                 <TabPanel value="1">
                   <TabTongQuan />
                 </TabPanel>
                 <TabPanel value="2">
-                  <TabThongTinChiTiet />
+                  <TabThongTinChiTiet id={id}/>
                 </TabPanel>
                 <TabPanel value="3">
                   <TabLienHe />
@@ -268,6 +276,9 @@ const KhachHangMucTieuDetail = () => {
                 </TabPanel>
                 <TabPanel value="6">
                   <TabLichSuMuaHang />
+                </TabPanel>
+                <TabPanel value="7">
+                  <TabMailDaGui />
                 </TabPanel>
               </TabContext>
             </Box>
@@ -290,6 +301,11 @@ const KhachHangMucTieuDetail = () => {
         khachHangData={KhachhangData}
         showModal={modalSinhCoHoi}
         closeModal={handleCloseModalChuyenDoiCoHoi}
+      />
+      {/* Moldal Gửi Mail */}
+      <ModalGuiMail
+        showModal={modalGuiMail}
+        closeModal={handleCloseModalGuiMail}
       />
     </>
   );

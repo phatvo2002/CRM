@@ -86,13 +86,13 @@ namespace CRM.Controllers.MailDaGuis
                 return BadRequest(ex.Message);
             }
         }
-        [HttpDelete("delete")]
+        [HttpDelete("delete/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
             {
-                var result = await _mailDaGuiServices.DeleteById(id);
+                var result = await _mailDaGuiServices.Delete(id);
                 return Ok(result);
             }
             catch (Exception ex)

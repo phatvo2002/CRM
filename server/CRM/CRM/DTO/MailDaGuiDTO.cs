@@ -9,5 +9,6 @@
         public Guid? KhachHangTiemNangId { get; set; }
         public string? KhachHangMucTieuId { get; set; }
         public Guid? BaoGiaId { get; set; }
+        public DateTime? CreateAt { get; set; }
     }
 }
