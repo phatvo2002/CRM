@@ -76,6 +76,12 @@ namespace CRM.Helper
             CreateMap<KPINhanVien, KPINhanVienDTO>();
             CreateMap<KPINhanVienModal, KPINhanVien>().ReverseMap();
 
+            CreateMap<XepLoai, XepLoaiDTO>();
+            CreateMap<XepLoaiModal, XepLoai>().ReverseMap();
+
+            CreateMap<EmailDaGui, MailDaGuiDTO>();
+            CreateMap<MailDaGuiModal, EmailDaGui>().ReverseMap();
+
         }
     }
 }

@@ -84,13 +84,14 @@ namespace CRM.Entities
         public virtual DbSet<MucTieuDoanhSo> MucTieuDoanhSos { get; set; }
         public virtual DbSet<TinhTrangKPI> TinhTrangKPIs { get; set; }
         public virtual DbSet<KPINhanVien> KPINhanViens { get; set; }
+        public virtual DbSet<XepLoai> XepLoais { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            // optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             //Local connection :
-            //optionsBuilder.UseSqlServer("Server=DESKTOP-7IV23S1;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
-            optionsBuilder.UseSqlServer("Server=MSI\\MSSQLSERVER6;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=6000;");
+            optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=CRM_V2;User Id=sa;Password=abc@123;Encrypt=True;TrustServerCertificate=true;Connection Timeout=1000;");
+            // optionsBuilder.UseSqlServer("Server=MSI\\MSSQLSERVER6;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=6000;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -377,6 +378,7 @@ namespace CRM.Entities
                 entity.Property(e => e.Name).HasMaxLength(50);
 
             });
+            #region
             modelBuilder.Entity<CuocGoi>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_CuocGoi");
@@ -513,6 +515,7 @@ namespace CRM.Entities
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_PhongBan_NhiemVu");
             });
+            #endregion
 
             #region Hàng hóa
             modelBuilder.Entity<LoaiHangHoa>(entity =>
@@ -838,6 +841,7 @@ namespace CRM.Entities
                 entity.Property(e => e.TieuDe).HasMaxLength(50);
                 entity.Property(e => e.DiaChiGui).HasMaxLength(50);
                 entity.Property(e => e.DiaChiNhan).HasMaxLength(50);
+                entity.Property(e => e.BaoGiaId).HasColumnType("uniqueidentifier");
                 entity.HasOne(d => d.KhachHangMucTieu).WithMany(p => p.EmailDaGuis)
  .HasForeignKey(d => d.KhachHangMucTieuId)
  .OnDelete(DeleteBehavior.ClientSetNull)
@@ -1034,6 +1038,18 @@ namespace CRM.Entities
                .OnDelete(DeleteBehavior.ClientSetNull)
                .HasConstraintName("FK_TinhTrangKPI_KPINhanVien");
                 entity.HasOne(d => d.MucTieuDoanhSo).WithMany(r => r.KPINhanViens).HasForeignKey(r => r.MaMucTieuDoanhSo).OnDelete(DeleteBehavior.ClientSetNull).HasConstraintName("FK_MucTieuDoanhSo_KPINhanVien");
+            });
+
+            modelBuilder.Entity<XepLoai>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_XepLoai");
+
+                entity.ToTable("XepLoai");
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.TenXepLoai).HasMaxLength(50);
+                entity.Property(e => e.TuDiem).HasColumnType("float");
+                entity.Property(e => e.DenDiem).HasColumnType("float");
+                entity.Property(e => e.MaMau).HasMaxLength(50);
             });
             #endregion
 

@@ -76,8 +76,10 @@ const HangHoaQuanTamTab = () => {
         console.log(currentRow)
         updatedRow = await createData(currentRow).unwrap();
         currentRow.isNew = false; 
+        refetch()
       } else {
         updatedRow = await updateData(currentRow).unwrap();
+        refetch()
       }
       // setHangHoa((prev) =>
       //   prev.map((row) => (row.id === id ? { ...updatedRow } : row))

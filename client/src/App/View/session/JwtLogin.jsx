@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab";
-import { Card, Grid, TextField } from "@mui/material";
+import { Card, CircularProgress, Grid, TextField } from "@mui/material";
 import { Box, styled } from "@mui/system";
 // import { GoogleLogin } from "@react-oauth/google";
 import { AuthContext } from "../../Context/AuthContext";
@@ -251,7 +251,7 @@ const JwtLogin = () => {
                       variant="contained"
                       sx={{ my: 3, width: "100%" }}
                     >
-                      ĐĂNG NHẬP
+                      {loading ? (<><CircularProgress color="success" /></>) : (<>ĐĂNG NHẬP</>)}
                     </LoadingButton>
                     <Box
                       sx={{

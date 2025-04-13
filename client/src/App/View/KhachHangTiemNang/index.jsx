@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
   Paper,
+  Slide,
   Stack,
   Typography,
 } from "@mui/material";
@@ -52,7 +53,6 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import SearchIcon from "@mui/icons-material/Search";
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -535,7 +535,27 @@ const KhachHangTiemNang = () => {
           />
         </Box>
       </Paper>
-
+      <Slide direction="left" in={isActionOpen} mountOnEnter unmountOnExit>
+        <Box
+          sx={{
+            width: "360px",
+            position: "fixed",
+            right: 0,
+            top: 0,
+            bottom: 0,
+            zIndex: 1300,
+            bgcolor: "background.paper",
+            boxShadow: 3,
+            overflowY: "auto",
+          }}
+        >
+          <ActionComponents
+            selectedItem={selectedRow}
+            onClose={handleClose}
+            isOpen={isActionOpen}
+          />
+        </Box>
+      </Slide>
       {/* Modals and Action Components */}
       <UpdateKhachHangTiemNang
         selectedItem={selectedRow}
@@ -556,14 +576,6 @@ const KhachHangTiemNang = () => {
         setLoading={setLoading}
         refetch={refetchkh}
       />
-
-      {isActionOpen && (
-        <ActionComponents
-          selectedItem={selectedRow}
-          onClose={handleClose}
-          isOpen={isActionOpen}
-        />
-      )}
 
       <ModalXemKhachHangDaXoa
         handleClose={handleCloseModalXem}

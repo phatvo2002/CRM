@@ -2,14 +2,17 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using CRM.Repositories.MucTieuDoanhSos;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repositories.KhachhangMucTieus
 {
     public class KhachHangMucTieuRepository : BaseRepository<KhachHangMucTieu, KhachHangMucTieuModal, Guid, KhachHangMucTieuDTO>, IKhachHangMucTieuRepository
     {
-        public KhachHangMucTieuRepository(CrmDbContext crmDbContext, IMapper mapper) : base(crmDbContext, mapper)
+        private readonly IMucTieuDoanhSoRepository _mucTieuDoanhSoRepository;
+        public KhachHangMucTieuRepository(CrmDbContext crmDbContext, IMapper mapper, IMucTieuDoanhSoRepository mucTieuDoanhSoRepository) : base(crmDbContext, mapper)
         {
+            _mucTieuDoanhSoRepository = mucTieuDoanhSoRepository;
         }
         public async Task<ResultModal> ConvertKhachHangMucTieu(ConvertKhachHangModal modal, Guid nguoiDungId, Guid phongBanId)
         {
@@ -91,8 +94,14 @@ namespace CRM.Repositories.KhachhangMucTieus
 
                     // chuyển trạng thái của tiềm năng thành đã chuyển đổi
                     var dbKhTiemnang = _crmDbContext.KhachHangTiemNangs.FirstOrDefault(r => r.Id == modal.KhachHangTiemNangId);
-                    dbKhTiemnang.IsChuyenDoi = true;
-                    _crmDbContext.KhachHangTiemNangs.Update(dbKhTiemnang);
+                    if (dbKhTiemnang != null)
+                    {
+                        dbKhTiemnang.IsChuyenDoi = true;
+                        _crmDbContext.KhachHangTiemNangs.Update(dbKhTiemnang);
+                    }
+
+                    await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, 3, 0);
+
 
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Chuyển đổi khách hàng thành công", Success = true };

@@ -29,6 +29,8 @@
         public bool? IsDatMucTieu { get; set; }
         public int? MaTrangThaiKPI { get; set; }
         public decimal? TongTiLeThucTe { get; set; }
+        public string? XepLoai { get; set; }
+        public string? Color { get; set; }
         public List<KPINhanVienDTO>? KPINhanViens { get; set; }
         public NguoiDungDTO? NguoiDung { get; set; }
         public PhongBanDTO? PhongBan { get; set; }

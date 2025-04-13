@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using CRM.Repositories.MucTieuDoanhSos;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repositories.CuocGois
@@ -11,16 +12,19 @@ namespace CRM.Repositories.CuocGois
         private readonly CrmDbContext _context;
         private readonly ILogger<CuocGoiRepository> _logger;
         private readonly IMapper _mapper;
+        private readonly IMucTieuDoanhSoRepository _mucTieuDoanhSoRepository;
 
-        public CuocGoiRepository(CrmDbContext context, IMapper mapper, ILogger<CuocGoiRepository> logger)
+        public CuocGoiRepository(CrmDbContext context, IMapper mapper, ILogger<CuocGoiRepository> logger, IMucTieuDoanhSoRepository mucTieuDoanhSoRepository)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _mucTieuDoanhSoRepository = mucTieuDoanhSoRepository;
         }
         public async Task<ResultModal> CreateCuocGoi(CuocGoiModal modal, Guid nguoiDungId, Guid phongBanId)
         {
             var db = _context.CuocGois.FirstOrDefault(r => r.Id == modal.Id);
+            // lấy thời gian đầu tháng và cuối tháng 
             try
             {
                 if (db == null)
@@ -43,6 +47,13 @@ namespace CRM.Repositories.CuocGois
                     cuocGoi.PhongBanId = phongBanId;
                     cuocGoi.CreateAt = DateTime.Now;
                     _context.CuocGois.Add(cuocGoi);
+
+                    // cập nhật dữ liệu kpi khi cuộc gọi đã hoàn thành
+                    if (cuocGoi.IsHoanThanh == true)
+                    {
+                        await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, 1, 0);
+                    }
+
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };
                 }
@@ -96,6 +107,12 @@ namespace CRM.Repositories.CuocGois
                 db.NguoiDungId = nguoiDungId;
                 db.PhongBanId = phongBanId;
                 _context.CuocGois.Update(db);
+
+                if (db.IsHoanThanh == modal.IsHoanThanh == true)
+                {
+                    await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, 1, 0);
+                }
+
                 await _context.SaveChangesAsync();
                 return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công", Success = true };
             }

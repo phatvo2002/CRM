@@ -74,11 +74,17 @@ export const apiGetData = createApi({
   });
   export const { 
     useGetAllPhongBanKhachHangQuery, 
+    useLazyGetAllPhongBanKhachHangQuery,
     useGetAllNguonGocKhachHangQuery,
+    useLazyGetAllNguonGocKhachHangQuery,
     useGetAllLoaiTiemNangQuery, 
+    useLazyGetAllLoaiTiemNangQuery,
     useGetAllLoaiHinhNgheNghiepQuery, 
+    useLazyGetAllLoaiHinhNgheNghiepQuery,
     useGetAllLinhVucNgheNghiepQuery, 
+    useLazyGetAllLinhVucNgheNghiepQuery,
     useGetAllNganhNgheByLinhVucIdQuery, 
+    useLazyGetAllNganhNgheByLinhVucIdQuery,
     useGetAllDoanhThuQuery, 
     useGetAllTrangThaiThucHienQuery, 
     useGetAllMucDoUuTienQuery, 

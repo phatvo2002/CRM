@@ -112,10 +112,16 @@ const index = () => {
               variant="contained"
               color="success"
               sx={{ borderRadius: 2, textTransform: "none", boxShadow: 3 }}
-           //   onClick={handleOpenModalThemMoiMucTieu}   
+              //   onClick={handleOpenModalThemMoiMucTieu}
             >
-               <img src={IconExcel} alt="Xuất thống kê" width={24} height={24} style={{marginRight:10}} />{" "}
-                Xuất excel
+              <img
+                src={IconExcel}
+                alt="Xuất thống kê"
+                width={24}
+                height={24}
+                style={{ marginRight: 10 }}
+              />{" "}
+              Xuất excel
             </Button>
           </Stack>
         </Grid2>
@@ -156,7 +162,7 @@ const index = () => {
                   <TableRow sx={{ backgroundColor: "background.primary" }}>
                     <TableCell></TableCell>
                     <TableCell
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold", color: "#333", width: "200px" }}
                     >
                       Hành động
                     </TableCell>
@@ -172,13 +178,13 @@ const index = () => {
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold", color: "#333", width: "200px" }}
                     >
                       Tên KPI
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold", color: "#333", width: "200px" }}
                     >
                       Tên phòng ban
                     </TableCell>
@@ -241,12 +247,6 @@ const index = () => {
                       sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
                     >
                       Đánh giá
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
-                    >
-                      Tình Trạng
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -412,12 +412,28 @@ const index = () => {
 
                           <TableCell align="center">
                             <Typography variant="body2">
-                              {item?.tongTiLeThucTe} %
+                              {item?.tongTiLeThucTe.toFixed(2)} %
                             </Typography>
                           </TableCell>
-
-                          <TableCell />
-                          <TableCell />
+                          <TableCell align="center">
+                            {item.xepLoai || ""}
+                            <div
+                              style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                height: "60px",
+                              }}
+                            >
+                              <div
+                                style={{
+                                  width: "50px",
+                                  height: "50px",
+                                  backgroundColor: item.color,
+                                }}
+                              ></div>
+                            </div>
+                          </TableCell>
                         </TableRow>
 
                         <TableRow>
@@ -464,7 +480,6 @@ const index = () => {
                                         "Doanh số / Thực tế",
                                         "Tổng phần trăm",
                                         "Đánh giá",
-                                        "Tình trạng",
                                         "",
                                       ].map((text, idx) => (
                                         <TableCell
@@ -501,14 +516,15 @@ const index = () => {
                                           )}
                                         </TableCell>
                                         <TableCell align="center">
-                                          <IconButton color="success"   
-                                          disabled={selectedRow == null}
-                                           onClick={handleOpenModalChinhSua}>
-                                            <EditIcon />
-                                          </IconButton>
-                                          {/* <IconButton color="error">
-                                            <DeleteIcon />
-                                          </IconButton> */}
+                                          {checkPermission == true && (
+                                            <IconButton
+                                              color="success"
+                                              disabled={selectedRow == null}
+                                              onClick={handleOpenModalChinhSua}
+                                            >
+                                              <EditIcon />
+                                            </IconButton>
+                                          )}
                                         </TableCell>
 
                                         <TableCell align="center">
@@ -592,19 +608,39 @@ const index = () => {
                                         </TableCell>
                                         <TableCell align="center">
                                           <div>
-                                            {kpi.doanhSo} / {kpi.doanhSoThucTe}
+                                            {kpi.doanhSo.toLocaleString(
+                                              "vi-VN"
+                                            )}{" "}
+                                            /{" "}
+                                            {kpi.doanhSoThucTe.toLocaleString(
+                                              "vi-VN"
+                                            )}
                                           </div>
                                           {kpi.tiLeDoanhSoThucTe} %
                                         </TableCell>
                                         <TableCell align="center">
-                                          {kpi.tongTiLeThucTe} %
+                                          {kpi.tongTiLeThucTe.toFixed(2)} %
                                         </TableCell>
                                         <TableCell align="center">
-                                          {kpi.ghiChu || ""}
+                                          {kpi.xepLoai || ""}
+                                          <div
+                                            style={{
+                                              display: "flex",
+                                              justifyContent: "center",
+                                              alignItems: "center",
+                                              height: "60px",
+                                            }}
+                                          >
+                                            <div
+                                              style={{
+                                                width: "50px",
+                                                height: "50px",
+                                                backgroundColor: kpi.color,
+                                              }}
+                                            ></div>
+                                          </div>
                                         </TableCell>
-                                        <TableCell align="center">
-                                          {kpi.danhGia || ""}
-                                        </TableCell>
+
                                         <TableCell align="center" />
                                       </TableRow>
                                     ))}

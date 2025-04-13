@@ -31,7 +31,8 @@
         public string? GhiChu { get; set; }
         public Guid? MaMucTieuDoanhSo { get; set; }
         public decimal? TongTiLeThucTe { get; set; }
-
+        public string? XepLoai { get; set; }
+        public string? Color { get; set; }
         public NguoiDungDTO? NguoiDung { get; set; }
         public PhongBanDTO? PhongBan { get; set; }
     }

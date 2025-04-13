@@ -56,7 +56,7 @@ const CongViecThucHienTab = () => {
     { field: "tieuDe", headerName: "Tiêu đề", width: 200},
     { field: "moTa", headerName: "Mô tả", width: 200 },
     {
-      field: "",
+      field: "NgayBa",
       headerName: "Ngày bắt đầu",
       width: 200,
       renderCell: (params) => (
@@ -108,7 +108,7 @@ const CongViecThucHienTab = () => {
       ),
     },
     {
-      field: "",
+      field: "ngayTao",
       headerName: "Ngày tạo",
       width: 200,
       renderCell: (params) => (

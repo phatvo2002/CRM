@@ -19,6 +19,7 @@ using CRM.Repositories.LichHens;
 using CRM.Repositories.LienHes;
 using CRM.Repositories.LoaiDuBaos;
 using CRM.Repositories.LoaiHangHoas;
+using CRM.Repositories.MailDaGuis;
 using CRM.Repositories.Mails;
 using CRM.Repositories.Menus;
 using CRM.Repositories.MucTieuDoanhSos;
@@ -28,6 +29,7 @@ using CRM.Repositories.PhanLoaiDuBaos;
 using CRM.Repositories.PhongBans;
 using CRM.Repositories.ThongBaos;
 using CRM.Repositories.TinhTrangs;
+using CRM.Repositories.XepLoais;
 using CRM.Services.BaoGias;
 using CRM.Services.ChucVus;
 using CRM.Services.CoHois;
@@ -45,6 +47,7 @@ using CRM.Services.LichHens;
 using CRM.Services.LienHes;
 using CRM.Services.LoaiDuBaos;
 using CRM.Services.LoaiHangHoas;
+using CRM.Services.MailDaGuis;
 using CRM.Services.Mails;
 using CRM.Services.Menus;
 using CRM.Services.MucTieuDoanhSos;
@@ -54,6 +57,7 @@ using CRM.Services.PhanLoaiDuBaos;
 using CRM.Services.PhongBans;
 using CRM.Services.ThongBaos;
 using CRM.Services.TinhTrangs;
+using CRM.Services.XepLoais;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -176,6 +180,12 @@ builder.Services.AddScoped<IMucTieuDoanhSoServices, MucTieuDoanhSoServices>();
 
 builder.Services.AddScoped<IKPINhanVienRepository, KPINhanVienRepository>();
 builder.Services.AddScoped<IKPIServices, KPINhanVienServices>();
+
+builder.Services.AddScoped<IXepLoaiRepository, XepLoaiRepository>();
+builder.Services.AddScoped<IXepLoaiServices, XepLoaiServices>();
+
+builder.Services.AddScoped<IMailDaGuiRepository, MailDaGuiRepository>();
+builder.Services.AddScoped<IMailDaGuiServices, MailDaGuiServices>();
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 

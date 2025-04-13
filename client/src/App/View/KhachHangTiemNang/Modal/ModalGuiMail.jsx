@@ -61,7 +61,6 @@ export const ModalGuiMail = ({ showModal, typeModal, closeModal }) => {
       KhachHangMucTieuId: null,
       KhachHangTiemNangId: id,
     };
-    console.log(tempData);
     callApiSentFile(tempData);
   };
   const callApiSentFile = async (params) => {
@@ -108,8 +107,9 @@ export const ModalGuiMail = ({ showModal, typeModal, closeModal }) => {
         initialFormState={initialFormState}
         schema={schema}
         ref={modalRef}
+        width={800}
       >
-        <Grid2 container spacing={2} width={"500px"}>
+        <Grid2 container spacing={2} >
           <Grid2 size={12}>
             <TextFieldRHF
               name={modelObj.ToMail}

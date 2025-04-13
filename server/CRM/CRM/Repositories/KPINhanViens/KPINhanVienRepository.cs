@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Dynamic.Core;
 
 namespace CRM.Repositories.KPINhanViens
@@ -42,7 +43,6 @@ namespace CRM.Repositories.KPINhanViens
                     data.IsDatMucTieu = false;
                     data.MaTrangThaiKPI = modal.MaTrangThaiKPI;
                     data.MaMucTieuDoanhSo = modal.MaMucTieuDoanhSo;
-                    data.TongTiLeThucTe = 0;
                     data.NguoiDungId = modal.NguoiDungId;
                     data.PhongBanId = phongBanId;
                     data.CreateAt = DateTime.Now;
@@ -64,6 +64,13 @@ namespace CRM.Repositories.KPINhanViens
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
 
             }
+        }
+
+        public async Task<KPINhanVienDTO> GetByNhanVienId(Guid id, DateTime tuNgay, DateTime denNgay)
+        {
+            var db = await _crmDbContext.KPINhanViens
+                .FirstOrDefaultAsync(r => r.Id == id && r.CreateAt >= tuNgay && r.CreateAt <= denNgay && r.IsDeleted == false);
+            return _mapper.Map<KPINhanVienDTO>(db);
         }
 
         public async Task<ResultModal> UpdateKPINhanVien(KPINhanVienModal modal)

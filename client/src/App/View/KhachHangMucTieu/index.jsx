@@ -45,6 +45,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
@@ -83,6 +84,7 @@ const KhachHangMucTieu = () => {
           }}
         >
           <Tooltip title="Sửa thông tin ">
+            <span>
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
@@ -90,8 +92,10 @@ const KhachHangMucTieu = () => {
             >
               <EditIcon color="success" />
             </IconButton>
+            </span>
           </Tooltip>
           <Tooltip title="Xóa">
+            <span>
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
@@ -99,8 +103,10 @@ const KhachHangMucTieu = () => {
             >
               <DeleteIcon color="error" />
             </IconButton>
+            </span>
           </Tooltip>
           <Tooltip title="Bàn giao khách hàng">
+            <span>
             <IconButton
               disabled={selectedRow.length === 0}
               style={{}}
@@ -108,6 +114,7 @@ const KhachHangMucTieu = () => {
             >
               <ThreePIcon color="primary" />
             </IconButton>
+            </span>
           </Tooltip>
         </div>
       ),
@@ -229,10 +236,7 @@ const KhachHangMucTieu = () => {
   };
   const { data: dataKhachHangByNguoiDung, refetch } =
     useGetKhachHangMucTieuByNguoiDungIdQuery({tuNgay : valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"), denNgay:valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS")});
-  const [ getTemplate ] = useGetTemplatesMutation({
-    path: "Templates/ThongTinKhachHang.xlsx",
-    filename: "ThongTinKhachHang",
-  });
+  const [ getTemplate ] = useGetTemplatesMutation();
   const [deleteNguoiDung] = useDeleteKhachHangMucTieuMutation();
   const [deleteHangLoat] = useDeletehangLoatKhachHangMucTieuMutation();
 
@@ -282,19 +286,27 @@ const KhachHangMucTieu = () => {
       }
     });
   };
-  const handleGetTemplates = () => {
-    if (getTemplate) {
-      const url = window.URL.createObjectURL(getTemplate);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "ThongTinKhachHang.xlsx";
-      a.click();
-      window.URL.revokeObjectURL(url);
-    } else {
-      console.error("Không có dữ liệu để tải file.");
+  const handleGetTemplates = async () => {
+    try {
+      const result = await getTemplate({
+        path: "Templates/ThongTinKhachHang.xlsx",
+        filename: "ThongTinKhachHang",
+      }).unwrap();
+
+      if (result instanceof Blob) {
+        const url = window.URL.createObjectURL(result);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "ThongTinKhachHang.xlsx";
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error("Không có dữ liệu để tải file.");
+      }
+    } catch (error) {
+      console.error("Lỗi khi tải template:", error);
     }
   };
-
   useEffect(() => {
     setRows(dataKhachHangByNguoiDung);
   }, [dataKhachHangByNguoiDung]);
@@ -372,6 +384,23 @@ const KhachHangMucTieu = () => {
                   onClick={handleOpenModalImportKhachHang}
                 >
                   Nhập dữ liệu
+                </Button>
+
+                <Button
+                  variant="outlined"
+                  color="warning"
+                  startIcon={<SupervisedUserCircleIcon />}
+                  sx={{
+                    borderRadius: 2,
+                    textTransform: "none",
+                    px: 2.5,
+                    py: 1,
+                    borderColor: "#e0e0e0",
+                    color: "#424242",
+                  }}
+                  // onClick={handleOpenModalImportKhachHang}
+                >
+                  Bàn giao
                 </Button>
 
                 <Button
@@ -547,7 +576,7 @@ const KhachHangMucTieu = () => {
           refetch={refetch}
           selectedItem={selectedRow}
         />
-
+ 
         <ModalKhachHangMucTieuDaXoa
           open={modalKhDaXoa}
           handleClose={handleCloseKhDaXoa}
