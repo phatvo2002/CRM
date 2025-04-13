@@ -28,11 +28,39 @@ import { Autocomplete, Grid2, Paper, Stack, TextField } from "@mui/material";
 import { Grid } from "@mui/joy";
 const BanLamViec = () => {
   const revenueData = [
-    { month: "Tháng 1", revenue: 12000 },
-    { month: "Tháng 2", revenue: 18000 },
-    { month: "Tháng 3", revenue: 15000 },
-    { month: "Tháng 4", revenue: 22000 },
-    { month: "Tháng 5", revenue: 25000 },
+    { month: "Jan 2025", closedValue: 1200000, wonDeals: 5 },
+    { month: "Feb 2025", closedValue: 1500000, wonDeals: 7 },
+    { month: "Mar 2025", closedValue: 500000, wonDeals: 5 },
+    { month: "Apr 2025", closedValue: 100000, wonDeals: 6 },
+    { month: "May 2025", closedValue: 1450000, wonDeals: 6 },
+    { month: "Jun 2025", closedValue: 0, wonDeals: 4 },
+    { month: "Jul 2025", closedValue: 200000, wonDeals: 5 },
+    { month: "Aug 2025", closedValue: 300000, wonDeals: 7 },
+    { month: "Sep 2025", closedValue: 250000, wonDeals: 5 },
+    { month: "Oct 2025", closedValue: 50000, wonDeals: 1 },
+    { month: "Nov 2025", closedValue: 180000, wonDeals: 4 },
+    { month: "Dec 2025", closedValue: 120000, wonDeals: 4 },
+  ];
+
+  const topSalerData = [
+    {
+      name: "Võ Đăng Phát",
+      contactMade: 0,
+      leadIn: 2,
+      proposal: 0,
+    },
+    {
+      name: "Cao Anh Quân",
+      contactMade: 1,
+      leadIn: 1,
+      proposal: 0,
+    },
+    {
+      name: "Tào Văn Mạnh",
+      contactMade: 0,
+      leadIn: 0,
+      proposal: 1,
+    },
   ];
 
   const salesData = [
@@ -91,13 +119,13 @@ const BanLamViec = () => {
       khachHangMoi: 45,
     },
   ];
-  const dataDuDoan = [
-    { month: "Tháng 1", revenue: 100000000, customers: 500 },
-    { month: "Tháng 2", revenue: 120000000, customers: 600 },
-    { month: "Tháng 3", revenue: 110000000, customers: 550 },
-    { month: "Tháng 4", revenue: 130000000, customers: 650 },
-    { month: "Tháng 5", revenue: 140000000, customers: 700 },
-  ];
+  // const dataDuDoan = [
+  //   { month: "Tháng 1", revenue: 100000000, customers: 500 },
+  //   { month: "Tháng 2", revenue: 120000000, customers: 600 },
+  //   { month: "Tháng 3", revenue: 110000000, customers: 550 },
+  //   { month: "Tháng 4", revenue: 130000000, customers: 650 },
+  //   { month: "Tháng 5", revenue: 140000000, customers: 700 },
+  // ];
 
   return (
     <>
@@ -136,28 +164,58 @@ const BanLamViec = () => {
               alignItems="center"
               justifyContent="space-between" // Căn đều khoảng cách giữa các Card
             >
-              <Card sx={{ flex: 1, minWidth: 200, textAlign: "center" }}>
+              <Card
+                sx={{
+                  flex: 1,
+                  minWidth: 200,
+                  textAlign: "center",
+                  backgroundColor: "#5a76f2",
+                }}
+              >
                 <CardContent>
-                  <ShowChartIcon className="text-blue-500 text-3xl" />
-                  <div>
+                  <ShowChartIcon
+                    style={{ color: "#fff" }}
+                    className="text-blue-500 text-3xl"
+                  />
+                  <div style={{ color: "#fff" }}>
                     <h3 className="text-lg font-bold">Doanh thu</h3>
                     <p className="text-2xl font-semibold">$25,000</p>
                   </div>
                 </CardContent>
               </Card>
-              <Card sx={{ flex: 1, minWidth: 200, textAlign: "center" }}>
+              <Card
+                sx={{
+                  flex: 1,
+                  minWidth: 200,
+                  textAlign: "center",
+                  backgroundColor: "#37c8a1",
+                }}
+              >
                 <CardContent>
-                  <PersonIcon className="text-green-500 text-3xl" />
-                  <div>
+                  <PersonIcon
+                    style={{ color: "#fff" }}
+                    className="text-green-500 text-3xl"
+                  />
+                  <div style={{ color: "#fff" }}>
                     <h3 className="text-lg font-bold">Khách hàng mới</h3>
                     <p className="text-2xl font-semibold">350</p>
                   </div>
                 </CardContent>
               </Card>
-              <Card sx={{ flex: 1, minWidth: 200, textAlign: "center" }}>
+              <Card
+                sx={{
+                  flex: 1,
+                  minWidth: 200,
+                  textAlign: "center",
+                  backgroundColor: "#f28c5a",
+                }}
+              >
                 <CardContent>
-                  <PaidIcon className="text-yellow-500 text-3xl" />
-                  <div>
+                  <PaidIcon
+                    style={{ color: "#fff" }}
+                    className="text-yellow-500 text-3xl"
+                  />
+                  <div style={{ color: "#fff" }}>
                     <h3 className="text-lg font-bold">Hợp đồng mới</h3>
                     <p className="text-2xl font-semibold">15</p>
                   </div>
@@ -165,20 +223,33 @@ const BanLamViec = () => {
               </Card>
             </Stack>
           </Grid2>
-          <Grid2 size={6} sx={{ padding: 1 }}>
+          <Grid2 size={6} sx={{ padding: 2 }}>
             <Card>
               <CardContent className="p-4">
                 <h3 className="text-lg font-bold mb-2">Doanh thu theo tháng</h3>
-                <ResponsiveContainer width="100%" height={250}>
+                <ResponsiveContainer width="100%" height={400}>
                   <LineChart data={revenueData}>
+                    <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
-                    <YAxis />
+                    <YAxis yAxisId="left" />
+                    <YAxis yAxisId="right" orientation="right" />
                     <Tooltip />
+                    <Legend />
                     <Line
+                      yAxisId="left"
                       type="monotone"
-                      dataKey="revenue"
-                      stroke="#8884d8"
-                      strokeWidth={2}
+                      dataKey="closedValue"
+                      stroke="#0077b6"
+                      activeDot={{ r: 8 }}
+                      name="Doanh số"
+                    />
+                    <Line
+                      yAxisId="right"
+                      type="monotone"
+                      dataKey="wonDeals"
+                      stroke="#d62828"
+                      activeDot={{ r: 8 }}
+                      name="Deal thành công"
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -186,7 +257,7 @@ const BanLamViec = () => {
             </Card>
           </Grid2>
           {/* Sales Chart */}
-          <Grid2 size={6} sx={{ padding: 1 }}>
+          <Grid2 size={6} sx={{ padding: 2 }}>
             <Card>
               <CardContent className="p-4">
                 <h3 className="text-lg font-bold mb-2">
@@ -230,26 +301,41 @@ const BanLamViec = () => {
           <Grid2 size={12} sx={{ padding: 3 }}>
             <Card>
               <CardContent>
-                <h3 className="text-lg font-bold mb-2">Dự đoán doanh thu</h3>
-                <ResponsiveContainer width="100%" height={400}>
-                  <LineChart data={dataDuDoan}>
+                <h3 className="text-lg font-bold mb-2">
+                  Tiến trình bán hàng của nhân viên
+                </h3>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart
+                    layout="vertical"
+                    width={600}
+                    height={300}
+                    data={topSalerData}
+                    margin={{ top: 20, right: 30, left: 100, bottom: 20 }}
+                  >
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
+                    <XAxis type="number" />
+                    <YAxis dataKey="name" type="category" />
                     <Tooltip />
                     <Legend />
-                    <Line
-                      type="monotone"
-                      dataKey="revenue"
-                      stroke="#8884d8"
-                      activeDot={{ r: 8 }}
+                    <Bar
+                      dataKey="contactMade"
+                      stackId="a"
+                      fill="#d62828"
+                      name="Đã liên hệ"
                     />
-                    <Line
-                      type="monotone"
-                      dataKey="customers"
-                      stroke="#82ca9d"
+                    <Bar
+                      dataKey="leadIn"
+                      stackId="a"
+                      fill="#70e000"
+                      name="Tiềm năng"
                     />
-                  </LineChart>
+                    <Bar
+                      dataKey="proposal"
+                      stackId="a"
+                      fill="#48cae4"
+                      name="Đề xuất"
+                    />
+                  </BarChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>

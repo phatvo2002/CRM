@@ -39,10 +39,18 @@ const BanLamViecTrPhong = () => {
   const [rows, setRows] = useState([]);
   const [selectedRow, setSelectedRow] = useState([]);
   const revenueData = [
-    { month: "Quý 1", revenue: 32000 },
-    { month: "Quý 2", revenue: 45000 },
-    { month: "Quý 3", revenue: 39000 },
-    { month: "Quý 4", revenue: 52000 },
+    { month: "Jan 2025", closedValue: 1200000, wonDeals: 5 },
+    { month: "Feb 2025", closedValue: 1500000, wonDeals: 7 },
+    { month: "Mar 2025", closedValue: 500000, wonDeals: 5 },
+    { month: "Apr 2025", closedValue: 100000, wonDeals: 6 },
+    { month: "May 2025", closedValue: 1450000, wonDeals: 6 },
+    { month: "Jun 2025", closedValue: 0, wonDeals: 4 },
+    { month: "Jul 2025", closedValue: 200000, wonDeals: 5 },
+    { month: "Aug 2025", closedValue: 300000, wonDeals: 7 },
+    { month: "Sep 2025", closedValue: 250000, wonDeals: 5 },
+    { month: "Oct 2025", closedValue: 50000, wonDeals: 1 },
+    { month: "Nov 2025", closedValue: 180000, wonDeals: 4 },
+    { month: "Dec 2025", closedValue: 120000, wonDeals: 4 },
   ];
 
   const salesData = [
@@ -84,7 +92,7 @@ const BanLamViecTrPhong = () => {
   ];
   const dataNV = [
     {
-      ten: "Nguyễn An",
+      ten: "Võ Đăng Phát",
       phongBan: "Phòng Kinh doanh 1",
       doanhThu: 2500,
       dealThanhCong: 10,
@@ -92,7 +100,7 @@ const BanLamViecTrPhong = () => {
       khachHangMoi: 75,
     },
     {
-      ten: "Trần Bình",
+      ten: "Cao Anh Quân",
       phongBan: "Phòng kinh doanh 2",
       doanhThu: 1800,
       dealThanhCong: 15,
@@ -110,13 +118,22 @@ const BanLamViecTrPhong = () => {
   ];
 
   // KPI data
-  const dataKPI = [
-    { subject: "Doanh số", A: 120, fullMark: 150 },
-    { subject: "Khách hàng mới", A: 98, fullMark: 150 },
-    { subject: "Cuộc gọi", A: 86, fullMark: 150 },
-    { subject: "Email gửi", A: 99, fullMark: 150 },
-    { subject: "Cuộc hẹn", A: 85, fullMark: 150 },
-    { subject: "Tư vấn hoàn tất", A: 65, fullMark: 150 },
+  const dataKpi = [
+    {
+      name: "Võ Đăng Phát",
+      personalKPI: 92,
+      teamKPI: 88,
+    },
+    {
+      name: "Cao Anh Quân",
+      personalKPI: 75,
+      teamKPI: 82,
+    },
+    {
+      name: "Lê Cường",
+      personalKPI: 98,
+      teamKPI: 95,
+    },
   ];
 
   const taskData = [
@@ -292,20 +309,33 @@ const BanLamViecTrPhong = () => {
             />
           </Grid2>
 
-          <Grid2 size={6} sx={{ padding: 1 }}>
+          <Grid2 size={6} sx={{ padding: 2 }}>
             <Card>
               <CardContent className="p-4">
-                <h3 className="text-lg font-bold mb-2">Doanh thu theo quý</h3>
-                <ResponsiveContainer width="100%" height={250}>
+                <h3 className="text-lg font-bold mb-2">Doanh thu theo tháng</h3>
+                <ResponsiveContainer width="100%" height={400}>
                   <LineChart data={revenueData}>
+                    <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
-                    <YAxis />
+                    <YAxis yAxisId="left" />
+                    <YAxis yAxisId="right" orientation="right" />
                     <Tooltip />
+                    <Legend />
                     <Line
+                      yAxisId="left"
                       type="monotone"
-                      dataKey="revenue"
-                      stroke="#8884d8"
-                      strokeWidth={2}
+                      dataKey="closedValue"
+                      stroke="#0077b6"
+                      activeDot={{ r: 8 }}
+                      name="Doanh số"
+                    />
+                    <Line
+                      yAxisId="right"
+                      type="monotone"
+                      dataKey="wonDeals"
+                      stroke="#d62828"
+                      activeDot={{ r: 8 }}
+                      name="Deal thành công"
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -313,11 +343,11 @@ const BanLamViecTrPhong = () => {
             </Card>
           </Grid2>
           {/* Sales Chart */}
-          <Grid2 size={6} sx={{ padding: 1 }}>
+          <Grid2 size={6} sx={{ padding: 2 }}>
             <Card>
               <CardContent>
                 <h3 className="text-lg font-bold mb-2">Hiệu suất nhân viên</h3>
-                <ResponsiveContainer width="100%" height={250}>
+                <ResponsiveContainer width="100%" height={400}>
                   <BarChart
                     data={dataNV}
                     barCategoryGap="20%"
@@ -344,7 +374,7 @@ const BanLamViecTrPhong = () => {
               </CardContent>
             </Card>
           </Grid2>
-          <Grid2 size={6} sx={{ padding: 3 }}>
+          <Grid2 size={6} sx={{ padding: 2 }}>
             <Card>
               <CardContent>
                 <h3 className="text-lg font-bold mb-2">Tiến độ công việc</h3>
@@ -373,29 +403,27 @@ const BanLamViecTrPhong = () => {
               </CardContent>
             </Card>
           </Grid2>
-          <Grid2 size={6} sx={{ padding: 1 }}>
+          <Grid2 size={6} sx={{ padding: 2 }}>
             <Card>
               <CardContent>
-                <h3 className="text-lg font-bold mb-2">KPI Cá Nhân</h3>
+                <h3 className="text-lg font-bold mb-2">KPI nhân viên</h3>
                 <ResponsiveContainer width="100%" height={400}>
-                  <RadarChart
-                    cx="50%"
-                    cy="50%"
-                    outerRadius="80%"
-                    data={dataKPI}
+                  <BarChart
+                    data={dataKpi}
+                    margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
                   >
-                    <PolarGrid />
-                    <PolarAngleAxis dataKey="subject" />
-                    <PolarRadiusAxis angle={30} domain={[0, 150]} />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis unit="%" domain={[0, 100]} />
                     <Tooltip />
-                    <Radar
-                      name="Nhân viên A"
-                      dataKey="A"
-                      stroke="#8884d8"
+                    <Legend />
+                    <Bar
+                      dataKey="personalKPI"
                       fill="#8884d8"
-                      fillOpacity={0.6}
+                      name="KPI Cá nhân"
                     />
-                  </RadarChart>
+                    <Bar dataKey="teamKPI" fill="#82ca9d" name="KPI Nhóm" />
+                  </BarChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>

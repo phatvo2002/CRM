@@ -79,7 +79,7 @@ const RouteChild = [
     ),
   },
   {
-    path: "/tpbanlamviecj",
+    path: "/tpbanlamviec",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <BanLamViecTP />

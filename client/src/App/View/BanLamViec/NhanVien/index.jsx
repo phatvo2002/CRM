@@ -33,10 +33,18 @@ import { Grid } from "@mui/joy";
 const BanLamViecNhanVien = () => {
   const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"];
   const revenueData = [
-    { month: "Quý 1", revenue: 32000 },
-    { month: "Quý 2", revenue: 45000 },
-    { month: "Quý 3", revenue: 39000 },
-    { month: "Quý 4", revenue: 52000 },
+    { month: "Jan 2025", closedValue: 1200000, wonDeals: 5 },
+    { month: "Feb 2025", closedValue: 1500000, wonDeals: 7 },
+    { month: "Mar 2025", closedValue: 500000, wonDeals: 5 },
+    { month: "Apr 2025", closedValue: 100000, wonDeals: 6 },
+    { month: "May 2025", closedValue: 1450000, wonDeals: 6 },
+    { month: "Jun 2025", closedValue: 0, wonDeals: 4 },
+    { month: "Jul 2025", closedValue: 200000, wonDeals: 5 },
+    { month: "Aug 2025", closedValue: 300000, wonDeals: 7 },
+    { month: "Sep 2025", closedValue: 250000, wonDeals: 5 },
+    { month: "Oct 2025", closedValue: 50000, wonDeals: 1 },
+    { month: "Nov 2025", closedValue: 180000, wonDeals: 4 },
+    { month: "Dec 2025", closedValue: 120000, wonDeals: 4 },
   ];
 
   const salesData = [
@@ -96,13 +104,13 @@ const BanLamViecNhanVien = () => {
       khachHangMoi: 45,
     },
   ];
-  const dataDuDoan = [
-    { month: "Tháng 1", revenue: 100000000, customers: 500 },
-    { month: "Tháng 2", revenue: 120000000, customers: 600 },
-    { month: "Tháng 3", revenue: 110000000, customers: 550 },
-    { month: "Tháng 4", revenue: 130000000, customers: 650 },
-    { month: "Tháng 5", revenue: 140000000, customers: 700 },
-  ];
+  // const dataDuDoan = [
+  //   { month: "Tháng 1", revenue: 100000000, customers: 500 },
+  //   { month: "Tháng 2", revenue: 120000000, customers: 600 },
+  //   { month: "Tháng 3", revenue: 110000000, customers: 550 },
+  //   { month: "Tháng 4", revenue: 130000000, customers: 650 },
+  //   { month: "Tháng 5", revenue: 140000000, customers: 700 },
+  // ];
 
   // KPI data
   const dataKPI = [
@@ -222,20 +230,33 @@ const BanLamViecNhanVien = () => {
               </Card>
             </Stack>
           </Grid2>
-          <Grid2 size={6} sx={{ padding: 1 }}>
+          <Grid2 size={6} sx={{ padding: 2 }}>
             <Card>
               <CardContent className="p-4">
-                <h3 className="text-lg font-bold mb-2">Doanh thu theo quý</h3>
+                <h3 className="text-lg font-bold mb-2">Doanh thu theo tháng</h3>
                 <ResponsiveContainer width="100%" height={400}>
                   <LineChart data={revenueData}>
+                    <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="month" />
-                    <YAxis />
+                    <YAxis yAxisId="left" />
+                    <YAxis yAxisId="right" orientation="right" />
                     <Tooltip />
+                    <Legend />
                     <Line
+                      yAxisId="left"
                       type="monotone"
-                      dataKey="revenue"
-                      stroke="#8884d8"
-                      strokeWidth={2}
+                      dataKey="closedValue"
+                      stroke="#0077b6"
+                      activeDot={{ r: 8 }}
+                      name="Doanh số"
+                    />
+                    <Line
+                      yAxisId="right"
+                      type="monotone"
+                      dataKey="wonDeals"
+                      stroke="#d62828"
+                      activeDot={{ r: 8 }}
+                      name="Deal thành công"
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -243,7 +264,7 @@ const BanLamViecNhanVien = () => {
             </Card>
           </Grid2>
           {/* Sales Chart */}
-          <Grid2 size={6} sx={{ padding: 1 }}>
+          <Grid2 size={6} sx={{ padding: 2 }}>
             <Card>
               <CardContent>
                 <h3 className="text-lg font-bold mb-2">
@@ -274,7 +295,7 @@ const BanLamViecNhanVien = () => {
               </CardContent>
             </Card>
           </Grid2>
-          <Grid2 size={6} sx={{ padding: 3 }}>
+          <Grid2 size={6} sx={{ padding: 2 }}>
             <Card>
               <CardContent>
                 <h3 className="text-lg font-bold mb-2">Công việc trong tuần</h3>
@@ -303,7 +324,7 @@ const BanLamViecNhanVien = () => {
               </CardContent>
             </Card>
           </Grid2>
-          <Grid2 size={6} sx={{ padding: 1 }}>
+          <Grid2 size={6} sx={{ padding: 2 }}>
             <Card>
               <CardContent>
                 <h3 className="text-lg font-bold mb-2">KPI Cá Nhân</h3>
