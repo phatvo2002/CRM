@@ -49,8 +49,9 @@ const KhachHangMucTieuDetail = () => {
   const [modalLichHen, setModalLichHen] = useState(false);
   const [modalSinhCoHoi, setModalSinhCoHoi] = useState(false);
   const [modalGuiMail , setModalGuiMail] = useState(false);
+  const [modalSinhDonHang , setModalSinhDonHang] = useState(false);
   const { id } = useParams();
-  const { data: KhachhangData } = useGetKhachHangMucTieuByIdQuery(id);
+  const { data: KhachhangData  } = useGetKhachHangMucTieuByIdQuery(id);
   const navigate = useNavigate();
   const handleTabChange = (event, newValue) => {
     setActiveTab(newValue);
@@ -76,7 +77,9 @@ const KhachHangMucTieuDetail = () => {
   const handleOpenModalChuyenDoiCoHoi = () => setModalSinhCoHoi(true);
   const handleCloseModalChuyenDoiCoHoi = () => setModalSinhCoHoi(false);
   const handleOpenModalGuiMail = () => setModalGuiMail(true);
-  const handleCloseModalGuiMail = ()=> setModalGuiMail(false)
+  const handleCloseModalGuiMail = ()=> setModalGuiMail(false);
+  const handleOpenModalSinhDonHang = ()=> setModalSinhDonHang(true);
+  const handleCloseModalSinhDonHang = ()=> setModalSinhDonHang(false);
   return (
     <>
       <Grid2 container spacing={2} sx={{ padding: 2 }}>
@@ -136,7 +139,7 @@ const KhachHangMucTieuDetail = () => {
             onClose={handleClose}
             MenuListProps={{ "aria-labelledby": "basic-button" }}
           >
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={handleOpenModalSinhDonHang}>
               <ContentPasteIcon sx={{ mr: 1, color: "#0288d1" }}  /> Sinh đơn hàng
             </MenuItem>
             <MenuItem onClick={handleOpenModalChuyenDoiCoHoi}>
@@ -306,6 +309,12 @@ const KhachHangMucTieuDetail = () => {
       <ModalGuiMail
         showModal={modalGuiMail}
         closeModal={handleCloseModalGuiMail}
+      />
+      {/* Modal Sinh đơn hàng */}
+      <ModalSinhDonHang
+         khachHangData={KhachhangData}
+         showModal={modalSinhDonHang}
+         closeModal={handleCloseModalSinhDonHang}
       />
     </>
   );
