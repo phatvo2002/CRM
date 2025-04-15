@@ -1,11 +1,14 @@
 ﻿using CRM.Entities;
 using CRM.Modal;
 using CRM.Repositories.HangHoaQuanTams;
+using CRM.Repositories.MucTieuDoanhSos;
 using MailKit.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Globalization;
+using System.Net;
+using System.Net.Mail;
 
 namespace CRM.Repositories.Mails
 {
@@ -14,11 +17,13 @@ namespace CRM.Repositories.Mails
         private readonly MailSettings _mailSettings;
         private readonly CrmDbContext _context;
         private readonly IHangHoaQuanTamRepository _hangHoaQuanTamRepository;
-        public MailRepository(IOptions<MailSettings> mailSettings, CrmDbContext context, IHangHoaQuanTamRepository hangHoaQuanTamRepository)
+        private readonly IMucTieuDoanhSoRepository _mucTieuDoanhSoRepository;
+        public MailRepository(IOptions<MailSettings> mailSettings, CrmDbContext context, IHangHoaQuanTamRepository hangHoaQuanTamRepository, IMucTieuDoanhSoRepository mucTieuDoanhSoRepository)
         {
             _mailSettings = mailSettings.Value;
             _context = context;
             _hangHoaQuanTamRepository = hangHoaQuanTamRepository;
+            _mucTieuDoanhSoRepository = mucTieuDoanhSoRepository;
         }
 
 
@@ -66,6 +71,9 @@ namespace CRM.Repositories.Mails
             emailDaGui.NguoiDungId = nguoiDungId;
             emailDaGui.PhongBanId = PhongBanId;
             _context.EmailDaGuis.Add(emailDaGui);
+
+            await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, PhongBanId, 5, 0);
+
             await _context.SaveChangesAsync();
         }
 
@@ -169,5 +177,74 @@ namespace CRM.Repositories.Mails
                 new Exception(ex.ToString());
             }
         }
+
+        public Task SendMailBaoGiaAsync(MailRequest request, string Email, string Password, Guid baoGiaId, Guid nguoiDungId, Guid phongBanId)
+        {
+            throw new NotImplementedException();
+        }
     }
+
+    public class SendMailAutoMation : BackgroundService
+    {
+        private readonly IServiceScopeFactory _scopeFactory;
+
+        public SendMailAutoMation(IServiceScopeFactory scopeFactory)
+        {
+            _scopeFactory = scopeFactory;
+        }
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            TimeZoneInfo vnTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
+            DateTime vnNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vnTimeZone);
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                try
+                {
+                    using (var scope = _scopeFactory.CreateScope())
+                    {
+                        var dbContext = scope.ServiceProvider.GetRequiredService<CrmDbContext>();
+                        var dbAdmin = await dbContext.Nguoidungs.FirstOrDefaultAsync(r => r.Id == Guid.Parse("0E7FDE09-09F3-48F2-9205-E9E5201ACB0B"));
+                        var nhiemVus = dbContext.NhiemVus
+                    .AsNoTracking()
+                    .Where(r =>
+                        r.TrangThaiThucHienId == Guid.Parse("DC08A44C-6A39-426F-89C2-C6068C248573") &&
+                        r.HanHoanThanh.HasValue &&
+                        vnNow >= r.HanHoanThanh.Value.AddMinutes(-30) &&
+                        vnNow < r.HanHoanThanh.Value
+                    )
+                    .Include(r => r.Nguoidung).ToList();
+
+                        foreach (var r in nhiemVus)
+                        {
+                            try
+                            {
+                                var mailMessage = new MailMessage();
+                                mailMessage.From = new MailAddress(dbAdmin.Email);
+                                mailMessage.To.Add(r.Nguoidung.Email);
+                                mailMessage.Subject = "Cảnh báo nhiệm vụ sắp hết hạn";
+                                mailMessage.Body = $"Nhiệm vụ \"{r.TieuDe}\" sẽ hết hạn lúc {r.HanHoanThanh.Value:HH:mm dd/MM/yyyy}. Vui lòng kiểm tra.";
+                                using (var smtpClient = new SmtpClient("smtp.gmail.com", 587))
+                                {
+                                    smtpClient.EnableSsl = true;
+                                    smtpClient.Credentials = new NetworkCredential(dbAdmin.Email, dbAdmin.Password);
+
+                                    await smtpClient.SendMailAsync(mailMessage);
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine($"Lỗi khi gửi email: {ex.Message}");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Lỗi khi gửi email: {ex.Message}");
+                }
+                await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
+            }
+        }
+    }
+
 }

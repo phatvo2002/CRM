@@ -23,6 +23,11 @@ namespace CRM.Services.DonHangs
             return await _donHangRepository.GetAllDonHang();
         }
 
+        public async Task<List<DonHangDTO>> GetDonHangByKhachHangId(string khachHangId)
+        {
+            return await _donHangRepository.GetDonHangByKhachHangId(khachHangId);
+        }
+
         public async Task<List<DonHangDTO>> GetDonHangByNguoiDungId(Guid nguoiDungId)
         {
             return await _donHangRepository.GetDonHangByNguoiDungId(nguoiDungId);

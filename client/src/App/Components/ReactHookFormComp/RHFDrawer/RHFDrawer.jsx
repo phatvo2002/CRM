@@ -95,7 +95,7 @@ const RHFDrawer = forwardRef((props, ref) => {
     <Dialog open={isOpen} onClose={handleClose} {...otherProps} fullScreen={fullScreen}>
       <Box
         sx={{
-          width: drawerWidth,
+          width: width,
           height: "60%",
         }}
       >

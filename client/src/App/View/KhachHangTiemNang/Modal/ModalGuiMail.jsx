@@ -107,7 +107,6 @@ export const ModalGuiMail = ({ showModal, typeModal, closeModal }) => {
         initialFormState={initialFormState}
         schema={schema}
         ref={modalRef}
-        width={800}
       >
         <Grid2 container spacing={2} >
           <Grid2 size={12}>

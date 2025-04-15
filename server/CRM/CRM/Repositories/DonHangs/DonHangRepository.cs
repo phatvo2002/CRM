@@ -92,6 +92,13 @@ namespace CRM.Repositories.DonHangs
             return _mapper.Map<List<DonHangDTO>>(db);
         }
 
+        public async Task<List<DonHangDTO>> GetDonHangByKhachHangId(string khachHangId)
+        {
+            var db = await _crmDbContext.DonHangs.AsNoTracking().Where(r => r.MaKhachHang == khachHangId).Include(r => r.KhachHangMucTieu)
+                .Include(r => r.Nguoidung).Include(r => r.TinhTrangDonHang).ToListAsync();
+            return _mapper.Map<List<DonHangDTO>>(db);
+        }
+
         public async Task<List<DonHangDTO>> GetDonHangByNguoiDungId(Guid nguoiDungId)
         {
             var db = await _crmDbContext.DonHangs.AsNoTracking().Where(r => r.NguoiDungId == nguoiDungId).Include(r => r.KhachHangMucTieu)

@@ -189,6 +189,7 @@ builder.Services.AddScoped<IMailDaGuiServices, MailDaGuiServices>();
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
+builder.Services.AddHostedService<SendMailAutoMation>();
 
 
 
