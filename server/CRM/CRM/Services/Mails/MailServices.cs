@@ -18,6 +18,11 @@ namespace CRM.Services.Mails
         public async Task SendMailAsync(MailRequest request, string Email, string Password, Guid nguoiDungId, Guid PhongBanId)
         { await _mailRepository.SendMailAsync(request, Email, Password, nguoiDungId, PhongBanId); }
 
+        public async Task SendMailBaoGiaAsync(MailRequest request, string Email, string Password, Guid baoGiaId, Guid nguoiDungId, Guid phongBanId)
+        {
+            await _mailRepository.SendMailBaoGiaAsync(request, Email, Password, baoGiaId, nguoiDungId, phongBanId);
+        }
+
         public async Task SendMailDonHangAsync(MailRequest request, string Email, string Password, Guid donHangId, Guid nguoiDungId, Guid phongBanId)
         { await _mailRepository.SendMailDonHangAsync(request, Email, Password, donHangId, nguoiDungId, phongBanId); }
     }

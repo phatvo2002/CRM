@@ -7,8 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System.Globalization;
-using System.Net;
-using System.Net.Mail;
 
 namespace CRM.Repositories.Mails
 {
@@ -153,7 +151,7 @@ namespace CRM.Repositories.Mails
                     if (db.KhachHangMucTieu.Email != null || db.KhachHangMucTieu.Email != "")
                     {
                         mail.To.Add(MailboxAddress.Parse(db.KhachHangMucTieu.Email));
-                        mail.Subject = $"Báo giá đơn hàng : {db.TenDonHang}";
+                        mail.Subject = $"Đơn hàng : {db.TenDonHang}";
                         var builder = new BodyBuilder();
 
                         builder.HtmlBody = htmlContent;
@@ -178,72 +176,100 @@ namespace CRM.Repositories.Mails
             }
         }
 
-        public Task SendMailBaoGiaAsync(MailRequest request, string Email, string Password, Guid baoGiaId, Guid nguoiDungId, Guid phongBanId)
+        public async Task SendMailBaoGiaAsync(MailRequest request, string Email, string Password, Guid baoGiaId, Guid nguoiDungId, Guid phongBanId)
         {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class SendMailAutoMation : BackgroundService
-    {
-        private readonly IServiceScopeFactory _scopeFactory;
-
-        public SendMailAutoMation(IServiceScopeFactory scopeFactory)
-        {
-            _scopeFactory = scopeFactory;
-        }
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            TimeZoneInfo vnTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
-            DateTime vnNow = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, vnTimeZone);
-            while (!stoppingToken.IsCancellationRequested)
+            var dataBaoGia = _context.BaoGias.AsNoTracking().Include(r => r.KhachHangMucTieu).FirstOrDefault(r => r.Id == baoGiaId);
+            var dataNguoiDung = _context.Nguoidungs.AsNoTracking().Include(r => r.ChucVu).FirstOrDefault(r => r.Id == nguoiDungId);
+            try
             {
-                try
+                if (dataBaoGia != null)
                 {
-                    using (var scope = _scopeFactory.CreateScope())
+                    var hangHoaData = await _hangHoaQuanTamRepository.GetHangHoaQuanTamByBaoGiaId(baoGiaId);
+
+                    string chiTietSanPhamRows = "";
+                    int index = 0;
+                    double tongTien = 0;
+                    foreach (var ct in hangHoaData)
                     {
-                        var dbContext = scope.ServiceProvider.GetRequiredService<CrmDbContext>();
-                        var dbAdmin = await dbContext.Nguoidungs.FirstOrDefaultAsync(r => r.Id == Guid.Parse("0E7FDE09-09F3-48F2-9205-E9E5201ACB0B"));
-                        var nhiemVus = dbContext.NhiemVus
-                    .AsNoTracking()
-                    .Where(r =>
-                        r.TrangThaiThucHienId == Guid.Parse("DC08A44C-6A39-426F-89C2-C6068C248573") &&
-                        r.HanHoanThanh.HasValue &&
-                        vnNow >= r.HanHoanThanh.Value.AddMinutes(-30) &&
-                        vnNow < r.HanHoanThanh.Value
-                    )
-                    .Include(r => r.Nguoidung).ToList();
+                        tongTien += (double)ct.ThanhTien;
+                        chiTietSanPhamRows += $@"
+                            <tr>
+                               <td>{index++}</td>
+                               <td>{ct.MaHangHoaId}</td>
+                               <td>{ct.TenHangHoa}</td>
+                               <td>{ct.SoLuong}</td>
+                               <td>{ct.DonViTinh}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.DonGia)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.ThanhTien)}</td>
+                            </tr>";
+                    }
+                    var htmlContent = $@"
+<html>
+  <body style='font-family: Arial, sans-serif; color: #333;'>
+    <p>Kính gửi: <strong>{dataBaoGia?.KhachHangMucTieu?.TenKhachHang}</strong>,</p>
 
-                        foreach (var r in nhiemVus)
-                        {
-                            try
-                            {
-                                var mailMessage = new MailMessage();
-                                mailMessage.From = new MailAddress(dbAdmin.Email);
-                                mailMessage.To.Add(r.Nguoidung.Email);
-                                mailMessage.Subject = "Cảnh báo nhiệm vụ sắp hết hạn";
-                                mailMessage.Body = $"Nhiệm vụ \"{r.TieuDe}\" sẽ hết hạn lúc {r.HanHoanThanh.Value:HH:mm dd/MM/yyyy}. Vui lòng kiểm tra.";
-                                using (var smtpClient = new SmtpClient("smtp.gmail.com", 587))
-                                {
-                                    smtpClient.EnableSsl = true;
-                                    smtpClient.Credentials = new NetworkCredential(dbAdmin.Email, dbAdmin.Password);
+    <p>Cảm ơn Quý khách đã quan tâm đến sản phẩm/dịch vụ của chúng tôi. Chúng tôi xin gửi đến Quý khách bảng báo giá như sau:</p>
 
-                                    await smtpClient.SendMailAsync(mailMessage);
-                                }
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine($"Lỗi khi gửi email: {ex.Message}");
-                            }
-                        }
+    <table border='1' cellpadding='8' cellspacing='0' style='border-collapse: collapse; width: 100%; margin: 20px 0;'>
+      <thead style='background-color: #f2f2f2;'>
+        <tr>
+          <th>STT</th>
+          <th>Mã sản phẩm</th>
+          <th>Tên sản phẩm</th>
+          <th>Số lượng </th>
+          <th>Đơn vị tính</th>
+          <th>Đơn giá (VNĐ)</th>
+          <th>Thành tiền (VNĐ)</th>
+        </tr>
+      </thead>
+      <tbody>
+         {chiTietSanPhamRows}
+      </tbody>
+    </table>
+
+    <p><strong>Tổng cộng: {string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", tongTien)}</strong></p>
+
+    <p>
+      👉 <a href='http://localhost:3000/XemBaoGia/{baoGiaId}'>
+        http://localhost:3000/XemBaoGia/{baoGiaId}
+      </a>
+    </p>
+    <p> </p>
+    <p>Trân trọng,</p>
+    <p><strong>{dataNguoiDung?.HoVaDem}{dataNguoiDung?.Ten}</strong><br/>
+    {dataNguoiDung?.ChucVu?.TenChucVu}<br/>
+      <br/>
+    📞 {dataNguoiDung?.SoDienThoai}<br/>
+    📧 {dataNguoiDung?.Email}</p>
+  </body>
+</html>";
+                    var mail = new MimeMessage();
+                    mail.Sender = MailboxAddress.Parse(Email);
+                    if (dataBaoGia?.Nguoidung?.Email != null)
+                    {
+                        mail.To.Add(MailboxAddress.Parse(dataBaoGia?.KhachHangMucTieu?.Email));
+                        mail.Subject = $"Báo giá đơn hàng : {dataBaoGia?.TenBaoGia}";
+                        var builder = new BodyBuilder();
+                        builder.HtmlBody = htmlContent;
+                        mail.Body = builder.ToMessageBody();
+                        using var smtp = new MailKit.Net.Smtp.SmtpClient();
+                        smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+                        smtp.Authenticate(Email, Password);
+                        await smtp.SendAsync(mail);
+                        smtp.Disconnect(true);
+                    }
+                    else
+                    {
+
+                        new Exception("Mail của khách hàng không tồn tại");
                     }
                 }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Lỗi khi gửi email: {ex.Message}");
-                }
-                await Task.Delay(TimeSpan.FromMinutes(30), stoppingToken);
             }
+            catch (Exception ex)
+            {
+                new Exception(ex.ToString());
+            }
+            throw new NotImplementedException();
         }
     }
 

@@ -6,6 +6,7 @@
         public string? TieuDe { get; set; }
         public string? MoTa { get; set; }
         public bool? IsThongBao { get; set; }
+        public bool? IsGuiMail { get; set; }
         public DateTime? HanHoanThanh { get; set; }
         public Guid? KhachHangTiemNangId { get; set; }
         public Guid? MucDoUuTienId { get; set; }

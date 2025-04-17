@@ -31,6 +31,8 @@ import ReplyIcon from '@mui/icons-material/Reply';
 import { ModalGuiMailBaoGia } from "../../Component/ModalGuiMailBaoGia";
 import ModalXuatLinkBaoGia from "../../Component/ModalXuatLinkBaoGia";
 import { ModalSinhDonHang } from "../../Component/ModalSinhDonHang";
+import { toast } from "react-toastify";
+import { useGuiMailBaoGiaMutation } from "src/App/Api/MailServicesApi";
 const index = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [tabIndex, setTabIndex] = useState(0);
@@ -51,6 +53,7 @@ const index = () => {
   const handleCloselModalXuatLinkBaoGia = () => setModalXuatLink(false)
   const { id } = useParams(),
     { data: dataBaoGia } = useGetBaoGiaByIdQuery(id);
+    const [sendMail] = useGuiMailBaoGiaMutation()
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
@@ -66,6 +69,19 @@ const index = () => {
 
   const handleCloseModalConvertDonhang = () => setModalConvertDonHang(false)
 
+  const handleSendMaill  = async() =>
+  {
+      try{
+           const response = await sendMail({data : null  , baoGiaId : id})
+           if(response?.data?.status === 200)
+           {
+             toast.success(response?.data?.message)
+           } else toast.warn(response?.data?.message)
+      }catch(err) 
+      {
+         toast.error(err)
+      }
+  }
 
   return (
     <Box>
@@ -83,7 +99,7 @@ const index = () => {
                 <Button
                 variant="contained"
                 color="secondary"
-                onClick={handleOpenModalMailBaoGia}
+                onClick={handleSendMaill}
                 startIcon={<EmailIcon />}
                 sx={{ marginLeft: 2 }}
               >
