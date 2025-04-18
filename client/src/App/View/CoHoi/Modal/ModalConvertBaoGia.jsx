@@ -34,6 +34,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
+import dayjs from "dayjs";
 const modelObj = {
     id: "id",
     tenBaoGia: "tenBaoGia",
@@ -88,7 +89,6 @@ export const ModalConvertBaoGia = ({
   showModal,
   closeModal,
   typeModal,
-  isLoading
 }) => {
   const _isMounted = useRef(false),
     modalRef = useRef(null),
@@ -102,17 +102,18 @@ export const ModalConvertBaoGia = ({
   const [createData] = useAddHangHoaQuanTamMutation();
   const [updateData] = useUpdateHangHoaQuanTamMutation();
   const [deleteData] = useDeleteHangHoaQuanTamMutation();
+  const valueTuNgay = dayjs("1900-01-01").format('YYYY-MM-DD');
+  const valueDenNgay = dayjs("2100-12-31").format('YYYY-MM-DD');
   const { data: dataKhachhangMucTieu, isLoading: isGetKhachHangIsFeatching } =
-    useGetKhachHangMucTieuByNguoiDungIdQuery(undefined, {
+    useGetKhachHangMucTieuByNguoiDungIdQuery({tuNgay : valueTuNgay , denNgay : valueDenNgay}, {
       skip: showModal == false,
     });
+  
   const { data: dataCoHoi, isLoading: isGetCoHoiIsFetching } =
       useGetCoHoiListQuery({ skip: showModal == false }),
     [convertBaoGia] = useConvertBaoGiaMutation();
-  // const isLoading =
-  //   isGetTinhTrangBaoGiaIsFetching ||
-  //   isGetTinhTrangBaoGiaIsFetching ||
-  //   isGetCoHoiIsFetching;
+
+  const isLoading = isGetKhachHangIsFeatching || isGetCoHoiIsFetching
   const handleAddClick = () => {
     const newRow = {
       id: uuidv4(),
@@ -121,6 +122,7 @@ export const ModalConvertBaoGia = ({
       khachHangTiemNangId: null,
       khachHangId: null,
       coHoiId: id,
+      maDonViTinh:0,
       soLuong: 0,
       thueSuat: 0,
       tienThue: 0,
@@ -167,6 +169,8 @@ export const ModalConvertBaoGia = ({
     const updateTongTien = selectedItem ? updatedThanhTien + updateTienThue : 0;
     const updatedRow = {
       ...newRow,
+      tenHangHoa : selectedItem?.tenHangHoa,
+      maDonViTinh :selectedItem?.donViTinh?.id,
       tienThue: updateTienThue,
       thanhTien: updatedThanhTien,
       tongTien: updateTongTien,
@@ -231,6 +235,16 @@ export const ModalConvertBaoGia = ({
       renderCell: (params) => {
         const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
         return selectedItem ? selectedItem.tenHangHoa : "" ;
+      },
+    },
+    {
+      field: "maDonViTinh",
+      headerName: "Đơn vị tính",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
+        return selectedItem ? selectedItem.donViTinh.name  : "" ;
       },
     },
     {
@@ -358,6 +372,7 @@ export const ModalConvertBaoGia = ({
           [modelObj.maCoHoi]: coHoiData?.id,
           [modelObj.maKhachHang]: coHoiData?.maKhachHang,
           [modelObj.diaChi]: coHoiData?.diaChi,
+          [modelObj.maSoThue] : coHoiData?.khachHangMucTieu?.maSoThue,
           [modelObj.ngayBaoGia] : new Date(),
           [modelObj.ngayHetHan] : new Date(new Date().setDate(new Date().getDate() + 15))
         },
@@ -374,6 +389,7 @@ export const ModalConvertBaoGia = ({
       getInitialStateFromApiToUpdate(coHoiData);
     }
   }, [coHoiData]);
+  console.log(coHoiData)
   useEffect(() => {
     _isMounted.current = true;
     return () => {
@@ -462,7 +478,6 @@ export const ModalConvertBaoGia = ({
               name={modelObj.diaChi}
               label={labelObj.diaChi}
               disabled={isLoading}
-              required
             />
           </Grid2>
 

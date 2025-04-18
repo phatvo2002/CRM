@@ -7,6 +7,7 @@ using CRM.Services.DonHangs;
 using CRM.Services.HangHoaQuanTams;
 using Microsoft.AspNetCore.Mvc;
 using OpenXmlPowerTools;
+using System.Globalization;
 namespace CRM.Controllers.Files
 {
     [Route("api/v1/[controller]")]
@@ -96,14 +97,19 @@ namespace CRM.Controllers.Files
                 BaoGiaDTO baoGiaResult = await _baoGiaServices.GetBaoGiaById(baoGiaId);
 
                 var hangHoaResult = await _hangHoaQuanTamServices.GetHangHoaQuanTamByBaoGiaId(baoGiaId);
-                List<HangHoaQuanTamDTO> hanghoa = new List<HangHoaQuanTamDTO>();
+                List<ExportHangHoaQuanTamDTO> hanghoa = new List<ExportHangHoaQuanTamDTO>();
                 foreach (var item in hangHoaResult)
                 {
-                    HangHoaQuanTamDTO h = new HangHoaQuanTamDTO();
-                    h.MaHangHoaId = item.MaHangHoaId;
-                    h.SoLuong = item.SoLuong;
-                    h.DonGia = item.DonGia;
-                    h.TenHangHoa = item.TenHangHoa;
+                    ExportHangHoaQuanTamDTO h = new ExportHangHoaQuanTamDTO();
+                    h.TenHangHoa = item?.TenHangHoa;
+                    h.TenDonViTinh = item?.DonViTinh?.Name;
+                    h.SoLuong = item?.SoLuong;
+                    h.DonGia = item?.DonGia;
+                    h.ThanhTien = item?.ThanhTien;
+                    h.ThueSuat = item?.ThueSuat;
+                    h.TongTien = item?.TongTien;
+                    h.ThanhTienFormat = item?.ThanhTien?.ToString("N0", new CultureInfo("vi-VN"));
+                    h.TongTienFormat = item?.TongTien?.ToString("N0", new CultureInfo("vi-VN"));
                     hanghoa.Add(h);
                 }
                 DateTime dateTime = DateTime.UtcNow.Date;
@@ -112,7 +118,7 @@ namespace CRM.Controllers.Files
                 modal.Thang = dateTime.Month.ToString();
                 modal.Nam = dateTime.Year.ToString();
                 modal.HangHoaQuanTam = hanghoa;
-                modal.TongTien = hangHoaResult.Sum(r => (decimal)r.ThanhTien);
+                modal.TongTien = hangHoaResult.Sum(r => (decimal)r.TongTien);
                 modal.NguoiDung = baoGiaResult.NguoiDung;
                 var pathTemplate = $"{_webHostEnvironment.WebRootPath}\\Templates\\baogiadonhang.docx";
                 FileInfo templateDoc = new(pathTemplate);

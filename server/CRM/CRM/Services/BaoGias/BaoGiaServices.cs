@@ -28,14 +28,14 @@ namespace CRM.Services.BaoGias
             return await _baoGiaRepository.GetBaoGiaById(id);
         }
 
-        public async Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId)
+        public async Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId, DateTime tuNgay, DateTime denNgay)
         {
-            return await _baoGiaRepository.GetBaoGiaByNguoiDungId(nguoiDungId);
+            return await _baoGiaRepository.GetBaoGiaByNguoiDungId(nguoiDungId, tuNgay, denNgay);
         }
 
-        public async Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId)
+        public async Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId, DateTime tuNgay, DateTime denNgay)
         {
-            return await _baoGiaRepository.GetBaoGiaByPhongBanId(phongBanId);
+            return await _baoGiaRepository.GetBaoGiaByPhongBanId(phongBanId, tuNgay, denNgay);
         }
 
         public async Task<ResultModal> PheDuyetBaoGia(Guid baoGiaId, int trangthaiId)

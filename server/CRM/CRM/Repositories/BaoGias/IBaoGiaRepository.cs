@@ -8,8 +8,8 @@ namespace CRM.Repositories.BaoGias
     {
         Task<ResultModal> ConvertBaoGia(BaoGiaModal baoGiaModal, Guid nguoiDungId, Guid phongBanId);
         Task<BaoGiaDTO> GetBaoGiaById(Guid id);
-        Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId);
-        Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId);
+        Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId, DateTime tuNgay, DateTime denNgay);
+        Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId, DateTime tuNgay, DateTime denNgay);
         Task<ResultModal> PheDuyetBaoGia(Guid baoGiaId, int trangthaiId);
         Task<ResultModal> UpdateSoTienHangHoa(Guid baoGiaId, decimal soTien);
         Task<ResultModal> UpdateTrangThaiBaoGia(Guid baoGiaId, int trangThaiId);

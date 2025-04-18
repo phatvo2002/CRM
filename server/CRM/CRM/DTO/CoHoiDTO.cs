@@ -20,5 +20,6 @@
         public DateTime? CreateAt { get; set; }
         public GiaiDoanBanHangDTO? GiaiDoanBanHang { get; set; }
         public NguoiDungDTO? NguoiDung { get; set; }
+        public KhachHangMucTieuDTO? KhachHangMucTieu { get; set; }
     }
 }

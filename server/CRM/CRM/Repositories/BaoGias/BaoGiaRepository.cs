@@ -89,17 +89,17 @@ namespace CRM.Repositories.BaoGias
             return _mapper.Map<BaoGiaDTO>(db);
         }
 
-        public async Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId)
+        public async Task<List<BaoGiaDTO>> GetBaoGiaByNguoiDungId(Guid nguoiDungId, DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _crmDbContext.BaoGias.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false)
+            var db = await _crmDbContext.BaoGias.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
                 .Include(r => r.KhachHangMucTieu)
                 .Include(r => r.CoHoi).Include(r => r.TinhTrangBaoGia).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<BaoGiaDTO>>(db);
         }
 
-        public async Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId)
+        public async Task<List<BaoGiaDTO>> GetBaoGiaByPhongBanId(Guid phongBanId, DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _crmDbContext.BaoGias.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false)
+            var db = await _crmDbContext.BaoGias.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
                 .Include(r => r.KhachHangMucTieu)
                 .Include(r => r.CoHoi).Include(r => r.TinhTrangBaoGia).Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<BaoGiaDTO>>(db);

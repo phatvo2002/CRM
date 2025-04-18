@@ -69,19 +69,21 @@ namespace CRM.Repositories.CoHois
 
         public async Task<CoHoiDTO> GetCoHoiById(string id)
         {
-            var db = await _crmDbContext.CoHois.Where(r => r.Id == id).Include(r => r.GiaiDoanBanHang).FirstOrDefaultAsync();
+            var db = await _crmDbContext.CoHois.Where(r => r.Id == id).Include(r => r.GiaiDoanBanHang).Include(r => r.KhachHangMucTieu).FirstOrDefaultAsync();
             return _mapper.Map<CoHoiDTO>(db);
         }
 
         public async Task<List<CoHoiDTO>> GetCoHoiByNguoiDungId(Guid nguoiDungId)
         {
-            var db = await _crmDbContext.CoHois.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).Include(r => r.Nguoidung).ToListAsync();
+            var db = await _crmDbContext.CoHois.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang)
+                .Include(r => r.Nguoidung).Include(r => r.KhachHangMucTieu).ToListAsync();
             return _mapper.Map<List<CoHoiDTO>>(db);
         }
 
         public async Task<List<CoHoiDTO>> GetCoHoiByPhongBanId(Guid phongBanId)
         {
-            var db = await _crmDbContext.CoHois.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).Include(r => r.Nguoidung).ToListAsync();
+            var db = await _crmDbContext.CoHois.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang)
+                .Include(r => r.Nguoidung).Include(r => r.KhachHangMucTieu).ToListAsync();
             return _mapper.Map<List<CoHoiDTO>>(db);
         }
 

@@ -8,7 +8,7 @@ namespace CRM.Modal
         public string? Thang { get; set; }
         public string? Nam { get; set; }
         public BaoGiaDTO? BaoGia { get; set; }
-        public List<HangHoaQuanTamDTO>? HangHoaQuanTam { get; set; }
+        public List<ExportHangHoaQuanTamDTO>? HangHoaQuanTam { get; set; }
         public NguoiDungExportDTO? NguoiDung { get; set; }
         public decimal TongTien { get; set; }
     }

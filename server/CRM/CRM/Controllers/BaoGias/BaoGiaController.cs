@@ -25,7 +25,7 @@ namespace CRM.Controllers.BaoGias
 
         [HttpGet("getbaogialist")]
         [JwtAuthorize]
-        public async Task<IActionResult> GetBaoGiaList()
+        public async Task<IActionResult> GetBaoGiaList(DateTime tuNgay, DateTime denNgay)
         {
             try
             {
@@ -39,12 +39,12 @@ namespace CRM.Controllers.BaoGias
                 }
                 else if (db.CheckIsTruongPhong)
                 {
-                    List<BaoGiaDTO> result = await _baoGiaServices.GetBaoGiaByPhongBanId(phongbanId);
+                    List<BaoGiaDTO> result = await _baoGiaServices.GetBaoGiaByPhongBanId(phongbanId, tuNgay, denNgay);
                     return Ok(result);
                 }
                 else
                 {
-                    List<BaoGiaDTO> result = await _baoGiaServices.GetBaoGiaByNguoiDungId(userId);
+                    List<BaoGiaDTO> result = await _baoGiaServices.GetBaoGiaByNguoiDungId(userId, tuNgay, denNgay);
                     return Ok(result);
                 }
             }
