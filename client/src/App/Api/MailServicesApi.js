@@ -44,11 +44,10 @@ export const apiMail = createApi({
       },
     }),
     GuiMailBaoGia: builder.mutation({
-      query: ({data : data, baoGiaId : baoGiaId}) => {
+      query: ({ baoGiaId : baoGiaId}) => {
         return {
           url: `/Mail/GuiMailBaoGia/${baoGiaId}`,
           method: "POST",
-          body: data,
         };
       },
     }),

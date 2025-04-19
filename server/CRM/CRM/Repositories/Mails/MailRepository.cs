@@ -125,7 +125,7 @@ namespace CRM.Repositories.Mails
                           <a href='http://localhost:3000/donhang/chitietdonhang/{donHangId}' class='button'>Xem chi tiết đơn hàng</a>
                      </div>
                        <div> 
-                     <table>
+                     <table border='1' cellpadding='8' cellspacing='0' style='border-collapse: collapse; width: 100%; margin: 20px 0;'>
                        <tr style={{margin-top:10px}}>
                        <th style={{margin-left:15px}}>Tên sản phầm</th>
                        <th style={{margin-left:15px}}>Số lượng</th>
@@ -191,16 +191,17 @@ namespace CRM.Repositories.Mails
                     double tongTien = 0;
                     foreach (var ct in hangHoaData)
                     {
-                        tongTien += (double)ct.ThanhTien;
+                        tongTien += (double)ct.TongTien;
                         chiTietSanPhamRows += $@"
                             <tr>
                                <td>{index++}</td>
-                               <td>{ct.MaHangHoaId}</td>
                                <td>{ct.TenHangHoa}</td>
+                               <td>{ct.DonViTinh?.Name}</td>
                                <td>{ct.SoLuong}</td>
-                               <td>{ct.DonViTinh}</td>
                                <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.DonGia)}</td>
                                <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.ThanhTien)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.TienThue)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.TongTien)}</td>
                             </tr>";
                     }
                     var htmlContent = $@"
@@ -214,12 +215,13 @@ namespace CRM.Repositories.Mails
       <thead style='background-color: #f2f2f2;'>
         <tr>
           <th>STT</th>
-          <th>Mã sản phẩm</th>
           <th>Tên sản phẩm</th>
-          <th>Số lượng </th>
           <th>Đơn vị tính</th>
+          <th>Số lượng </th>
           <th>Đơn giá (VNĐ)</th>
           <th>Thành tiền (VNĐ)</th>
+          <th>Thuể VAT</th>
+          <th>Tổng tiền</th>
         </tr>
       </thead>
       <tbody>
@@ -230,7 +232,7 @@ namespace CRM.Repositories.Mails
     <p><strong>Tổng cộng: {string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", tongTien)}</strong></p>
 
     <p>
-      👉 <a href='http://localhost:3000/XemBaoGia/{baoGiaId}'>
+      👉 Để tiếp tục vui lòng quý khách nhấn nút xác nhận báo giá hoặc từ chối báo giá thông qua đường link : <a href='http://localhost:3000/XemBaoGia/{baoGiaId}'>
         http://localhost:3000/XemBaoGia/{baoGiaId}
       </a>
     </p>
@@ -245,7 +247,7 @@ namespace CRM.Repositories.Mails
 </html>";
                     var mail = new MimeMessage();
                     mail.Sender = MailboxAddress.Parse(Email);
-                    if (dataBaoGia?.Nguoidung?.Email != null)
+                    if (dataBaoGia?.KhachHangMucTieu?.Email != null)
                     {
                         mail.To.Add(MailboxAddress.Parse(dataBaoGia?.KhachHangMucTieu?.Email));
                         mail.Subject = $"Báo giá đơn hàng : {dataBaoGia?.TenBaoGia}";
@@ -269,7 +271,6 @@ namespace CRM.Repositories.Mails
             {
                 new Exception(ex.ToString());
             }
-            throw new NotImplementedException();
         }
     }
 

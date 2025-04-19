@@ -37,7 +37,10 @@ namespace CRM.Repositories.DonHangs
                     donHang.MaLienHe = null;
                     donHang.Id = Guid.NewGuid();
                     donHang.SoTienConPhaiThu = modal.GiaTriDonHang;
-                    donHang.ThucThuDonHang = 0;
+                    donHang.ThucThuDonHang = modal.ThucThuDonHang;
+                    donHang.PhuongThucThanhToan = modal.PhuongThucThanhToan;
+                    donHang.SoTaiKhoanNganHang = modal.SoTaiKhoanNganHang;
+                    donHang.ChuTaiKhoan = modal.ChuTaiKhoan;
                     donHang.NguoiDungId = nguoiDungId;
                     donHang.PhongBanId = phongBanId;
                     donHang.IsDeleted = false;

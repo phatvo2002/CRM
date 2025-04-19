@@ -22,6 +22,9 @@
         public bool IsGhiDoanhSo { get; set; }
         public string? ThongTinHoaDon { get; set; }
         public string? ThongTinGiaoHang { get; set; }
+        public string? PhuongThucThanhToan { get; set; }
+        public string? SoTaiKhoanNganHang { get; set; }
+        public string? ChuTaiKhoan { get; set; }
         public virtual TinhTrangDonHang? TinhTrangDonHang { get; set; }
         public virtual LoaiDonHang? LoaiDonHang { get; set; }
         public virtual TinhTrangGhiDoanhSo? TinhTrangGhiDoanhSo { get; set; }

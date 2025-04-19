@@ -69,10 +69,10 @@ const index = () => {
 
   const handleCloseModalConvertDonhang = () => setModalConvertDonHang(false)
 
-  const handleSendMaill  = async() =>
+  const handleSendMaill  = async () =>
   {
       try{
-           const response = await sendMail({data : null  , baoGiaId : id})
+           const response = await sendMail({baoGiaId : id})
            if(response?.data?.status === 200)
            {
              toast.success(response?.data?.message)

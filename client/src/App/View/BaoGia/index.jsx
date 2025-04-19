@@ -145,7 +145,7 @@ const index = () => {
         >
           <Tooltip title="Sửa thông tin ">
             <IconButton
-              disabled={selectedRow.length === 0}
+              disabled={selectedRow.length == 0}
               style={{}}
               onClick={handleOpenModalSuaThongTinBaoGia}
             >
@@ -154,7 +154,7 @@ const index = () => {
           </Tooltip>
           <Tooltip title="Xóa">
             <IconButton
-              disabled={selectedRow.length === 0}
+              disabled={selectedRow.length == 0}
               style={{}}
               onClick={() => handleDeleteBaoGia(params?.id)}
             >

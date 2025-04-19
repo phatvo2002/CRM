@@ -87,7 +87,7 @@ namespace CRM.Controllers.Files
             return Ok(null);
         }
         [HttpPost("exportbaogia/{baoGiaId}")]
-        [JwtAuthorize]
+        //[JwtAuthorize]
         public async Task<IActionResult> ExportBaoGia(Guid baoGiaId)
         {
             try
@@ -104,7 +104,7 @@ namespace CRM.Controllers.Files
                     h.TenHangHoa = item?.TenHangHoa;
                     h.TenDonViTinh = item?.DonViTinh?.Name;
                     h.SoLuong = item?.SoLuong;
-                    h.DonGia = item?.DonGia;
+                    h.DonGia = item?.DonGia?.ToString("N0", new CultureInfo("vi-VN"));
                     h.ThanhTien = item?.ThanhTien;
                     h.ThueSuat = item?.ThueSuat;
                     h.TongTien = item?.TongTien;

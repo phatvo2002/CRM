@@ -11,5 +11,7 @@ namespace CRM.Modal
         public List<ExportHangHoaQuanTamDTO>? HangHoaQuanTam { get; set; }
         public NguoiDungExportDTO? NguoiDung { get; set; }
         public decimal TongTien { get; set; }
+        public decimal TongTienFormat { get; set; }
+
     }
 }

@@ -20,17 +20,22 @@ import {
 } from "src/App/Api/BaoGiaApi";
 import { useGetHangHoaQuanTamByBaoGiaIdQuery } from "src/App/Api/HangHoaQuanTam";
 import Swal from "sweetalert2";
+import IconWord from "src/App/Assets/icon/word.png";
+import { useDownloadFileMutation } from "src/App/Api/FileApi";
 const XacNhanPage = () => {
   const { id } = useParams(),
     { data: dataBaoGia } = useGetBaoGiaByIdQuery(id),
     { data: dataHangHoaQuanTam } = useGetHangHoaQuanTamByBaoGiaIdQuery(id),
-    [xacNhanBaoGia] = useUpdatePheDuyetBaoGiaMutation();
+    [xacNhanBaoGia] = useUpdatePheDuyetBaoGiaMutation(),
+    [downLoadBaoGia] = useDownloadFileMutation();
   const total = Array.isArray(dataHangHoaQuanTam)
-    ? dataHangHoaQuanTam.reduce(
-        (sum, item) => sum + item.soLuong * item.donGia,
-        0
-      )
+    ? dataHangHoaQuanTam.reduce((sum, item) => sum + item?.tongTien, 0)
     : 0;
+
+  const fullDay = new Date();
+  const day = fullDay.getDay();
+  const month = fullDay.getMonth();
+  const year = fullDay.getFullYear();
 
   const handleXacNhan = (xacNhanId) => {
     if (xacNhanId == 4) {
@@ -93,6 +98,15 @@ const XacNhanPage = () => {
   return (
     <Container>
       <Paper sx={{ padding: 5 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{ marginLeft: 2 }}
+          onClick={() => downLoadBaoGia(id)}
+        >
+          <img src={IconWord} alt="Xuất báo giá" width={24} height={24} /> Tải 
+          báo giá
+        </Button>
         <Box textAlign="center" mb={2}>
           <Typography variant="h6" fontWeight="bold">
             LOGO CÔNG TY
@@ -125,11 +139,12 @@ const XacNhanPage = () => {
               <TableRow>
                 <TableCell>STT</TableCell>
                 <TableCell>TÊN HÀNG HÓA</TableCell>
-                <TableCell>MÃ HÀNG HÓA</TableCell>
+                <TableCell>ĐƠN VỊ TÍNH </TableCell>
                 <TableCell>SỐ LƯỢNG</TableCell>
                 <TableCell>ĐƠN GIÁ</TableCell>
                 <TableCell>THÀNH TIỀN</TableCell>
-                <TableCell>GHI CHÚ</TableCell>
+                <TableCell>THUẾ VAT</TableCell>
+                <TableCell>TỔNG TIỀN</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -138,7 +153,7 @@ const XacNhanPage = () => {
                   <TableRow key={item.id}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{item.tenHangHoa}</TableCell>
-                    <TableCell>{item.maHangHoaId}</TableCell>
+                    <TableCell>{item.donViTinh?.name}</TableCell>
                     <TableCell>{item.soLuong}</TableCell>
                     <TableCell>
                       {item.donGia.toLocaleString()} <span>&#x0111;</span>
@@ -146,11 +161,17 @@ const XacNhanPage = () => {
                     <TableCell>
                       {item.thanhTien.toLocaleString()} <span>&#x0111;</span>
                     </TableCell>
+                    <TableCell>
+                      {item.tienThue.toLocaleString()} <span>&#x0111;</span>
+                    </TableCell>
+                    <TableCell>
+                      {item.tongTien.toLocaleString()} <span>&#x0111;</span>
+                    </TableCell>
                     <TableCell></TableCell>
                   </TableRow>
                 ))}
               <TableRow>
-                <TableCell colSpan={5} sx={{ fontWeight: "bold" }}>
+                <TableCell colSpan={7} sx={{ fontWeight: "bold" }}>
                   Tổng cộng:
                 </TableCell>
                 <TableCell sx={{ fontWeight: "bold" }}>
@@ -164,19 +185,24 @@ const XacNhanPage = () => {
         <Typography mt={2}>
           <b>Ghi chú:</b>
         </Typography>
-        <Typography>- Báo giá chưa bao gồm thêm thuế và chiết khấu.</Typography>
         <Typography>
-          - Báo giá có hiệu lực trong vòng 14 ngày kể từ ngày ban hành.
+          - Báo giá có hiệu lực trong vòng 14 ngày kể từ ngày được tạo.
         </Typography>
         <Typography mt={2}>
           <b>Mọi chi tiết vui lòng liên hệ:</b>
         </Typography>
-        <Typography>admin | Di động: 0708223608 | Email: admin@123</Typography>
+        <Typography>
+          {dataBaoGia?.nguoiDung?.hoVaDem} {dataBaoGia?.nguoiDung?.ten} | Di
+          động: {dataBaoGia?.nguoiDung?.soDienThoai} | Email:{" "}
+          {dataBaoGia?.nguoiDung?.email}
+        </Typography>
         <Typography mt={2} fontStyle="italic">
           Trân trọng kính chào!
         </Typography>
         <Box textAlign="right" mt={2}>
-          <Typography>Ngày 26 tháng 2 năm 2025</Typography>
+          <Typography>
+            Ngày {day} tháng {month} năm {year}
+          </Typography>
           <Typography fontWeight="bold">CÔNG TY ............</Typography>
         </Box>
         <Box marginTop={10}>
