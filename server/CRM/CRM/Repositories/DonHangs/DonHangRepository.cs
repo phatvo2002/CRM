@@ -127,24 +127,64 @@ namespace CRM.Repositories.DonHangs
             return _mapper.Map<DonHangDTO>(db);
         }
 
-        public async Task<ResultModal> XacNhanDonHang(Guid donHangId)
+        public async Task<ResultModal> XacNhanDonHang(XacNhanDonHangModal modal)
         {
-            var db = _crmDbContext.DonHangs.Where(r => r.Id == donHangId).FirstOrDefault();
-            Guid nguoiDungID = (Guid)(db.Nguoidung?.Id);
-            Guid phongBanId = (Guid)(db.Nguoidung?.MaPhongBan);
-            if (db != null)
+            var db = _crmDbContext.DonHangs.Where(r => r.Id == modal.Id).Include(r => r.Nguoidung).FirstOrDefault();
+            try
             {
-                db.MaTinhTrangDonHang = 3;
+                if (db != null)
+                {
 
-                _crmDbContext.DonHangs.Update(db);
+                    if (modal.Type == 1)
+                    {
+                        if (db.Nguoidung?.Id is Guid nguoiDungID && db.Nguoidung?.MaPhongBan is Guid phongBanId)
+                        {
+                            db.MaTinhTrangDonHang = 3;
+                            db.LyDoHuyDon = null;
 
-                await _crmDbContext.SaveChangesAsync();
+                            _crmDbContext.DonHangs.Update(db);
+                            await _crmDbContext.SaveChangesAsync();
 
-                await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungID, phongBanId, 6, (double)db.GiaTriDonHang);
+                            await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(
+                                nguoiDungID,
+                                phongBanId,
+                                6,
+                                (double)db.GiaTriDonHang
+                            );
 
-                return new ResultModal() { Status = 200, Message = "Xác nhận đơn hàng thành công", Success = true };
+                            return new ResultModal
+                            {
+                                Status = 200,
+                                Message = "Xác nhận đơn hàng thành công",
+                                Success = true
+                            };
+                        }
+                        else return new ResultModal
+                        {
+                            Status = 202,
+                            Message = "Đã có lỗi xảy ra",
+                            Success = true
+                        };
+                    }
+                    else
+                    {
+                        db.MaTinhTrangDonHang = 9;
+                        db.LyDoHuyDon = modal.LyDoHuyDon;
+                        _crmDbContext.DonHangs.Update(db);
+                        await _crmDbContext.SaveChangesAsync();
+                        return new ResultModal() { Status = 200, Message = "Hủy đơn thành công", Success = true };
+                    }
+
+
+                }
+                else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
             }
-            else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+            catch (Exception ex)
+            {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
+            }
+
+
         }
     }
 }

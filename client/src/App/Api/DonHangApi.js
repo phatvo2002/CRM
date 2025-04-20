@@ -45,6 +45,13 @@ export const apiDonHang = createApi({
           body: data, 
         }),
       }),
+      xacNhanDonhang: builder.mutation({
+        query: (data) => ({
+          url: `/DonHang/xacnhandonhang`, 
+          method: 'PUT', 
+          body : data
+        }),
+      }),
     }),
   });
   export const { 
@@ -53,7 +60,8 @@ export const apiDonHang = createApi({
    useGetGetDonHangByIdQuery,
    useAddDonHangMutation,
    useUpdateDonhangMutation,
-   useDeleteDonHangMutation
+   useDeleteDonHangMutation,
+   useXacNhanDonhangMutation
   } = apiDonHang;
 
 
