@@ -44,6 +44,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
+import { useDownloadFileDonHangMutation } from "src/App/Api/FileApi";
 const orderStatusColors = {
   Mới: "#3498db",
   "Ðang xử lý": "#f1c40f",
@@ -61,6 +62,7 @@ const DonHang = () => {
   const { data: dataDonHang, refetch } = useGetGetDonHangListQuery();
   const [deleteDonHang] = useDeleteDonHangMutation();
   const [mailDonHang] = useGuiMailDonHangMutation();
+  const [exportDonHang] = useDownloadFileDonHangMutation();
   const [modalThemMoiDonHang, setModalThemMoiDonHang] = useState(false);
   const [modalChinhSuaDonHang, setModalChinhSuaDonHang] = useState(false);
     const [valueTuNgay, setValueTuNgay] = React.useState(
@@ -398,7 +400,8 @@ const DonHang = () => {
               variant="contained"
               color="primary"
               sx={{ marginLeft: 2 }}
-              //onClick={() => downloadBaoGia(dataBaoGia?.id)}
+              disabled={selectedRow.length == 0}
+              onClick={() => exportDonHang(selectedRow[0]?.id)}
             >
               <img src={IconWord} alt="Xuất báo giá" width={24} height={24} />{" "}
               Tải đơn đặt hàng

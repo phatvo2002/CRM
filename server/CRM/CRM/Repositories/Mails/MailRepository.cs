@@ -91,9 +91,12 @@ namespace CRM.Repositories.Mails
                         chiTietSanPhamRows += $@"
                             <tr>
                                <td>{ct.TenHangHoa}</td>
+                               <td>{ct.DonViTinh}</td>
                                <td>{ct.SoLuong}</td>
                                <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.DonGia)}</td>
                                <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.ThanhTien)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.TienThue)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.TongTien)}</td>
                             </tr>";
                     }
 
@@ -106,7 +109,7 @@ namespace CRM.Repositories.Mails
                              .header {{ background-color: #007bff; color: white; padding: 10px; text-align: center; font-size: 20px; }}
                              .content {{ padding: 15px; line-height: 1.5; }}
                              .footer {{ margin-top: 20px; font-size: 12px; color: gray; text-align: center; }}
-                             .button {{ display: inline-block; padding: 10px 20px; background: #28a745; color: #fff; text-decoration: none; border-radius: 5px; }}
+                             .button {{ display: inline-block; padding: 10px 20px; color: #fff; text-decoration: none; border-radius: 5px; }}
                         </style>
                        </head>
                    <body>
@@ -115,8 +118,8 @@ namespace CRM.Repositories.Mails
                               <h2>Từ LPCRM</h2>
                        </div>
                       <div class='content'>
-                          <p>Đơn hàng số : {db.MaQuanLy}</p>
-                          <p>Giá trị đơn hàng : {db.GiaTriDonHang.ToString("N0", new CultureInfo("vi-VN")) + " đ"}</p>
+                          <p> <b>Đơn hàng số</b> : {db.MaQuanLy}</p>
+                          <p> <b>Giá trị đơn hàng</b> : {db.GiaTriDonHang.ToString("N0", new CultureInfo("vi-VN")) + " đ"}</p>
                           <p style={{text-align : center}}>Cảm ơn bạn đã đặt hàng thông qua hệ thống của chúng tôi</p>
                           <p style={{text-align : center}}>Xin chào {(db.KhachHangMucTieu.TenKhachHang != "" ? db.KhachHangMucTieu.TenKhachHang : "")}
                                     , Bạn vui lòng kiểm tra thông tin chi tiết đơn hàng và nhấn nút xác nhận để xác nhận nếu bạn đồng ý với mức giá của chúng tôi.</p>
@@ -128,17 +131,26 @@ namespace CRM.Repositories.Mails
                      <table border='1' cellpadding='8' cellspacing='0' style='border-collapse: collapse; width: 100%; margin: 20px 0;'>
                        <tr style={{margin-top:10px}}>
                        <th style={{margin-left:15px}}>Tên sản phầm</th>
+                       <th style={{margin-left:15px}}>Đơn vị tính</th>
                        <th style={{margin-left:15px}}>Số lượng</th>
                        <th style={{margin-left:15px}}>Đơn giá</th>
                        <th style={{margin-left:15px}}>Thành tiền</th>
+                       <th style={{margin-left:15px}}>Tiền thuế</th>
+                       <th style={{margin-left:15px}}>Tổng tiền</th>
                     </tr>
                       {chiTietSanPhamRows}
                      
                       </table>
                  </div>
                  <div>
-                     <p>Thông tin giao hàng : {db.ThongTinHoaDon}</p>
-                     <p>Địa chỉ giao hàng : {db.ThongTinGiaoHang}</p>
+                    <h3>Phương thức thanh toán : {db.PhuongThucThanhToan}</h3>
+                    
+                 </div>
+                 <div>
+                     <p> <b>Thời hạn giao hàng </b>: {db.HanGiaoHang?.ToString("dd/MM/yyyy")}</p>
+                     <p> <b>Thời hạn thanh toán</b>: {db.HanThanhToan?.ToString("dd/MM/yyyy")}</p>
+                     <p> <b>Thông tin giao hàng</b> : {db.ThongTinHoaDon}</p>
+                     <p> <b>Địa chỉ giao hàng</b> : {db.ThongTinGiaoHang}</p>
                  </div>
              <div class='footer'>
                 <p>&copy; {DateTime.Now.Year} LPCRM. Mọi quyền được bảo lưu.</p>
@@ -259,6 +271,8 @@ namespace CRM.Repositories.Mails
                         smtp.Authenticate(Email, Password);
                         await smtp.SendAsync(mail);
                         smtp.Disconnect(true);
+
+                        await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, 4, 0);
                     }
                     else
                     {

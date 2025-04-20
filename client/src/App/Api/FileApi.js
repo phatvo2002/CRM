@@ -35,11 +35,28 @@ export const apiFile = createApi({
           return { data: null };
         },
       }),
+      downloadFileDonHang: builder.mutation({
+        queryFn: async (donHangId, api, extraOptions, baseQuery) => {
+          const result = await baseQuery({
+            url: `/File/exportdonhang/${donHangId}`, 
+            method: "GET", 
+            responseHandler: (response) => response.blob(),
+          });
+  
+          if (result.error) {
+            return { error: result.error };
+          }
+  
+          fileDownload(result.data,"donhang.docx");
+          return { data: null };
+        },
+      }),
     }),
   });
   export const { 
    useGetFileImageQuery,
-   useDownloadFileMutation
+   useDownloadFileMutation,
+   useDownloadFileDonHangMutation
   } = apiFile;
 
 

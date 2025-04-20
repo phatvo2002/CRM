@@ -3,6 +3,7 @@
     public class ExportHangHoaQuanTamDTO
     {
         public Guid Id { get; set; }
+        public int STT { get; set; } = 0;
         public string? MaHangHoaId { get; set; }
         public string? TenHangHoa { get; set; }
         public Guid? KhachHangTiemNangId { get; set; }

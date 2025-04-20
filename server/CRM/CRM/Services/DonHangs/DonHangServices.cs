@@ -23,6 +23,11 @@ namespace CRM.Services.DonHangs
             return await _donHangRepository.GetAllDonHang();
         }
 
+        public Task<DonHangDTO> GetDonHangById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<DonHangDTO>> GetDonHangByKhachHangId(string khachHangId)
         {
             return await _donHangRepository.GetDonHangByKhachHangId(khachHangId);
@@ -41,6 +46,11 @@ namespace CRM.Services.DonHangs
         public async Task<DonHangDTO> GetDonHangId(Guid id)
         {
             return await _donHangRepository.GetDonHangId(id);
+        }
+
+        public async Task<ResultModal> XacNhanDonHang(Guid donHangId)
+        {
+            return await _donHangRepository.XacNhanDonHang(donHangId);
         }
     }
 }
