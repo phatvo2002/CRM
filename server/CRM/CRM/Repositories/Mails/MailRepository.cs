@@ -1,6 +1,7 @@
 ﻿using CRM.Entities;
 using CRM.Modal;
 using CRM.Repositories.HangHoaQuanTams;
+using CRM.Repositories.MucTieuDoanhSos;
 using MailKit.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -14,11 +15,13 @@ namespace CRM.Repositories.Mails
         private readonly MailSettings _mailSettings;
         private readonly CrmDbContext _context;
         private readonly IHangHoaQuanTamRepository _hangHoaQuanTamRepository;
-        public MailRepository(IOptions<MailSettings> mailSettings, CrmDbContext context, IHangHoaQuanTamRepository hangHoaQuanTamRepository)
+        private readonly IMucTieuDoanhSoRepository _mucTieuDoanhSoRepository;
+        public MailRepository(IOptions<MailSettings> mailSettings, CrmDbContext context, IHangHoaQuanTamRepository hangHoaQuanTamRepository, IMucTieuDoanhSoRepository mucTieuDoanhSoRepository)
         {
             _mailSettings = mailSettings.Value;
             _context = context;
             _hangHoaQuanTamRepository = hangHoaQuanTamRepository;
+            _mucTieuDoanhSoRepository = mucTieuDoanhSoRepository;
         }
 
 
@@ -66,6 +69,9 @@ namespace CRM.Repositories.Mails
             emailDaGui.NguoiDungId = nguoiDungId;
             emailDaGui.PhongBanId = PhongBanId;
             _context.EmailDaGuis.Add(emailDaGui);
+
+            await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, PhongBanId, 5, 0);
+
             await _context.SaveChangesAsync();
         }
 
@@ -85,9 +91,12 @@ namespace CRM.Repositories.Mails
                         chiTietSanPhamRows += $@"
                             <tr>
                                <td>{ct.TenHangHoa}</td>
+                               <td>{ct.DonViTinh}</td>
                                <td>{ct.SoLuong}</td>
                                <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.DonGia)}</td>
                                <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.ThanhTien)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.TienThue)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.TongTien)}</td>
                             </tr>";
                     }
 
@@ -100,7 +109,7 @@ namespace CRM.Repositories.Mails
                              .header {{ background-color: #007bff; color: white; padding: 10px; text-align: center; font-size: 20px; }}
                              .content {{ padding: 15px; line-height: 1.5; }}
                              .footer {{ margin-top: 20px; font-size: 12px; color: gray; text-align: center; }}
-                             .button {{ display: inline-block; padding: 10px 20px; background: #28a745; color: #fff; text-decoration: none; border-radius: 5px; }}
+                             .button {{ display: inline-block; padding: 10px 20px; color: #fff; text-decoration: none; border-radius: 5px; }}
                         </style>
                        </head>
                    <body>
@@ -109,8 +118,8 @@ namespace CRM.Repositories.Mails
                               <h2>Từ LPCRM</h2>
                        </div>
                       <div class='content'>
-                          <p>Đơn hàng số : {db.MaQuanLy}</p>
-                          <p>Giá trị đơn hàng : {db.GiaTriDonHang.ToString("N0", new CultureInfo("vi-VN")) + " đ"}</p>
+                          <p> <b>Đơn hàng số</b> : {db.MaQuanLy}</p>
+                          <p> <b>Giá trị đơn hàng</b> : {db.GiaTriDonHang.ToString("N0", new CultureInfo("vi-VN")) + " đ"}</p>
                           <p style={{text-align : center}}>Cảm ơn bạn đã đặt hàng thông qua hệ thống của chúng tôi</p>
                           <p style={{text-align : center}}>Xin chào {(db.KhachHangMucTieu.TenKhachHang != "" ? db.KhachHangMucTieu.TenKhachHang : "")}
                                     , Bạn vui lòng kiểm tra thông tin chi tiết đơn hàng và nhấn nút xác nhận để xác nhận nếu bạn đồng ý với mức giá của chúng tôi.</p>
@@ -119,20 +128,29 @@ namespace CRM.Repositories.Mails
                           <a href='http://localhost:3000/donhang/chitietdonhang/{donHangId}' class='button'>Xem chi tiết đơn hàng</a>
                      </div>
                        <div> 
-                     <table>
+                     <table border='1' cellpadding='8' cellspacing='0' style='border-collapse: collapse; width: 100%; margin: 20px 0;'>
                        <tr style={{margin-top:10px}}>
                        <th style={{margin-left:15px}}>Tên sản phầm</th>
+                       <th style={{margin-left:15px}}>Đơn vị tính</th>
                        <th style={{margin-left:15px}}>Số lượng</th>
                        <th style={{margin-left:15px}}>Đơn giá</th>
                        <th style={{margin-left:15px}}>Thành tiền</th>
+                       <th style={{margin-left:15px}}>Tiền thuế</th>
+                       <th style={{margin-left:15px}}>Tổng tiền</th>
                     </tr>
                       {chiTietSanPhamRows}
                      
                       </table>
                  </div>
                  <div>
-                     <p>Thông tin giao hàng : {db.ThongTinHoaDon}</p>
-                     <p>Địa chỉ giao hàng : {db.ThongTinGiaoHang}</p>
+                    <h3>Phương thức thanh toán : {db.PhuongThucThanhToan}</h3>
+                    
+                 </div>
+                 <div>
+                     <p> <b>Thời hạn giao hàng </b>: {db.HanGiaoHang?.ToString("dd/MM/yyyy")}</p>
+                     <p> <b>Thời hạn thanh toán</b>: {db.HanThanhToan?.ToString("dd/MM/yyyy")}</p>
+                     <p> <b>Thông tin giao hàng</b> : {db.ThongTinHoaDon}</p>
+                     <p> <b>Địa chỉ giao hàng</b> : {db.ThongTinGiaoHang}</p>
                  </div>
              <div class='footer'>
                 <p>&copy; {DateTime.Now.Year} LPCRM. Mọi quyền được bảo lưu.</p>
@@ -145,7 +163,7 @@ namespace CRM.Repositories.Mails
                     if (db.KhachHangMucTieu.Email != null || db.KhachHangMucTieu.Email != "")
                     {
                         mail.To.Add(MailboxAddress.Parse(db.KhachHangMucTieu.Email));
-                        mail.Subject = $"Báo giá đơn hàng : {db.TenDonHang}";
+                        mail.Subject = $"Đơn hàng : {db.TenDonHang}";
                         var builder = new BodyBuilder();
 
                         builder.HtmlBody = htmlContent;
@@ -169,5 +187,105 @@ namespace CRM.Repositories.Mails
                 new Exception(ex.ToString());
             }
         }
+
+        public async Task SendMailBaoGiaAsync(MailRequest request, string Email, string Password, Guid baoGiaId, Guid nguoiDungId, Guid phongBanId)
+        {
+            var dataBaoGia = _context.BaoGias.AsNoTracking().Include(r => r.KhachHangMucTieu).FirstOrDefault(r => r.Id == baoGiaId);
+            var dataNguoiDung = _context.Nguoidungs.AsNoTracking().Include(r => r.ChucVu).FirstOrDefault(r => r.Id == nguoiDungId);
+            try
+            {
+                if (dataBaoGia != null)
+                {
+                    var hangHoaData = await _hangHoaQuanTamRepository.GetHangHoaQuanTamByBaoGiaId(baoGiaId);
+
+                    string chiTietSanPhamRows = "";
+                    int index = 0;
+                    double tongTien = 0;
+                    foreach (var ct in hangHoaData)
+                    {
+                        tongTien += (double)ct.TongTien;
+                        chiTietSanPhamRows += $@"
+                            <tr>
+                               <td>{index++}</td>
+                               <td>{ct.TenHangHoa}</td>
+                               <td>{ct.DonViTinh?.Name}</td>
+                               <td>{ct.SoLuong}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.DonGia)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.ThanhTien)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.TienThue)}</td>
+                               <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.TongTien)}</td>
+                            </tr>";
+                    }
+                    var htmlContent = $@"
+<html>
+  <body style='font-family: Arial, sans-serif; color: #333;'>
+    <p>Kính gửi: <strong>{dataBaoGia?.KhachHangMucTieu?.TenKhachHang}</strong>,</p>
+
+    <p>Cảm ơn Quý khách đã quan tâm đến sản phẩm/dịch vụ của chúng tôi. Chúng tôi xin gửi đến Quý khách bảng báo giá như sau:</p>
+
+    <table border='1' cellpadding='8' cellspacing='0' style='border-collapse: collapse; width: 100%; margin: 20px 0;'>
+      <thead style='background-color: #f2f2f2;'>
+        <tr>
+          <th>STT</th>
+          <th>Tên sản phẩm</th>
+          <th>Đơn vị tính</th>
+          <th>Số lượng </th>
+          <th>Đơn giá (VNĐ)</th>
+          <th>Thành tiền (VNĐ)</th>
+          <th>Thuể VAT</th>
+          <th>Tổng tiền</th>
+        </tr>
+      </thead>
+      <tbody>
+         {chiTietSanPhamRows}
+      </tbody>
+    </table>
+
+    <p><strong>Tổng cộng: {string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", tongTien)}</strong></p>
+
+    <p>
+      👉 Để tiếp tục vui lòng quý khách nhấn nút xác nhận báo giá hoặc từ chối báo giá thông qua đường link : <a href='http://localhost:3000/XemBaoGia/{baoGiaId}'>
+        http://localhost:3000/XemBaoGia/{baoGiaId}
+      </a>
+    </p>
+    <p> </p>
+    <p>Trân trọng,</p>
+    <p><strong>{dataNguoiDung?.HoVaDem}{dataNguoiDung?.Ten}</strong><br/>
+    {dataNguoiDung?.ChucVu?.TenChucVu}<br/>
+      <br/>
+    📞 {dataNguoiDung?.SoDienThoai}<br/>
+    📧 {dataNguoiDung?.Email}</p>
+  </body>
+</html>";
+                    var mail = new MimeMessage();
+                    mail.Sender = MailboxAddress.Parse(Email);
+                    if (dataBaoGia?.KhachHangMucTieu?.Email != null)
+                    {
+                        mail.To.Add(MailboxAddress.Parse(dataBaoGia?.KhachHangMucTieu?.Email));
+                        mail.Subject = $"Báo giá đơn hàng : {dataBaoGia?.TenBaoGia}";
+                        var builder = new BodyBuilder();
+                        builder.HtmlBody = htmlContent;
+                        mail.Body = builder.ToMessageBody();
+                        using var smtp = new MailKit.Net.Smtp.SmtpClient();
+                        smtp.Connect(_mailSettings.Host, _mailSettings.Port, SecureSocketOptions.StartTls);
+                        smtp.Authenticate(Email, Password);
+                        await smtp.SendAsync(mail);
+                        smtp.Disconnect(true);
+
+                        await _mucTieuDoanhSoRepository.UpdateMucTieuDoanhSoData(nguoiDungId, phongBanId, 4, 0);
+                    }
+                    else
+                    {
+
+                        new Exception("Mail của khách hàng không tồn tại");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                new Exception(ex.ToString());
+            }
+        }
     }
+
 }

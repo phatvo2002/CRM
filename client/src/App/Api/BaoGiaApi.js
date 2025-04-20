@@ -17,7 +17,7 @@ export const apiBaoGia = createApi({
     }),
     endpoints: (builder) => ({
       getBaoGiaList: builder.query({
-        query: () => `/BaoGia/getbaogialist`,
+        query: ({tuNgay ,denNgay}) => `/BaoGia/getbaogialist?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
       getBaoGiaById: builder.query({
         query: (id) => `/BaoGia/getbaogiabyid/${id}`,

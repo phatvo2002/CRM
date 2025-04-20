@@ -40,6 +40,13 @@ import TextAreaRHF from "src/App/Components/ReactHookFormComp/TextAreaRHF";
 import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 import { useAddDonHangMutation } from "src/App/Api/DonHangApi";
+import dayjs from "dayjs";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+
 const modelObj = {
     id: "id",
     tenDonHang: "tenDonHang",
@@ -61,6 +68,9 @@ const modelObj = {
     thongTinHoaDon: "thongTinHoaDon",
     thongTinGiaoHang: "thongTinGiaoHang",
     hangHoaQuanTam: "hangHoaQuanTam",
+    phuongThucThanhToan: "phuongThucThanhToan",
+    soTaiKhoanNganHang: "soTaiKhoanNganHang",
+    chuTaiKhoan: "chuTaiKhoan",
   },
   labelObj = {
     id: "Mã đơn hàng",
@@ -68,7 +78,7 @@ const modelObj = {
     moTaDonHang: "Mô tả đơn hàng",
     ngayDatHang: "Ngày đặt hàng",
     soTienConPhaiThu: "Số tiền còn phải thu",
-    thucThuDonHang: "Thực thu đơn hàng",
+    thucThuDonHang: "Khách hàng trả trước",
     giaTriDonHang: "Giá trị đơn hàng",
     hanThanhToan: "Hạn thanh toán",
     hanGiaoHang: "Hạn giao hàng",
@@ -81,6 +91,8 @@ const modelObj = {
     maTinhTrangGhiDoanhSo: "Tình trạng ghi doanh số",
     thongTinHoaDon: "Thông tin hóa đơn",
     thongTinGiaoHang: "Thông tin giao hàng",
+    soTaiKhoanNganHang: "Số tài khoản ngân hàng",
+    chuTaiKhoan: "Chủ tài khoản",
   },
   initialFormState = {
     [modelObj.id]: "",
@@ -102,6 +114,9 @@ const modelObj = {
     [modelObj.thongTinHoaDon]: "",
     [modelObj.thongTinGiaoHang]: "",
     [modelObj.hangHoaQuanTam]: [],
+    [modelObj.phuongThucThanhToan]: null,
+    [modelObj.soTaiKhoanNganHang]: null,
+    [modelObj.chuTaiKhoan]: null,
   },
   schema = yup.object().shape({
     [modelObj.tenDonHang]: validateString(),
@@ -113,18 +128,19 @@ const modelObj = {
 export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
   const [khachHangId, setKhachHangId] = useState(null);
   const [isSave, setIsSave] = useState(false);
-  const _isMounted = useRef(false),
+  const _isMounted = useRef(false);
+  const [phuongThucThanhToan, setPhuongThucThanhToanValue] = React.useState("");
+  const valueTuNgay = dayjs("1900-01-01").format("YYYY-MM-DD");
+  const valueDenNgay = dayjs("2100-12-31").format("YYYY-MM-DD"),
     modalRef = useRef(null),
     { id } = useParams(),
     [hangHoa, setHangHoa] = useState([]),
     { data: hangHoas } = useGetAllHangHoaQuery(undefined, {
       skip: showModal == false,
     }),
-    { data: rows, refetch } = useGetHangHoaQuanTamByBaoGiaIdQuery(
-      id
-    ),
+    { data: rows, refetch } = useGetHangHoaQuanTamByBaoGiaIdQuery(id),
     { data: dataBaoGia, isLoading: isBaoGiaFetching } = useGetBaoGiaListQuery(
-      undefined,
+      { tuNgay: valueTuNgay, denNgay: valueDenNgay },
       { skip: showModal == false }
     ),
     { data: dataTinhTrangDonHang, isLoading: isGetTinhTrangIsFetching } =
@@ -142,9 +158,12 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
         skip: showModal == false,
       }),
     { data: dataKhachhangMucTieu, isLoading: isGetKhachHangIsFeatching } =
-      useGetKhachHangMucTieuByNguoiDungIdQuery(undefined, {
-        skip: showModal == false,
-      }),
+      useGetKhachHangMucTieuByNguoiDungIdQuery(
+        { tuNgay: valueTuNgay, denNgay: valueDenNgay },
+        {
+          skip: showModal == false,
+        }
+      ),
     [createData] = useAddHangHoaQuanTamMutation(),
     [updateData] = useUpdateHangHoaQuanTamMutation(),
     [deleteData] = useDeleteHangHoaQuanTamMutation(),
@@ -162,7 +181,7 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
       tenHangHoa: "",
       khachHangTiemNangId: null,
       khachHangId: null,
-      baoGiaId : id,
+      baoGiaId: id,
       coHoiId: null,
       soLuong: 0,
       thueSuat: 0,
@@ -354,29 +373,31 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
     },
   ];
   const submitForm = (data) => {
-        const tempData = {
-          [modelObj.tenDonHang]: data[modelObj.tenDonHang],
-          [modelObj.moTaDonHang]: data[modelObj.moTaDonHang],
-          [modelObj.ngayDatHang]: data[modelObj.ngayDatHang],
-          [modelObj.hanThanhToan]: data[modelObj.hanThanhToan],
-          [modelObj.hanGiaoHang]: data[modelObj.hanGiaoHang],
-          [modelObj.giaTriDonHang]: totalAmountFinal,
-          [modelObj.soTienConPhaiThu]: totalAmountFinal,
-          [modelObj.thucThuDonHang]: 0,
-          [modelObj.ngayGhiDoanhSo]: null,
-          [modelObj.thongTinGiaoHang]: data[modelObj.thongTinGiaoHang],
-          [modelObj.thongTinHoaDon]: data[modelObj.thongTinHoaDon],
-          [modelObj.maLoaiDonHang]: data[modelObj.maLoaiDonHang],
-          [modelObj.maBaoGia]: data[modelObj.maBaoGia],
-          [modelObj.maKhachHang]: data[modelObj.maKhachHang],
-          [modelObj.maLienHe]: data[modelObj.maLienHe],
-          [modelObj.maLoaiDonHang]: data[modelObj.maLoaiDonHang],
-          [modelObj.maTinhTrangDonHang]: data[modelObj.maTinhTrangDonHang],
-          [modelObj.maTinhTrangGhiDoanhSo]:
-            data[modelObj.maTinhTrangGhiDoanhSo],
-          [modelObj.hangHoaQuanTam]: hangHoa,
-        };
-        callApiConvert(tempData);
+      const tempData = {
+        [modelObj.tenDonHang]: data[modelObj.tenDonHang],
+        [modelObj.moTaDonHang]: data[modelObj.moTaDonHang],
+        [modelObj.ngayDatHang]: data[modelObj.ngayDatHang],
+        [modelObj.hanThanhToan]: data[modelObj.hanThanhToan],
+        [modelObj.hanGiaoHang]: data[modelObj.hanGiaoHang],
+        [modelObj.giaTriDonHang]: totalAmountFinal,
+        [modelObj.soTienConPhaiThu]: totalAmountFinal,
+        [modelObj.thucThuDonHang]: data[modelObj.thucThuDonHang],
+        [modelObj.ngayGhiDoanhSo]: null,
+        [modelObj.thongTinGiaoHang]: data[modelObj.thongTinGiaoHang],
+        [modelObj.thongTinHoaDon]: data[modelObj.thongTinHoaDon],
+        [modelObj.maLoaiDonHang]: data[modelObj.maLoaiDonHang],
+        [modelObj.maBaoGia]: data[modelObj.maBaoGia],
+        [modelObj.maKhachHang]: data[modelObj.maKhachHang],
+        [modelObj.maLienHe]: data[modelObj.maLienHe],
+        [modelObj.maLoaiDonHang]: data[modelObj.maLoaiDonHang],
+        [modelObj.maTinhTrangDonHang]: data[modelObj.maTinhTrangDonHang],
+        [modelObj.maTinhTrangGhiDoanhSo]: data[modelObj.maTinhTrangGhiDoanhSo],
+        [modelObj.hangHoaQuanTam]: hangHoa,
+        [modelObj.phuongThucThanhToan]: phuongThucThanhToan,
+        [modelObj.soTaiKhoanNganHang] :data[modelObj.soTaiKhoanNganHang],
+        [modelObj.chuTaiKhoan] : data[modelObj.chuTaiKhoan]
+      };
+      callApiConvert(tempData);
     },
     callApiConvert = async (paramData) => {
       try {
@@ -398,14 +419,17 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
           [modelObj.maBaoGia]: baoGiaData?.id,
           [modelObj.maKhachHang]: baoGiaData?.maKhachHang,
           [modelObj.thongTinGiaoHang]: baoGiaData?.diaChi,
-          [modelObj.maTinhTrangDonHang] :2,
+          [modelObj.maTinhTrangDonHang]: 2,
           [modelObj.maTinhTrangGhiDoanhSo]: 1,
           [modelObj.maLoaiDonHang]: 1,
-          [modelObj.ngayDatHang] : new Date()
+          [modelObj.ngayDatHang]: new Date(),
         },
         { keepDirty: true }
       );
     };
+  const handleChangePhuongThucThanhToan = (event) => {
+    setPhuongThucThanhToanValue(event.target.value);
+  };
   useEffect(() => {
     if (rows) {
       setHangHoa(rows);
@@ -520,16 +544,24 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
             />
           </Grid2>
           <Grid2 size={6}>
-              <TextField
-                label="Giá trị đơn hàng"
-                variant="outlined"
-                value={totalAmountFinal}
-                type="number"
-                disabled
-                fullWidth
-              />
+            <TextField
+              label="Giá trị đơn hàng"
+              variant="outlined"
+              value={totalAmountFinal}
+              type="number"
+              disabled
+              fullWidth
+            />
           </Grid2>
-          
+          <Grid2 size={6}>
+            <TextFieldRHF
+              name={modelObj.thucThuDonHang}
+              label={labelObj.thucThuDonHang}
+              disabled={isLoading}
+              required
+            />
+          </Grid2>
+
           <Grid2 size={12}>
             <h3>Thông tin hàng hóa</h3>
           </Grid2>
@@ -629,6 +661,53 @@ export const ModalSinhDonHang = ({ baoGiaData, showModal, closeModal }) => {
               disabled={isLoading}
             />
           </Grid2>
+          <Grid2 size={12}>
+            <h3>Phương thức thanh toán</h3>
+            <FormControl>
+              <RadioGroup
+                aria-labelledby="demo-controlled-radio-buttons-group"
+                name="controlled-radio-buttons-group"
+                value={phuongThucThanhToan}
+                onChange={handleChangePhuongThucThanhToan}
+              >
+                <FormControlLabel
+                  value="Thanh toán khi nhận hàng"
+                  control={<Radio />}
+                  label="Thanh toán khi nhận hàng"
+                />
+                <FormControlLabel
+                  value="Thanh toán thông qua số tài khoản ngân hàng"
+                  control={<Radio />}
+                  label="Thanh toán thông qua số tài khoản ngân hàng"
+                />
+              </RadioGroup>
+            </FormControl>
+          </Grid2>
+         
+            {phuongThucThanhToan ==
+              "Thanh toán thông qua số tài khoản ngân hàng" && (
+              <>
+                <Grid2 size={6}>
+                  <TextFieldRHF
+                    name={modelObj.soTaiKhoanNganHang}
+                    label={labelObj.soTaiKhoanNganHang}
+                    disabled={isLoading}
+                    required
+                  />
+                </Grid2>
+                <Grid2 size={6}>
+                  <TextFieldRHF
+                    name={modelObj.chuTaiKhoan}
+                    label={labelObj.chuTaiKhoan}
+                    disabled={isLoading}
+                    required
+                  />
+                </Grid2>
+              </>
+            )}
+           <Grid2 size={12}>
+           <h3>Tình trạng đơn hàng</h3>
+           </Grid2>
           <Grid2 size={6}>
             <AutocompleteRHF
               name={modelObj.maTinhTrangDonHang}

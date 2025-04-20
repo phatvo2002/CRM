@@ -8,9 +8,11 @@ namespace CRM.Repositories.DonHangs
     {
         Task<List<DonHangDTO>> GetAllDonHang();
         Task<List<DonHangDTO>> GetDonHangByNguoiDungId(Guid nguoiDungId);
+        Task<List<DonHangDTO>> GetDonHangByKhachHangId(string khachHangId);
         Task<List<DonHangDTO>> GetDonHangByPhongBanId(Guid phongBanId);
         Task<ResultModal> ConvertDonHang(DonHangModal modal, Guid nguoiDungId, Guid phongBanId);
         Task<DonHangDTO> GetDonHangId(Guid id);
+        Task<ResultModal> XacNhanDonHang(Guid donHangId);
 
     }
 }

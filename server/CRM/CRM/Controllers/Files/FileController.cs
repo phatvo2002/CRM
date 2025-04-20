@@ -7,6 +7,7 @@ using CRM.Services.DonHangs;
 using CRM.Services.HangHoaQuanTams;
 using Microsoft.AspNetCore.Mvc;
 using OpenXmlPowerTools;
+using System.Globalization;
 namespace CRM.Controllers.Files
 {
     [Route("api/v1/[controller]")]
@@ -86,7 +87,7 @@ namespace CRM.Controllers.Files
             return Ok(null);
         }
         [HttpPost("exportbaogia/{baoGiaId}")]
-        [JwtAuthorize]
+        //[JwtAuthorize]
         public async Task<IActionResult> ExportBaoGia(Guid baoGiaId)
         {
             try
@@ -96,14 +97,19 @@ namespace CRM.Controllers.Files
                 BaoGiaDTO baoGiaResult = await _baoGiaServices.GetBaoGiaById(baoGiaId);
 
                 var hangHoaResult = await _hangHoaQuanTamServices.GetHangHoaQuanTamByBaoGiaId(baoGiaId);
-                List<HangHoaQuanTamDTO> hanghoa = new List<HangHoaQuanTamDTO>();
+                List<ExportHangHoaQuanTamDTO> hanghoa = new List<ExportHangHoaQuanTamDTO>();
                 foreach (var item in hangHoaResult)
                 {
-                    HangHoaQuanTamDTO h = new HangHoaQuanTamDTO();
-                    h.MaHangHoaId = item.MaHangHoaId;
-                    h.SoLuong = item.SoLuong;
-                    h.DonGia = item.DonGia;
-                    h.TenHangHoa = item.TenHangHoa;
+                    ExportHangHoaQuanTamDTO h = new ExportHangHoaQuanTamDTO();
+                    h.TenHangHoa = item?.TenHangHoa;
+                    h.TenDonViTinh = item?.DonViTinh?.Name;
+                    h.SoLuong = item?.SoLuong;
+                    h.DonGia = item?.DonGia?.ToString("N0", new CultureInfo("vi-VN"));
+                    h.ThanhTien = item?.ThanhTien;
+                    h.ThueSuat = item?.ThueSuat;
+                    h.TongTien = item?.TongTien;
+                    h.ThanhTienFormat = item?.ThanhTien?.ToString("N0", new CultureInfo("vi-VN"));
+                    h.TongTienFormat = item?.TongTien?.ToString("N0", new CultureInfo("vi-VN"));
                     hanghoa.Add(h);
                 }
                 DateTime dateTime = DateTime.UtcNow.Date;
@@ -112,7 +118,7 @@ namespace CRM.Controllers.Files
                 modal.Thang = dateTime.Month.ToString();
                 modal.Nam = dateTime.Year.ToString();
                 modal.HangHoaQuanTam = hanghoa;
-                modal.TongTien = hangHoaResult.Sum(r => (decimal)r.ThanhTien);
+                modal.TongTien = hangHoaResult.Sum(r => (decimal)r.TongTien);
                 modal.NguoiDung = baoGiaResult.NguoiDung;
                 var pathTemplate = $"{_webHostEnvironment.WebRootPath}\\Templates\\baogiadonhang.docx";
                 FileInfo templateDoc = new(pathTemplate);
@@ -129,42 +135,62 @@ namespace CRM.Controllers.Files
                 return BadRequest(ex.Message);
             }
         }
-        //[HttpGet("exportdonhang")]
-        ////[JwtAuthorize]
-        //public async Task<IActionResult> ExportDonhang(Guid donHangId, int type)
-        //{
-        //    try
-        //    {
-        //        ExportDonHangModal modal = new ExportDonHangModal();
-        //        DonHangDTO result = await _donHangServices.GetDonHangId(donHangId);
-        //        List<HangHoaQuanTamDTO> hangHoa = await _hangHoaQuanTamServices.GetHangHoaQuanTamByDonHangid(donHangId);
-        //        modal.DonHangDTO = result;
-        //        var pathTemplate = $"{_webHostEnvironment.WebRootPath}\\Templates\\dondathang.docx";
-        //        if (type == 0)
-        //        {
-        //            FileInfo templateDoc = new(pathTemplate);
-        //            var obj = Until.ObjectToXml<ExportDonHangModal>(modal);
-        //            WmlDocument wmlDoc = new(templateDoc.FullName);
-        //            bool templateError;
-        //            WmlDocument wmlAssembledDoc = DocumentAssembler.AssembleDocument(wmlDoc, obj, out templateError);
-        //            string fileName = $"dondathang.docx";
-        //            byte[] data = wmlAssembledDoc.DocumentByteArray;
-        //            return File(data, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
-        //        }
-        //        else
-        //        {
-        //            var report = new XLTemplate(pathTemplate);
-        //            report.AddVariable("info", result);
-        //            report.AddVariable("data", hangHoa);
-        //        }
+        [HttpGet("exportdonhang/{donHangId}")]
+        //[JwtAuthorize]
+        public async Task<IActionResult> ExportDonhang(Guid donHangId)
+        {
+            ExportDonHangModal modal = new ExportDonHangModal();
+            DonHangDTO result = await _donHangServices.GetDonHangId(donHangId);
+            List<ExportHangHoaQuanTamDTO> hanghoas = new List<ExportHangHoaQuanTamDTO>();
+            var hangHoa = await _hangHoaQuanTamServices.GetHangHoaQuanTamByDonHangid(donHangId);
+            modal.DonHang = result;
+            int stt = 1;
+            try
+            {
+                foreach (var item in hangHoa)
+                {
+                    ExportHangHoaQuanTamDTO hangHoaDTO = new ExportHangHoaQuanTamDTO();
+                    hangHoaDTO.STT = stt;
+                    hangHoaDTO.TenHangHoa = item.TenHangHoa;
+                    hangHoaDTO.TenDonViTinh = item?.DonViTinh?.Name;
+                    hangHoaDTO.SoLuong = item?.SoLuong;
+                    hangHoaDTO.DonGia = item?.DonGia?.ToString("N0", new CultureInfo("vi-VN"));
+                    hangHoaDTO.ThanhTienFormat = item?.ThanhTien?.ToString("N0", new CultureInfo("vi-VN"));
+                    hangHoaDTO.TongTienFormat = item?.TongTien?.ToString("N0", new CultureInfo("vi-VN"));
+                    hangHoaDTO.TienThue = item?.TienThue;
+                    hanghoas.Add(hangHoaDTO);
+                    stt++;
+                }
+                modal.HangHoas = hanghoas;
+                modal.TongTienHang = hangHoa.Sum(r => r.ThanhTien)?.ToString("N0", new CultureInfo("vi-VN"));
+                modal.TongTienThue = hangHoa.Sum(r => r.TienThue)?.ToString("N0", new CultureInfo("vi-VN"));
+                modal.TongChietKhau = hangHoa.Sum(r => r.ChiecKhauDonHang)?.ToString("N0", new CultureInfo("vi-VN"));
+                modal.TongTienThanhToan = Math.Round(
+                (decimal)((hangHoa.Sum(r => r.ThanhTien ?? 0) + hangHoa.Sum(r => r.TienThue ?? 0)) - hangHoa.Sum(r => r.ChiecKhauDonHang ?? 0))).ToString("N0", new CultureInfo("vi-VN"));
+                modal.ThoiGianGiaoHang = result.HanGiaoHang?.ToString("yyyy-MM-dd HH:mm:ss");
+                modal.ThoiGianThanhToan = result.HanThanhToan?.ToString("yyyy-MM-dd HH:mm:ss");
+                var ngaytao = DateTime.Now;
+                modal.Ngay = ngaytao.ToString("dd");
+                modal.Thang = ngaytao.ToString("mm");
+                modal.Nam = ngaytao.ToString("yyyy");
+                var pathTemplate = $"{_webHostEnvironment.WebRootPath}\\Templates\\dondathang.docx";
+                FileInfo templateDoc = new(pathTemplate);
+                var obj = Until.ObjectToXml<ExportDonHangModal>(modal);
+                WmlDocument wmlDoc = new(templateDoc.FullName);
+                bool templateError;
+                WmlDocument wmlAssembledDoc = DocumentAssembler.AssembleDocument(wmlDoc, obj, out templateError);
+                string fileName = $"dondathang.docx";
+                byte[] data = wmlAssembledDoc.DocumentByteArray;
+                return File(data, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", fileName);
 
-        //    }
-        //    catch (Exception ex)
-        //    {
 
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(ex.Message);
+            }
+        }
     }
 
 }

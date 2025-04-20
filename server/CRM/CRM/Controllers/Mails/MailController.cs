@@ -69,5 +69,30 @@ namespace CRM.Controllers.Mails
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPost("GuiMailBaoGia/{baoGiaId}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> SendMailBaoGia([FromForm] MailRequest mailRequest, Guid baoGiaId)
+        {
+            try
+            {
+                Guid nguoiDungID = HttpContext.GetUserId();
+                Guid phongBand = HttpContext.GetPhongBanId();
+                var db = _crmDbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungID);
+                if (db != null)
+                {
+                    if (db.Password != null)
+                    {
+                        await _mailService.SendMailBaoGiaAsync(mailRequest, db.Email, db.Password, baoGiaId, nguoiDungID, phongBand);
+                        return Ok(new ResultModal() { Status = 200, Message = "Gửi mail báo giá thành công", Success = true });
+                    }
+                    else return Ok(new ResultModal() { Status = 202, Message = "Bạn chưa đăng ký dịch vụ mail cá nhân", Success = false });
+                }
+                else return Ok(new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

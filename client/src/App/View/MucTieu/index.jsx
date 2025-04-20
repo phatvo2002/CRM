@@ -169,7 +169,7 @@ const index = () => {
                     <TableCell
                       sx={{
                         fontWeight: "bold",
-                        color: "#333",
+                      //  color: "#333",
                         width: "300px",
                         flex: 1,
                       }}
@@ -178,73 +178,73 @@ const index = () => {
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "200px" }}
+                      sx={{ fontWeight: "bold",width: "200px" }}
                     >
                       Tên KPI
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "200px" }}
+                      sx={{ fontWeight: "bold",  width: "200px" }}
                     >
                       Tên phòng ban
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold",  width: "300px" }}
                     >
                       Ngày bắt đầu
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold", width: "300px" }}
                     >
                       Ngày kết thúc
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold",  width: "300px" }}
                     >
                       SL Cuộc Gọi / Thực Tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold",  width: "300px" }}
                     >
                       SL Lịch Hẹn / Thực Tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold",width: "300px" }}
                     >
                       SL Email Tương Tác Khách Hàng / Thực Tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold", width: "300px" }}
                     >
                       SL Tiềm Năng Đã Chuyển Đổi / Thực tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold",  width: "300px" }}
                     >
                       SL Email Báo Giá/ Thực tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold",  width: "300px" }}
                     >
                       Doanh Số / Thực tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold", width: "300px" }}
                     >
                       Tổng tỷ lệ (%)
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", color: "#333", width: "300px" }}
+                      sx={{ fontWeight: "bold",  width: "300px" }}
                     >
                       Đánh giá
                     </TableCell>
@@ -390,7 +390,7 @@ const index = () => {
                               </Typography>
                               <Typography
                                 variant="caption"
-                                color="text.secondary"
+                               
                               >
                                 {data.percent} %
                               </Typography>
@@ -404,7 +404,7 @@ const index = () => {
                             </Typography>
                             <Typography
                               variant="caption"
-                              color="text.secondary"
+                           
                             >
                               {item?.tiLeDoanhSoThucTe} %
                             </Typography>
@@ -429,7 +429,7 @@ const index = () => {
                                 style={{
                                   width: "50px",
                                   height: "50px",
-                                  backgroundColor: item.color,
+                                  backgroundColor: item?.color,
                                 }}
                               ></div>
                             </div>
@@ -446,7 +446,7 @@ const index = () => {
                               <Box
                                 sx={{
                                   m: 2,
-                                  backgroundColor: "#fafafa",
+                                  backgroundColor: "background.primary",
                                   borderRadius: 2,
                                   boxShadow: 2,
                                   border: "1px solid #e0e0e0",
@@ -464,7 +464,7 @@ const index = () => {
                                 <Table size="small">
                                   <TableHead>
                                     <TableRow
-                                      sx={{ backgroundColor: "#f5f5f5" }}
+                                      sx={{ backgroundColor: "background.primary" }}
                                     >
                                       {[
                                         "",

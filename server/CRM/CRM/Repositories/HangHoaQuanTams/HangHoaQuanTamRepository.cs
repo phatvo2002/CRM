@@ -92,7 +92,7 @@ namespace CRM.Repositories.HangHoaQuanTams
 
         public async Task<List<HangHoaQuanTamDTO>> GetHangHoaQuanTamByDonHangid(Guid id)
         {
-            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.HoaDonId == id).ToListAsync();
+            var db = await _crmDbContext.HangHoaQuanTams.Where(r => r.HoaDonId == id).Include(r => r.DonViTinh).ToListAsync();
             return _mapper.Map<List<HangHoaQuanTamDTO>>(db);
         }
 

@@ -55,6 +55,7 @@ const index = () => {
     }
   }, [dataCoHoi]);
 
+
   const handleOpenModalChuyenDoiBaoGia = () => setModalChuyenDoiBaoGia(true);
   const handleCloseModaChuyenDoiBaoGia = () => setModalChuyenDoiBaoGia(false);
   const open = Boolean(anchorEl);
@@ -72,6 +73,7 @@ const index = () => {
   };
   const handleReload = () => {
     refetch();
+    window.location.reload()
   };
 
   const totalSteps = () => {
@@ -152,7 +154,6 @@ const index = () => {
                 sx={{ textTransform: "none", borderRadius: 2 }}
                 onClick={handleReturn}
               >
-                Quay về
               </Button>
               <Button
                 variant="outlined"
@@ -161,7 +162,6 @@ const index = () => {
                 sx={{ textTransform: "none", borderRadius: 2 }}
                 onclick={handleReload}
               >
-                Reload
               </Button>
             </div>
             <div>
@@ -194,7 +194,9 @@ const index = () => {
               >
                Lịch hẹn
               </Button>
-              <Button
+              {dataCoHoi?.giaiDoanBanHang?.tiLeThanhCong == "100" &&
+               <>
+                    <Button
                 id="basic-button"
                 aria-controls={open ? "basic-menu" : undefined}
                 aria-haspopup="true"
@@ -223,6 +225,8 @@ const index = () => {
                   <AttachMoneyIcon /> Sinh Báo giá
                 </MenuItem>
               </Menu>
+               </>}
+           
               <Button
                 variant="contained"
                 startIcon={<EditIcon />}
@@ -318,7 +322,7 @@ const index = () => {
             <Box sx={{ width: "100%", padding: 2 }}>
               <Stepper activeStep={activeStepIndex} alternativeLabel>
                 {steps.map((label, index) => (
-                  <Step key={label} completed={completed[index]}>
+                  <Step key={index} completed={completed[index]}>
                     <StepButton color="inherit" onClick={handleStep(index)}>
                       {label.tenGiaiDoan}
                     </StepButton>
@@ -336,7 +340,7 @@ const index = () => {
                       onClick={handleBack}
                       sx={{ mr: 1 }}
                     >
-                      Quay về
+                      Trở lại
                     </Button>
                     <Box sx={{ flex: "1 1 auto" }} />
                     <Button onClick={handleNext} sx={{ mr: 1 }}>

@@ -60,6 +60,21 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
+
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbykhachhang/{khachhangid}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetDonHangByKhachHang(string khachHangId)
+        {
+            try
+            {
+                var result = await _donHangServices.GetDonHangByKhachHangId(khachHangId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
         }
@@ -69,7 +84,7 @@ namespace CRM.Controllers.DonHangs
         {
             try
             {
-                var result = await _donHangServices.GetById(Id);
+                var result = await _donHangServices.GetDonHangId(Id);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -100,6 +115,20 @@ namespace CRM.Controllers.DonHangs
             try
             {
                 var result = await _donHangServices.Update(modal);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("xacnhandonhang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> XacNhanDonHang(Guid donHangId)
+        {
+            try
+            {
+                var result = await _donHangServices.XacNhanDonHang(donHangId);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -30,6 +30,7 @@ using CRM.Repositories.PhongBans;
 using CRM.Repositories.ThongBaos;
 using CRM.Repositories.TinhTrangs;
 using CRM.Repositories.XepLoais;
+using CRM.Services.Automations;
 using CRM.Services.BaoGias;
 using CRM.Services.ChucVus;
 using CRM.Services.CoHois;
@@ -189,6 +190,7 @@ builder.Services.AddScoped<IMailDaGuiServices, MailDaGuiServices>();
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
+builder.Services.AddHostedService<AutomationServices>();
 
 
 

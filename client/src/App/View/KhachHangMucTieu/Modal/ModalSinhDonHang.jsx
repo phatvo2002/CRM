@@ -13,6 +13,7 @@ import {
   useAddHangHoaQuanTamMutation,
   useDeleteHangHoaQuanTamMutation,
   useGetHangHoaQuanTamByBaoGiaIdQuery,
+  useGetHangHoaQuanTamByKhachHangIdQuery,
   useUpdateHangHoaQuanTamMutation,
 } from "src/App/Api/HangHoaQuanTam";
 import { validateDatePicker, validateString } from "src/App/Until/validateYup";
@@ -111,7 +112,7 @@ const modelObj = {
     [modelObj.thongTinGiaoHang]: validateString(),
   });
 export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
-  const [khachHangId, setKhachHangId] = useState(null);
+  console.log(khachHangData)
   const [isSave, setIsSave] = useState(false);
   const _isMounted = useRef(false),
     modalRef = useRef(null),
@@ -120,7 +121,7 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
     { data: hangHoas } = useGetAllHangHoaQuery(undefined, {
       skip: showModal == false,
     }),
-    { data: rows, refetch } = useGetHangHoaQuanTamByBaoGiaIdQuery(
+    { data: rows, refetch } = useGetHangHoaQuanTamByKhachHangIdQuery(
       id
     ),
     { data: dataBaoGia, isLoading: isBaoGiaFetching } = useGetBaoGiaListQuery(
@@ -138,11 +139,7 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
     { data: dataLoaiDonHang, isLoading: isGetLoaiDonHangFetching } =
       useGetAllLoaiDonHangQuery(undefined, { skip: showModal == false }),
     { data: dataLienHe, isLoading: isGetLienHeFetching } =
-      useGetLienHeByKhachHangMucTieuIdQuery(khachHangId, {
-        skip: showModal == false,
-      }),
-    { data: dataKhachhangMucTieu, isLoading: isGetKhachHangIsFeatching } =
-      useGetKhachHangMucTieuByNguoiDungIdQuery(undefined, {
+      useGetLienHeByKhachHangMucTieuIdQuery(id, {
         skip: showModal == false,
       }),
     [createData] = useAddHangHoaQuanTamMutation(),
@@ -153,8 +150,7 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
     isBaoGiaFetching ||
     isGetTinhTrangIsFetching ||
     isGetLoaiDonHangFetching ||
-    isGetLienHeFetching ||
-    isGetKhachHangIsFeatching;
+    isGetLienHeFetching;
   const handleAddClick = () => {
     const newRow = {
       id: uuidv4(),
@@ -367,8 +363,8 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
           [modelObj.thongTinGiaoHang]: data[modelObj.thongTinGiaoHang],
           [modelObj.thongTinHoaDon]: data[modelObj.thongTinHoaDon],
           [modelObj.maLoaiDonHang]: data[modelObj.maLoaiDonHang],
-          [modelObj.maBaoGia]: data[modelObj.maBaoGia],
-          [modelObj.maKhachHang]: data[modelObj.maKhachHang],
+          [modelObj.maBaoGia]: null,
+          [modelObj.maKhachHang]: id,
           [modelObj.maLienHe]: data[modelObj.maLienHe],
           [modelObj.maLoaiDonHang]: data[modelObj.maLoaiDonHang],
           [modelObj.maTinhTrangDonHang]: data[modelObj.maTinhTrangDonHang],
@@ -395,12 +391,13 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
       modalRef.current?.reset(
         {
           ...selectedItem,
-          [modelObj.maKhachHang]: khachHangData?.maKhachHang,
-          [modelObj.thongTinGiaoHang]: khachHangData?.diaChi,
+          [modelObj.thongTinGiaoHang]: khachHangData?.thongTinGiaoHang,
           [modelObj.maTinhTrangDonHang] :2,
           [modelObj.maTinhTrangGhiDoanhSo]: 1,
           [modelObj.maLoaiDonHang]: 1,
-          [modelObj.ngayDatHang] : new Date()
+          [modelObj.ngayDatHang] : new Date(),
+          [modelObj.hanThanhToan] : new Date(),
+          [modelObj.hanGiaoHang]: new Date(new Date().setDate(new Date().getDate() + 15))
         },
         { keepDirty: true }
       );
@@ -457,17 +454,6 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
           </Grid2>
           <Grid2 size={6}>
             <AutocompleteRHF
-              name={modelObj.maKhachHang}
-              label={labelObj.maKhachHang}
-              isGetOnlyId
-              disabled={isLoading}
-              data={commonMapDataAutocomplete(dataKhachhangMucTieu, "name")}
-              skeletonLoading={isGetKhachHangIsFeatching}
-              onChangeCallback={(v) => setKhachHangId(v)}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <AutocompleteRHF
               name={modelObj.maLienHe}
               label={labelObj.maLienHe}
               isGetOnlyId
@@ -492,16 +478,6 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
               disabled={isLoading}
               data={commonMapDataAutocomplete(dataLoaiDonHang, "name")}
               skeletonLoading={isGetLoaiDonHangFetching}
-            />
-          </Grid2>
-          <Grid2 size={6}>
-            <AutocompleteRHF
-              name={modelObj.maBaoGia}
-              label={labelObj.maBaoGia}
-              isGetOnlyId
-              disabled={isLoading}
-              data={commonMapDataAutocomplete(dataBaoGia, "name")}
-              skeletonLoading={isBaoGiaFetching}
             />
           </Grid2>
           <Grid2 size={6}>

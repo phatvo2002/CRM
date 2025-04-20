@@ -41,6 +41,10 @@ import { useDownloadFileMutation } from "src/App/Api/FileApi";
 import { ModalNhanBanBaoGia } from "./Component/ModalNhanBanBaoGia";
 import ModalPheDuyetBaoGia from "./Component/ModalPheDuyetBaoGia";
 import NoImage from "../../Assets/image/no-image.png";
+import dayjs from "dayjs";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const statusColors = {
   "Mới tạo": "#3498db",
@@ -141,7 +145,7 @@ const index = () => {
         >
           <Tooltip title="Sửa thông tin ">
             <IconButton
-              disabled={selectedRow.length === 0}
+              disabled={selectedRow.length == 0}
               style={{}}
               onClick={handleOpenModalSuaThongTinBaoGia}
             >
@@ -150,7 +154,7 @@ const index = () => {
           </Tooltip>
           <Tooltip title="Xóa">
             <IconButton
-              disabled={selectedRow.length === 0}
+              disabled={selectedRow.length == 0}
               style={{}}
               onClick={() => handleDeleteBaoGia(params?.id)}
             >
@@ -332,7 +336,14 @@ const index = () => {
       ),
     },
   ];
-  const { data: dataBaogia, refetch } = useGetBaoGiaListQuery();
+   const [valueTuNgay, setValueTuNgay] = React.useState(
+        dayjs().startOf("month")
+      );
+   const [valueDenNgay, setValueDenNgay] = React.useState(
+        dayjs().endOf("month")
+      );
+      
+  const { data: dataBaogia, refetch } = useGetBaoGiaListQuery({tuNgay :valueTuNgay , denNgay : valueDenNgay });
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -466,19 +477,43 @@ const index = () => {
             </MenuItem>
           </Menu>
         </Grid2>
-        <Grid2 size={12}>
-          <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
-            <CustomDatagrid
-              rows={rows}
-              columns={columns}
-              pageSizeOptions={[10, 25, 50]}
-              initialPageSize={25}
-              checkboxSelection={true}
-              showTopToolbar={true}
-              onRowSelectionChange={handleRowSelectionChange}
-            />
-          </Paper>
-        </Grid2>
+           <Grid2 size={12}>
+                  <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
+                    <Grid2 size={12}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer
+                          components={["DateTimePicker", "DateTimePicker"]}
+                        >
+                          <Stack
+                            direction={{ xs: "column", sm: "row" }}
+                            spacing={2}
+                            alignItems={{ xs: "stretch", sm: "center" }}
+                          >
+                            <DateTimePicker
+                              label="Từ ngày"
+                              value={valueTuNgay}
+                              onChange={(newValue) => setValueTuNgay(newValue)}
+                            />
+                            <DateTimePicker
+                              label="Đến ngày"
+                              value={valueDenNgay}
+                              onChange={(newValue) => setValueDenNgay(newValue)}
+                            />
+                          </Stack>
+                        </DemoContainer>
+                      </LocalizationProvider>
+                    </Grid2>
+                    <CustomDatagrid
+                      rows={rows}
+                      columns={columns}
+                      pageSizeOptions={[10, 25, 50]}
+                      initialPageSize={25}
+                      checkboxSelection={true}
+                      showTopToolbar={true}
+                      onRowSelectionChange={handleRowSelectionChange}
+                    />
+                  </Paper>
+                </Grid2>
       </Grid2>
       {/* Modal thêm mới báo giá */}
       <ModalThemBaoGia
