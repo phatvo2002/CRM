@@ -161,6 +161,11 @@ const CustomDatagrid = ({
           toolbarExport: "Xuất dữ liệu",
           toolbarQuickFilterPlaceholder:"Tìm kiếm"
         }}
+        initialState={{
+          pagination: {
+            paginationModel: { pageSize: 10, page: 0 },
+          },
+        }}
         componentsProps={{
           pagination: {
             sx: {

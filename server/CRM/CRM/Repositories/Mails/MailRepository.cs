@@ -91,7 +91,7 @@ namespace CRM.Repositories.Mails
                         chiTietSanPhamRows += $@"
                             <tr>
                                <td>{ct.TenHangHoa}</td>
-                               <td>{ct.DonViTinh}</td>
+                               <td>{ct.DonViTinh?.Name}</td>
                                <td>{ct.SoLuong}</td>
                                <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.DonGia)}</td>
                                <td>{string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", ct.ThanhTien)}</td>

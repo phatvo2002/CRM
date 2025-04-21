@@ -170,30 +170,6 @@ const KhachHangTiemNang = () => {
           </div>
         ),
       },
-      { field: "diaChi", headerName: "Địa Chỉ", width: 200 },
-      {
-        field: "soDienThoaiDiDong",
-        headerName: "Số điện thoại cá nhân",
-        width: 200,
-        renderCell: (params) =>
-          params.value ? (
-            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              <PhoneIcon style={{ padding: 2 }} color="success" />
-              <span>{params.value}</span>
-            </div>
-          ) : (
-            <div></div>
-          ),
-      },
-      {
-        field: "soDienThoaiCoQuan",
-        headerName: "Số điện thoại cơ quan",
-        width: 200,
-      },
-      { field: "emailCaNhan", headerName: "Email cá nhân", width: 200 },
-      { field: "EmailCoQuan", headerName: "Tài khoản", width: 200 },
-      { field: "nguonGoc", headerName: "Nguồn gốc khách hàng", width: 200 },
-      { field: "linhVuc", headerName: "Lĩnh vực", width: 200 },
       {
         field: "isChuyenDoi",
         headerName: "Chuyển đổi ",
@@ -218,6 +194,31 @@ const KhachHangTiemNang = () => {
           );
         },
       },
+      { field: "diaChi", headerName: "Địa Chỉ", width: 200 },
+      {
+        field: "soDienThoaiDiDong",
+        headerName: "Số điện thoại cá nhân",
+        width: 200,
+        renderCell: (params) =>
+          params.value ? (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <PhoneIcon style={{ padding: 2 }} color="success" />
+              <span>{params.value}</span>
+            </div>
+          ) : (
+            <div></div>
+          ),
+      },
+      {
+        field: "soDienThoaiCoQuan",
+        headerName: "Số điện thoại cơ quan",
+        width: 200,
+      },
+      { field: "emailCaNhan", headerName: "Email cá nhân", width: 200 },
+      { field: "EmailCoQuan", headerName: "Tài khoản", width: 200 },
+      { field: "nguonGoc", headerName: "Nguồn gốc khách hàng", width: 200 },
+      { field: "linhVuc", headerName: "Lĩnh vực", width: 200 },
+  
     ],
     [selectedRow]
   );
