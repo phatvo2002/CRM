@@ -11,11 +11,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-export const Barchart = ({ data , colorfill , width , height }) => {
+ const Barchart = ({ data , colorfill , height , dataKey , fill }) => {
   return (
-    <ResponsiveContainer width="100%" height="100%">
+    <ResponsiveContainer width="100%" height={height || 300}>
       <BarChart
-        width={width}
         height={height}
         data={data}
         margin={{
@@ -26,16 +25,18 @@ export const Barchart = ({ data , colorfill , width , height }) => {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey={data?.name} />
+        <XAxis  dataKey="name"/>
         <YAxis />
         <Tooltip />
         <Legend />
         <Bar
-          dataKey={data?.name}
-          fill="#8884d8"
+          dataKey={dataKey}
+          fill={fill}
           activeBar={<Rectangle fill={colorfill} stroke="blue" />}
         />
       </BarChart>
     </ResponsiveContainer>
   );
 };
+
+export default Barchart
