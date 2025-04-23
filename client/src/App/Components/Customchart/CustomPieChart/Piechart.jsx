@@ -8,22 +8,22 @@ import {
 } from 'recharts';
 import { Box, Typography, Stack } from '@mui/material';
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042','#43a047' ,'#212121'];
 
-const Piechart = ({ data, height = 300, dataKey = 'value', fill }) => {
+const Piechart = ({ data, height = 300, dataKey , fill }) => {
   const total = data.reduce((acc, item) => acc + item[dataKey], 0);
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-      <ResponsiveContainer width="60%" height={height}>
+      <ResponsiveContainer width="100%" height={height}>
         <PieChart>
           <Pie
             data={data}
             dataKey={dataKey}
             cx="50%"
             cy="50%"
-            innerRadius={70}
-            outerRadius={90}
+            // innerRadius={70}
+            // outerRadius={90}
             fill={fill || COLORS[0]}
             label={({ name, percent }) =>
               `${(percent * 100).toFixed(0)}%`
@@ -52,7 +52,7 @@ const Piechart = ({ data, height = 300, dataKey = 'value', fill }) => {
                 }}
               />
               <Typography>
-                {entry.name}: {entry[dataKey].toLocaleString()} ({((entry[dataKey] / total) * 100).toFixed(1)}%)
+                {entry.name}: {entry[dataKey]} ({((entry[dataKey] / total) * 100).toFixed(1)}%)
               </Typography>
             </Box>
           ))}

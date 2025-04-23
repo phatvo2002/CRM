@@ -28,8 +28,13 @@ import { Grid } from "@mui/joy";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import Barchart from "src/App/Components/Customchart/CustomBarchart/Barchart";
-const BanLamViecTrPhong = () => {
+import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
+import LineCh from "src/App/Components/Customchart/CustomLine/LineCh";
+import { topNhanVien } from "src/App/Until/DataDefault";
+import { coHoiData } from "src/App/Until/DataDefault";
+import { doanhSoTheoHangHoaData } from "src/App/Until/DataDefault";
+import { donHangTheoTrangThai } from "src/App/Until/DataDefault";
+const index = () => {
   const statistics = [
     {
       title: "Tổng số khách tiềm năng mới",
@@ -97,58 +102,6 @@ const BanLamViecTrPhong = () => {
       previousMonthValue: 50000000,
     },
   ];
-
-  const dataDoanhThu = [
-    {
-      id: 1,
-      name: "Phòng kinh doanh 1",
-      doanhThu: 70000000,
-    },
-    {
-      id: 2,
-      name: "Phòng kinh doanh 2",
-      doanhThu: 100000000,
-    },
-    {
-      id: 3,
-      name: "Phòng kinh doanh 3",
-      doanhThu: 50000000,
-    },
-  ];
-
-  const topNhanVien = [
-    {
-      id: 1,
-      name: "Nguyễn Văn A",
-      doanhThu: 150000000,
-      avatar: "https://i.pravatar.cc/40?img=1",
-    },
-    {
-      id: 2,
-      name: "Trần Thị B",
-      doanhThu: 140000000,
-      avatar: "https://i.pravatar.cc/40?img=2",
-    },
-    {
-      id: 3,
-      name: "Lê Văn C",
-      doanhThu: 130000000,
-      avatar: "https://i.pravatar.cc/40?img=3",
-    },
-    {
-      id: 4,
-      name: "Phạm Thị D",
-      doanhThu: 120000000,
-      avatar: "https://i.pravatar.cc/40?img=4",
-    },
-    {
-      id: 5,
-      name: "Hoàng Văn E",
-      doanhThu: 110000000,
-      avatar: "https://i.pravatar.cc/40?img=5",
-    },
-  ];
-
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
   const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
 
@@ -263,48 +216,99 @@ const BanLamViecTrPhong = () => {
         </Grid2>
         <Grid2 container spacing={2}>
           <Grid2 size={6}>
-            <Typography variant="h5" sx={{ textAlign: "center" }}>
-              <b>Doanh thu theo phòng ban</b>
-            </Typography>{" "}
-            <Barchart
-              data={dataDoanhThu}
-              colorfill={"#1769aa"}
-              fill={"#1769aa"}
-              height={500}
-              dataKey="doanhThu"
-            />
-          </Grid2>
-          <Grid2 size={6}>
             <Paper sx={{ padding: 2 }}>
               <Typography variant="h5" sx={{ textAlign: "center" }}>
-                <b>  🏆 Top 5 Nhân Viên Có Doanh Thu Cao Nhất</b>
+                <b> Top 5 Nhân Viên Có Doanh Thu Cao Nhất</b>
               </Typography>
-              <TableContainer>
-                <Table style={{width : "100%"}}>
+              <TableContainer
+                component={Paper}
+                sx={{
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                  borderRadius: "12px",
+                }}
+              >
+                <Table
+                  sx={{
+                    minWidth: 650,
+                    "& .MuiTableCell-root": { padding: "12px 16px" },
+                  }}
+                >
                   <TableHead>
-                    <TableRow>
-                      <TableCell>STT</TableCell>
-                      <TableCell>Nhân viên</TableCell>
-                      <TableCell align="right">Doanh thu</TableCell>
+                    <TableRow
+                      sx={{
+                        backgroundColor: "#f5f7fa",
+                        "& .MuiTableCell-head": {
+                          fontWeight: 600,
+                          color: "#1a1a1a",
+                          fontSize: "0.9rem",
+                          textTransform: "uppercase",
+                          letterSpacing: "0.5px",
+                        },
+                      }}
+                    >
+                      <TableCell sx={{ width: "10%" }}>STT</TableCell>
+                      <TableCell sx={{ width: "60%" }}>Nhân viên</TableCell>
+                      <TableCell align="right" sx={{ width: "30%" }}>
+                        Doanh thu
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {topNhanVien.map((nv, index) => (
-                      <TableRow key={nv.id}>
+                      <TableRow
+                        key={nv.id}
+                        hover
+                        sx={{
+                          "&:hover": {
+                            backgroundColor: "#f9fafb",
+                            transition: "background-color 0.2s ease",
+                          },
+                          "& .MuiTableCell-body": {
+                            fontSize: "0.95rem",
+                            color: "#333",
+                            borderBottom: "1px solid #e8ecef",
+                          },
+                        }}
+                      >
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>
                           <Box
                             sx={{
                               display: "flex",
                               alignItems: "center",
-                              gap: 1,
+                              gap: 1.5,
                             }}
                           >
-                            <Avatar src={nv.avatar} />
-                            <Typography>{nv.name}</Typography>
+                            <Avatar
+                              src={nv.avatar}
+                              sx={{
+                                width: 40,
+                                height: 40,
+                                border: "2px solid #e0e0e0",
+                                bgcolor: "#f0f0f0",
+                              }}
+                            />
+                            <Typography
+                              sx={{
+                                fontWeight: 500,
+                                fontSize: "1rem",
+                                color: "#1a1a1a",
+                              }}
+                            >
+                              {nv.name}
+                            </Typography>
                           </Box>
                         </TableCell>
-                        <TableCell align="right">{nv.doanhThu}</TableCell>
+                        <TableCell align="right">
+                          <Typography
+                            sx={{ fontWeight: 500, color: "#2e7d32" }}
+                          >
+                            {new Intl.NumberFormat("vi-VN", {
+                              style: "currency",
+                              currency: "VND",
+                            }).format(nv.doanhThu)}
+                          </Typography>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -312,10 +316,43 @@ const BanLamViecTrPhong = () => {
               </TableContainer>
             </Paper>
           </Grid2>
+          <Grid2 size={6}>
+            <Typography variant="h5" sx={{ textAlign: "center" }}>
+              <b>Doanh số theo hàng hóa</b>
+            </Typography>{" "}
+            <LineCh
+              data={doanhSoTheoHangHoaData}
+              dataKey1={"name"}
+              dataKey2={"cost"}
+              height={500}
+            />
+          </Grid2>
+          <Grid2 size={6}>
+            <Typography variant="h5" sx={{ textAlign: "center" }}>
+              <b>Cơ hội theo giai đoạn</b>
+            </Typography>{" "}
+            <Piechart
+              data={coHoiData}
+              dataKey={"soLuong"}
+              fill={"#03a9f4"}
+              height={500}
+            />
+          </Grid2>
+          <Grid2 size={6}>
+            <Typography variant="h5" sx={{ textAlign: "center" }}>
+              <b>Đơn hàng theo trạng thái</b>
+            </Typography>{" "}
+            <Piechart
+              data={donHangTheoTrangThai}
+              dataKey={"number"}
+              fill={"#03a9f4"}
+              height={500}
+            />
+          </Grid2>
         </Grid2>
       </Paper>
     </>
   );
 };
 
-export default BanLamViecTrPhong;
+export default index;
