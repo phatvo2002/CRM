@@ -105,6 +105,44 @@ export const dataDoanhThu = [
     },
   ];
 
+export const khachHangTuongTacGanDay = [
+  {
+    id : 1 ,
+    name : "Khách hàng A",
+    active : "Gọi điện thoại đặt hàng",
+    time : "9h 30 phút",
+    status : "hoàn thành"
+  },
+  {
+    id : 2 ,
+    name : "Khách hàng B",
+    active : "Gọi điện thoại đặt hàng",
+    time : "9h 30 phút",
+    status : "hoàn thành"
+  },
+  {
+    id : 3 ,
+    name : "Khách hàng C",
+    active : "Gọi điện thoại đặt hàng",
+    time : "9h 30 phút",
+    status : "hoàn thành"
+  },
+  {
+    id : 4 ,
+    name : "Khách hàng D",
+    active : "Gọi điện thoại đặt hàng",
+    time : "9h 30 phút",
+    status : "hoàn thành"
+  },
+  {
+    id : 5 ,
+    name : "Khách hàng E",
+    active : "Gọi điện thoại đặt hàng",
+    time : "9h 30 phút",
+    status : "hoàn thành"
+  }
+]
+
  export const donHangTheoTrangThai = [
     {
       name:"Mới",
@@ -148,3 +186,54 @@ export const dataDoanhThu = [
     }
   ]
 
+export const baoGiaTheoTrangThai =[
+  {
+    name : "Đang chờ duyệt",
+    number : 3
+  },
+  {
+    name : "Đã duyệt",
+    number : 1
+  },
+  {
+    name : "Đã gửi khách hàng",
+    number : 2
+  },
+  {
+    name : "Được chấp nhận",
+    number : 1
+  },
+  {
+    name : "Từ chối",
+    number : 0
+  },
+  {
+    name : "Hết hạn",
+    number : 0
+  },
+  {
+    name : "Đã chuyển thành đơn hàng",
+    number : 3
+  },
+
+]
+
+export const cuocGoiTheoTrangThai =[
+    {
+      name : "Không nghe máy",
+      number : 10
+    },
+    {
+      name : "Thành công",
+      number : 4
+    },
+    {
+      name : "Số điện thoại lỗi",
+      number : 0
+    },
+    {
+      name : "Máy bận",
+      number : 10
+    },
+
+]
