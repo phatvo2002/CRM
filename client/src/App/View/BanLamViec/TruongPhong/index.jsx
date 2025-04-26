@@ -229,7 +229,6 @@ const index = () => {
               >
                 <Table
                   sx={{
-                    minWidth: 650,
                     "& .MuiTableCell-root": { padding: "12px 16px" },
                   }}
                 >
@@ -247,8 +246,8 @@ const index = () => {
                       }}
                     >
                       <TableCell sx={{ width: "10%" }}>STT</TableCell>
-                      <TableCell sx={{ width: "60%" }}>Nhân viên</TableCell>
-                      <TableCell align="right" sx={{ width: "30%" }}>
+                      <TableCell >Nhân viên</TableCell>
+                      <TableCell align="center" >
                         Doanh thu
                       </TableCell>
                     </TableRow>
