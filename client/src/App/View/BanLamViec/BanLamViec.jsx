@@ -47,15 +47,20 @@ import { useState } from "react";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import LineCh from "src/App/Components/Customchart/CustomLine/LineCh";
 import Barchart from "src/App/Components/Customchart/CustomBarchart/Barchart";
-import { doanhThuTheoNamData, top5NhanVienSuatSac } from "src/App/Until/DataDefault";
+import {
+  doanhThuTheoNamData,
+  top5NhanVienSuatSac,
+} from "src/App/Until/DataDefault";
 import { dataDoanhThuPhongBan } from "src/App/Until/DataDefault";
 import { dataTheoMucTieu } from "src/App/Until/DataDefault";
 import { dataCoHoiTheoGiaiDoan } from "src/App/Until/DataDefault";
 import { topNhanVien } from "src/App/Until/DataDefault";
+import { hieuSuatNhanVien } from "src/App/Until/DataDefault";
+import { phanBoNguonKhachHang } from "src/App/Until/DataDefault";
 import CustomBarchartDouble from "src/App/Components/Customchart/CustomBarchartDouble/CustomBarchartDouble";
 import FunnelChart from "src/App/Components/Customchart/CustomFunnelChart/FunnelChart";
 import StackedBarChart from "src/App/Components/Customchart/CustomStackedBarChart/StackedBarChart";
-import { hieuSuatNhanVien } from "src/App/Until/DataDefault";
+import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
 const BanLamViec = () => {
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
   const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
@@ -198,7 +203,7 @@ const BanLamViec = () => {
               />
             </Paper>
           </Grid2>
-          <Grid2 size={4}>
+          <Grid2 size={6}>
             <Paper>
               <Typography variant="h6" sx={{ textAlign: "left" }}>
                 <b>Tổng quan doanh thu theo phòng ban</b>
@@ -210,9 +215,146 @@ const BanLamViec = () => {
               />
             </Paper>
           </Grid2>
-          <Grid2 size={4}>
-            <Paper sx={{ padding: 2 }}>
+          <Grid2 size={6}>
+            <Paper>
               <Typography variant="h5" sx={{ textAlign: "center" }}>
+                <b>So sánh doanh số theo mục tiêu</b>
+              </Typography>
+              <CustomBarchartDouble
+                data={dataTheoMucTieu}
+                dataKeyName={"thang"}
+                dataKey1={"mucTieu"}
+                dataKey2={"mucTieuThucTe"}
+                height={440}
+              />
+            </Paper>
+          </Grid2>
+        
+          
+          <Grid2 size={12}>
+            <Typography variant="body1" sx={{ textAlign: "center" }}>
+              <b>Tổng quan khách hàng</b>
+            </Typography>
+          </Grid2>
+          <Grid2 size={6}>
+            <Paper>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
+                <b>Cơ hội theo giai đoạn</b>
+              </Typography>
+              <FunnelChart
+                data={dataCoHoiTheoGiaiDoan}
+                dataKey={"soLuong"}
+                nameKey={"tenCoHoi"}
+                fill={"mauSac"}
+              />
+            </Paper>
+          </Grid2>
+          <Grid2 size={6}>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
+                <b>Nguồn gốc khách hàng</b>
+              </Typography>
+              <Piechart data={phanBoNguonKhachHang} dataKey={"value"} height={400} />
+          </Grid2>
+          <Grid2 size={12}>
+            <Typography variant="h5" sx={{ textAlign: "center" }}>
+              <b>Hiệu suất nhân viên</b>
+            </Typography>
+          </Grid2>
+          <Grid2 size={6}>
+            <Typography variant="body1" sx={{ textAlign: "center" }}>
+              <b>Top 5 nhân viên suất sắc nhất</b>
+            </Typography>
+            <TableContainer
+              component={Paper}
+              sx={{
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                borderRadius: "12px",
+                height: 400,
+              }}
+            >
+              <Table
+                sx={{
+                  "& .MuiTableCell-root": { padding: "12px 16px" },
+                }}
+              >
+                <TableHead>
+                  <TableRow
+                    sx={{
+                      backgroundColor: "background.primary",
+                      "& .MuiTableCell-head": {
+                        fontWeight: 600,
+                        color: "#1a1a1a",
+                        fontSize: "0.9rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      },
+                    }}
+                  >
+                    <TableCell sx={{ width: "10%" }}>STT</TableCell>
+                    <TableCell>Nhân viên</TableCell>
+                    <TableCell align="center">Cuộc gọi hoàn thành</TableCell>
+                    <TableCell align="center">Lịch hẹn hoàn thành</TableCell>
+                    <TableCell align="center">Nhiệm vụ hoàn thành</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {top5NhanVienSuatSac.map((nv, index) => (
+                    <TableRow
+                      key={nv.id}
+                      hover
+                      sx={{
+                        "&:hover": {
+                          backgroundColor: "background.primary",
+                          transition: "background-color 0.2s ease",
+                        },
+                        "& .MuiTableCell-body": {
+                          fontSize: "0.95rem",
+                          color: "#333",
+                          borderBottom: "1px solid #e8ecef",
+                        },
+                      }}
+                    >
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1.5,
+                          }}
+                        >
+                          <Avatar
+                            src={nv.avatar}
+                            sx={{
+                              width: 40,
+                              height: 40,
+                              border: "2px solid #e0e0e0",
+                              bgcolor: "#f0f0f0",
+                            }}
+                          />
+                          <Typography
+                            sx={{
+                              fontWeight: 500,
+                              fontSize: "1rem",
+                              color: "background.primary",
+                            }}
+                          >
+                            {nv.name}
+                          </Typography>
+                        </Box>
+                      </TableCell>
+                      <TableCell align="right">{nv.cuocgoi}</TableCell>
+                      <TableCell align="right">{nv.lichHen}</TableCell>
+                      <TableCell align="right">{nv.NhiemVuHoanThanh}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid2>
+          <Grid2 size={6}>
+            <Paper sx={{ padding: 2 }}>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
                 <b> Top 5 Nhân Viên Có Doanh Thu Cao Nhất</b>
               </Typography>
               <TableContainer
@@ -220,7 +362,7 @@ const BanLamViec = () => {
                 sx={{
                   boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                   borderRadius: "12px",
-                  height: 380,
+                  height: 400,
                 }}
               >
                 <Table
@@ -312,138 +454,11 @@ const BanLamViec = () => {
               </TableContainer>
             </Paper>
           </Grid2>
-          <Grid2 size={4}>
-            <Paper>
-              <Typography variant="h5" sx={{ textAlign: "center" }}>
-                <b>So sánh doanh số theo mục tiêu</b>
-              </Typography>
-              <CustomBarchartDouble
-                data={dataTheoMucTieu}
-                dataKeyName={"thang"}
-                dataKey1={"mucTieu"}
-                dataKey2={"mucTieuThucTe"}
-                height={440}
-              />
-            </Paper>
-          </Grid2>
-          <Grid2 size={12}>
-            <Paper>
-              <Typography variant="body1" sx={{ textAlign: "center" }}>
-                <b>Cơ hội theo giai đoạn</b>
-              </Typography>
-              <FunnelChart
-                data={dataCoHoiTheoGiaiDoan}
-                dataKey={"soLuong"}
-                nameKey={"tenCoHoi"}
-                fill={"mauSac"}
-              />
-            </Paper>
-          </Grid2>
-          <Grid2 size={12}>
-            <Typography variant="h5" sx={{ textAlign: "center" }}>
-              <b>Hiệu suất nhân viên</b>
-            </Typography>
-          </Grid2>
-          <Grid2 size={6}>
-            <Typography variant="body1" sx={{ textAlign: "center" }}>
-              <b>Top 5 nhân viên suất sắc nhất</b>
-            </Typography>
-            <TableContainer
-                component={Paper}
-                sx={{
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                  borderRadius: "12px",
-                  height: 380,
-                }}
-              >
-                <Table
-                  sx={{
-                    "& .MuiTableCell-root": { padding: "12px 16px" },
-                  }}
-                >
-                  <TableHead>
-                    <TableRow
-                      sx={{
-                        backgroundColor: "background.primary",
-                        "& .MuiTableCell-head": {
-                          fontWeight: 600,
-                          color: "#1a1a1a",
-                          fontSize: "0.9rem",
-                          textTransform: "uppercase",
-                          letterSpacing: "0.5px",
-                        },
-                      }}
-                    >
-                      <TableCell sx={{ width: "10%" }}>STT</TableCell>
-                      <TableCell>Nhân viên</TableCell>
-                      <TableCell align="center">Cuộc gọi hoàn thành</TableCell>
-                      <TableCell align="center">Lịch hẹn hoàn thành</TableCell>
-                      <TableCell align="center">Nhiệm vụ hoàn thành</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {top5NhanVienSuatSac.map((nv, index) => (
-                      <TableRow
-                        key={nv.id}
-                        hover
-                        sx={{
-                          "&:hover": {
-                            backgroundColor: "background.primary",
-                            transition: "background-color 0.2s ease",
-                          },
-                          "& .MuiTableCell-body": {
-                            fontSize: "0.95rem",
-                            color: "#333",
-                            borderBottom: "1px solid #e8ecef",
-                          },
-                        }}
-                      >
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1.5,
-                            }}
-                          >
-                            <Avatar
-                              src={nv.avatar}
-                              sx={{
-                                width: 40,
-                                height: 40,
-                                border: "2px solid #e0e0e0",
-                                bgcolor: "#f0f0f0",
-                              }}
-                            />
-                            <Typography
-                              sx={{
-                                fontWeight: 500,
-                                fontSize: "1rem",
-                                color: "background.primary",
-                              }}
-                            >
-                              {nv.name}
-                            </Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell align="right">
-                           {nv.cuocgoi}
-                        </TableCell>
-                        <TableCell align="right">
-                           {nv.lichHen}
-                        </TableCell>
-                        <TableCell align="right">
-                           {nv.NhiemVuHoanThanh}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-          </Grid2>  
 
           <Grid2 size={6}>
+             <Typography variant="body1" sx={{ textAlign: "center" }}>
+                <b>Hoạt động nhân viên</b>
+              </Typography>
             <StackedBarChart
               data={hieuSuatNhanVien}
               dataKeyName={"tenNhanVien"}

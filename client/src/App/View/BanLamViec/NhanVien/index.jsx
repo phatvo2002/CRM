@@ -94,7 +94,7 @@ const hieuSuatBanHangData = [
     previousMonthValue: 10,
   },
   {
-    title: "Doanh số tháng này",
+    title: "Doanh thu tháng này",
     description: "",
     icon: <PaidIcon fontSize="large" />,
     increase: <NorthIcon fontSize="large" />,
