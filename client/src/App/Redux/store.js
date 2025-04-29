@@ -24,6 +24,7 @@ import { apiMucTieuDoanhSo } from '../Api/MucTieuDoanhSo.Api';
 import { apiKPINhanVien } from '../Api/KPINhanVien.api';
 import { xepLoaiApi } from '../Api/XepLoai.api';
 import { mailDaGuiApi } from '../Api/MailDaGui.Api';
+import { baoCaoApi } from '../Api/BaoCao.api';
 const apis = [
   apiPhongban,
   apiUser,
@@ -49,7 +50,8 @@ const apis = [
   apiMucTieuDoanhSo,
   apiKPINhanVien,
   xepLoaiApi,
-  mailDaGuiApi
+  mailDaGuiApi,
+  baoCaoApi
 ];
 
 const store = configureStore({

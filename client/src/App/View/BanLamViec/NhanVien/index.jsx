@@ -20,7 +20,7 @@ import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import CasesIcon from "@mui/icons-material/Cases";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -37,74 +37,9 @@ import { coHoiData, cuocGoiTheoTrangThai } from "src/App/Until/DataDefault";
 import { baoGiaTheoTrangThai } from "src/App/Until/DataDefault";
 import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
 import { khachHangTuongTacGanDay } from "src/App/Until/DataDefault";
-const hieuSuatBanHangData = [
-  {
-    title: "Tổng số tiềm năng đã chuyển đổi",
-    value: 2,
-    description: "",
-    icon: <Person2Icon fontSize="large" />,
-    increase: <NorthIcon fontSize="large" />,
-    decrease: <SouthIcon fontSize="large" />,
-    color: "#b28900",
-    currentMonthValue: 15,
-    previousMonthValue: 10,
-  },
-  {
-    title: "Tỷ lệ chuyển đổi tiềm năng thành khách hàng (%)",
-    value: 2,
-    description: "",
-    icon: <PersonPinIcon fontSize="large" />,
-    increase: <NorthIcon fontSize="large" />,
-    decrease: <SouthIcon fontSize="large" />,
-    color: "#f44336",
-    currentMonthValue: 50,
-    previousMonthValue: 30,
-  },
-  {
-    title: "Tổng số cơ hội mới",
-    value: 0,
-    description: "",
-    icon: <CasesIcon fontSize="large" />,
-    increase: <NorthIcon fontSize="large" />,
-    decrease: <SouthIcon fontSize="large" />,
-    color: "#ff7043",
-    currentMonthValue: 15,
-    previousMonthValue: 10,
-  },
-  {
-    title: "Tổng số báo giá mới",
-    value: 0,
-    description: "",
-    icon: <RequestQuoteIcon fontSize="large" />,
-    increase: <NorthIcon fontSize="large" />,
-    decrease: <SouthIcon fontSize="large" />,
-    color: "#b22a00",
-    currentMonthValue: 15,
-    previousMonthValue: 10,
-  },
-  {
-    title: "Tổng số đơn hàng",
-    value: 0,
-    description: "",
-    icon: <LocalMallIcon fontSize="large" />,
-    increase: <NorthIcon fontSize="large" />,
-    decrease: <SouthIcon fontSize="large" />,
-    color: "#b26500",
-    currentMonthValue: 15,
-    previousMonthValue: 10,
-  },
-  {
-    title: "Doanh thu tháng này",
-    description: "",
-    icon: <PaidIcon fontSize="large" />,
-    increase: <NorthIcon fontSize="large" />,
-    decrease: <SouthIcon fontSize="large" />,
-    color: "#84c887",
-    currentMonthValue: 100000000,
-    previousMonthValue: 50000000,
-  },
-];
-
+import { useGetBaoTongTheQuery } from "src/App/Api/BaoCao.api";
+import { dataCoHoiTheoGiaiDoan } from "src/App/Until/DataDefault";
+import FunnelChartCustom from "src/App/Components/Customchart/CustomFunnelChart/FunnelChart";
 const hoatDongTuongTacData = [
   {
     title: "Tổng số nhiệm vụ đã hoàn thành",
@@ -143,6 +78,76 @@ const hoatDongTuongTacData = [
 const index = () => {
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
   const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
+  const [dataBaoCao, setDataBaoCao] = useState(null);
+  const { data: dataBaoCaoTongThe, isSuccess } = useGetBaoTongTheQuery({ tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"), denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59") })
+
+  const hieuSuatBanHangData = [
+    {
+      title: "Tổng số tiềm năng đã chuyển đổi",
+      value: 2,
+      description: "",
+      icon: <Person2Icon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#b28900",
+      currentMonthValue: dataBaoCao?.khachHangTiemNangHienTai,
+      previousMonthValue: dataBaoCao?.khachHangTiemNangThangTruoc,
+    },
+    {
+      title: "Tỷ lệ chuyển đổi tiềm năng thành khách hàng (%)",
+      value: 2,
+      description: "",
+      icon: <PersonPinIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#f44336",
+      currentMonthValue: dataBaoCao?.tiLeChuyenDoiKhachHangThangHienTai,
+      previousMonthValue: dataBaoCao?.tiLeChuyenDoiKhachHangThangTruoc,
+    },
+    {
+      title: "Tổng số cơ hội mới",
+      value: 0,
+      description: "",
+      icon: <CasesIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#ff7043",
+      currentMonthValue: dataBaoCao?.tongSoCoHoiHienTai,
+      previousMonthValue: dataBaoCao?.tongSoCoHoiThangTruoc,
+    },
+    {
+      title: "Tổng số báo giá mới",
+      value: 0,
+      description: "",
+      icon: <RequestQuoteIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#b22a00",
+      currentMonthValue: dataBaoCao?.tongSoBaoGiaHienTai,
+      previousMonthValue: dataBaoCao?.tongSoBaoGiaThangTruoc,
+    },
+    {
+      title: "Tổng số đơn hàng",
+      value: 0,
+      description: "",
+      icon: <LocalMallIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#b26500",
+      currentMonthValue: dataBaoCao?.tongSoDonHangHienTai,
+      previousMonthValue: dataBaoCao?.tongSoDonHangThangTruoc,
+    },
+    {
+      title: "Doanh thu tháng này",
+      description: "",
+      icon: <PaidIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#84c887",
+      currentMonthValue: dataBaoCao?.tongDoanhThuHienTai,
+      previousMonthValue: dataBaoCao?.tongDoanhThuThangTruoc,
+    },
+  ];
   const StatisticCard = ({
     title,
     currentMonthValue,
@@ -157,12 +162,18 @@ const index = () => {
           ? 100
           : 0
         : Math.round(
-            ((currentMonthValue - previousMonthValue) / previousMonthValue) *
-              100
-          );
+          ((currentMonthValue - previousMonthValue) / previousMonthValue) *
+          100
+        );
 
     const isIncrease = percentChange >= 0;
     const ChangeIcon = isIncrease ? NorthIcon : SouthIcon;
+
+    useEffect(() => {
+      if (isSuccess && dataBaoCaoTongThe) {
+        setDataBaoCao(dataBaoCaoTongThe);
+      }
+    }, [isSuccess, dataBaoCaoTongThe]);
 
     return (
       <Paper
@@ -188,7 +199,7 @@ const index = () => {
           </Typography>
 
           <Typography variant="h5" fontWeight="bold">
-            {currentMonthValue.toLocaleString("vi-VN")}
+            {currentMonthValue}
           </Typography>
 
           <Stack direction="row" alignItems="center" spacing={1}>
@@ -201,7 +212,7 @@ const index = () => {
               {percentChange}%
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              so với tháng trước ({previousMonthValue.toLocaleString("vi-VN")})
+              so với tháng trước ({previousMonthValue})
             </Typography>
           </Stack>
 
@@ -261,7 +272,12 @@ const index = () => {
               <b>Cơ hội theo giai đoạn bán hàng </b>
             </Typography>{" "}
             <Paper>
-              <Barchart data={coHoiData} dataKey={"soLuong"} height={500} />
+              <FunnelChartCustom
+                data={dataCoHoiTheoGiaiDoan}
+                dataKey={"soLuong"}
+                nameKey={"tenCoHoi"}
+                fill={"mauSac"}
+              />
             </Paper>
           </Grid2>
           <Grid2 size={12}>
@@ -326,15 +342,15 @@ const index = () => {
                       },
                     }}
                   >
-                    <TableCell sx={{  }}>STT</TableCell>
-                    <TableCell sx={{  }}>Tên khách hàng</TableCell>
-                    <TableCell align="right" sx={{  }}>
+                    <TableCell sx={{}}>STT</TableCell>
+                    <TableCell sx={{}}>Tên khách hàng</TableCell>
+                    <TableCell align="right" sx={{}}>
                       Hoạt động
                     </TableCell>
-                    <TableCell align="right" sx={{  }}>
+                    <TableCell align="right" sx={{}}>
                       Thời gian
                     </TableCell>
-                    <TableCell align="right" sx={{  }}>
+                    <TableCell align="right" sx={{}}>
                       Trạng thái
                     </TableCell>
                   </TableRow>
@@ -398,7 +414,7 @@ const index = () => {
             </TableContainer>
           </Grid2>
           <Grid2 size={4}>
-              <Piechart data={cuocGoiTheoTrangThai} dataKey={"number"}/>
+            <Piechart data={cuocGoiTheoTrangThai} dataKey={"number"} />
           </Grid2>
         </Grid2>
       </Paper>

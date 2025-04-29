@@ -17,7 +17,7 @@
         public int TongSoDonHangHienTai { get; set; }
         public int TongSoDonHangThangTruoc { get; set; }
         // dữ liệu doanh số tháng này và tháng trước
-        public double TongDoanhThuHienTai { get; set; }
-        public double TongDoanhThuThangTruoc { get; set; }
+        public decimal TongDoanhThuHienTai { get; set; }
+        public decimal TongDoanhThuThangTruoc { get; set; }
     }
 }
