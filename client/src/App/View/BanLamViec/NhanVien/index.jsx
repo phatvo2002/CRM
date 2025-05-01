@@ -15,8 +15,6 @@ import {
 } from "@mui/material";
 import SouthIcon from "@mui/icons-material/South";
 import NorthIcon from "@mui/icons-material/North";
-import PersonIcon from "@mui/icons-material/Person";
-import ChangeCircleIcon from "@mui/icons-material/ChangeCircle";
 import CasesIcon from "@mui/icons-material/Cases";
 import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
@@ -33,18 +31,18 @@ import Person2Icon from "@mui/icons-material/Person2";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import PaidIcon from "@mui/icons-material/Paid";
 import Barchart from "src/App/Components/Customchart/CustomBarchart/Barchart";
-import { coHoiData, cuocGoiTheoTrangThai } from "src/App/Until/DataDefault";
-import { baoGiaTheoTrangThai } from "src/App/Until/DataDefault";
 import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
-import { khachHangTuongTacGanDay } from "src/App/Until/DataDefault";
 import {
+  useGetBaoCaoHoatDongQuery,
   useGetBaoCaoTheoBaoGiaQuery,
   useGetBaoCaoTheoCoHoiQuery,
   useGetBaoCaoTheoDonHangQuery,
   useGetBaoTongTheQuery,
+  useGetCuocGoiTheoTrangThaiQuery,
+  useGetTop5KhachHangTuongTacQuery,
 } from "src/App/Api/BaoCao.api";
-import { dataCoHoiTheoGiaiDoan } from "src/App/Until/DataDefault";
 import FunnelChartCustom from "src/App/Components/Customchart/CustomFunnelChart/FunnelChart";
+import Moment from "react-moment";
 
 const index = () => {
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
@@ -53,6 +51,11 @@ const index = () => {
   const [baoCaoTheoCoHoiState, setBaoCaoTheoCoHoiState] = useState(null);
   const [baoCaoBaoGiaState, setBaoCaoBaoGiaState] = useState(null);
   const [baoCaoDonHangState, setBaoCaoDonHangState] = useState(null);
+  const [baoCaoHoatDongState, setBaoCaoHoatDongState] = useState(null);
+  const [baoCaoTop5KhTuongTacGanDay, setBaoCaoTop5KhachHangTuongTacGanDay] =
+    useState(null);
+  const [baoCaoCuocGoiTheoTrangThaiState, setBaoCaoCuocGoiTheoTrangThaiState] =
+    useState(null);
   const { data: dataBaoCaoTongThe } = useGetBaoTongTheQuery({
     tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
     denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
@@ -69,6 +72,20 @@ const index = () => {
     tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
     denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
   });
+  const { data: dataHoatDong } = useGetBaoCaoHoatDongQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataTop5KhachHangTuongTacGanDay } =
+    useGetTop5KhachHangTuongTacQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+    });
+  const { data: dataBaoCaoCuocGoiTheoTrangThai } =
+    useGetCuocGoiTheoTrangThaiQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+    });
   const hieuSuatBanHangData = [
     {
       title: "Tổng số tiềm năng đã chuyển đổi",
@@ -145,8 +162,9 @@ const index = () => {
       increase: <NorthIcon fontSize="large" />,
       decrease: <SouthIcon fontSize="large" />,
       color: "#b2102f",
-      currentMonthValue: dataBaoCao?.tongSoNhiemVuDaHoanThanhhienTai,
-      previousMonthValue: dataBaoCao?.tongSoNhiemVuDaHoanThanhThangTruoc,
+      currentMonthValue: baoCaoHoatDongState?.tongSoNhiemVuDaHoanThanhhienTai,
+      previousMonthValue:
+        baoCaoHoatDongState?.tongSoNhiemVuDaHoanThanhThangTruoc,
     },
     {
       title: "Cuộc gọi đã thực hiện",
@@ -156,8 +174,8 @@ const index = () => {
       increase: <NorthIcon fontSize="large" />,
       decrease: <SouthIcon fontSize="large" />,
       color: "#4caf50",
-      currentMonthValue: dataBaoCao?.tongSoCuocGoiHienTai,
-      previousMonthValue: dataBaoCao?.tongSoCuocGoiThangTruoc,
+      currentMonthValue: baoCaoHoatDongState?.tongSoCuocGoiHienTai,
+      previousMonthValue: baoCaoHoatDongState?.tongSoCuocGoiThangTruoc,
     },
     {
       title: "Lịch hẹn đã thực hiện",
@@ -167,8 +185,8 @@ const index = () => {
       increase: <NorthIcon fontSize="large" />,
       decrease: <SouthIcon fontSize="large" />,
       color: "#ffea00",
-      currentMonthValue: dataBaoCao?.tongSoLichHenHienTai,
-      previousMonthValue: dataBaoCao?.tongSoLichHenCuaThangTruoc,
+      currentMonthValue: baoCaoHoatDongState?.tongSoLichHenHienTai,
+      previousMonthValue: baoCaoHoatDongState?.tongSoLichHenCuaThangTruoc,
     },
   ];
   const StatisticCard = ({
@@ -221,6 +239,29 @@ const index = () => {
         setBaoCaoDonHangState([]);
       }
     }, [dataDonHang]);
+    useEffect(() => {
+      if (dataHoatDong) {
+        setBaoCaoHoatDongState(dataHoatDong);
+      } else {
+        setBaoCaoHoatDongState([]);
+      }
+    }, [dataHoatDong]);
+
+    useEffect(() => {
+      if (dataTop5KhachHangTuongTacGanDay) {
+        setBaoCaoTop5KhachHangTuongTacGanDay(dataTop5KhachHangTuongTacGanDay);
+      } else {
+        setBaoCaoTop5KhachHangTuongTacGanDay([]);
+      }
+    }, [dataTop5KhachHangTuongTacGanDay]);
+
+    useEffect(() => {
+      if (dataBaoCaoCuocGoiTheoTrangThai) {
+        setBaoCaoCuocGoiTheoTrangThaiState(dataBaoCaoCuocGoiTheoTrangThai);
+      } else {
+        setBaoCaoCuocGoiTheoTrangThaiState([]);
+      }
+    }, [dataBaoCaoCuocGoiTheoTrangThai]);
 
     return (
       <Paper
@@ -399,71 +440,81 @@ const index = () => {
                   >
                     <TableCell sx={{}}>STT</TableCell>
                     <TableCell sx={{}}>Tên khách hàng</TableCell>
-                    <TableCell align="right" sx={{}}>
+                    <TableCell align="center" sx={{}}>
                       Hoạt động
                     </TableCell>
-                    <TableCell align="right" sx={{}}>
+                    <TableCell align="center" sx={{}}>
                       Thời gian
                     </TableCell>
-                    <TableCell align="right" sx={{}}>
+                    <TableCell align="center" sx={{}}>
                       Trạng thái
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {khachHangTuongTacGanDay.map((khachhang, index) => (
-                    <TableRow
-                      key={khachhang.id}
-                      hover
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "#f9fafb",
-                          transition: "background-color 0.2s ease",
-                        },
-                        "& .MuiTableCell-body": {
-                          fontSize: "0.95rem",
-                          color: "#333",
-                          borderBottom: "1px solid #e8ecef",
-                        },
-                      }}
-                    >
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1.5,
-                          }}
-                        >
-                          <Typography
+                  {Array.isArray(baoCaoTop5KhTuongTacGanDay) &&
+                    baoCaoTop5KhTuongTacGanDay.length > 0 &&
+                    baoCaoTop5KhTuongTacGanDay.map((khachhang, index) => (
+                      <TableRow
+                        key={khachhang.id}
+                        hover
+                        sx={{
+                          "&:hover": {
+                            backgroundColor: "#f9fafb",
+                            transition: "background-color 0.2s ease",
+                          },
+                          "& .MuiTableCell-body": {
+                            fontSize: "0.95rem",
+                            color: "#333",
+                            borderBottom: "1px solid #e8ecef",
+                          },
+                        }}
+                      >
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>
+                          <Box
                             sx={{
-                              fontWeight: 500,
-                              fontSize: "1rem",
-                              color: "#1a1a1a",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1.5,
                             }}
                           >
-                            {khachhang.name}
+                            <Typography
+                              sx={{
+                                fontWeight: 500,
+                                fontSize: "1rem",
+                                color: "#1a1a1a",
+                              }}
+                            >
+                              {khachhang.tenKhachHang}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography>{khachhang.tenHoatDong}</Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography>
+                            {" "}
+                            <Moment format="DD/MM/YYYY ">
+                              {new Date(khachhang.thoiGian)}
+                            </Moment>
                           </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Typography>{khachhang.active}</Typography>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Typography>{khachhang.time}</Typography>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Typography>{khachhang.status}</Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography>{khachhang.trangThaiThucHien}</Typography>
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
           </Grid2>
           <Grid2 size={4}>
-            <Piechart data={cuocGoiTheoTrangThai} dataKey={"number"} />
+            {Array.isArray(baoCaoCuocGoiTheoTrangThaiState) &&
+              baoCaoCuocGoiTheoTrangThaiState.length > 0 && (
+                <Piechart data={baoCaoCuocGoiTheoTrangThaiState} dataKey={"number"} />
+              )}
           </Grid2>
         </Grid2>
       </Paper>

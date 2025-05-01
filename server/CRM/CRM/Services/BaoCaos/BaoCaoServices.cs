@@ -11,13 +11,17 @@ namespace CRM.Services.BaoCaos
             _baoCaoRepository = baoCaoRepository;
         }
 
-        public async Task<List<BaoCaoBaoGiaDTO>> BaoCaoBaoGia(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        public async Task<List<BaoCaoResultDTO>> BaoCaoBaoGia(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
             return await _baoCaoRepository.BaoCaoBaoGia(tuNgay, denNgay, nguoiDungId);
         }
 
+        public async Task<List<BaoCaoResultDTO>> BaoCaoCuocGoiTheoTrangThai(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        {
+            return await _baoCaoRepository.BaoCaoCuocGoiTheoTrangThai(tuNgay, denNgay, nguoiDungId);
+        }
 
-        public async Task<List<BaoCaoDonHangDTO>> BaoCaoDonHang(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        public async Task<List<BaoCaoResultDTO>> BaoCaoDonHang(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
             return await _baoCaoRepository.BaoCaoDonHang(tuNgay, denNgay, nguoiDungId);
         }
@@ -25,6 +29,11 @@ namespace CRM.Services.BaoCaos
         public async Task<List<BaoCaoCoHoiDTO>> BaoCaoTheoCoHoi(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
             return await _baoCaoRepository.BaoCaoTheoCoHoi(tuNgay, denNgay, nguoiDungId);
+        }
+
+        public async Task<List<BaoCaoTop5KhachHangTuongTac>> BaoCaoTop5KhachHangTuongTac(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        {
+            return await _baoCaoRepository.BaoCaoTop5KhachHangTuongTac(tuNgay, denNgay, nguoiDungId);
         }
 
         public async Task<BaoCaoHoatDongDTO> GetBaoCaoHoatDong(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)

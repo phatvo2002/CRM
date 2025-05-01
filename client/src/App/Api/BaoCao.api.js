@@ -21,6 +21,9 @@ export const baoCaoApi = createApi({
       getBaoTongThe: builder.query({
         query: ({tuNgay , denNgay}) => `/BaoCao/getbaocaotongthe?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
+      getBaoCaoHoatDong: builder.query({
+        query: ({tuNgay , denNgay}) => `/BaoCao/getbaocaotongthehoatdong?tuNgay=${tuNgay}&denNgay=${denNgay}`,
+      }),
       getBaoCaoTheoCoHoi: builder.query({
         query: ({tuNgay , denNgay}) => `/BaoCao/getbaocaotheocohoi?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
@@ -30,13 +33,22 @@ export const baoCaoApi = createApi({
       getBaoCaoTheoDonHang: builder.query({
         query: ({tuNgay , denNgay}) => `/BaoCao/getbaocaodonhang?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
+      getTop5KhachHangTuongTac: builder.query({
+        query: ({tuNgay , denNgay}) => `/BaoCao/gettop5khachhangtuongtacganday?tuNgay=${tuNgay}&denNgay=${denNgay}`,
+      }),
+      getCuocGoiTheoTrangThai: builder.query({
+        query: ({tuNgay , denNgay}) => `/BaoCao/getbaocaocuocgoitheotrangthai?tuNgay=${tuNgay}&denNgay=${denNgay}`,
+      }),
     }),
   });
   export const { 
     useGetBaoTongTheQuery,
     useGetBaoCaoTheoCoHoiQuery,
     useGetBaoCaoTheoBaoGiaQuery,
-    useGetBaoCaoTheoDonHangQuery
+    useGetBaoCaoTheoDonHangQuery,
+    useGetBaoCaoHoatDongQuery,
+    useGetTop5KhachHangTuongTacQuery,
+    useGetCuocGoiTheoTrangThaiQuery
   } = baoCaoApi;
 
 

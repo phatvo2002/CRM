@@ -67,7 +67,6 @@ namespace CRM.Repositories.BaoCaos
             }
 
         }
-
         public async Task<List<BaoCaoCoHoiDTO>> BaoCaoTheoCoHoi(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
             var dataNguoiDung = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefaultAsync();
@@ -136,12 +135,10 @@ namespace CRM.Repositories.BaoCaos
 
             return result;
         }
-
-
-        public async Task<List<BaoCaoBaoGiaDTO>> BaoCaoBaoGia(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        public async Task<List<BaoCaoResultDTO>> BaoCaoBaoGia(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
             var dataNguoiDung = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefaultAsync();
-            var result = new List<BaoCaoBaoGiaDTO>();
+            var result = new List<BaoCaoResultDTO>();
             if (dataNguoiDung != null)
             {
                 if (dataNguoiDung.CheckIsTruongPhong == false)
@@ -152,7 +149,7 @@ namespace CRM.Repositories.BaoCaos
                         var groupBaoGia = dbBaoGia.GroupBy(r => r.MaTinhTrangBaoGia);
                         foreach (var group in groupBaoGia)
                         {
-                            result.Add(new BaoCaoBaoGiaDTO
+                            result.Add(new BaoCaoResultDTO
                             {
                                 Name = group.First().TinhTrangBaoGia.Name,
                                 Number = group.Count()
@@ -169,7 +166,7 @@ namespace CRM.Repositories.BaoCaos
                         var groupBaoGia = dbBaoGia.GroupBy(r => r.MaTinhTrangBaoGia);
                         foreach (var group in groupBaoGia)
                         {
-                            result.Add(new BaoCaoBaoGiaDTO
+                            result.Add(new BaoCaoResultDTO
                             {
                                 Name = group.First().TinhTrangBaoGia.Name,
                                 Number = group.Count()
@@ -180,14 +177,13 @@ namespace CRM.Repositories.BaoCaos
 
                 }
             }
-            else return new List<BaoCaoBaoGiaDTO>();
+            else return new List<BaoCaoResultDTO>();
             return result;
         }
-
-        public async Task<List<BaoCaoDonHangDTO>> BaoCaoDonHang(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        public async Task<List<BaoCaoResultDTO>> BaoCaoDonHang(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
             var dbNguoiDung = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefaultAsync();
-            var result = new List<BaoCaoDonHangDTO>();
+            var result = new List<BaoCaoResultDTO>();
             if (dbNguoiDung != null)
             {
                 if (dbNguoiDung.CheckIsTruongPhong == false)
@@ -198,7 +194,7 @@ namespace CRM.Repositories.BaoCaos
                         var groupDonHang = dbDonhang.GroupBy(r => r.MaTinhTrangDonHang);
                         foreach (var item in groupDonHang)
                         {
-                            result.Add(new BaoCaoDonHangDTO
+                            result.Add(new BaoCaoResultDTO
                             {
                                 Name = item.First().TinhTrangDonHang.Name,
                                 Number = item.Count(),
@@ -215,7 +211,7 @@ namespace CRM.Repositories.BaoCaos
                         var groupDonHang = dbDonhang.GroupBy(r => r.MaTinhTrangDonHang);
                         foreach (var item in groupDonHang)
                         {
-                            result.Add(new BaoCaoDonHangDTO
+                            result.Add(new BaoCaoResultDTO
                             {
                                 Name = item.First().TinhTrangDonHang.Name,
                                 Number = item.Count(),
@@ -225,12 +221,11 @@ namespace CRM.Repositories.BaoCaos
                     }
                 }
             }
-            else return new List<BaoCaoDonHangDTO>();
+            else return new List<BaoCaoResultDTO>();
 
             return result;
 
         }
-
         public async Task<BaoCaoHoatDongDTO> GetBaoCaoHoatDong(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
             var thoiGianTuNgayThangTruoc = tuNgay.AddMonths(-1);
@@ -329,7 +324,83 @@ namespace CRM.Repositories.BaoCaos
             }
             return result;
         }
+        public async Task<List<BaoCaoTop5KhachHangTuongTac>> BaoCaoTop5KhachHangTuongTac(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        {
+            var result = new List<BaoCaoTop5KhachHangTuongTac>();
+            var dbKhachHangTuongTac = await _context.CuocGois.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay))
+                .Include(r => r.KhachHangMucTieu).Include(r => r.KhachHangTiemNang)
+                .ToListAsync();
+            if (dbKhachHangTuongTac != null)
+            {
+                var top5KhachHangTuongTac = dbKhachHangTuongTac.OrderByDescending(r => r.CreateAt).Take(5);
+                int stt = 1;
+                foreach (var item in top5KhachHangTuongTac)
+                {
+                    result.Add(new BaoCaoTop5KhachHangTuongTac
+                    {
+                        Id = item.Id,
+                        STT = stt,
+                        TenHoatDong = item.TieuDe,
+                        TenKhachHang = item.KhachHangTiemNang.TenKhachHang != null ? item.KhachHangTiemNang.TenKhachHang : item.KhachHangMucTieu.TenKhachHang,
+                        ThoiGian = (DateTime)item.CreateAt,
+                        TrangThaiThucHien = item.IsHoanThanh == false ? "Chưa hoàn thành" : "Hoàn thành",
+                    });
+                }
+            }
+            return result;
+        }
+        public async Task<List<BaoCaoResultDTO>> BaoCaoCuocGoiTheoTrangThai(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        {
+            var result = new List<BaoCaoResultDTO>();
+            var dbNguoiDung = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefaultAsync();
+            if (dbNguoiDung != null)
+            {
+                // lấy dữ liệu khi là nhân viên
+                if (dbNguoiDung.CheckIsTruongPhong == false)
+                {
+                    var dbCuocGoi = await _context.CuocGois.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.KetQuaCuocGoi).ToListAsync();
+                    if (dbCuocGoi != null)
+                    {
+                        var dbCuocGoiGroup = dbCuocGoi.GroupBy(r => r.KetQuaCuocGoiId);
+                        foreach (var item in dbCuocGoiGroup)
+                        {
+                            result.Add(new BaoCaoResultDTO
+                            {
+                                Name = item.First().KetQuaCuocGoi.Name,
+                                Number = item.Count()
+                            });
+                        }
+                    }
+                    else { result.Add(new BaoCaoResultDTO { Name = "Không có dữ liệu", Number = 0 }); }
+                }
+                // lấy dữ liệu khi là trưởng phòng
+                else
+                {
+                    var dbCuocGoi = await _context.CuocGois.Where(r => r.PhongBanId == dbNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)).Include(r => r.KetQuaCuocGoi).ToListAsync();
+                    if (dbCuocGoi != null)
+                    {
+                        var dbCuocGoiGroup = dbCuocGoi.GroupBy(r => r.KetQuaCuocGoiId);
+                        foreach (var item in dbCuocGoiGroup)
+                        {
+                            result.Add(new BaoCaoResultDTO
+                            {
+                                Name = item.First().KetQuaCuocGoi.Name,
+                                Number = item.Count()
+                            });
+                        }
+                    }
+                    else { result.Add(new BaoCaoResultDTO { Name = "Không có dữ liệu", Number = 0 }); }
+                }
+            }
+            else { result.Add(new BaoCaoResultDTO { Name = "Không có dữ liệu", Number = 0 }); }
+            return result;
+        }
+        // Hàm xử lý báo cáo dành cho ban lãnh đạo công ty 
+        public Task<BaoCaoDoanhThuDTO> BaoCaoDoanhThu(DateTime tuNgay, DateTime denNgay)
+        {
 
+            throw new NotImplementedException();
+        }
         private string LayMauSacTheoGiaiDoan(int maGiaiDoan)
         {
             string maMau = "";
@@ -345,7 +416,6 @@ namespace CRM.Repositories.BaoCaos
             };
             return maMau;
         }
-
         private async Task<int> LayTongSoTheoNguoiDungAsync<T>(IQueryable<T> query, DateTime tuNgay, DateTime denNgay, Guid nguoiDungId) where T : class
         {
 
@@ -402,6 +472,7 @@ namespace CRM.Repositories.BaoCaos
             }
             else return 0;
         }
+
 
     }
 }
