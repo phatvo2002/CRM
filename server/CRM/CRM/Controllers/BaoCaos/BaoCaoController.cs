@@ -29,5 +29,69 @@ namespace CRM.Controllers.BaoCaos
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getbaocaotongthehoatdong")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoTongTheHoatDong(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                var result = await _baoCaoServices.GetBaoCaoHoatDong(tuNgay, denNgay, nguoiDungId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaocaotheocohoi")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoTheoCoHoi(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                var result = await _baoCaoServices.BaoCaoTheoCoHoi(tuNgay, denNgay, nguoiDungId);
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaocaobaogia")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoBaoGia(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                var result = await _baoCaoServices.BaoCaoBaoGia(tuNgay, denNgay, nguoiDungId);
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaocaodonhang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoBaoDonHang(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                var result = await _baoCaoServices.BaoCaoDonHang(tuNgay, denNgay, nguoiDungId);
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

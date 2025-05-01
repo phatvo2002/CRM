@@ -149,5 +149,32 @@ namespace CRM.Repositories.CoHois
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
         }
+
+        public async Task<List<CoHoiDTO>> GetAllData(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        {
+            var dataNguoiDung = _crmDbContext.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefault();
+            if (dataNguoiDung != null)
+            {
+                if (dataNguoiDung.CheckIsGiamDoc == false)
+                {
+                    if (dataNguoiDung.CheckIsTruongPhong == false)
+                    {
+                        var dataCoHoi = await _crmDbContext.CoHois.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).ToListAsync();
+                        return _mapper.Map<List<CoHoiDTO>>(dataCoHoi);
+                    }
+                    else
+                    {
+                        var dataCoHoi = await _crmDbContext.CoHois.Where(r => r.PhongBanId == dataNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).ToListAsync();
+                        return _mapper.Map<List<CoHoiDTO>>(dataCoHoi);
+                    }
+                }
+                else
+                {
+                    var dataCoHoi = await _crmDbContext.CoHois.Where(r => (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).ToListAsync();
+                    return _mapper.Map<List<CoHoiDTO>>(dataCoHoi);
+                }
+            }
+            return new List<CoHoiDTO>();
+        }
     }
 }

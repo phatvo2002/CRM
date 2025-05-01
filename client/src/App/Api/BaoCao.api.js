@@ -21,12 +21,22 @@ export const baoCaoApi = createApi({
       getBaoTongThe: builder.query({
         query: ({tuNgay , denNgay}) => `/BaoCao/getbaocaotongthe?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
-
-     
+      getBaoCaoTheoCoHoi: builder.query({
+        query: ({tuNgay , denNgay}) => `/BaoCao/getbaocaotheocohoi?tuNgay=${tuNgay}&denNgay=${denNgay}`,
+      }),
+      getBaoCaoTheoBaoGia: builder.query({
+        query: ({tuNgay , denNgay}) => `/BaoCao/getbaocaobaogia?tuNgay=${tuNgay}&denNgay=${denNgay}`,
+      }),
+      getBaoCaoTheoDonHang: builder.query({
+        query: ({tuNgay , denNgay}) => `/BaoCao/getbaocaodonhang?tuNgay=${tuNgay}&denNgay=${denNgay}`,
+      }),
     }),
   });
   export const { 
-    useGetBaoTongTheQuery
+    useGetBaoTongTheQuery,
+    useGetBaoCaoTheoCoHoiQuery,
+    useGetBaoCaoTheoBaoGiaQuery,
+    useGetBaoCaoTheoDonHangQuery
   } = baoCaoApi;
 
 

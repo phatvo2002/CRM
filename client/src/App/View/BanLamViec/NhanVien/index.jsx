@@ -37,50 +37,38 @@ import { coHoiData, cuocGoiTheoTrangThai } from "src/App/Until/DataDefault";
 import { baoGiaTheoTrangThai } from "src/App/Until/DataDefault";
 import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
 import { khachHangTuongTacGanDay } from "src/App/Until/DataDefault";
-import { useGetBaoTongTheQuery } from "src/App/Api/BaoCao.api";
+import {
+  useGetBaoCaoTheoBaoGiaQuery,
+  useGetBaoCaoTheoCoHoiQuery,
+  useGetBaoCaoTheoDonHangQuery,
+  useGetBaoTongTheQuery,
+} from "src/App/Api/BaoCao.api";
 import { dataCoHoiTheoGiaiDoan } from "src/App/Until/DataDefault";
 import FunnelChartCustom from "src/App/Components/Customchart/CustomFunnelChart/FunnelChart";
-const hoatDongTuongTacData = [
-  {
-    title: "Tổng số nhiệm vụ đã hoàn thành",
-    value: 0,
-    description: "",
-    icon: <TaskAltIcon fontSize="large" />,
-    increase: <NorthIcon fontSize="large" />,
-    decrease: <SouthIcon fontSize="large" />,
-    color: "#b2102f",
-    currentMonthValue: 15,
-    previousMonthValue: 10,
-  },
-  {
-    title: "Cuộc gọi đã thực hiện",
-    value: 0,
-    description: "",
-    icon: <PhoneForwardedIcon fontSize="large" />,
-    increase: <NorthIcon fontSize="large" />,
-    decrease: <SouthIcon fontSize="large" />,
-    color: "#4caf50",
-    currentMonthValue: 15,
-    previousMonthValue: 10,
-  },
-  {
-    title: "Lịch hẹn đã thực hiện",
-    value: 0,
-    description: "",
-    icon: <CalendarMonthIcon fontSize="large" />,
-    increase: <NorthIcon fontSize="large" />,
-    decrease: <SouthIcon fontSize="large" />,
-    color: "#ffea00",
-    currentMonthValue: 15,
-    previousMonthValue: 10,
-  },
-];
+
 const index = () => {
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
   const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
   const [dataBaoCao, setDataBaoCao] = useState(null);
-  const { data: dataBaoCaoTongThe, isSuccess } = useGetBaoTongTheQuery({ tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"), denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59") })
-
+  const [baoCaoTheoCoHoiState, setBaoCaoTheoCoHoiState] = useState(null);
+  const [baoCaoBaoGiaState, setBaoCaoBaoGiaState] = useState(null);
+  const [baoCaoDonHangState, setBaoCaoDonHangState] = useState(null);
+  const { data: dataBaoCaoTongThe } = useGetBaoTongTheQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataBaoCaoTheoCoHoi } = useGetBaoCaoTheoCoHoiQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataBaoGia } = useGetBaoCaoTheoBaoGiaQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataDonHang } = useGetBaoCaoTheoDonHangQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
   const hieuSuatBanHangData = [
     {
       title: "Tổng số tiềm năng đã chuyển đổi",
@@ -148,6 +136,41 @@ const index = () => {
       previousMonthValue: dataBaoCao?.tongDoanhThuThangTruoc,
     },
   ];
+  const hoatDongTuongTacData = [
+    {
+      title: "Tổng số nhiệm vụ đã hoàn thành",
+      value: 0,
+      description: "",
+      icon: <TaskAltIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#b2102f",
+      currentMonthValue: dataBaoCao?.tongSoNhiemVuDaHoanThanhhienTai,
+      previousMonthValue: dataBaoCao?.tongSoNhiemVuDaHoanThanhThangTruoc,
+    },
+    {
+      title: "Cuộc gọi đã thực hiện",
+      value: 0,
+      description: "",
+      icon: <PhoneForwardedIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#4caf50",
+      currentMonthValue: dataBaoCao?.tongSoCuocGoiHienTai,
+      previousMonthValue: dataBaoCao?.tongSoCuocGoiThangTruoc,
+    },
+    {
+      title: "Lịch hẹn đã thực hiện",
+      value: 0,
+      description: "",
+      icon: <CalendarMonthIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#ffea00",
+      currentMonthValue: dataBaoCao?.tongSoLichHenHienTai,
+      previousMonthValue: dataBaoCao?.tongSoLichHenCuaThangTruoc,
+    },
+  ];
   const StatisticCard = ({
     title,
     currentMonthValue,
@@ -162,18 +185,42 @@ const index = () => {
           ? 100
           : 0
         : Math.round(
-          ((currentMonthValue - previousMonthValue) / previousMonthValue) *
-          100
-        );
+            ((currentMonthValue - previousMonthValue) / previousMonthValue) *
+              100
+          );
 
     const isIncrease = percentChange >= 0;
     const ChangeIcon = isIncrease ? NorthIcon : SouthIcon;
 
     useEffect(() => {
-      if (isSuccess && dataBaoCaoTongThe) {
+      if (dataBaoCaoTongThe) {
         setDataBaoCao(dataBaoCaoTongThe);
       }
-    }, [isSuccess, dataBaoCaoTongThe]);
+    }, [dataBaoCaoTongThe]);
+
+    useEffect(() => {
+      if (dataBaoCaoTheoCoHoi) {
+        setBaoCaoTheoCoHoiState(dataBaoCaoTheoCoHoi);
+      } else {
+        setBaoCaoTheoCoHoiState([]);
+      }
+    }, [dataBaoCaoTheoCoHoi]);
+
+    useEffect(() => {
+      if (dataBaoGia) {
+        setBaoCaoBaoGiaState(dataBaoGia);
+      } else {
+        setBaoCaoBaoGiaState([]);
+      }
+    }, [dataBaoGia]);
+
+    useEffect(() => {
+      if (dataDonHang) {
+        setBaoCaoDonHangState(dataDonHang);
+      } else {
+        setBaoCaoDonHangState([]);
+      }
+    }, [dataDonHang]);
 
     return (
       <Paper
@@ -221,7 +268,6 @@ const index = () => {
       </Paper>
     );
   };
-
   return (
     <>
       <Paper>
@@ -272,12 +318,15 @@ const index = () => {
               <b>Cơ hội theo giai đoạn bán hàng </b>
             </Typography>{" "}
             <Paper>
-              <FunnelChartCustom
-                data={dataCoHoiTheoGiaiDoan}
-                dataKey={"soLuong"}
-                nameKey={"tenCoHoi"}
-                fill={"mauSac"}
-              />
+              {Array.isArray(baoCaoTheoCoHoiState) &&
+                baoCaoTheoCoHoiState.length > 0 && (
+                  <FunnelChartCustom
+                    data={baoCaoTheoCoHoiState}
+                    dataKey="soLuong"
+                    nameKey="tenCoHoi"
+                    fill="mauSac"
+                  />
+                )}
             </Paper>
           </Grid2>
           <Grid2 size={12}>
@@ -285,24 +334,30 @@ const index = () => {
               <b>Kết quả bán hàng </b>
             </Typography>{" "}
           </Grid2>
-          <Grid2 size={4}>
+          <Grid2 size={6}>
             <Typography variant="body1" sx={{ textAlign: "left" }}>
               <b>Báo giá theo trạng thái</b>
             </Typography>{" "}
-            <Piechart data={baoGiaTheoTrangThai} dataKey={"number"} />
+            {Array.isArray(baoCaoBaoGiaState) &&
+              baoCaoBaoGiaState.length > 0 && (
+                <Piechart data={baoCaoBaoGiaState} dataKey={"number"} />
+              )}
           </Grid2>
-          <Grid2 size={4}>
+          <Grid2 size={6}>
             <Typography variant="body1" sx={{ textAlign: "left" }}>
               <b>Đơn hàng theo trạng thái</b>
             </Typography>{" "}
-            <Piechart data={baoGiaTheoTrangThai} dataKey={"number"} />
+            {Array.isArray(baoCaoDonHangState) &&
+              baoCaoDonHangState.length > 0 && (
+                <Piechart data={baoCaoDonHangState} dataKey={"number"} />
+              )}
           </Grid2>
-          <Grid2 size={4}>
+          {/* <Grid2 size={4}>
             <Typography variant="body1" sx={{ textAlign: "left" }}>
               <b>Khách hàng tiềm năng chuyển đổi</b>
             </Typography>{" "}
             <Piechart data={baoGiaTheoTrangThai} dataKey={"number"} />
-          </Grid2>
+          </Grid2> */}
           <Grid2 size={12}>
             <Typography variant="h5" sx={{ textAlign: "left" }}>
               <b>Tổng quan hoạt động tương tác</b>
@@ -393,19 +448,13 @@ const index = () => {
                         </Box>
                       </TableCell>
                       <TableCell align="center">
-                        <Typography >
-                          {khachhang.active}
-                        </Typography>
+                        <Typography>{khachhang.active}</Typography>
                       </TableCell>
                       <TableCell align="center">
-                        <Typography >
-                          {khachhang.time}
-                        </Typography>
+                        <Typography>{khachhang.time}</Typography>
                       </TableCell>
                       <TableCell align="center">
-                        <Typography >
-                          {khachhang.status}
-                        </Typography>
+                        <Typography>{khachhang.status}</Typography>
                       </TableCell>
                     </TableRow>
                   ))}

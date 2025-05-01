@@ -17,7 +17,7 @@ export const apiCoHoi = createApi({
     }),
     endpoints: (builder) => ({
       getAllCoHoi: builder.query({
-        query: () => `/CoHoi/getallcohoi`,
+        query: ({tuNgay, denNgay}) => `/CoHoi/getallcohoi?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
       getCoHoiById: builder.query({
         query: (id) => `/CoHoi/getcohoibyid/${id}`,

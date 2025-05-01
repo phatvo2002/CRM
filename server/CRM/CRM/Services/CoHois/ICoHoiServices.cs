@@ -7,6 +7,7 @@ namespace CRM.Services.CoHois
     public interface ICoHoiServices : IBaseServices<CoHoi, CoHoiModal, Guid, CoHoiDTO>
     {
         Task<ResultModal> ConvertCoHoi(CoHoiModal modal, Guid nguoiDung, Guid phongBan);
+        Task<List<CoHoiDTO>> GetAllData(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId);
         Task<CoHoiDTO> GetCoHoiById(string id);
         Task<List<CoHoiDTO>> GetCoHoiByNguoiDungId(Guid nguoiDungId);
         Task<List<CoHoiDTO>> GetCoHoiByPhongBanId(Guid phongBanId);

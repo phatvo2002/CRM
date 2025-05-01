@@ -90,9 +90,9 @@ namespace CRM.Entities
         {
             // optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=1000;");
             //Local connection :
-            // optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=CRM_V2;User Id=sa;Password=abc@123;Encrypt=True;TrustServerCertificate=true;Connection Timeout=1000;");
+            optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=CRM_V2;User Id=sa;Password=abc@123;Encrypt=True;TrustServerCertificate=true;Connection Timeout=1000;");
             // optionsBuilder.UseSqlServer("Server=MSI\\MSSQLSERVER6;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=6000;");
-            optionsBuilder.UseSqlServer("Server=DESKTOP-7IV23S1;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
+            // optionsBuilder.UseSqlServer("Server=DESKTOP-7IV23S1;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

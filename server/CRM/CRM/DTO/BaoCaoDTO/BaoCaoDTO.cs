@@ -19,5 +19,14 @@
         // dữ liệu doanh số tháng này và tháng trước
         public decimal TongDoanhThuHienTai { get; set; }
         public decimal TongDoanhThuThangTruoc { get; set; }
+        // dữ liệu cuộc gọi
+        public int TongSoCuocGoiHienTai { get; set; }
+        public int TongSoCuocGoiThangTruoc { get; set; }
+        // dữ liệu nhiệm vụ
+        public int TongSoNhiemVuDaHoanThanhhienTai { get; set; }
+        public int TongSoNhiemVuDaHoanThanhThangTruoc { get; set; }
+        // dữ liệu lịch hẹn
+        public int TongSoLichHenHienTai { get; set; }
+        public int TongSoLichHenCuaThangTruoc { get; set; }
     }
 }
