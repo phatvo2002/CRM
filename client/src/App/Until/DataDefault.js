@@ -1,16 +1,13 @@
 export const dataDoanhThuPhongBan = [
     {
-      id: 1,
       name: "Phòng kinh doanh 1",
       doanhThu: 70000000,
     },
     {
-      id: 2,
       name: "Phòng kinh doanh 2",
       doanhThu: 100000000,
     },
     {
-      id: 3,
       name: "Phòng kinh doanh 3",
       doanhThu: 50000000,
     },
@@ -396,25 +393,25 @@ export const top5NhanVienSuatSac =[
 export const phanBoNguonKhachHang = [
   {
     name : "Nhân viên kinh doanh tự tìm kiếm",
-    value : 10 
+    number : 10 
   },
   {
     name : "Khách hàng hoặc đối tác giới thiệu",
-    value : 10 
+    number : 10 
   },
   {
     name : "Thông qua sự kiện , hội thảo , tập huấn",
-    value : 10 
+    number : 10 
   },{
     name : "Khách hàng tự tìm đến",
-    value : 10 
+    number : 10 
   },
   {
     name : "Marketing",
-    value : 10 
+    number : 10 
   },
   {
     name : "Khác",
-    value : 10 
+    number : 10 
   },
 ]

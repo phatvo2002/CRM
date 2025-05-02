@@ -125,5 +125,107 @@ namespace CRM.Controllers.BaoCaos
             }
         }
 
+        [HttpGet("getbaocaodoanhthu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoDoanhThu(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                var result = await _baoCaoServices.BaoCaoDoanhThu(tuNgay, denNgay);
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaocaodoanhthutheonam")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoDoanhThuTheoNam(int nam)
+        {
+            try
+            {
+                var result = await _baoCaoServices.BaoCaoDoanhThuTheonam(nam);
+                return Ok(result);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaocaodoanhthutheophongban")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoDoanhThuTheoPhongBan(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                var result = await _baoCaoServices.BaoCaoDoanhThuTheoPhongBan(tuNgay, denNgay);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaocaososanhmuctieudoanhso")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoSoSanhMucTieuDoanhSo(DateTime tuNgay, DateTime denNgay, int nam)
+        {
+            try
+            {
+                var result = await _baoCaoServices.BaoCaoSoSanhMucTieuDoanhSo(tuNgay, denNgay, nam);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaocaonguongockhachhang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoNguonGocKhachHang(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                var result = await _baoCaoServices.BaoCaoNguonGocKhachHang(tuNgay, denNgay);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaocaotop5nhanviensuatsacnhat")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoTop5NhanVienSuatSacNhat(DateTime tuNgay, DateTime denNgay, int type)
+        {
+            try
+            {
+                var result = await _baoCaoServices.BaoCaoTop5NhanVienSuatSacNhat(tuNgay, denNgay, type);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaocaotop5nhanviencodoanhthucaonhat")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoTop5NhanVienCoDoanhThuCaoNhat(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                Guid userId = HttpContext.GetUserId();
+                var result = await _baoCaoServices.BaoCaoTop5NhanVienCoDoanhThuCaoNhat(tuNgay, denNgay, userId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

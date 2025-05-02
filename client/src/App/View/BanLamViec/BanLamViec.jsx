@@ -1,4 +1,3 @@
-
 import PaidIcon from "@mui/icons-material/Paid";
 import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -11,8 +10,12 @@ import {
   Autocomplete,
   Avatar,
   Box,
+  FormControl,
   Grid2,
+  InputLabel,
+  MenuItem,
   Paper,
+  Select,
   Stack,
   Table,
   TableBody,
@@ -22,7 +25,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LineCh from "src/App/Components/Customchart/CustomLine/LineCh";
 import Barchart from "src/App/Components/Customchart/CustomBarchart/Barchart";
 import {
@@ -39,10 +42,134 @@ import CustomBarchartDouble from "src/App/Components/Customchart/CustomBarchartD
 import FunnelChart from "src/App/Components/Customchart/CustomFunnelChart/FunnelChart";
 import StackedBarChart from "src/App/Components/Customchart/CustomStackedBarChart/StackedBarChart";
 import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
+import {
+  useGetBaoCaoDoanhThuQuery,
+  useGetBaoCaoDoanhThuTheoNamQuery,
+  useGetBaoCaoDoanhThuTheoPhongBanQuery,
+  useGetBaoCaoNguonGocKhachHangQuery,
+  useGetBaoCaoSoSanhMucTieuDoanhSoQuery,
+  useGetBaoCaoTheoCoHoiQuery,
+} from "src/App/Api/BaoCao.api";
+import FunnelChartCustom from "src/App/Components/Customchart/CustomFunnelChart/FunnelChart";
 const BanLamViec = () => {
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
   const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
+  const [valueTuNgayTheoQuy, setValueTuNgayTheoQuy] = useState(
+    dayjs().startOf("month")
+  );
+  const [valueDenNgayTheoQuy, setValueDenNgayTheoQuy] = useState(
+    dayjs().endOf("month")
+  );
   const [selectedYear, setSelectedYear] = useState(dayjs());
+  const [selectedQuy, setSelectedQuy] = useState(1);
+  const [baoCaoDoanhThu, setBaoCaoDoanhThu] = useState(null);
+  const [baoCaoDoanhThuTheoNam, setBaoCaoDoanhThuTheoNam] = useState(null);
+  const [baoCaoDoanhThuTheoPhongBan, setBaoCaoDoanhThuTheoPhongBan] =
+    useState(null);
+  const [baoCaoSoSanhMucTieuDoanhSo, setBaoCaoSoSanhMucTieuDoanhSo] =
+    useState(null);
+  const [baoCaoTheoCoHoiState, setBaoCaoTheoCoHoiState] = useState(null);
+  const [baoCaoNguonGocKhachHang, setBaoCaoNguonGocKhachHang] = useState(null);
+  const { data: dataBaoCaoDoanhThu } = useGetBaoCaoDoanhThuQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataBaoCaoDoanhThuTheoNam } = useGetBaoCaoDoanhThuTheoNamQuery({
+    nam: selectedYear.format("YYYY"),
+  });
+  const { data: dataBaoCaoDoanhThuTheoPhongBan } =
+    useGetBaoCaoDoanhThuTheoPhongBanQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+    });
+
+  const { data: dataSoSanhMucTieuDoanhSo } =
+    useGetBaoCaoSoSanhMucTieuDoanhSoQuery({
+      tuNgay: valueTuNgayTheoQuy.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgayTheoQuy.format("YYYY-MM-DDT23:59:59"),
+      nam: selectedYear.format("YYYY"),
+    });
+
+  const { data: dataBaoCaoTheoCoHoi } = useGetBaoCaoTheoCoHoiQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataNguonGocKhachHang } = useGetBaoCaoNguonGocKhachHangQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+
+  useEffect(() => {
+    if (dataBaoCaoDoanhThu) {
+      setBaoCaoDoanhThu(dataBaoCaoDoanhThu);
+    } else setBaoCaoDoanhThu([]);
+  }, [dataBaoCaoDoanhThu]);
+
+  useEffect(() => {
+    if (dataBaoCaoDoanhThuTheoNam) {
+      setBaoCaoDoanhThuTheoNam(dataBaoCaoDoanhThuTheoNam);
+    } else setBaoCaoDoanhThuTheoNam([]);
+  }, [dataBaoCaoDoanhThuTheoNam]);
+
+  useEffect(() => {
+    if (dataBaoCaoDoanhThuTheoPhongBan) {
+      setBaoCaoDoanhThuTheoPhongBan(dataBaoCaoDoanhThuTheoPhongBan);
+    } else setBaoCaoDoanhThuTheoPhongBan([]);
+  }, [dataBaoCaoDoanhThuTheoPhongBan]);
+
+  useEffect(() => {
+    if (dataSoSanhMucTieuDoanhSo) {
+      setBaoCaoSoSanhMucTieuDoanhSo(dataSoSanhMucTieuDoanhSo);
+    } else setBaoCaoSoSanhMucTieuDoanhSo([]);
+  }, [dataSoSanhMucTieuDoanhSo]);
+
+  useEffect(() => {
+    if (dataBaoCaoTheoCoHoi) {
+      setBaoCaoTheoCoHoiState(dataBaoCaoTheoCoHoi);
+    } else {
+      setBaoCaoTheoCoHoiState([]);
+    }
+  }, [dataBaoCaoTheoCoHoi]);
+
+  useEffect(() => {
+    if (dataNguonGocKhachHang) {
+      setBaoCaoNguonGocKhachHang(dataNguonGocKhachHang);
+    } else {
+      setBaoCaoNguonGocKhachHang([]);
+    }
+  }, [dataNguonGocKhachHang]);
+
+  useEffect(() => {
+    if (selectedYear && selectedQuy) {
+      const year = dayjs(selectedYear).year();
+
+      let tuNgay, denNgay;
+
+      switch (selectedQuy) {
+        case 1:
+          tuNgay = dayjs(`${year}-01-01`);
+          denNgay = dayjs(`${year}-03-31`);
+          break;
+        case 2:
+          tuNgay = dayjs(`${year}-04-01`);
+          denNgay = dayjs(`${year}-06-30`);
+          break;
+        case 3:
+          tuNgay = dayjs(`${year}-07-01`);
+          denNgay = dayjs(`${year}-09-30`);
+          break;
+        case 4:
+          tuNgay = dayjs(`${year}-10-01`);
+          denNgay = dayjs(`${year}-12-31`);
+          break;
+        default:
+          break;
+      }
+
+      setValueTuNgayTheoQuy(tuNgay);
+      setValueDenNgayTheoQuy(denNgay);
+    }
+  }, [selectedYear, selectedQuy]);
 
   const doanhThuData = [
     {
@@ -53,8 +180,8 @@ const BanLamViec = () => {
       increase: <NorthIcon fontSize="large" />,
       decrease: <SouthIcon fontSize="large" />,
       color: "#ffea00",
-      currentMonthValue: 15,
-      previousMonthValue: 10,
+      currentMonthValue: baoCaoDoanhThu?.doanhThuHienTai,
+      previousMonthValue: baoCaoDoanhThu?.doanhThuThangTruoc,
     },
   ];
 
@@ -103,7 +230,7 @@ const BanLamViec = () => {
           </Typography>
 
           <Typography variant="h5" fontWeight="bold">
-            {currentMonthValue.toLocaleString("vi-VN")}
+            {currentMonthValue}
           </Typography>
 
           <Stack direction="row" alignItems="center" spacing={1}>
@@ -116,7 +243,7 @@ const BanLamViec = () => {
               {percentChange}%
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              so với tháng trước ({previousMonthValue.toLocaleString("vi-VN")})
+              so với tháng trước ({previousMonthValue})
             </Typography>
           </Stack>
 
@@ -138,6 +265,26 @@ const BanLamViec = () => {
                   spacing={2}
                   alignItems={{ xs: "stretch", sm: "center" }}
                 >
+                  <FormControl sx={{ minWidth: 120 }}>
+                    <InputLabel id="quy-label">Chọn quý</InputLabel>
+                    <Select
+                      labelId="quy-label"
+                      value={selectedQuy}
+                      label="Chọn quý"
+                      onChange={(e) => setSelectedQuy(e.target.value)}
+                    >
+                      <MenuItem value={1}>Quý 1</MenuItem>
+                      <MenuItem value={2}>Quý 2</MenuItem>
+                      <MenuItem value={3}>Quý 3</MenuItem>
+                      <MenuItem value={4}>Quý 4</MenuItem>
+                    </Select>
+                  </FormControl>
+                  <DatePicker
+                    views={["year"]}
+                    label="Chọn năm"
+                    value={selectedYear}
+                    onChange={(newValue) => setSelectedYear(newValue)}
+                  />
                   <DatePicker
                     label="Từ ngày"
                     value={valueTuNgay}
@@ -147,12 +294,6 @@ const BanLamViec = () => {
                     label="Đến ngày"
                     value={valueDenNgay}
                     onChange={(newValue) => setValueDenNgay(newValue)}
-                  />
-                  <DatePicker
-                    views={["year"]}
-                    label="Chọn năm"
-                    value={selectedYear}
-                    onChange={(newValue) => setSelectedYear(newValue)}
                   />
                 </Stack>
               </DemoContainer>
@@ -174,7 +315,7 @@ const BanLamViec = () => {
                 <b>Tổng quan doanh thu theo năm</b>
               </Typography>
               <LineCh
-                data={doanhThuTheoNamData}
+                data={baoCaoDoanhThuTheoNam}
                 height={300}
                 dataKey1={"thang"}
                 dataKey2={"doanhThu"}
@@ -183,11 +324,11 @@ const BanLamViec = () => {
           </Grid2>
           <Grid2 size={6}>
             <Paper>
-              <Typography variant="h6" sx={{ textAlign: "left" }}>
+              <Typography variant="body1" sx={{ textAlign: "left" }}>
                 <b>Tổng quan doanh thu theo phòng ban</b>
               </Typography>
               <Barchart
-                data={dataDoanhThuPhongBan}
+                data={baoCaoDoanhThuTheoPhongBan}
                 dataKey={"doanhThu"}
                 height={440}
               />
@@ -195,11 +336,11 @@ const BanLamViec = () => {
           </Grid2>
           <Grid2 size={6}>
             <Paper>
-              <Typography variant="h5" sx={{ textAlign: "center" }}>
-                <b>So sánh doanh số theo mục tiêu</b>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
+                <b>So sánh doanh số và mục tiêu theo quý</b>
               </Typography>
               <CustomBarchartDouble
-                data={dataTheoMucTieu}
+                data={baoCaoSoSanhMucTieuDoanhSo}
                 dataKeyName={"thang"}
                 dataKey1={"mucTieu"}
                 dataKey2={"mucTieuThucTe"}
@@ -207,8 +348,7 @@ const BanLamViec = () => {
               />
             </Paper>
           </Grid2>
-        
-          
+
           <Grid2 size={12}>
             <Typography variant="body1" sx={{ textAlign: "center" }}>
               <b>Tổng quan khách hàng</b>
@@ -219,19 +359,29 @@ const BanLamViec = () => {
               <Typography variant="body1" sx={{ textAlign: "center" }}>
                 <b>Cơ hội theo giai đoạn</b>
               </Typography>
-              <FunnelChart
-                data={dataCoHoiTheoGiaiDoan}
-                dataKey={"soLuong"}
-                nameKey={"tenCoHoi"}
-                fill={"mauSac"}
-              />
+              {Array.isArray(baoCaoTheoCoHoiState) &&
+                baoCaoTheoCoHoiState.length > 0 && (
+                  <FunnelChartCustom
+                    data={baoCaoTheoCoHoiState}
+                    dataKey="soLuong"
+                    nameKey="tenCoHoi"
+                    fill="mauSac"
+                  />
+                )}
             </Paper>
           </Grid2>
           <Grid2 size={6}>
-              <Typography variant="body1" sx={{ textAlign: "center" }}>
-                <b>Nguồn gốc khách hàng</b>
-              </Typography>
-              <Piechart data={phanBoNguonKhachHang} dataKey={"value"} height={400} />
+            <Typography variant="body1" sx={{ textAlign: "center" }}>
+              <b>Nguồn gốc khách hàng</b>
+            </Typography>
+            {Array.isArray(baoCaoNguonGocKhachHang) &&
+              baoCaoNguonGocKhachHang.length > 0 && (
+                <Piechart
+                  data={baoCaoNguonGocKhachHang}
+                  dataKey={"number"}
+                  height={400}
+                />
+              )}
           </Grid2>
           <Grid2 size={12}>
             <Typography variant="h5" sx={{ textAlign: "center" }}>
@@ -434,9 +584,9 @@ const BanLamViec = () => {
           </Grid2>
 
           <Grid2 size={6}>
-             <Typography variant="body1" sx={{ textAlign: "center" }}>
-                <b>Hoạt động nhân viên</b>
-              </Typography>
+            <Typography variant="body1" sx={{ textAlign: "center" }}>
+              <b>Hoạt động nhân viên</b>
+            </Typography>
             <StackedBarChart
               data={hieuSuatNhanVien}
               dataKeyName={"tenNhanVien"}

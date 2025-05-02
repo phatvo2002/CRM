@@ -396,10 +396,302 @@ namespace CRM.Repositories.BaoCaos
             return result;
         }
         // Hàm xử lý báo cáo dành cho ban lãnh đạo công ty 
-        public Task<BaoCaoDoanhThuDTO> BaoCaoDoanhThu(DateTime tuNgay, DateTime denNgay)
+        public async Task<BaoCaoDoanhThuDTO> BaoCaoDoanhThu(DateTime tuNgay, DateTime denNgay)
         {
+            var thoiGianTuNgayThangTruoc = tuNgay.AddMonths(-1);
+            var thoiGianDenNgayThangTruoc = denNgay.AddMonths(-1);
+            var result = new BaoCaoDoanhThuDTO();
+            var dbDoanhThu = await _context.DonHangs.Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay).ToListAsync();
+            if (dbDoanhThu != null)
+            {
 
-            throw new NotImplementedException();
+                result.DoanhThuHienTai = dbDoanhThu.Sum(r => r.ThucThuDonHang);
+            }
+            else result.DoanhThuHienTai = 0;
+            var dbDoanhThuThangTruoc = await _context.DonHangs.Where(r => r.CreateAt >= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc).ToListAsync();
+            if (dbDoanhThuThangTruoc != null)
+            {
+                result.DoanhThuThangTruoc = dbDoanhThuThangTruoc.Sum(r => r.ThucThuDonHang);
+            }
+            else result.DoanhThuThangTruoc = 0;
+            return result;
+        }
+        public async Task<List<BaoCaoDoanhThuTheoNamDTO>> BaoCaoDoanhThuTheonam(int nam)
+        {
+            var result = new List<BaoCaoDoanhThuTheoNamDTO>();
+            var dbDoanhThu = await _context.DonHangs.Where(r => (r.CreateAt.HasValue && r.CreateAt.Value.Year == nam) && r.IsDeleted == false).ToListAsync();
+            var dbDoanhThuTheoThang = dbDoanhThu.GroupBy(r => r.CreateAt.Value.Month).Select(g => new BaoCaoDoanhThuTheoNamDTO
+            {
+                Thang = g.Key,
+                DoanhThu = g.Sum(r => r.ThucThuDonHang),
+            });
+            var fullResult = Enumerable.Range(1, 12)
+       .Select(thang => result.FirstOrDefault(r => r.Thang == thang) ?? new BaoCaoDoanhThuTheoNamDTO
+       {
+           Thang = thang,
+           DoanhThu = 0
+       })
+       .OrderBy(r => r.Thang)
+       .ToList();
+
+            return fullResult;
+        }
+
+        public async Task<List<BaoCaoDoanhThuTheoPhongBanDTO>> BaoCaoDoanhThuTheoPhongBan(DateTime tuNgay, DateTime denNgay)
+        {
+            var result = new List<BaoCaoDoanhThuTheoPhongBanDTO>();
+            var dbDoanhThu = await _context.DonHangs.Where(r => (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.PhongBan).ToListAsync();
+            if (dbDoanhThu.Count > 0)
+            {
+
+                var doanhThuGroup = dbDoanhThu.GroupBy(r => r.PhongBanId);
+                foreach (var item in doanhThuGroup)
+                {
+                    var testDataa = item.First().PhongBan.TenPhongBan;
+                    if (item.First().PhongBan.TenPhongBan != "Phòng IT")
+                    {
+                        result.Add(new BaoCaoDoanhThuTheoPhongBanDTO
+                        {
+                            TenPhongBan = item.First().PhongBan.TenPhongBan,
+                            DoanhThu = item.Sum(r => r.ThucThuDonHang),
+                        });
+                    }
+                    else { continue; }
+
+                }
+            }
+            else result.Add(new BaoCaoDoanhThuTheoPhongBanDTO { TenPhongBan = "Không có dữ liệu", DoanhThu = 0 });
+
+            return result;
+        }
+        public async Task<List<BaoCaoSoSanhMucTieuDTO>> BaoCaoSoSanhMucTieuDoanhSo(DateTime tuNgay, DateTime denNgay, int nam)
+        {
+            var dbDoanhSoTheoQuy = await _context.DonHangs
+                .Where(r => r.CreateAt.HasValue &&
+                            r.CreateAt.Value.Year == nam &&
+                            r.CreateAt >= tuNgay && r.CreateAt <= denNgay &&
+                            r.IsDeleted == false)
+                .ToListAsync();
+
+            var dbMucTieuDoanhSoTheoQuy = await _context.MucTieuDoanhSos
+                .Where(r => r.CreateAt.HasValue &&
+                            r.CreateAt.Value.Year == nam &&
+                            r.CreateAt >= tuNgay && r.CreateAt <= denNgay &&
+                            r.IsDeleted == false)
+                .ToListAsync();
+
+            if (!dbDoanhSoTheoQuy.Any() || !dbMucTieuDoanhSoTheoQuy.Any())
+                return new List<BaoCaoSoSanhMucTieuDTO>();
+
+            var doanhSoTheoThang = dbDoanhSoTheoQuy
+                .GroupBy(r => r.CreateAt.Value.Month)
+                .ToDictionary(g => g.Key, g => g.Sum(r => r.ThucThuDonHang));
+
+            var mucTieuTheoThang = dbMucTieuDoanhSoTheoQuy
+                .GroupBy(r => r.CreateAt.Value.Month)
+                .ToDictionary(g => g.Key, g => g.Sum(r => r.DoanhSo ?? 0));
+
+            var result = doanhSoTheoThang
+                .Select(ds => new BaoCaoSoSanhMucTieuDTO
+                {
+                    Thang = ds.Key,
+                    MucTieuThucTe = ds.Value,
+                    MucTieu = (decimal)(mucTieuTheoThang.ContainsKey(ds.Key) ? mucTieuTheoThang[ds.Key] : 0)
+                })
+                .OrderByDescending(r => r.Thang)
+                .ToList();
+
+            return result;
+        }
+        public async Task<List<BaoCaoResultDTO>> BaoCaoNguonGocKhachHang(DateTime tuNgay, DateTime denNgay)
+        {
+            var db = await _context.KhachHangTiemNangs.Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay && r.IsDeleted == false).Include(r => r.NguonGocKhachHang).ToListAsync();
+            if (db != null)
+            {
+                var dbGroup = db.GroupBy(r => r.MaNguonGocKhachHang).Select(g => new BaoCaoResultDTO
+                {
+                    Name = g.First().NguonGocKhachHang.TenNguonGoc,
+                    Number = g.Count(),
+                }).ToList();
+                return dbGroup;
+            }
+            else return new List<BaoCaoResultDTO>();
+        }
+        public async Task<List<BaoCaoTop5NhanVienSuatSac>> BaoCaoTop5NhanVienSuatSacNhat(DateTime tuNgay, DateTime denNgay, int type)
+        {
+            if (type == 1)
+            {
+                var hoanThanhId = Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5");
+
+                var cuocGoi = await _context.CuocGois
+                    .Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay && r.IsDeleted == false && r.IsHoanThanh == true).Include(r => r.Nguoidung)
+                    .GroupBy(r => new { r.Nguoidung.Id, r.Nguoidung.HoVaDem, r.Nguoidung.Ten }) // Giả sử có NhanVienId và navigation property NhanVien
+                    .Select(g => new
+                    {
+                        NhanVienId = g.Key.Id,
+                        Name = $"{g.Key.HoVaDem + "" + g.Key.Ten}",
+                        SoCuocGoiHoanThanh = g.Count()
+                    })
+                    .ToListAsync();
+
+                var lichHen = await _context.LichHens
+                    .Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay && r.IsDeleted == false && r.TrangThaiThucHienId == hoanThanhId).Include(r => r.Nguoidung)
+                    .GroupBy(r => new { r.Nguoidung.Id, r.Nguoidung.HoVaDem, r.Nguoidung.Ten })
+                    .Select(g => new
+                    {
+                        NhanVienId = g.Key.Id,
+                        Name = $"{g.Key.HoVaDem + "" + g.Key.Ten}",
+                        SoLichHenHoanThanh = g.Count()
+                    })
+                    .ToListAsync();
+
+                var nhiemVu = await _context.NhiemVus
+                    .Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay && r.IsDeleted == false && r.TrangThaiThucHienId == hoanThanhId).Include(r => r.Nguoidung)
+                    .GroupBy(r => new { r.Nguoidung.Id, r.Nguoidung.HoVaDem, r.Nguoidung.Ten })
+                    .Select(g => new
+                    {
+                        NhanVienId = g.Key.Id,
+                        Name = g.Key.Ten,
+                        SoNhiemVuHoanThanh = g.Count()
+                    })
+                    .ToListAsync();
+
+                // Gộp dữ liệu
+                var result = cuocGoi
+                    .Union(lichHen.Select(x => new { x.NhanVienId, x.Name, SoCuocGoiHoanThanh = 0 }))
+                    .Union(nhiemVu.Select(x => new { x.NhanVienId, x.Name, SoCuocGoiHoanThanh = 0 }))
+                    .GroupBy(x => new { x.NhanVienId, x.Name })
+                    .Select(g =>
+                    {
+                        var nvId = g.Key.NhanVienId;
+                        var name = g.Key.Name;
+
+                        var cuocGoiCount = cuocGoi.FirstOrDefault(x => x.NhanVienId == nvId)?.SoCuocGoiHoanThanh ?? 0;
+                        var lichHenCount = lichHen.FirstOrDefault(x => x.NhanVienId == nvId)?.SoLichHenHoanThanh ?? 0;
+                        var nhiemVuCount = nhiemVu.FirstOrDefault(x => x.NhanVienId == nvId)?.SoNhiemVuHoanThanh ?? 0;
+
+                        return new BaoCaoTop5NhanVienSuatSac
+                        {
+                            Name = name,
+                            SoCuocGoiHoanThanh = cuocGoiCount,
+                            SoLichHenHoanThanh = lichHenCount,
+                            SoNhiemVuHoanThanh = nhiemVuCount
+                        };
+                    })
+                    .OrderByDescending(x => x.SoCuocGoiHoanThanh + x.SoLichHenHoanThanh + x.SoNhiemVuHoanThanh)
+                    .Take(5)
+                    .Select((x, index) =>
+                    {
+                        x.STT = index + 1;
+                        return x;
+                    })
+                    .ToList();
+
+                return result;
+            }
+            else
+            {
+                var cuocGoi = await _context.CuocGois
+                   .Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay && r.IsDeleted == false).Include(r => r.Nguoidung)
+                   .GroupBy(r => new { r.Nguoidung.Id, r.Nguoidung.HoVaDem, r.Nguoidung.Ten })
+                   .Select(g => new
+                   {
+                       NhanVienId = g.Key.Id,
+                       Name = $"{g.Key.HoVaDem + "" + g.Key.Ten}",
+                       SoCuocGoiHoanThanh = g.Count()
+                   })
+                   .ToListAsync();
+                var lichHen = await _context.LichHens
+                  .Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay && r.IsDeleted == false).Include(r => r.Nguoidung)
+                  .GroupBy(r => new { r.Nguoidung.Id, r.Nguoidung.HoVaDem, r.Nguoidung.Ten })
+                  .Select(g => new
+                  {
+                      NhanVienId = g.Key.Id,
+                      Name = $"{g.Key.HoVaDem + "" + g.Key.Ten}",
+                      SoLichHenHoanThanh = g.Count()
+                  })
+                  .ToListAsync();
+                var nhiemVu = await _context.NhiemVus
+                   .Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay && r.IsDeleted == false).Include(r => r.Nguoidung)
+                   .GroupBy(r => new { r.Nguoidung.Id, r.Nguoidung.HoVaDem, r.Nguoidung.Ten })
+                   .Select(g => new
+                   {
+                       NhanVienId = g.Key.Id,
+                       Name = g.Key.Ten,
+                       SoNhiemVuHoanThanh = g.Count()
+                   })
+                   .ToListAsync();
+                var result = cuocGoi
+                   .Union(lichHen.Select(x => new { x.NhanVienId, x.Name, SoCuocGoiHoanThanh = 0 }))
+                   .Union(nhiemVu.Select(x => new { x.NhanVienId, x.Name, SoCuocGoiHoanThanh = 0 }))
+                   .GroupBy(x => new { x.NhanVienId, x.Name })
+                   .Select(g =>
+                   {
+                       var nvId = g.Key.NhanVienId;
+                       var name = g.Key.Name;
+
+                       var cuocGoiCount = cuocGoi.FirstOrDefault(x => x.NhanVienId == nvId)?.SoCuocGoiHoanThanh ?? 0;
+                       var lichHenCount = lichHen.FirstOrDefault(x => x.NhanVienId == nvId)?.SoLichHenHoanThanh ?? 0;
+                       var nhiemVuCount = nhiemVu.FirstOrDefault(x => x.NhanVienId == nvId)?.SoNhiemVuHoanThanh ?? 0;
+
+                       return new BaoCaoTop5NhanVienSuatSac
+                       {
+                           Name = name,
+                           SoCuocGoiHoanThanh = cuocGoiCount,
+                           SoLichHenHoanThanh = lichHenCount,
+                           SoNhiemVuHoanThanh = nhiemVuCount
+                       };
+                   })
+                   .OrderByDescending(x => x.SoCuocGoiHoanThanh + x.SoLichHenHoanThanh + x.SoNhiemVuHoanThanh)
+                   .Select((x, index) =>
+                   {
+                       x.STT = index + 1;
+                       return x;
+                   })
+                   .ToList();
+
+                return result;
+            }
+
+        }
+        public async Task<List<BaoCaoTop5NhanVienCoDoanhThuCaoNhat>> BaoCaoTop5NhanVienCoDoanhThuCaoNhat(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        {
+            var dbNguoiDung = _context.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId);
+            if (dbNguoiDung != null)
+            {
+                if (dbNguoiDung.CheckIsGiamDoc == true && dbNguoiDung.CheckIsTruongPhong == false || dbNguoiDung.MaPhongBan == Guid.Parse("4D086C61-CC35-40D4-B9D9-816063DF1C32"))
+                {
+                    var dbDoanhThu = await _context.DonHangs.Where(r =>
+                                                                   r.CreateAt >= tuNgay &&
+                                                                   r.CreateAt <= denNgay &&
+                                                                   r.IsDeleted == false)
+                                                            .Include(r => r.Nguoidung)
+                                                            .GroupBy(r => r.NguoiDungId)
+                                                            .Select(g => new BaoCaoTop5NhanVienCoDoanhThuCaoNhat
+                                                            {
+                                                                TenNhanVien = $"{g.First().Nguoidung.HoVaDem}{g.First().Nguoidung.Ten}",
+                                                                DoanhThu = g.Sum(r => r.GiaTriDonHang)
+                                                            }).ToListAsync();
+                    return dbDoanhThu;
+                }
+                else
+                {
+                    var dbDoanhThu = await _context.DonHangs.Where(r =>
+                                                                  r.CreateAt >= tuNgay &&
+                                                                  r.CreateAt <= denNgay &&
+                                                                  r.IsDeleted == false &&
+                                                                  r.PhongBanId == dbNguoiDung.MaPhongBan)
+                                                           .Include(r => r.Nguoidung)
+                                                           .GroupBy(r => r.NguoiDungId)
+                                                           .Select(g => new BaoCaoTop5NhanVienCoDoanhThuCaoNhat
+                                                           {
+                                                               TenNhanVien = $"{g.First().Nguoidung.HoVaDem}{g.First().Nguoidung.Ten}",
+                                                               DoanhThu = g.Sum(r => r.GiaTriDonHang)
+                                                           }).ToListAsync();
+                    return dbDoanhThu;
+                }
+            }
+            else return new List<BaoCaoTop5NhanVienCoDoanhThuCaoNhat>();
         }
         private string LayMauSacTheoGiaiDoan(int maGiaiDoan)
         {
