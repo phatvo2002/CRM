@@ -94,5 +94,10 @@ namespace CRM.Services.BaoCaos
         {
             return await _baoCaoRepository.BaoCaoNhiemVu(tuNgay, denNgay, phongBanId);
         }
+
+        public async Task<List<BaoCaoResultDTO>> BaoCaoNhiemVuTheoTrangThai(DateTime tuNgay, DateTime denNgay, Guid phongBanId)
+        {
+            return await _baoCaoRepository.BaoCaoNhiemVuTheoTrangThai(tuNgay, denNgay, phongBanId);
+        }
     }
 }

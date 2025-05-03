@@ -69,6 +69,9 @@ export const baoCaoApi = createApi({
       getBaoCaoTop3NhanVienHoanThanhNhiemVu: builder.query({
         query: ({tuNgay , denNgay }) => `/BaoCao/getbaocaotop3nhanvienhoanthanhnhiemvu?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
+      getBaoCaoNhiemVuTheoTrangThai: builder.query({
+        query: ({tuNgay , denNgay }) => `/BaoCao/getbaocaonhiemvutheotrangthai?tuNgay=${tuNgay}&denNgay=${denNgay}`,
+      }),
     }),
   });
   export const { 
@@ -88,7 +91,8 @@ export const baoCaoApi = createApi({
     useGetBaoCaoTop5NhanVienCoDoanhThuCaoNhatQuery,
     useGetBaoCaoSoSanhDoanhThuNhanVienQuery,
     useGetBaoCaoNhiemVuQuery,
-    useGetBaoCaoTop3NhanVienHoanThanhNhiemVuQuery
+    useGetBaoCaoTop3NhanVienHoanThanhNhiemVuQuery,
+    useGetBaoCaoNhiemVuTheoTrangThaiQuery
   } = baoCaoApi;
 
 

@@ -24,31 +24,12 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
 import {
   useGetBaoCaoNhiemVuQuery,
+  useGetBaoCaoNhiemVuTheoTrangThaiQuery,
   useGetBaoCaoTop3NhanVienHoanThanhNhiemVuQuery,
 } from "src/App/Api/BaoCao.api";
 import NoImage from "src/App/Assets/image/no-image.png";
 
 
-
-
-const trangThaiNhiemVu = [
-  {
-    name: "Chưa thực hiện",
-    value: 10,
-  },
-  {
-    name: "Đang thực hiện",
-    value: 10,
-  },
-  {
-    name: "Hoàn thành",
-    value: 30,
-  },
-  {
-    name: "Trễ hạn",
-    value: 5,
-  },
-];
 const ThongKe = () => {
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
   const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
@@ -63,6 +44,11 @@ const ThongKe = () => {
       tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
       denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
     });
+  const {data : dataNhiemVuTheoTrangThai} =
+  useGetBaoCaoNhiemVuTheoTrangThaiQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  })
   const percentChange =
     baoCaoTongNhiemVu?.soNhiemVuThangTruoc === 0
       ? baoCaoTongNhiemVu?.soNhiemVuThangHienTai > 0
@@ -274,7 +260,10 @@ const ThongKe = () => {
           </Paper>
         </Grid2>
         <Grid2 size={6}>
-          <Piechart data={trangThaiNhiemVu} dataKey={"value"} />
+          {Array.isArray(dataNhiemVuTheoTrangThai) &&
+           dataNhiemVuTheoTrangThai.length >0 &&
+           (<Piechart data={dataNhiemVuTheoTrangThai} dataKey={"number"} />)}
+          
         </Grid2>
       </Grid2>
     </>

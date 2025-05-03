@@ -802,6 +802,21 @@ namespace CRM.Repositories.BaoCaos
 
             return result;
         }
+        public async Task<List<BaoCaoResultDTO>> BaoCaoNhiemVuTheoTrangThai(DateTime tuNgay, DateTime denNgay, Guid phongBanId)
+        {
+            var db = await _context.NhiemVus.Where(r => r.CreateAt >= tuNgay &&
+                                                       r.CreateAt <= denNgay &&
+                                                       r.IsDeleted == false &&
+                                                       r.PhongBanId == phongBanId)
+                                            .Include(r => r.TrangThaiThucHien)
+                                            .GroupBy(r => r.TrangThaiThucHienId)
+                                            .Select(g => new BaoCaoResultDTO
+                                            {
+                                                Name = g.First().TrangThaiThucHien.Name,
+                                                Number = g.Count()
+                                            }).ToListAsync();
+            return db;
+        }
         private async Task<int> LayTongSoTheoNguoiDungAsync<T>(IQueryable<T> query, DateTime tuNgay, DateTime denNgay, Guid nguoiDungId) where T : class
         {
 
@@ -873,6 +888,7 @@ namespace CRM.Repositories.BaoCaos
             };
             return maMau;
         }
+
 
     }
 }

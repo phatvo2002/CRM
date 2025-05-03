@@ -272,5 +272,21 @@ namespace CRM.Controllers.BaoCaos
             }
         }
 
+        [HttpGet("getbaocaonhiemvutheotrangthai")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoNhiemVuTheoTrangThai(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                var result = await _baoCaoServices.BaoCaoNhiemVuTheoTrangThai(tuNgay, denNgay, phongBanId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
