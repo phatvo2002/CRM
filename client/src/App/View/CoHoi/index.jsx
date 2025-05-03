@@ -1,4 +1,12 @@
-import { Button, Grid2, Menu, MenuItem, Paper, Typography } from "@mui/material";
+import {
+  Button,
+  Grid2,
+  Menu,
+  MenuItem,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
@@ -14,16 +22,27 @@ import WidgetsIcon from "@mui/icons-material/Widgets";
 import { TabBieuDoCoHoi } from "./Pages/Tabs/TabBieuDoCoHoi";
 import { TabListCoHoi } from "./Pages/Tabs/TabListCoHoi";
 import ModalThemMoiCoHoi from "./Modal/ModalThemMoiCoHoi";
-import { useGetCoHoiListQuery } from "src/App/Api/CoHoiApi";
+import { useGetAllCoHoiQuery, useGetCoHoiListQuery } from "src/App/Api/CoHoiApi";
 import EditIcon from "@mui/icons-material/Edit";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import dayjs from "dayjs";
 const index = () => {
   const [value, setValue] = useState("1");
   const [anchorEl, setAnchorEl] = useState(null);
-  const { data: dataCoHoi, refetch } = useGetCoHoiListQuery();
+  const [valueTuNgay, setValueTuNgay] = React.useState(
+    dayjs().startOf("month")
+  );
+  const [valueDenNgay, setValueDenNgay] = React.useState(
+    dayjs().endOf("month")
+  );
+  const { data: dataCoHoi, refetch } = useGetAllCoHoiQuery({tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"), denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59") });
   const [modalThemMoi, setModalThemMoi] = useState(false);
   const handleOpenModalThemMoiCoHoi = () => setModalThemMoi(true);
   const handleCloseModalThemMoiCoHoi = () => setModalThemMoi(false);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -36,90 +55,121 @@ const index = () => {
   };
   return (
     <>
-     <Grid2 container spacing={2} alignItems="center">
-      {/* Tiêu đề */}
-      <Grid2 xs={12} md={8}>
-        <Typography variant="h5" sx={{ fontWeight: "bold", color: "#1976d2" }}>
-          📋 Tất cả cơ hội
-        </Typography>
-      </Grid2>
+      <Grid2 container spacing={2} alignItems="center">
+        {/* Tiêu đề */}
+        <Grid2 xs={12} md={8}>
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "bold", color: "#1976d2" }}
+          >
+            📋 Tất cả cơ hội
+          </Typography>
+        </Grid2>
 
-      {/* Các nút chức năng */}
-      <Grid2 xs={12} md={4} sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleOpenModalThemMoiCoHoi}
-          sx={{ borderRadius: 2, textTransform: "none", boxShadow: 2, mr: 1 }}
+        {/* Các nút chức năng */}
+        <Grid2
+          xs={12}
+          md={4}
+          sx={{ display: "flex", justifyContent: "flex-end" }}
         >
-          Thêm mới
-        </Button>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={handleOpenModalThemMoiCoHoi}
+            sx={{ borderRadius: 2, textTransform: "none", boxShadow: 2, mr: 1 }}
+          >
+            Thêm mới
+          </Button>
 
-        <Button
-          id="basic-button"
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-          onClick={handleClick}
-          variant="outlined"
-          startIcon={<OpenInNewIcon />}
-          sx={{ borderRadius: 2, textTransform: "none", width: 150 }}
-        >
-          Mở rộng
-        </Button>
+          <Button
+            id="basic-button"
+            aria-controls={open ? "basic-menu" : undefined}
+            aria-haspopup="true"
+            aria-expanded={open ? "true" : undefined}
+            onClick={handleClick}
+            variant="outlined"
+            startIcon={<OpenInNewIcon />}
+            sx={{ borderRadius: 2, textTransform: "none", width: 150 }}
+          >
+            Mở rộng
+          </Button>
 
-        {/* Dropdown Menu */}
-        <Menu
-          id="basic-menu"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleCloseDrop}
-          MenuListProps={{ "aria-labelledby": "basic-button" }}
-          sx={{ mt: 1 }}
-        >
-          <MenuItem onClick={handleCloseDrop}>
-            <Button
-              variant="outlined"
-              sx={{ width: "100%", justifyContent: "flex-start" }}
-              startIcon={<AutoDeleteIcon />}
-              color="error"
-            >
-              Xóa hàng loạt
-            </Button>
-          </MenuItem>
-          <MenuItem onClick={handleCloseDrop}>
-            <Button
-              variant="outlined"
-              sx={{ width: "100%", justifyContent: "flex-start" }}
-              startIcon={<DeleteOutlineIcon />}
-              color="primary"
-            >
-              Thùng rác
-            </Button>
-          </MenuItem>
-        </Menu>
+          {/* Dropdown Menu */}
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleCloseDrop}
+            MenuListProps={{ "aria-labelledby": "basic-button" }}
+            sx={{ mt: 1 }}
+          >
+            <MenuItem onClick={handleCloseDrop}>
+              <Button
+                variant="outlined"
+                sx={{ width: "100%", justifyContent: "flex-start" }}
+                startIcon={<AutoDeleteIcon />}
+                color="error"
+              >
+                Xóa hàng loạt
+              </Button>
+            </MenuItem>
+            <MenuItem onClick={handleCloseDrop}>
+              <Button
+                variant="outlined"
+                sx={{ width: "100%", justifyContent: "flex-start" }}
+                startIcon={<DeleteOutlineIcon />}
+                color="primary"
+              >
+                Thùng rác
+              </Button>
+            </MenuItem>
+          </Menu>
+        </Grid2>
+
+        {/* Nội dung chính */}
+        <Grid2 xs={12}>
+          <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
+            <Grid2 size={12}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer
+                  components={["DateTimePicker", "DateTimePicker"]}
+                >
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    alignItems={{ xs: "stretch", sm: "center" }}
+                  >
+                    <DateTimePicker
+                      label="Từ ngày"
+                      value={valueTuNgay}
+                      onChange={(newValue) => setValueTuNgay(newValue)}
+                    />
+                    <DateTimePicker
+                      label="Đến ngày"
+                      value={valueDenNgay}
+                      onChange={(newValue) => setValueDenNgay(newValue)}
+                    />
+                  </Stack>
+                </DemoContainer>
+              </LocalizationProvider>
+            </Grid2>
+            <TabContext value={value}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                <TabList onChange={handleChange} aria-label="Chuyển tab">
+                  <Tab icon={<FactCheckIcon />} label="Danh sách" value="1" />
+                  <Tab icon={<WidgetsIcon />} label="Mở rộng" value="2" />
+                </TabList>
+              </Box>
+              <TabPanel value="1">
+                <TabListCoHoi dataCoHoi={dataCoHoi} refetch={refetch}  />
+              </TabPanel>
+              <TabPanel value="2">
+                <TabBieuDoCoHoi dataCoHoi={dataCoHoi} refetch={refetch} />
+              </TabPanel>
+            </TabContext>
+          </Paper>
+        </Grid2>
       </Grid2>
-
-      {/* Nội dung chính */}
-      <Grid2 xs={12}>
-        <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
-          <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-              <TabList onChange={handleChange} aria-label="Chuyển tab">
-                <Tab icon={<FactCheckIcon />} label="Danh sách" value="1" />
-                <Tab icon={<WidgetsIcon />} label="Mở rộng" value="2" />
-              </TabList>
-            </Box>
-            <TabPanel value="1">
-              <TabListCoHoi dataCoHoi={dataCoHoi} refetch={refetch} />
-            </TabPanel>
-            <TabPanel value="2">
-              <TabBieuDoCoHoi />
-            </TabPanel>
-          </TabContext>
-        </Paper>
-      </Grid2>
-    </Grid2>
       {/* Modal thêm mới */}
       <ModalThemMoiCoHoi
         showModal={modalThemMoi}

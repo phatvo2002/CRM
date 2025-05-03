@@ -123,12 +123,12 @@ namespace CRM.Controllers.DonHangs
             }
         }
         [HttpPut("xacnhandonhang")]
-        [JwtAuthorize]
-        public async Task<IActionResult> XacNhanDonHang(Guid donHangId)
+        ////[JwtAuthorize]
+        public async Task<IActionResult> XacNhanDonHang(XacNhanDonHangModal modal)
         {
             try
             {
-                var result = await _donHangServices.XacNhanDonHang(donHangId);
+                var result = await _donHangServices.XacNhanDonHang(modal);
                 return Ok(result);
             }
             catch (Exception ex)

@@ -1,4 +1,6 @@
-﻿namespace CRM.DTO
+﻿using System.Xml.Serialization;
+
+namespace CRM.DTO
 {
     public class NguoiDungDTO
     {
@@ -10,6 +12,7 @@
         public string? TaiKhoan { get; set; }
         public string? SoDienThoai { get; set; }
         public string? Email { get; set; }
+        [XmlIgnore]
         public byte[]? HinhAnh { get; set; }
     }
 }

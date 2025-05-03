@@ -47,5 +47,10 @@ namespace CRM.Services.CoHois
         {
             return await _coHoiRepository.UpdateNgayKyVong(coHoiId, ngayKyVong);
         }
+
+        public async Task<List<CoHoiDTO>> GetAllData(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        {
+            return await _coHoiRepository.GetAllData(tuNgay, denNgay, nguoiDungId);
+        }
     }
 }

@@ -1,355 +1,520 @@
 import {
-  LineChart,
-  Line,
-  PieChart,
-  Pie,
-  Cell,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-  Legend,
-  Radar,
-  RadarChart,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-} from "recharts";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
-import PersonIcon from "@mui/icons-material/Person";
-import PaidIcon from "@mui/icons-material/Paid";
-import AssignmentIcon from "@mui/icons-material/Assignment";
+  Autocomplete,
+  Box,
+  Grid2,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TextField,
+  Typography,
+} from "@mui/material";
+import SouthIcon from "@mui/icons-material/South";
+import NorthIcon from "@mui/icons-material/North";
+import CasesIcon from "@mui/icons-material/Cases";
+import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
+import LocalMallIcon from "@mui/icons-material/LocalMall";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Autocomplete, Grid2, Paper, Stack, TextField } from "@mui/material";
-import { Grid } from "@mui/joy";
-const BanLamViecNhanVien = () => {
-  const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff8042", "#8dd1e1"];
-  const revenueData = [
-    { month: "Jan 2025", closedValue: 1200000, wonDeals: 5 },
-    { month: "Feb 2025", closedValue: 1500000, wonDeals: 7 },
-    { month: "Mar 2025", closedValue: 500000, wonDeals: 5 },
-    { month: "Apr 2025", closedValue: 100000, wonDeals: 6 },
-    { month: "May 2025", closedValue: 1450000, wonDeals: 6 },
-    { month: "Jun 2025", closedValue: 0, wonDeals: 4 },
-    { month: "Jul 2025", closedValue: 200000, wonDeals: 5 },
-    { month: "Aug 2025", closedValue: 300000, wonDeals: 7 },
-    { month: "Sep 2025", closedValue: 250000, wonDeals: 5 },
-    { month: "Oct 2025", closedValue: 50000, wonDeals: 1 },
-    { month: "Nov 2025", closedValue: 180000, wonDeals: 4 },
-    { month: "Dec 2025", closedValue: 120000, wonDeals: 4 },
-  ];
+import TaskAltIcon from "@mui/icons-material/TaskAlt";
+import PhoneForwardedIcon from "@mui/icons-material/PhoneForwarded";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-  const salesData = [
-    { name: "Product A", value: 2400 },
-    { name: "Product B", value: 1398 },
-    { name: "Product C", value: 9800 },
-    { name: "Product D", value: 3908 },
-    { name: "Product E", value: 4800 },
-  ];
-  const years = [
-    {
-      id: "2020",
-      name: "2020",
-    },
-    {
-      id: "2021",
-      name: "2021",
-    },
-    {
-      id: "2022",
-      name: "2022",
-    },
-    {
-      id: "2023",
-      name: "2023",
-    },
-    {
-      id: "2025",
-      name: "2025",
-    },
-    {
-      id: "2026",
-      name: "2026",
-    },
-    {
-      id: "2027",
-      name: "2027",
-    },
-  ];
-  const data = [
-    {
-      phongBan: "Phòng Kinh doanh 1",
-      doanhThu: 2500,
-      hopDong: 150,
-      khachHangMoi: 75,
-    },
-    {
-      phongBan: "Phòng kinh doanh 2",
-      doanhThu: 1800,
-      hopDong: 120,
-      khachHangMoi: 60,
-    },
-    {
-      phongBan: "Phòng kinh doanh 3",
-      doanhThu: 1200,
-      hopDong: 90,
-      khachHangMoi: 45,
-    },
-  ];
-  // const dataDuDoan = [
-  //   { month: "Tháng 1", revenue: 100000000, customers: 500 },
-  //   { month: "Tháng 2", revenue: 120000000, customers: 600 },
-  //   { month: "Tháng 3", revenue: 110000000, customers: 550 },
-  //   { month: "Tháng 4", revenue: 130000000, customers: 650 },
-  //   { month: "Tháng 5", revenue: 140000000, customers: 700 },
-  // ];
+import Person2Icon from "@mui/icons-material/Person2";
+import PersonPinIcon from "@mui/icons-material/PersonPin";
+import PaidIcon from "@mui/icons-material/Paid";
+import Barchart from "src/App/Components/Customchart/CustomBarchart/Barchart";
+import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
+import {
+  useGetBaoCaoHoatDongQuery,
+  useGetBaoCaoTheoBaoGiaQuery,
+  useGetBaoCaoTheoCoHoiQuery,
+  useGetBaoCaoTheoDonHangQuery,
+  useGetBaoTongTheQuery,
+  useGetCuocGoiTheoTrangThaiQuery,
+  useGetTop5KhachHangTuongTacQuery,
+} from "src/App/Api/BaoCao.api";
+import FunnelChartCustom from "src/App/Components/Customchart/CustomFunnelChart/FunnelChart";
+import Moment from "react-moment";
 
-  // KPI data
-  const dataKPI = [
-    { subject: "Doanh số", A: 120, fullMark: 150 },
-    { subject: "Khách hàng mới", A: 98, fullMark: 150 },
-    { subject: "Cuộc gọi", A: 86, fullMark: 150 },
-    { subject: "Email gửi", A: 99, fullMark: 150 },
-    { subject: "Cuộc hẹn", A: 85, fullMark: 150 },
-    { subject: "Tư vấn hoàn tất", A: 65, fullMark: 150 },
+const index = () => {
+  const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
+  const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
+  const [dataBaoCao, setDataBaoCao] = useState(null);
+  const [baoCaoTheoCoHoiState, setBaoCaoTheoCoHoiState] = useState(null);
+  const [baoCaoBaoGiaState, setBaoCaoBaoGiaState] = useState(null);
+  const [baoCaoDonHangState, setBaoCaoDonHangState] = useState(null);
+  const [baoCaoHoatDongState, setBaoCaoHoatDongState] = useState(null);
+  const [baoCaoTop5KhTuongTacGanDay, setBaoCaoTop5KhachHangTuongTacGanDay] =
+    useState(null);
+  const [baoCaoCuocGoiTheoTrangThaiState, setBaoCaoCuocGoiTheoTrangThaiState] =
+    useState(null);
+  const { data: dataBaoCaoTongThe } = useGetBaoTongTheQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataBaoCaoTheoCoHoi } = useGetBaoCaoTheoCoHoiQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataBaoGia } = useGetBaoCaoTheoBaoGiaQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataDonHang } = useGetBaoCaoTheoDonHangQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataHoatDong } = useGetBaoCaoHoatDongQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataTop5KhachHangTuongTacGanDay } =
+    useGetTop5KhachHangTuongTacQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+    });
+  const { data: dataBaoCaoCuocGoiTheoTrangThai } =
+    useGetCuocGoiTheoTrangThaiQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+    });
+  const hieuSuatBanHangData = [
+    {
+      title: "Tổng số tiềm năng đã chuyển đổi",
+      value: 2,
+      description: "",
+      icon: <Person2Icon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#b28900",
+      currentMonthValue: dataBaoCao?.khachHangTiemNangHienTai,
+      previousMonthValue: dataBaoCao?.khachHangTiemNangThangTruoc,
+    },
+    {
+      title: "Tỷ lệ chuyển đổi tiềm năng thành khách hàng (%)",
+      value: 2,
+      description: "",
+      icon: <PersonPinIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#f44336",
+      currentMonthValue: dataBaoCao?.tiLeChuyenDoiKhachHangThangHienTai,
+      previousMonthValue: dataBaoCao?.tiLeChuyenDoiKhachHangThangTruoc,
+    },
+    {
+      title: "Tổng số cơ hội mới",
+      value: 0,
+      description: "",
+      icon: <CasesIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#ff7043",
+      currentMonthValue: dataBaoCao?.tongSoCoHoiHienTai,
+      previousMonthValue: dataBaoCao?.tongSoCoHoiThangTruoc,
+    },
+    {
+      title: "Tổng số báo giá mới",
+      value: 0,
+      description: "",
+      icon: <RequestQuoteIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#b22a00",
+      currentMonthValue: dataBaoCao?.tongSoBaoGiaHienTai,
+      previousMonthValue: dataBaoCao?.tongSoBaoGiaThangTruoc,
+    },
+    {
+      title: "Tổng số đơn hàng",
+      value: 0,
+      description: "",
+      icon: <LocalMallIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#b26500",
+      currentMonthValue: dataBaoCao?.tongSoDonHangHienTai,
+      previousMonthValue: dataBaoCao?.tongSoDonHangThangTruoc,
+    },
+    {
+      title: "Doanh thu tháng này",
+      description: "",
+      icon: <PaidIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#84c887",
+      currentMonthValue: dataBaoCao?.tongDoanhThuHienTai,
+      previousMonthValue: dataBaoCao?.tongDoanhThuThangTruoc,
+    },
   ];
-
-  const taskData = [
-    { name: "Hoàn thành đúng hạn", value: 18 },
-    { name: "Trễ hạn", value: 4 },
-    { name: "Đang thực hiện", value: 8 },
+  const hoatDongTuongTacData = [
+    {
+      title: "Tổng số nhiệm vụ đã hoàn thành",
+      value: 0,
+      description: "",
+      icon: <TaskAltIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#b2102f",
+      currentMonthValue: baoCaoHoatDongState?.tongSoNhiemVuDaHoanThanhhienTai,
+      previousMonthValue:
+        baoCaoHoatDongState?.tongSoNhiemVuDaHoanThanhThangTruoc,
+    },
+    {
+      title: "Cuộc gọi đã thực hiện",
+      value: 0,
+      description: "",
+      icon: <PhoneForwardedIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#4caf50",
+      currentMonthValue: baoCaoHoatDongState?.tongSoCuocGoiHienTai,
+      previousMonthValue: baoCaoHoatDongState?.tongSoCuocGoiThangTruoc,
+    },
+    {
+      title: "Lịch hẹn đã thực hiện",
+      value: 0,
+      description: "",
+      icon: <CalendarMonthIcon fontSize="large" />,
+      increase: <NorthIcon fontSize="large" />,
+      decrease: <SouthIcon fontSize="large" />,
+      color: "#ffea00",
+      currentMonthValue: baoCaoHoatDongState?.tongSoLichHenHienTai,
+      previousMonthValue: baoCaoHoatDongState?.tongSoLichHenCuaThangTruoc,
+    },
   ];
+  const StatisticCard = ({
+    title,
+    currentMonthValue,
+    previousMonthValue,
+    description,
+    icon,
+    color,
+  }) => {
+    const percentChange =
+      previousMonthValue === 0
+        ? currentMonthValue > 0
+          ? 100
+          : 0
+        : Math.round(
+            ((currentMonthValue - previousMonthValue) / previousMonthValue) *
+              100
+          );
 
+    const isIncrease = percentChange >= 0;
+    const ChangeIcon = isIncrease ? NorthIcon : SouthIcon;
+
+    useEffect(() => {
+      if (dataBaoCaoTongThe) {
+        setDataBaoCao(dataBaoCaoTongThe);
+      }
+    }, [dataBaoCaoTongThe]);
+
+    useEffect(() => {
+      if (dataBaoCaoTheoCoHoi) {
+        setBaoCaoTheoCoHoiState(dataBaoCaoTheoCoHoi);
+      } else {
+        setBaoCaoTheoCoHoiState([]);
+      }
+    }, [dataBaoCaoTheoCoHoi]);
+
+    useEffect(() => {
+      if (dataBaoGia) {
+        setBaoCaoBaoGiaState(dataBaoGia);
+      } else {
+        setBaoCaoBaoGiaState([]);
+      }
+    }, [dataBaoGia]);
+
+    useEffect(() => {
+      if (dataDonHang) {
+        setBaoCaoDonHangState(dataDonHang);
+      } else {
+        setBaoCaoDonHangState([]);
+      }
+    }, [dataDonHang]);
+    useEffect(() => {
+      if (dataHoatDong) {
+        setBaoCaoHoatDongState(dataHoatDong);
+      } else {
+        setBaoCaoHoatDongState([]);
+      }
+    }, [dataHoatDong]);
+
+    useEffect(() => {
+      if (dataTop5KhachHangTuongTacGanDay) {
+        setBaoCaoTop5KhachHangTuongTacGanDay(dataTop5KhachHangTuongTacGanDay);
+      } else {
+        setBaoCaoTop5KhachHangTuongTacGanDay([]);
+      }
+    }, [dataTop5KhachHangTuongTacGanDay]);
+
+    useEffect(() => {
+      if (dataBaoCaoCuocGoiTheoTrangThai) {
+        setBaoCaoCuocGoiTheoTrangThaiState(dataBaoCaoCuocGoiTheoTrangThai);
+      } else {
+        setBaoCaoCuocGoiTheoTrangThaiState([]);
+      }
+    }, [dataBaoCaoCuocGoiTheoTrangThai]);
+
+    return (
+      <Paper
+        elevation={3}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          p: 2,
+          borderLeft: `8px solid ${color}`,
+          backgroundColor: "background.primary",
+          height: "150px",
+        }}
+      >
+        <Box sx={{ mr: 2, color }}>{icon}</Box>
+        <Box>
+          <Typography
+            variant="subtitle2"
+            fontWeight="bold"
+            color={color}
+            sx={{ height: "40px", overflow: "hidden" }}
+          >
+            {title}
+          </Typography>
+
+          <Typography variant="h5" fontWeight="bold">
+            {currentMonthValue}
+          </Typography>
+
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <ChangeIcon
+              fontSize="small"
+              sx={{ color: isIncrease ? "green" : "red" }}
+            />
+            <Typography variant="caption" color={isIncrease ? "green" : "red"}>
+              {isIncrease ? "+" : ""}
+              {percentChange}%
+            </Typography>
+            <Typography variant="caption" color="text.secondary">
+              so với tháng trước ({previousMonthValue})
+            </Typography>
+          </Stack>
+
+          <Typography variant="body2">{description}</Typography>
+        </Box>
+      </Paper>
+    );
+  };
   return (
     <>
       <Paper>
-        <Grid2 container spacing={2}>
+        <Grid2 container sx={{ padding: 5 }} spacing={2}>
           <Grid2 size={12}>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Autocomplete
-                disablePortal
-                options={years}
-                style={{ margin: 15 }}
-                sx={{ width: 100 }}
-                getOptionLabel={(option) => option.name}
-                renderInput={(params) => <TextField {...params} label="Năm" />}
-              />
+            <Typography variant="h5" sx={{ textAlign: "center" }}>
+              <b>BÀN LÀM VIỆC - NHÂN VIÊN </b>
+            </Typography>{" "}
+          </Grid2>
+          <Grid2 size={12}>
+            <Grid2 size={12}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker label="Từ ngày" defaultValue={dayjs().date(1)} />
-                </DemoContainer>
-              </LocalizationProvider>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
-                  <DatePicker
-                    label="Dến ngày"
-                    defaultValue={dayjs().endOf("month")}
-                  />
-                </DemoContainer>
-              </LocalizationProvider>
-              <Button variant="contained">Lọc</Button>
-            </Stack>
-          </Grid2>
-          <Grid2 size={12} sx={{ padding: 2 }}>
-            <Stack
-              direction="row"
-              spacing={2}
-              alignItems="center"
-              justifyContent="space-between" // Căn đều khoảng cách giữa các Card
-            >
-              <Card
-                sx={{
-                  backgroundColor: "#5a76f2",
-                  flex: 1,
-                  minWidth: 200,
-                  textAlign: "center",
-                }}
-              >
-                <CardContent>
-                  <ShowChartIcon
-                    style={{ color: "#fff" }}
-                    className="text-3xl"
-                  />
-                  <div style={{ color: "#fff" }}>
-                    <h3 className="text-lg font-bold">
-                      Doanh số theo tháng/quý
-                    </h3>
-                    <p className="text-2xl font-semibold">25000$</p>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card
-                sx={{
-                  backgroundColor: "#37c8a1",
-                  flex: 1,
-                  minWidth: 200,
-                  textAlign: "center",
-                }}
-              >
-                <CardContent>
-                  <PersonIcon
-                    style={{ color: "#fff" }}
-                    className="text-green-500 text-3xl"
-                  />
-                  <div style={{ color: "#fff" }}>
-                    <h3 className="text-lg font-bold">
-                      Số lượng khách hàng mới
-                    </h3>
-                    <p className="text-2xl font-semibold">350</p>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card
-                sx={{
-                  backgroundColor: "#f28c5a",
-                  flex: 1,
-                  minWidth: 200,
-                  textAlign: "center",
-                }}
-              >
-                <CardContent>
-                  <AssignmentIcon
-                    style={{ color: "#fff" }}
-                    className="text-yellow-500 text-3xl"
-                  />
-                  <div style={{ color: "#fff" }}>
-                    <h3 className="text-lg font-bold">
-                      Số lượng công việc đang xử lý
-                    </h3>
-                    <p className="text-2xl font-semibold">5</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </Stack>
-          </Grid2>
-          <Grid2 size={6} sx={{ padding: 2 }}>
-            <Card>
-              <CardContent className="p-4">
-                <h3 className="text-lg font-bold mb-2">Doanh thu theo tháng</h3>
-                <ResponsiveContainer width="100%" height={400}>
-                  <LineChart data={revenueData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis yAxisId="left" />
-                    <YAxis yAxisId="right" orientation="right" />
-                    <Tooltip />
-                    <Legend />
-                    <Line
-                      yAxisId="left"
-                      type="monotone"
-                      dataKey="closedValue"
-                      stroke="#0077b6"
-                      activeDot={{ r: 8 }}
-                      name="Doanh số"
-                    />
-                    <Line
-                      yAxisId="right"
-                      type="monotone"
-                      dataKey="wonDeals"
-                      stroke="#d62828"
-                      activeDot={{ r: 8 }}
-                      name="Deal thành công"
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </Grid2>
-          {/* Sales Chart */}
-          <Grid2 size={6} sx={{ padding: 2 }}>
-            <Card>
-              <CardContent>
-                <h3 className="text-lg font-bold mb-2">
-                  Doanh số theo sản phẩm
-                </h3>
-                <ResponsiveContainer width="100%" height={400}>
-                  <PieChart>
-                    <Pie
-                      data={salesData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={120}
-                      fill="#8884d8"
-                      label
-                    >
-                      {salesData.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={COLORS[index % COLORS.length]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </Grid2>
-          <Grid2 size={6} sx={{ padding: 2 }}>
-            <Card>
-              <CardContent>
-                <h3 className="text-lg font-bold mb-2">Công việc trong tuần</h3>
-                <ResponsiveContainer width="100%" height={400}>
-                  <PieChart>
-                    <Pie
-                      data={taskData}
-                      dataKey="value"
-                      nameKey="name"
-                      cx="50%"
-                      cy="50%"
-                      outerRadius={140}
-                      label
-                    >
-                      {taskData.map((entry, index) => (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={["#00C49F", "#FF8042", "#0088FE"][index % 3]}
-                        />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                    <Legend verticalAlign="bottom" />
-                  </PieChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-          </Grid2>
-          <Grid2 size={6} sx={{ padding: 2 }}>
-            <Card>
-              <CardContent>
-                <h3 className="text-lg font-bold mb-2">KPI Cá Nhân</h3>
-                <ResponsiveContainer width="100%" height={400}>
-                  <RadarChart
-                    cx="50%"
-                    cy="50%"
-                    outerRadius="80%"
-                    data={dataKPI}
+                <DemoContainer
+                  components={["DateTimePicker", "DateTimePicker"]}
+                >
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    alignItems={{ xs: "stretch", sm: "center" }}
                   >
-                    <PolarGrid />
-                    <PolarAngleAxis dataKey="subject" />
-                    <PolarRadiusAxis angle={30} domain={[0, 150]} />
-                    <Tooltip />
-                    <Radar
-                      name="Nhân viên A"
-                      dataKey="A"
-                      stroke="#8884d8"
-                      fill="#8884d8"
-                      fillOpacity={0.6}
+                    <DateTimePicker
+                      label="Từ ngày"
+                      value={valueTuNgay}
+                      onChange={(newValue) => setValueTuNgay(newValue)}
                     />
-                  </RadarChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
+                    <DateTimePicker
+                      label="Đến ngày"
+                      value={valueDenNgay}
+                      onChange={(newValue) => setValueDenNgay(newValue)}
+                    />
+                  </Stack>
+                </DemoContainer>
+              </LocalizationProvider>
+            </Grid2>
+          </Grid2>
+          <Grid2 size={12}>
+            <Typography variant="h5" sx={{ textAlign: "left" }}>
+              <b>Tổng quan hiệu suất bán hàng </b>
+            </Typography>{" "}
+          </Grid2>
+          {hieuSuatBanHangData.map((item, index) => (
+            <Grid2 item size={3} sm={6} md={3} key={index}>
+              <StatisticCard {...item} />
+            </Grid2>
+          ))}
+          <Grid2 size={12}>
+            <Typography variant="h5" sx={{ textAlign: "left" }}>
+              <b>Cơ hội theo giai đoạn bán hàng </b>
+            </Typography>{" "}
+            <Paper>
+              {Array.isArray(baoCaoTheoCoHoiState) &&
+                baoCaoTheoCoHoiState.length > 0 && (
+                  <FunnelChartCustom
+                    data={baoCaoTheoCoHoiState}
+                    dataKey="soLuong"
+                    nameKey="tenCoHoi"
+                    fill="mauSac"
+                  />
+                )}
+            </Paper>
+          </Grid2>
+          <Grid2 size={12}>
+            <Typography variant="h5" sx={{ textAlign: "left" }}>
+              <b>Kết quả bán hàng </b>
+            </Typography>{" "}
+          </Grid2>
+          <Grid2 size={6}>
+            <Typography variant="body1" sx={{ textAlign: "left" }}>
+              <b>Báo giá theo trạng thái</b>
+            </Typography>{" "}
+            {Array.isArray(baoCaoBaoGiaState) &&
+              baoCaoBaoGiaState.length > 0 && (
+                <Piechart data={baoCaoBaoGiaState} dataKey={"number"} />
+              )}
+          </Grid2>
+          <Grid2 size={6}>
+            <Typography variant="body1" sx={{ textAlign: "left" }}>
+              <b>Đơn hàng theo trạng thái</b>
+            </Typography>{" "}
+            {Array.isArray(baoCaoDonHangState) &&
+              baoCaoDonHangState.length > 0 && (
+                <Piechart data={baoCaoDonHangState} dataKey={"number"} />
+              )}
+          </Grid2>
+          {/* <Grid2 size={4}>
+            <Typography variant="body1" sx={{ textAlign: "left" }}>
+              <b>Khách hàng tiềm năng chuyển đổi</b>
+            </Typography>{" "}
+            <Piechart data={baoGiaTheoTrangThai} dataKey={"number"} />
+          </Grid2> */}
+          <Grid2 size={12}>
+            <Typography variant="h5" sx={{ textAlign: "left" }}>
+              <b>Tổng quan hoạt động tương tác</b>
+            </Typography>{" "}
+          </Grid2>
+          {hoatDongTuongTacData.map((item, index) => (
+            <Grid2 item size={4} sm={6} md={3} key={index}>
+              <StatisticCard {...item} />
+            </Grid2>
+          ))}
+          <Grid2 size={8}>
+            <Typography variant="h5" sx={{ textAlign: "left" }}>
+              <b>Top 5 khách hàng tương tác gần đây</b>
+            </Typography>{" "}
+            <TableContainer
+              component={Paper}
+              sx={{
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                borderRadius: "12px",
+              }}
+            >
+              <Table
+                sx={{
+                  "& .MuiTableCell-root": { padding: "12px 16px" },
+                }}
+              >
+                <TableHead>
+                  <TableRow
+                    sx={{
+                      backgroundColor: "#f5f7fa",
+                      "& .MuiTableCell-head": {
+                        fontWeight: 600,
+                        color: "#1a1a1a",
+                        fontSize: "0.9rem",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.5px",
+                      },
+                    }}
+                  >
+                    <TableCell sx={{}}>STT</TableCell>
+                    <TableCell sx={{}}>Tên khách hàng</TableCell>
+                    <TableCell align="center" sx={{}}>
+                      Hoạt động
+                    </TableCell>
+                    <TableCell align="center" sx={{}}>
+                      Thời gian
+                    </TableCell>
+                    <TableCell align="center" sx={{}}>
+                      Trạng thái
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {Array.isArray(baoCaoTop5KhTuongTacGanDay) &&
+                    baoCaoTop5KhTuongTacGanDay.length > 0 &&
+                    baoCaoTop5KhTuongTacGanDay.map((khachhang, index) => (
+                      <TableRow
+                        key={khachhang.id}
+                        hover
+                        sx={{
+                          "&:hover": {
+                            backgroundColor: "#f9fafb",
+                            transition: "background-color 0.2s ease",
+                          },
+                          "& .MuiTableCell-body": {
+                            fontSize: "0.95rem",
+                            color: "#333",
+                            borderBottom: "1px solid #e8ecef",
+                          },
+                        }}
+                      >
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1.5,
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontWeight: 500,
+                                fontSize: "1rem",
+                                color: "#1a1a1a",
+                              }}
+                            >
+                              {khachhang.tenKhachHang}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography>{khachhang.tenHoatDong}</Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography>
+                            {" "}
+                            <Moment format="DD/MM/YYYY ">
+                              {new Date(khachhang.thoiGian)}
+                            </Moment>
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Typography>{khachhang.trangThaiThucHien}</Typography>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Grid2>
+          <Grid2 size={4}>
+            {Array.isArray(baoCaoCuocGoiTheoTrangThaiState) &&
+              baoCaoCuocGoiTheoTrangThaiState.length > 0 && (
+                <Piechart data={baoCaoCuocGoiTheoTrangThaiState} dataKey={"number"} />
+              )}
           </Grid2>
         </Grid2>
       </Paper>
@@ -357,4 +522,4 @@ const BanLamViecNhanVien = () => {
   );
 };
 
-export default BanLamViecNhanVien;
+export default index;

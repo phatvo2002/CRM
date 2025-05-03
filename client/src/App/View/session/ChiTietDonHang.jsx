@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Container,
   Typography,
@@ -19,15 +19,27 @@ import DoneIcon from "@mui/icons-material/Done";
 import DownloadIcon from "@mui/icons-material/Download";
 import ReplayIcon from "@mui/icons-material/Replay";
 import { useParams } from "react-router-dom";
-import { useGetGetDonHangByIdQuery } from "src/App/Api/DonHangApi";
+import {
+  useGetGetDonHangByIdQuery,
+  useXacNhanDonhangMutation,
+} from "src/App/Api/DonHangApi";
 import { useGetHangHoaQuanTamByDonHangIdQuery } from "src/App/Api/HangHoaQuanTam";
 import Moment from "react-moment";
+import Swal from "sweetalert2";
+import { useDownloadFileDonHangMutation } from "src/App/Api/FileApi";
 
 const ChiTietDonHang = () => {
   const { id } = useParams();
-  const { data: dataDonhang, isLoading: loadingDonhang, refetch } = useGetGetDonHangByIdQuery(id);
-  const { data: dataHangHoa, isLoading: loadingHangHoa } = useGetHangHoaQuanTamByDonHangIdQuery(id);
-
+  const {
+    data: dataDonhang,
+    isLoading: loadingDonhang,
+    refetch,
+  } = useGetGetDonHangByIdQuery(id);
+  const { data: dataHangHoa, isLoading: loadingHangHoa } =
+    useGetHangHoaQuanTamByDonHangIdQuery(id);
+  const [xacNhanDonhang] = useXacNhanDonhangMutation();
+  const [lyDoHuyDon, setLydoHuyDon] = useState(null);
+  const [downLoadDonHang] = useDownloadFileDonHangMutation()
   if (loadingDonhang || loadingHangHoa) {
     return (
       <Container sx={{ display: "flex", justifyContent: "center", py: 4 }}>
@@ -46,7 +58,6 @@ const ChiTietDonHang = () => {
     );
   }
 
-
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("vi-VN", {
       style: "currency",
@@ -54,18 +65,61 @@ const ChiTietDonHang = () => {
     }).format(value);
   };
   const tongTienHang = Array.isArray(dataHangHoa)
-  ? dataHangHoa.reduce((total, item) => total + (Number(item.thanhTien) || 0), 0)
-  : 0;
+    ? dataHangHoa.reduce(
+        (total, item) => total + (Number(item.thanhTien) || 0),
+        0
+      )
+    : 0;
 
-const tongTienThue = Array.isArray(dataHangHoa)
-  ? dataHangHoa.reduce((total, item) => total + (Number(item.tienThue) || 0), 0)
-  : 0;
+  const tongTienThue = Array.isArray(dataHangHoa)
+    ? dataHangHoa.reduce(
+        (total, item) => total + (Number(item.tienThue) || 0),
+        0
+      )
+    : 0;
 
-const tongChietKhau = Array.isArray(dataHangHoa)
-  ? dataHangHoa.reduce((total, item) => total + (Number(item.ChiecKhauDonHang) || 0), 0)
-  : 0;
+  const tongChietKhau = Array.isArray(dataHangHoa)
+    ? dataHangHoa.reduce(
+        (total, item) => total + (Number(item.ChiecKhauDonHang) || 0),
+        0
+      )
+    : 0;
 
-const tongCong = tongTienHang + tongTienThue - tongChietKhau;
+  const tongCong = tongTienHang + tongTienThue - tongChietKhau;
+
+  const handleXacNhanDonHang = async () => {
+    Swal.fire({
+      title: "Bạn có muốn xác nhận đơn hàng ? ",
+      text: "Lưu ý : sau khi xác nhận đơn hàng của bạn sẽ không thể hoàn hủy đơn hàng",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const data = {
+          id: id,
+          type: 1,
+          lyDoHuyDon: "",
+        };
+        const response = await xacNhanDonhang(data);
+        if (response?.data?.status == 200) {
+          Swal.fire({
+            title: "Xác nhận đơn hàng thành công",
+            icon: "success",
+          }).then(() => {
+            window.location.href = "https://mail.google.com/mail/";
+          });
+        } else {
+          Swal.fire({
+            title: "Đã có lỗi xảy ra ",
+            icon: "warning",
+          });
+        }
+      }
+    });
+  };
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -90,10 +144,15 @@ const tongCong = tongTienHang + tongTienThue - tongChietKhau;
         {/* Company Information */}
         <Box mb={4}>
           <Typography variant="body1" mb={1}>
-            <strong>Kính gửi:</strong> {dataDonhang?.khachHangMucTieu?.TenKhachHang || "Công ty ............................................................"}
+            <strong>Kính gửi:</strong>{" "}
+            {dataDonhang?.khachHangMucTieu?.TenKhachHang ||
+              "Công ty ............................................................"}
           </Typography>
           <Typography variant="body1">
-            Công ty {dataDonhang?.tenCongTyBenMua || "............................................................"} có nhu cầu đặt hàng tại Quý công ty theo mẫu yêu cầu.
+            Công ty{" "}
+            {dataDonhang?.tenCongTyBenMua ||
+              "............................................................"}{" "}
+            có nhu cầu đặt hàng tại Quý công ty theo mẫu yêu cầu.
           </Typography>
         </Box>
 
@@ -143,24 +202,26 @@ const tongCong = tongTienHang + tongTienThue - tongChietKhau;
         {/* Summary Section */}
         <Box mb={4}>
           <Typography variant="body1" fontWeight="bold">
-            Tổng tiền hàng: {formatCurrency(
-    Array.isArray(dataHangHoa)
-      ? dataHangHoa.reduce(
-          (total, item) => total + (Number(item.thanhTien) || 0),
-          0
-        )
-      : 0
-  )}
+            Tổng tiền hàng:{" "}
+            {formatCurrency(
+              Array.isArray(dataHangHoa)
+                ? dataHangHoa.reduce(
+                    (total, item) => total + (Number(item.thanhTien) || 0),
+                    0
+                  )
+                : 0
+            )}
           </Typography>
           <Typography variant="body1" fontWeight="bold">
-            Thuế VAT: {formatCurrency(
-    Array.isArray(dataHangHoa)
-      ? dataHangHoa.reduce(
-          (total, item) => total + (Number(item.tienThue) || 0),
-          0
-        )
-      : 0
-  )}
+            Thuế VAT:{" "}
+            {formatCurrency(
+              Array.isArray(dataHangHoa)
+                ? dataHangHoa.reduce(
+                    (total, item) => total + (Number(item.tienThue) || 0),
+                    0
+                  )
+                : 0
+            )}
           </Typography>
           {/* <Typography variant="body1" fontWeight="bold">
             Phí vận chuyển: {formatCurrency(dataDonhang?.phiVanChuyen || 0)}
@@ -173,7 +234,12 @@ const tongCong = tongTienHang + tongTienThue - tongChietKhau;
         {/* Delivery Information */}
         <Box mb={4}>
           <Typography variant="body1" fontWeight="bold">
-            Thời gian giao hàng: {<Moment format="DD/MM/YYYY ">{new Date(dataDonhang.hanGiaoHang)}</Moment> || "......"}
+            Thời gian giao hàng:{" "}
+            {(
+              <Moment format="DD/MM/YYYY ">
+                {new Date(dataDonhang.hanGiaoHang)}
+              </Moment>
+            ) || "......"}
           </Typography>
           <Typography variant="body1" fontWeight="bold">
             Địa điểm giao hàng: {dataDonhang?.ThongTinGiaoHang || "......"}
@@ -195,11 +261,13 @@ const tongCong = tongTienHang + tongTienThue - tongChietKhau;
           <Typography variant="h6" fontWeight="bold" mb={1}>
             Ghi chú khác
           </Typography>
-          <Typography variant="body2">{dataDonhang?.ghiChu || "Không có ghi chú."}</Typography>
+          <Typography variant="body2">
+            {dataDonhang?.ghiChu || "Không có ghi chú."}
+          </Typography>
         </Box>
 
         {/* Signature Section */}
-        <Stack direction="row" justifyContent="space-between" mb={4}>
+        {/* <Stack direction="row" justifyContent="space-between" mb={4}>
           <Box textAlign="center">
             <Typography variant="body2">
               {dataDonhang?.diaDiem || "..........."}, ngày {dataDonhang?.ngay || "..."} tháng {dataDonhang?.thang || "..."} năm {dataDonhang?.nam || "......."}
@@ -222,30 +290,38 @@ const tongCong = tongTienHang + tongTienThue - tongChietKhau;
               (Ký ghi rõ họ tên)
             </Typography>
           </Box>
-        </Stack>
+        </Stack> */}
 
         {/* Action Buttons */}
         <Stack direction="row" spacing={2} justifyContent="center">
-          <Button
-            variant="contained"
-            color="success"
-            startIcon={<DoneIcon />}
-            sx={{ minWidth: 160, py: 1 }}
-          >
-            Xác nhận đơn hàng
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            startIcon={<ReplayIcon />}
-            sx={{ minWidth: 160, py: 1 }}
-          >
-            Đề nghị trả hàng
-          </Button>
+          {dataDonhang?.maTinhTrangDonhang !== 3 ||
+            (dataDonhang?.maTinhTrangDonHang !== 4 && (
+              <>
+                <Button
+                  variant="contained"
+                  color="success"
+                  startIcon={<DoneIcon />}
+                  onClick={handleXacNhanDonHang}
+                  sx={{ minWidth: 160, py: 1 }}
+                >
+                  Xác nhận đơn hàng
+                </Button>
+                <Button
+                  variant="contained"
+                  color="error"
+                  startIcon={<ReplayIcon />}
+                  sx={{ minWidth: 160, py: 1 }}
+                >
+                  Hủy đơn hàng
+                </Button>
+              </>
+            ))}
+
           <Button
             variant="contained"
             color="primary"
             startIcon={<DownloadIcon />}
+            onClick={() => downLoadDonHang(id)}
             sx={{ minWidth: 160, py: 1 }}
           >
             Tải đơn hàng

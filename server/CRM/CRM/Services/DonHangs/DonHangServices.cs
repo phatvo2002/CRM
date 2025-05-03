@@ -48,9 +48,9 @@ namespace CRM.Services.DonHangs
             return await _donHangRepository.GetDonHangId(id);
         }
 
-        public async Task<ResultModal> XacNhanDonHang(Guid donHangId)
+        public async Task<ResultModal> XacNhanDonHang(XacNhanDonHangModal modal)
         {
-            return await _donHangRepository.XacNhanDonHang(donHangId);
+            return await _donHangRepository.XacNhanDonHang(modal);
         }
     }
 }

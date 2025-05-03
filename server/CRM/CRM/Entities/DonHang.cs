@@ -25,6 +25,7 @@
         public string? PhuongThucThanhToan { get; set; }
         public string? SoTaiKhoanNganHang { get; set; }
         public string? ChuTaiKhoan { get; set; }
+        public string? LyDoHuyDon { get; set; }
         public virtual TinhTrangDonHang? TinhTrangDonHang { get; set; }
         public virtual LoaiDonHang? LoaiDonHang { get; set; }
         public virtual TinhTrangGhiDoanhSo? TinhTrangGhiDoanhSo { get; set; }

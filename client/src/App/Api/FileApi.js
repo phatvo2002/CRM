@@ -39,7 +39,7 @@ export const apiFile = createApi({
         queryFn: async (donHangId, api, extraOptions, baseQuery) => {
           const result = await baseQuery({
             url: `/File/exportdonhang/${donHangId}`, 
-            method: "GET", 
+            method: "POST", 
             responseHandler: (response) => response.blob(),
           });
   

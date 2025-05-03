@@ -37,9 +37,9 @@ const KanbanCard = styled(Box)(({ theme, isDragging }) => ({
   },
 }));
 
-export const TabBieuDoCoHoi = () => {
+export const TabBieuDoCoHoi = ({dataCoHoi ,refetch}) => {
   const { data: dataGiaiDoan } = useGetAllGiaiDoanBanHangQuery();
-  const { data: dataCoHoi, refetch } = useGetCoHoiListQuery();
+ // const { data: dataCoHoi, refetch } = useGetCoHoiListQuery();
   const [kanbanData, setKanbanData] = useState({});
   const [updateGiaiDoan] = useUpdateGiaiDoanMutation();
 
@@ -63,7 +63,7 @@ export const TabBieuDoCoHoi = () => {
     });
 
     setKanbanData(formattedData);
-  }, [dataCoHoi, dataGiaiDoan]);
+  }, [dataGiaiDoan]);
 
   // Handle drag and drop
   const onDragEnd = async (result) => {

@@ -135,7 +135,7 @@ namespace CRM.Controllers.Files
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("exportdonhang/{donHangId}")]
+        [HttpPost("exportdonhang/{donHangId}")]
         //[JwtAuthorize]
         public async Task<IActionResult> ExportDonhang(Guid donHangId)
         {

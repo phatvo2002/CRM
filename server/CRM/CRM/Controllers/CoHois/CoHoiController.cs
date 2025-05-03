@@ -23,11 +23,12 @@ namespace CRM.Controllers.CoHois
 
         [HttpGet("getallcohoi")]
         [JwtAuthorize]
-        public async Task<IActionResult> GetAllCoHoi()
+        public async Task<IActionResult> GetAllCoHoi(DateTime tuNgay, DateTime denNgay)
         {
+            Guid nguoiDungId = HttpContext.GetUserId();
             try
             {
-                var result = await _coHoiServices.GetAll();
+                var result = await _coHoiServices.GetAllData(tuNgay, denNgay, nguoiDungId);
                 return Ok(result);
             }
             catch (Exception ex)
