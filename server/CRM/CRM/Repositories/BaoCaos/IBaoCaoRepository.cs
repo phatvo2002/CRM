@@ -19,5 +19,8 @@ namespace CRM.Repositories.BaoCaos
         Task<List<BaoCaoTop5NhanVienSuatSac>> BaoCaoTop5NhanVienSuatSacNhat(DateTime tuNgay, DateTime denNgay, int type);
         Task<List<BaoCaoTop5NhanVienCoDoanhThuCaoNhat>> BaoCaoTop5NhanVienCoDoanhThuCaoNhat(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId);
         Task<List<BaoCaoSoSanhDoanhThuTheoMucTieuDTO>> BaoCaoSoSanhDoanhThuNhanVien(DateTime tuNgay, DateTime denNgay, Guid phongBanId);
+        Task<BaoCaoNhiemVuDTO> BaoCaoNhiemVu(DateTime tuNgay, DateTime denNgay, Guid phongBanId);
+        Task<List<BaoCaoTop3NhanVienHoanThanhNhiemVuDTO>> BaoCaoTop3NhanVienHoanThanhNhiemVu(DateTime tuNgay, DateTime denNgay, Guid phongBanId);
+
     }
 }

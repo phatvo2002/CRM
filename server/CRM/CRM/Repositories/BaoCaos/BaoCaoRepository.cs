@@ -755,20 +755,52 @@ namespace CRM.Repositories.BaoCaos
                                                 }).ToListAsync();
             return db;
         }
-        private string LayMauSacTheoGiaiDoan(int maGiaiDoan)
+        public async Task<BaoCaoNhiemVuDTO> BaoCaoNhiemVuDTO(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
-            string maMau = "";
-            maMau = maGiaiDoan switch
-            {
-                1 => "8884d8",
-                2 => "#83a6ed",
-                3 => "#8dd1e1",
-                4 => "#82ca9d",
-                5 => "#a4de6c",
-                6 => "#fff",
-                _ => "#fff",
-            };
-            return maMau;
+            var thoiGianTuNgayThangTruoc = tuNgay.AddMonths(-1);
+            var thoiGianDenNgayThangTruoc = denNgay.AddMonths(-1);
+
+            var result = new BaoCaoNhiemVuDTO();
+            result.SoNhiemVuThangHienTai = await LayTongSoTheoNguoiDungAsync(_context.NhiemVus, tuNgay, denNgay, nguoiDungId);
+            result.SoNhiemVuThangTruoc = await LayTongSoTheoNguoiDungAsync(_context.NhiemVus, thoiGianTuNgayThangTruoc, thoiGianDenNgayThangTruoc, nguoiDungId);
+
+            return result;
+        }
+        public async Task<List<BaoCaoTop3NhanVienHoanThanhNhiemVuDTO>> BaoCaoTop3NhanVienHoanThanhNhiemVu(DateTime tuNgay, DateTime denNgay, Guid phongBanId)
+        {
+            var db = await _context.NhiemVus.Where(r => r.CreateAt >= tuNgay &&
+                                                       r.CreateAt <= denNgay &&
+                                                       r.IsDeleted == false &&
+                                                       r.PhongBanId == phongBanId &&
+                                                       r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5"))
+                                            .Include(r => r.Nguoidung)
+                                            .GroupBy(g => g.NguoiDungId)
+                                            .Select(f => new BaoCaoTop3NhanVienHoanThanhNhiemVuDTO
+                                            {
+                                                Id = f.First().Id,
+                                                HinhAnh = f.First().Nguoidung.HinhAnh,
+                                                TenNhanVien = $"{f.First().Nguoidung.HoVaDem} {f.First().Nguoidung.Ten}",
+                                                TongSoNhiemVuDaHoanThanh = f.Count(),
+                                            }).ToListAsync();
+            return db;
+        }
+        public async Task<BaoCaoNhiemVuDTO> BaoCaoNhiemVu(DateTime tuNgay, DateTime denNgay, Guid phongBanId)
+        {
+            var thoiGianTuNgayThangTruoc = tuNgay.AddMonths(-1);
+            var thoiGianDenNgayThangTruoc = denNgay.AddMonths(-1);
+
+            var result = new BaoCaoNhiemVuDTO();
+            result.SoNhiemVuThangHienTai = await _context.NhiemVus.Where(r => r.PhongBanId == phongBanId &&
+                                                                      r.CreateAt >= tuNgay &&
+                                                                      r.CreateAt <= denNgay &&
+                                                                      r.IsDeleted == false).CountAsync();
+
+            result.SoNhiemVuThangTruoc = await _context.NhiemVus.Where(r => r.PhongBanId == phongBanId &&
+                                                                      r.CreateAt >= thoiGianTuNgayThangTruoc &&
+                                                                      r.CreateAt <= thoiGianDenNgayThangTruoc &&
+                                                                      r.IsDeleted == false).CountAsync();
+
+            return result;
         }
         private async Task<int> LayTongSoTheoNguoiDungAsync<T>(IQueryable<T> query, DateTime tuNgay, DateTime denNgay, Guid nguoiDungId) where T : class
         {
@@ -826,7 +858,21 @@ namespace CRM.Repositories.BaoCaos
             }
             else return 0;
         }
-
+        private string LayMauSacTheoGiaiDoan(int maGiaiDoan)
+        {
+            string maMau = "";
+            maMau = maGiaiDoan switch
+            {
+                1 => "8884d8",
+                2 => "#83a6ed",
+                3 => "#8dd1e1",
+                4 => "#82ca9d",
+                5 => "#a4de6c",
+                6 => "#fff",
+                _ => "#fff",
+            };
+            return maMau;
+        }
 
     }
 }

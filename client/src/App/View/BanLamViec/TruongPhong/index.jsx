@@ -28,11 +28,7 @@ import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
-import LineCh from "src/App/Components/Customchart/CustomLine/LineCh";
-import { topNhanVien } from "src/App/Until/DataDefault";
-import { coHoiData } from "src/App/Until/DataDefault";
-import { doanhSoTheoHangHoaData } from "src/App/Until/DataDefault";
-import { donHangTheoTrangThai } from "src/App/Until/DataDefault";
+
 import {
   useGetBaoCaoSoSanhDoanhThuNhanVienQuery,
   useGetBaoCaoTheoBaoGiaQuery,

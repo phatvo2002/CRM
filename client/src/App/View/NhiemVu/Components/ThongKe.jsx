@@ -1,82 +1,86 @@
-import { Avatar, Box, Grid2, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import React, { useState } from "react";
+import {
+  Avatar,
+  Box,
+  Grid2,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import React, { useEffect, useState } from "react";
 import SouthIcon from "@mui/icons-material/South";
 import NorthIcon from "@mui/icons-material/North";
-import PersonIcon from "@mui/icons-material/Person";
+
 import AddTaskIcon from "@mui/icons-material/AddTask";
 import dayjs from "dayjs";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
+import {
+  useGetBaoCaoNhiemVuQuery,
+  useGetBaoCaoTop3NhanVienHoanThanhNhiemVuQuery,
+} from "src/App/Api/BaoCao.api";
+import NoImage from "src/App/Assets/image/no-image.png";
 
-const topNhanVien = [
-  {
-    id: 1,
-    name: "Nguyễn Văn A",
-    doanhThu: 13,
-    avatar: "https://i.pravatar.cc/40?img=1",
-  },
-  {
-    id: 2,
-    name: "Trần Thị B",
-    doanhThu: 20,
-    avatar: "https://i.pravatar.cc/40?img=2",
-  },
-  {
-    id: 3,
-    name: "Lê Văn C",
-    doanhThu: 10,
-    avatar: "https://i.pravatar.cc/40?img=3",
-  },
 
-];
+
 
 const trangThaiNhiemVu = [
-    {
-        name :"Chưa thực hiện",
-        value :10
-    },
-    {
-        name :"Đang thực hiện",
-        value :10
-    },
-    {
-        name :"Hoàn thành",
-        value :30
-    },
-    {
-        name :"Trễ hạn",
-        value :5
-    },
-]
+  {
+    name: "Chưa thực hiện",
+    value: 10,
+  },
+  {
+    name: "Đang thực hiện",
+    value: 10,
+  },
+  {
+    name: "Hoàn thành",
+    value: 30,
+  },
+  {
+    name: "Trễ hạn",
+    value: 5,
+  },
+];
 const ThongKe = () => {
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
   const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
+  const [baoCaoTongNhiemVu, setBaoCaoTongNhiemVu] = useState(null);
+  const { data: dataTongNhiemVu } = useGetBaoCaoNhiemVuQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
 
-  const data = {
-    title: "Tổng số khách tiềm năng mới",
-    value: 2,
-    description: "",
-    icon: <PersonIcon fontSize="large" />,
-    increase: <NorthIcon fontSize="large" />,
-    decrease: <SouthIcon fontSize="large" />,
-    color: "#00bcd4",
-    currentMonthValue: 15,
-    previousMonthValue: 10,
-  };
+  const { data: dataTop3NhanVienHoanThanhNhiemVu } =
+    useGetBaoCaoTop3NhanVienHoanThanhNhiemVuQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+    });
   const percentChange =
-    data.previousMonthValue === 0
-      ? data.currentMonthValue > 0
+    baoCaoTongNhiemVu?.soNhiemVuThangTruoc === 0
+      ? baoCaoTongNhiemVu?.soNhiemVuThangHienTai > 0
         ? 100
         : 0
       : Math.round(
-          ((data.currentMonthValue - data.previousMonthValue) /
-            data.previousMonthValue) *
+          ((baoCaoTongNhiemVu?.soNhiemVuThangHienTai -
+            baoCaoTongNhiemVu?.soNhiemVuThangTruoc) /
+            baoCaoTongNhiemVu?.soNhiemVuThangTruoc) *
             100
         );
   const isIncrease = percentChange >= 0;
   const ChangeIcon = isIncrease ? NorthIcon : SouthIcon;
+
+  useEffect(() => {
+    if (dataTongNhiemVu) setBaoCaoTongNhiemVu(dataTongNhiemVu);
+    else setBaoCaoTongNhiemVu([]);
+  }, [dataTongNhiemVu]);
   return (
     <>
       <Grid2 container spacing={2}>
@@ -128,7 +132,7 @@ const ThongKe = () => {
               </Typography>
 
               <Typography variant="h5" fontWeight="bold">
-                {15}
+                {baoCaoTongNhiemVu?.soNhiemVuThangHienTai}
               </Typography>
 
               <Stack direction="row" alignItems="center" spacing={1}>
@@ -144,8 +148,7 @@ const ThongKe = () => {
                   {percentChange}%
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  so với tháng trước (
-                  {data.previousMonthValue.toLocaleString("vi-VN")})
+                  so với tháng trước ({baoCaoTongNhiemVu?.soNhiemVuThangTruoc})
                 </Typography>
               </Stack>
 
@@ -186,75 +189,92 @@ const ThongKe = () => {
                     }}
                   >
                     <TableCell sx={{ width: "10%" }}>STT</TableCell>
-                    <TableCell sx={{ width: "60%" }}>Nhân viên</TableCell>
-                    <TableCell align="right" sx={{ width: "30%" }}>
-                      Doanh thu
+                    <TableCell align="center"  >Nhân viên</TableCell>
+                    <TableCell align="center" >
+                      Số nhiệm vụ đã hoàn thành
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {topNhanVien.map((nv, index) => (
-                    <TableRow
-                      key={nv.id}
-                      hover
-                      sx={{
-                        "&:hover": {
-                          backgroundColor: "#f9fafb",
-                          transition: "background-color 0.2s ease",
-                        },
-                        "& .MuiTableCell-body": {
-                          fontSize: "0.95rem",
-                          color: "#333",
-                          borderBottom: "1px solid #e8ecef",
-                        },
-                      }}
-                    >
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 1.5,
-                          }}
-                        >
-                          <Avatar
-                            src={nv.avatar}
+                  {Array.isArray(dataTop3NhanVienHoanThanhNhiemVu) &&
+                    dataTop3NhanVienHoanThanhNhiemVu.length > 0 &&
+                    dataTop3NhanVienHoanThanhNhiemVu.map((nv, index) => (
+                      <TableRow
+                        key={nv.id}
+                        hover
+                        sx={{
+                          "&:hover": {
+                            backgroundColor: "#f9fafb",
+                            transition: "background-color 0.2s ease",
+                          },
+                          "& .MuiTableCell-body": {
+                            fontSize: "0.95rem",
+                            color: "#333",
+                            borderBottom: "1px solid #e8ecef",
+                          },
+                        }}
+                      >
+                        <TableCell>{index + 1}</TableCell>
+                        <TableCell>
+                          <Box
                             sx={{
-                              width: 40,
-                              height: 40,
-                              border: "2px solid #e0e0e0",
-                              bgcolor: "#f0f0f0",
-                            }}
-                          />
-                          <Typography
-                            sx={{
-                              fontWeight: 500,
-                              fontSize: "1rem",
-                              color: "#1a1a1a",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 1.5,
                             }}
                           >
-                            {nv.name}
+                            {nv?.hinhAnh == null ? (
+                              <>
+                                <Avatar
+                                  src={NoImage}
+                                  sx={{
+                                    width: 40,
+                                    height: 40,
+                                    border: "2px solid #e0e0e0",
+                                    bgcolor: "#f0f0f0",
+                                  }}
+                                />
+                              </>
+                            ) : (
+                              <>
+                                <Avatar
+                                  src={"data:image/jpeg;base64," + nv?.hinhAnh}
+                                  sx={{
+                                    width: 40,
+                                    height: 40,
+                                    border: "2px solid #e0e0e0",
+                                    bgcolor: "#f0f0f0",
+                                  }}
+                                />
+                              </>
+                            )}
+                            <Typography
+                              sx={{
+                                fontWeight: 500,
+                                fontSize: "1rem",
+                                color: "#1a1a1a",
+                              }}
+                            >
+                              {nv.tenNhanVien}
+                            </Typography>
+                          </Box>
+                        </TableCell>
+                        <TableCell align="right">
+                          <Typography
+                            sx={{ fontWeight: 500, color: "#2e7d32" }}
+                          >
+                            {nv.tongSoNhiemVuDaHoanThanh}
                           </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography sx={{ fontWeight: 500, color: "#2e7d32" }}>
-                          {new Intl.NumberFormat("vi-VN", {
-                            style: "currency",
-                            currency: "VND",
-                          }).format(nv.doanhThu)}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                        </TableCell>
+                      </TableRow>
+                    ))}
                 </TableBody>
               </Table>
             </TableContainer>
           </Paper>
         </Grid2>
         <Grid2 size={6}>
-            <Piechart data={trangThaiNhiemVu} dataKey={"value"}/>
+          <Piechart data={trangThaiNhiemVu} dataKey={"value"} />
         </Grid2>
       </Grid2>
     </>

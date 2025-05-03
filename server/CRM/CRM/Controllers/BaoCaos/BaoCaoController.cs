@@ -241,6 +241,36 @@ namespace CRM.Controllers.BaoCaos
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getbaocaonhiemvu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoNhieVu(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                var result = await _baoCaoServices.BaoCaoNhiemVu(tuNgay, denNgay, phongBanId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getbaocaotop3nhanvienhoanthanhnhiemvu")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoTop3NhanVienHoanThanhNhiemVu(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                var result = await _baoCaoServices.BaoCaoTop3NhanVienHoanThanhNhiemVu(tuNgay, denNgay, phongBanId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
