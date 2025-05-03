@@ -28,20 +28,10 @@ import {
 import { useEffect, useState } from "react";
 import LineCh from "src/App/Components/Customchart/CustomLine/LineCh";
 import Barchart from "src/App/Components/Customchart/CustomBarchart/Barchart";
-import {
-  doanhThuTheoNamData,
-  top5NhanVienSuatSac,
-} from "src/App/Until/DataDefault";
-import { dataDoanhThuPhongBan } from "src/App/Until/DataDefault";
-import { dataTheoMucTieu } from "src/App/Until/DataDefault";
-import { dataCoHoiTheoGiaiDoan } from "src/App/Until/DataDefault";
-import { topNhanVien } from "src/App/Until/DataDefault";
-import { hieuSuatNhanVien } from "src/App/Until/DataDefault";
-import { phanBoNguonKhachHang } from "src/App/Until/DataDefault";
 import CustomBarchartDouble from "src/App/Components/Customchart/CustomBarchartDouble/CustomBarchartDouble";
-import FunnelChart from "src/App/Components/Customchart/CustomFunnelChart/FunnelChart";
 import StackedBarChart from "src/App/Components/Customchart/CustomStackedBarChart/StackedBarChart";
 import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
+import NoImage from "src/App/Assets/image/no-image.png"
 import {
   useGetBaoCaoDoanhThuQuery,
   useGetBaoCaoDoanhThuTheoNamQuery,
@@ -49,9 +39,14 @@ import {
   useGetBaoCaoNguonGocKhachHangQuery,
   useGetBaoCaoSoSanhMucTieuDoanhSoQuery,
   useGetBaoCaoTheoCoHoiQuery,
+  useGetBaoCaoTop5NhanVienCoDoanhThuCaoNhatQuery,
+  useGetBaoCaoTop5NhanVienSuatSacNhatQuery,
 } from "src/App/Api/BaoCao.api";
 import FunnelChartCustom from "src/App/Components/Customchart/CustomFunnelChart/FunnelChart";
+
+const userData = JSON.parse(localStorage.getItem("authorizationData"));
 const BanLamViec = () => {
+
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
   const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
   const [valueTuNgayTheoQuy, setValueTuNgayTheoQuy] = useState(
@@ -70,6 +65,7 @@ const BanLamViec = () => {
     useState(null);
   const [baoCaoTheoCoHoiState, setBaoCaoTheoCoHoiState] = useState(null);
   const [baoCaoNguonGocKhachHang, setBaoCaoNguonGocKhachHang] = useState(null);
+  const [baoCaoTop5NhanVienSuatSac , setBaoCaoTop5NhanVienSuatSac] = useState(null);
   const { data: dataBaoCaoDoanhThu } = useGetBaoCaoDoanhThuQuery({
     tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
     denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
@@ -98,6 +94,29 @@ const BanLamViec = () => {
     tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
     denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
   });
+
+  const {data : dataTop5NhanVienSuatSac} = useGetBaoCaoTop5NhanVienSuatSacNhatQuery(
+    {
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+      type :1
+    }
+  )
+   
+  const {data : dataTop5NhanVienCoDoanhThuCaoNhat} = useGetBaoCaoTop5NhanVienCoDoanhThuCaoNhatQuery(
+    {
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+    }
+  )
+
+  const {data : dataHoatDongNhanVien} = useGetBaoCaoTop5NhanVienSuatSacNhatQuery(
+    {
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+      type :2
+    }
+  )
 
   useEffect(() => {
     if (dataBaoCaoDoanhThu) {
@@ -138,6 +157,15 @@ const BanLamViec = () => {
       setBaoCaoNguonGocKhachHang([]);
     }
   }, [dataNguonGocKhachHang]);
+
+  useEffect(() => {
+    if (dataTop5NhanVienSuatSac) {
+      setBaoCaoTop5NhanVienSuatSac(dataTop5NhanVienSuatSac);
+    } else {
+      setBaoCaoTop5NhanVienSuatSac([]);
+    }
+  }, [dataTop5NhanVienSuatSac]);
+
 
   useEffect(() => {
     if (selectedYear && selectedQuy) {
@@ -257,6 +285,11 @@ const BanLamViec = () => {
     <>
       <Paper>
         <Grid2 container spacing={2} sx={{ padding: 2 }}>
+          <Grid2 size={12}>
+                      <Typography variant="h5" sx={{ textAlign: "center" }}>
+                        <b>BÀN LÀM VIỆC - Nhân Viên {userData?.response?.ten}</b>
+                      </Typography>{" "}
+          </Grid2>
           <Grid2 size={12}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
@@ -389,6 +422,7 @@ const BanLamViec = () => {
             </Typography>
           </Grid2>
           <Grid2 size={6}>
+            <Paper sx={{ padding: 2 }}>
             <Typography variant="body1" sx={{ textAlign: "center" }}>
               <b>Top 5 nhân viên suất sắc nhất</b>
             </Typography>
@@ -426,9 +460,10 @@ const BanLamViec = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {top5NhanVienSuatSac.map((nv, index) => (
+                  {Array.isArray(baoCaoTop5NhanVienSuatSac)  &&
+                     baoCaoTop5NhanVienSuatSac.length >0 && baoCaoTop5NhanVienSuatSac.map((nv, index) => (
                     <TableRow
-                      key={nv.id}
+                      key={nv.name}
                       hover
                       sx={{
                         "&:hover": {
@@ -451,8 +486,9 @@ const BanLamViec = () => {
                             gap: 1.5,
                           }}
                         >
-                          <Avatar
-                            src={nv.avatar}
+                          {nv?.hinhAnh == null ? <>
+                            <Avatar
+                            src={NoImage}
                             sx={{
                               width: 40,
                               height: 40,
@@ -460,6 +496,20 @@ const BanLamViec = () => {
                               bgcolor: "#f0f0f0",
                             }}
                           />
+                           </> : <>
+                           <Avatar
+                            src={
+                              "data:image/jpeg;base64," + nv?.hinhAnh
+                            }
+                            sx={{
+                              width: 40,
+                              height: 40,
+                              border: "2px solid #e0e0e0",
+                              bgcolor: "#f0f0f0",
+                            }}
+                          />
+                           </> }
+                        
                           <Typography
                             sx={{
                               fontWeight: 500,
@@ -471,14 +521,15 @@ const BanLamViec = () => {
                           </Typography>
                         </Box>
                       </TableCell>
-                      <TableCell align="right">{nv.cuocgoi}</TableCell>
-                      <TableCell align="right">{nv.lichHen}</TableCell>
-                      <TableCell align="right">{nv.NhiemVuHoanThanh}</TableCell>
+                      <TableCell align="right">{nv.soCuocGoiHoanThanh}</TableCell>
+                      <TableCell align="right">{nv.soLichHenHoanThanh}</TableCell>
+                      <TableCell align="right">{nv.soNhiemVuHoanThanh}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
+            </Paper>
           </Grid2>
           <Grid2 size={6}>
             <Paper sx={{ padding: 2 }}>
@@ -517,9 +568,11 @@ const BanLamViec = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {topNhanVien.map((nv, index) => (
+                    {Array.isArray(dataTop5NhanVienCoDoanhThuCaoNhat) &&
+                     dataTop5NhanVienCoDoanhThuCaoNhat.length > 0 &&
+                      dataTop5NhanVienCoDoanhThuCaoNhat.map((nv, index) => (
                       <TableRow
-                        key={nv.id}
+                        key={nv.tenNhanVien}
                         hover
                         sx={{
                           "&:hover": {
@@ -542,15 +595,29 @@ const BanLamViec = () => {
                               gap: 1.5,
                             }}
                           >
+                            {nv?.hinhAnh == null ? <>
                             <Avatar
-                              src={nv.avatar}
-                              sx={{
-                                width: 40,
-                                height: 40,
-                                border: "2px solid #e0e0e0",
-                                bgcolor: "#f0f0f0",
-                              }}
-                            />
+                            src={NoImage}
+                            sx={{
+                              width: 40,
+                              height: 40,
+                              border: "2px solid #e0e0e0",
+                              bgcolor: "#f0f0f0",
+                            }}
+                          />
+                           </> : <>
+                           <Avatar
+                            src={
+                              "data:image/jpeg;base64," + nv?.hinhAnh
+                            }
+                            sx={{
+                              width: 40,
+                              height: 40,
+                              border: "2px solid #e0e0e0",
+                              bgcolor: "#f0f0f0",
+                            }}
+                          />
+                           </> }
                             <Typography
                               sx={{
                                 fontWeight: 500,
@@ -558,7 +625,7 @@ const BanLamViec = () => {
                                 color: "background.primary",
                               }}
                             >
-                              {nv.name}
+                              {nv.tenNhanVien}
                             </Typography>
                           </Box>
                         </TableCell>
@@ -587,14 +654,18 @@ const BanLamViec = () => {
             <Typography variant="body1" sx={{ textAlign: "center" }}>
               <b>Hoạt động nhân viên</b>
             </Typography>
-            <StackedBarChart
-              data={hieuSuatNhanVien}
-              dataKeyName={"tenNhanVien"}
-              dataKey1={"cuocGoi"}
-              dataKey2={"lichHen"}
-              dataKey3={"nhiemVu"}
+            {Array.isArray(dataHoatDongNhanVien) && dataHoatDongNhanVien.length > 0
+             && (
+              <StackedBarChart
+              data={dataHoatDongNhanVien}
+              dataKeyName={"name"}
+              dataKey1={"soCuocGoiHoanThanh"}
+              dataKey2={"soLichHenHoanThanh"}
+              dataKey3={"soNhiemVuHoanThanh"}
               height={400}
             />
+             )}
+           
           </Grid2>
         </Grid2>
       </Paper>

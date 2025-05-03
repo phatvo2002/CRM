@@ -4,6 +4,7 @@
     {
         public int STT { get; set; }
         public string? Name { get; set; }
+        public byte[]? HinhAnh { get; set; }
         public int SoCuocGoiHoanThanh { get; set; }
         public int SoLichHenHoanThanh { get; set; }
         public int SoNhiemVuHoanThanh { get; set; }

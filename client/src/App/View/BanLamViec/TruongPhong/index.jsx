@@ -22,9 +22,8 @@ import RequestQuoteIcon from "@mui/icons-material/RequestQuote";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import SouthIcon from "@mui/icons-material/South";
 import NorthIcon from "@mui/icons-material/North";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
-import { Grid } from "@mui/joy";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -34,29 +33,65 @@ import { topNhanVien } from "src/App/Until/DataDefault";
 import { coHoiData } from "src/App/Until/DataDefault";
 import { doanhSoTheoHangHoaData } from "src/App/Until/DataDefault";
 import { donHangTheoTrangThai } from "src/App/Until/DataDefault";
+import {
+  useGetBaoCaoSoSanhDoanhThuNhanVienQuery,
+  useGetBaoCaoTheoBaoGiaQuery,
+  useGetBaoCaoTheoDonHangQuery,
+  useGetBaoCaoTop5NhanVienCoDoanhThuCaoNhatQuery,
+  useGetBaoTongTheQuery,
+} from "src/App/Api/BaoCao.api";
+import NoImage from "src/App/Assets/image/no-image.png";
+import CustomBarchartDouble from "src/App/Components/Customchart/CustomBarchartDouble/CustomBarchartDouble";
+
+const userData = JSON.parse(localStorage.getItem("authorizationData"));
 const index = () => {
+  const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
+  const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
+  const [dataBaoCao, setDataBaoCao] = useState(null);
+  const { data: dataBaoCaoTongThe } = useGetBaoTongTheQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataTop5NhanVienCoDoanhThuCaoNhat } =
+    useGetBaoCaoTop5NhanVienCoDoanhThuCaoNhatQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+    });
+  const { data: dataSoSanhDoanhThuNhaVien } =
+    useGetBaoCaoSoSanhDoanhThuNhanVienQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+    });
+  const { data: dataBaoGia } = useGetBaoCaoTheoBaoGiaQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
+  const { data: dataDonHang } = useGetBaoCaoTheoDonHangQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
   const statistics = [
     {
-      title: "Tổng số khách tiềm năng mới",
+      title: "Tổng số tiềm năng đã chuyển đổi",
       value: 2,
       description: "",
       icon: <PersonIcon fontSize="large" />,
       increase: <NorthIcon fontSize="large" />,
       decrease: <SouthIcon fontSize="large" />,
       color: "#00bcd4",
-      currentMonthValue: 15,
-      previousMonthValue: 10,
+      currentMonthValue: dataBaoCao?.khachHangTiemNangHienTai,
+      previousMonthValue: dataBaoCao?.khachHangTiemNangThangTruoc,
     },
     {
-      title: "Tổng số tiềm năng đã chuyển đổi",
+      title: "Tỷ lệ chuyển đổi tiềm năng thành khách hàng (%)",
       value: 2,
       description: "",
       icon: <ChangeCircleIcon fontSize="large" />,
       increase: <NorthIcon fontSize="large" />,
       decrease: <SouthIcon fontSize="large" />,
       color: "#f44336",
-      currentMonthValue: 15,
-      previousMonthValue: 10,
+      currentMonthValue: dataBaoCao?.tiLeChuyenDoiKhachHangThangHienTai,
+      previousMonthValue: dataBaoCao?.tiLeChuyenDoiKhachHangThangTruoc,
     },
     {
       title: "Tổng số cơ hội mới",
@@ -66,8 +101,8 @@ const index = () => {
       increase: <NorthIcon fontSize="large" />,
       decrease: <SouthIcon fontSize="large" />,
       color: "#4caf50",
-      currentMonthValue: 15,
-      previousMonthValue: 10,
+      currentMonthValue: dataBaoCao?.tongSoCoHoiHienTai,
+      previousMonthValue: dataBaoCao?.tongSoCoHoiThangTruoc,
     },
     {
       title: "Tổng số báo giá mới",
@@ -77,8 +112,8 @@ const index = () => {
       increase: <NorthIcon fontSize="large" />,
       decrease: <SouthIcon fontSize="large" />,
       color: "#b22a00",
-      currentMonthValue: 15,
-      previousMonthValue: 10,
+      currentMonthValue: dataBaoCao?.tongSoBaoGiaHienTai,
+      previousMonthValue: dataBaoCao?.tongSoBaoGiaThangTruoc,
     },
     {
       title: "Tổng số đơn hàng",
@@ -88,8 +123,8 @@ const index = () => {
       increase: <NorthIcon fontSize="large" />,
       decrease: <SouthIcon fontSize="large" />,
       color: "#b26500",
-      currentMonthValue: 15,
-      previousMonthValue: 10,
+      currentMonthValue: dataBaoCao?.tongSoDonHangHienTai,
+      previousMonthValue: dataBaoCao?.tongSoDonHangThangTruoc,
     },
     {
       title: "Tổng doanh thu",
@@ -98,12 +133,10 @@ const index = () => {
       increase: <NorthIcon fontSize="large" />,
       decrease: <SouthIcon fontSize="large" />,
       color: "#00bcd4",
-      currentMonthValue: 100000000,
-      previousMonthValue: 50000000,
+      currentMonthValue: dataBaoCao?.tongDoanhThuHienTai,
+      previousMonthValue: dataBaoCao?.tongDoanhThuThangTruoc,
     },
   ];
-  const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
-  const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
 
   const StatisticCard = ({
     title,
@@ -125,6 +158,12 @@ const index = () => {
 
     const isIncrease = percentChange >= 0;
     const ChangeIcon = isIncrease ? NorthIcon : SouthIcon;
+
+    useEffect(() => {
+      if (dataBaoCaoTongThe) {
+        setDataBaoCao(dataBaoCaoTongThe);
+      }
+    }, [dataBaoCaoTongThe]);
 
     return (
       <Paper
@@ -150,7 +189,7 @@ const index = () => {
           </Typography>
 
           <Typography variant="h5" fontWeight="bold">
-            {currentMonthValue.toLocaleString("vi-VN")}
+            {currentMonthValue}
           </Typography>
 
           <Stack direction="row" alignItems="center" spacing={1}>
@@ -163,7 +202,7 @@ const index = () => {
               {percentChange}%
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              so với tháng trước ({previousMonthValue.toLocaleString("vi-VN")})
+              so với tháng trước ({previousMonthValue})
             </Typography>
           </Stack>
 
@@ -179,7 +218,7 @@ const index = () => {
         <Grid2 container spacing={2} sx={{ padding: 2 }}>
           <Grid2 size={12}>
             <Typography variant="h5" sx={{ textAlign: "center" }}>
-              <b>BÀN LÀM VIỆC - TRƯỞNG PHÒNG</b>
+              <b>BÀN LÀM VIỆC - Nhân Viên {userData?.response?.ten}</b>
             </Typography>{" "}
           </Grid2>
           <Grid2 size={12}>
@@ -217,7 +256,7 @@ const index = () => {
         <Grid2 container spacing={2}>
           <Grid2 size={6}>
             <Paper sx={{ padding: 2 }}>
-              <Typography variant="h5" sx={{ textAlign: "center" }}>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
                 <b> Top 5 Nhân Viên Có Doanh Thu Cao Nhất</b>
               </Typography>
               <TableContainer
@@ -225,6 +264,7 @@ const index = () => {
                 sx={{
                   boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                   borderRadius: "12px",
+                  height: 400,
                 }}
               >
                 <Table
@@ -235,7 +275,7 @@ const index = () => {
                   <TableHead>
                     <TableRow
                       sx={{
-                        backgroundColor: "#f5f7fa",
+                        backgroundColor: "background.primary",
                         "& .MuiTableCell-head": {
                           fontWeight: 600,
                           color: "#1a1a1a",
@@ -246,107 +286,140 @@ const index = () => {
                       }}
                     >
                       <TableCell sx={{ width: "10%" }}>STT</TableCell>
-                      <TableCell >Nhân viên</TableCell>
-                      <TableCell align="center" >
-                        Doanh thu
-                      </TableCell>
+                      <TableCell>Nhân viên</TableCell>
+                      <TableCell align="center">Doanh thu</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {topNhanVien.map((nv, index) => (
-                      <TableRow
-                        key={nv.id}
-                        hover
-                        sx={{
-                          "&:hover": {
-                            backgroundColor: "#f9fafb",
-                            transition: "background-color 0.2s ease",
-                          },
-                          "& .MuiTableCell-body": {
-                            fontSize: "0.95rem",
-                            color: "#333",
-                            borderBottom: "1px solid #e8ecef",
-                          },
-                        }}
-                      >
-                        <TableCell>{index + 1}</TableCell>
-                        <TableCell>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 1.5,
-                            }}
-                          >
-                            <Avatar
-                              src={nv.avatar}
+                    {Array.isArray(dataTop5NhanVienCoDoanhThuCaoNhat) &&
+                      dataTop5NhanVienCoDoanhThuCaoNhat.length > 0 &&
+                      dataTop5NhanVienCoDoanhThuCaoNhat.map((nv, index) => (
+                        <TableRow
+                          key={nv.tenNhanVien}
+                          hover
+                          sx={{
+                            "&:hover": {
+                              backgroundColor: "background.primary",
+                              transition: "background-color 0.2s ease",
+                            },
+                            "& .MuiTableCell-body": {
+                              fontSize: "0.95rem",
+                              color: "#333",
+                              borderBottom: "1px solid #e8ecef",
+                            },
+                          }}
+                        >
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>
+                            <Box
                               sx={{
-                                width: 40,
-                                height: 40,
-                                border: "2px solid #e0e0e0",
-                                bgcolor: "#f0f0f0",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1.5,
                               }}
-                            />
+                            >
+                              {nv?.hinhAnh == null ? (
+                                <>
+                                  <Avatar
+                                    src={NoImage}
+                                    sx={{
+                                      width: 40,
+                                      height: 40,
+                                      border: "2px solid #e0e0e0",
+                                      bgcolor: "#f0f0f0",
+                                    }}
+                                  />
+                                </>
+                              ) : (
+                                <>
+                                  <Avatar
+                                    src={
+                                      "data:image/jpeg;base64," + nv?.hinhAnh
+                                    }
+                                    sx={{
+                                      width: 40,
+                                      height: 40,
+                                      border: "2px solid #e0e0e0",
+                                      bgcolor: "#f0f0f0",
+                                    }}
+                                  />
+                                </>
+                              )}
+                              <Typography
+                                sx={{
+                                  fontWeight: 500,
+                                  fontSize: "1rem",
+                                  color: "background.primary",
+                                }}
+                              >
+                                {nv.tenNhanVien}
+                              </Typography>
+                            </Box>
+                          </TableCell>
+                          <TableCell align="right">
                             <Typography
                               sx={{
                                 fontWeight: 500,
-                                fontSize: "1rem",
-                                color: "#1a1a1a",
+                                color: "background.primary",
                               }}
                             >
-                              {nv.name}
+                              {new Intl.NumberFormat("vi-VN", {
+                                style: "currency",
+                                currency: "VND",
+                              }).format(nv.doanhThu)}
                             </Typography>
-                          </Box>
-                        </TableCell>
-                        <TableCell align="right">
-                          <Typography
-                            sx={{ fontWeight: 500, color: "#2e7d32" }}
-                          >
-                            {new Intl.NumberFormat("vi-VN", {
-                              style: "currency",
-                              currency: "VND",
-                            }).format(nv.doanhThu)}
-                          </Typography>
-                        </TableCell>
-                      </TableRow>
-                    ))}
+                          </TableCell>
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
               </TableContainer>
             </Paper>
           </Grid2>
           <Grid2 size={6}>
-            <Typography variant="h5" sx={{ textAlign: "center" }}>
-              <b>Doanh số theo hàng hóa</b>
+            <Typography variant="body1" sx={{ textAlign: "center" }}>
+              <b>So sánh doanh số theo mục tiêu</b>
             </Typography>{" "}
-            <LineCh
-              data={doanhSoTheoHangHoaData}
-              dataKey1={"name"}
-              dataKey2={"cost"}
-              height={500}
-            />
+            {Array.isArray(dataSoSanhDoanhThuNhaVien) &&
+              dataSoSanhDoanhThuNhaVien.length > 0 && (
+                <CustomBarchartDouble
+                  data={dataSoSanhDoanhThuNhaVien}
+                  dataKeyName={"name"}
+                  dataKey1={"mucTieu"}
+                  dataKey2={"doanhSoThucTe"}
+                  height={440}
+                />
+              )}
           </Grid2>
           <Grid2 size={6}>
-            <Typography variant="h5" sx={{ textAlign: "center" }}>
-              <b>Cơ hội theo giai đoạn</b>
-            </Typography>{" "}
-            <Piechart
-              data={coHoiData}
-              dataKey={"soLuong"}
-              fill={"#03a9f4"}
-              height={500}
-            />
+            <Paper sx={{ height: 400 }}>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
+                <b>Báo giá theo trạng thái</b>
+              </Typography>{" "}
+              {Array.isArray(dataBaoGia) && dataBaoGia.length > 0 && (
+                <Piechart
+                  data={dataBaoGia}
+                  dataKey={"number"}
+                  fill={"#03a9f4"}
+                  height={300}
+                />
+              )}
+            </Paper>
           </Grid2>
           <Grid2 size={6}>
-            <Typography variant="h5" sx={{ textAlign: "center" }}>
-              <b>Đơn hàng theo trạng thái</b>
-            </Typography>{" "}
-            <Piechart
-              data={donHangTheoTrangThai}
-              dataKey={"number"}
-              fill={"#03a9f4"}
-              height={500}
-            />
+            <Paper sx={{ height: 400 }}>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
+                <b>Đơn hàng theo trạng thái</b>
+              </Typography>{" "}
+              {Array.isArray(dataDonHang) && dataDonHang.length > 0 && (
+                <Piechart
+                  data={dataDonHang}
+                  dataKey={"number"}
+                  fill={"#03a9f4"}
+                  height={300}
+                />
+              )}
+            </Paper>
           </Grid2>
         </Grid2>
       </Paper>
