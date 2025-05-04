@@ -109,7 +109,7 @@ const ChiTietDonHang = () => {
             title: "Xác nhận đơn hàng thành công",
             icon: "success",
           }).then(() => {
-            window.location.href = "https://mail.google.com/mail/";
+            window.location.href = `http://localhost:3000/khaosat/${id}`;
           });
         } else {
           Swal.fire({
