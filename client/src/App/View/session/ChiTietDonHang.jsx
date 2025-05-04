@@ -122,7 +122,7 @@ const ChiTietDonHang = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{ py: 4 }}>
       <Paper sx={{ p: 4, borderRadius: 2, boxShadow: 3 }}>
         {/* Header Section */}
         <Box textAlign="center" mb={4}>
@@ -294,8 +294,8 @@ const ChiTietDonHang = () => {
 
         {/* Action Buttons */}
         <Stack direction="row" spacing={2} justifyContent="center">
-          {dataDonhang?.maTinhTrangDonhang !== 3 ||
-            (dataDonhang?.maTinhTrangDonHang !== 4 && (
+          {dataDonhang?.maTinhTrangDonhang === 3 &&
+            ( (
               <>
                 <Button
                   variant="contained"

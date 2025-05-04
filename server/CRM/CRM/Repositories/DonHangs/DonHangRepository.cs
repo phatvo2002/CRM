@@ -17,6 +17,8 @@ namespace CRM.Repositories.DonHangs
             _mucTieuDoanhSoRepository = mucTieuDoanhSoRepository;
         }
 
+
+
         public async Task<ResultModal> ConvertDonHang(DonHangModal modal, Guid nguoiDungId, Guid phongBanId)
         {
             try
@@ -39,8 +41,8 @@ namespace CRM.Repositories.DonHangs
                     donHang.GiaTriDonHang = modal.GiaTriDonHang;
                     donHang.MaLienHe = null;
                     donHang.Id = Guid.NewGuid();
-                    donHang.SoTienConPhaiThu = modal.GiaTriDonHang;
                     donHang.ThucThuDonHang = modal.ThucThuDonHang;
+                    donHang.SoTienConPhaiThu = modal.GiaTriDonHang - modal.ThucThuDonHang;
                     donHang.PhuongThucThanhToan = modal.PhuongThucThanhToan;
                     donHang.SoTaiKhoanNganHang = modal.SoTaiKhoanNganHang;
                     donHang.ChuTaiKhoan = modal.ChuTaiKhoan;
@@ -52,33 +54,34 @@ namespace CRM.Repositories.DonHangs
 
                     foreach (var item in modal.HangHoaQuanTam)
                     {
-                        var dbHangHoa = _crmDbContext.HangHoaQuanTams.Where(r => r.Id == item.Id).FirstOrDefault();
-                        if (dbHangHoa != null)
-                        {
-                            dbHangHoa.KhachHangId = donHang.MaKhachHang;
-                            dbHangHoa.HoaDonId = donHang.Id;
-                            _crmDbContext.HangHoaQuanTams.Update(dbHangHoa);
-                        }
-                        else
-                        {
-                            HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
-                            hangHoaQuanTam.Id = Guid.NewGuid();
-                            hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
-                            hangHoaQuanTam.TenHangHoa = item.TenHangHoa;
-                            hangHoaQuanTam.KhachHangId = donHang.MaKhachHang;
-                            hangHoaQuanTam.KhachHangTiemNangId = null;
-                            hangHoaQuanTam.CoHoiId = null;
-                            hangHoaQuanTam.SoLuong = item.SoLuong;
-                            hangHoaQuanTam.ThanhTien = item.ThanhTien;
-                            hangHoaQuanTam.TongTien = item.TongTien;
-                            hangHoaQuanTam.ThueSuat = item.ThueSuat;
-                            hangHoaQuanTam.TienThue = item.TienThue;
-                            hangHoaQuanTam.DonGia = item.DonGia;
-                            hangHoaQuanTam.BaoGiaId = donHang.MaBaoGia;
-                            hangHoaQuanTam.ChiecKhauDonHang = item.ChiecKhauDonHang;
-                            hangHoaQuanTam.HoaDonId = donHang.Id;
-                            _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
-                        }
+                        //var dbHangHoa = _crmDbContext.HangHoaQuanTams.Where(r => r.Id == item.Id ).FirstOrDefault();
+                        //if (dbHangHoa != null)
+                        //{
+                        //    dbHangHoa.KhachHangId = donHang.MaKhachHang;
+                        //    dbHangHoa.HoaDonId = donHang.Id;
+                        //    _crmDbContext.HangHoaQuanTams.Update(dbHangHoa);
+                        //}
+                        //else
+                        //{
+                        HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
+                        hangHoaQuanTam.Id = Guid.NewGuid();
+                        hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
+                        hangHoaQuanTam.TenHangHoa = item.TenHangHoa;
+                        hangHoaQuanTam.KhachHangId = donHang.MaKhachHang;
+                        hangHoaQuanTam.KhachHangTiemNangId = null;
+                        hangHoaQuanTam.CoHoiId = null;
+                        hangHoaQuanTam.SoLuong = item.SoLuong;
+                        hangHoaQuanTam.ThanhTien = item.ThanhTien;
+                        hangHoaQuanTam.TongTien = item.TongTien;
+                        hangHoaQuanTam.ThueSuat = item.ThueSuat;
+                        hangHoaQuanTam.TienThue = item.TienThue;
+                        hangHoaQuanTam.DonGia = item.DonGia;
+                        hangHoaQuanTam.BaoGiaId = donHang.MaBaoGia;
+                        hangHoaQuanTam.MaDonViTinh = item.MaDonViTinh;
+                        hangHoaQuanTam.ChiecKhauDonHang = item.ChiecKhauDonHang;
+                        hangHoaQuanTam.HoaDonId = donHang.Id;
+                        _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
+                        //}
                     }
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Message = "Tạo đơn hàng thành công", Status = 200, Success = true };
@@ -91,9 +94,13 @@ namespace CRM.Repositories.DonHangs
             }
         }
 
-        public async Task<List<DonHangDTO>> GetAllDonHang()
+        public async Task<List<DonHangDTO>> GetAllDonHang(DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _crmDbContext.DonHangs.AsNoTracking().Include(r => r.KhachHangMucTieu)
+            var db = await _crmDbContext.DonHangs.AsNoTracking()
+                .Where(r => r.CreateAt >= tuNgay &&
+                           r.CreateAt <= denNgay &&
+                           r.IsDeleted == false)
+                .Include(r => r.KhachHangMucTieu)
                 .Include(r => r.Nguoidung).Include(r => r.TinhTrangDonHang).ToListAsync();
             return _mapper.Map<List<DonHangDTO>>(db);
         }
@@ -102,21 +109,29 @@ namespace CRM.Repositories.DonHangs
 
         public async Task<List<DonHangDTO>> GetDonHangByKhachHangId(string khachHangId)
         {
-            var db = await _crmDbContext.DonHangs.AsNoTracking().Where(r => r.MaKhachHang == khachHangId).Include(r => r.KhachHangMucTieu)
+            var db = await _crmDbContext.DonHangs.AsNoTracking().Where(r => r.MaKhachHang == khachHangId
+                                                               ).Include(r => r.KhachHangMucTieu)
+                                                                .Include(r => r.Nguoidung)
+                                                                .Include(r => r.TinhTrangDonHang).ToListAsync();
+            return _mapper.Map<List<DonHangDTO>>(db);
+        }
+
+        public async Task<List<DonHangDTO>> GetDonHangByNguoiDungId(Guid nguoiDungId, DateTime tuNgay, DateTime denNgay)
+        {
+            var db = await _crmDbContext.DonHangs.AsNoTracking().Where(r => r.NguoiDungId == nguoiDungId &&
+                                                                            r.CreateAt >= tuNgay &&
+                                                                            r.CreateAt <= denNgay &&
+                                                                            r.IsDeleted == false).Include(r => r.KhachHangMucTieu)
                 .Include(r => r.Nguoidung).Include(r => r.TinhTrangDonHang).ToListAsync();
             return _mapper.Map<List<DonHangDTO>>(db);
         }
 
-        public async Task<List<DonHangDTO>> GetDonHangByNguoiDungId(Guid nguoiDungId)
+        public async Task<List<DonHangDTO>> GetDonHangByPhongBanId(Guid phongBanId, DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _crmDbContext.DonHangs.AsNoTracking().Where(r => r.NguoiDungId == nguoiDungId).Include(r => r.KhachHangMucTieu)
-                .Include(r => r.Nguoidung).Include(r => r.TinhTrangDonHang).ToListAsync();
-            return _mapper.Map<List<DonHangDTO>>(db);
-        }
-
-        public async Task<List<DonHangDTO>> GetDonHangByPhongBanId(Guid phongBanId)
-        {
-            var db = await _crmDbContext.DonHangs.AsNoTracking().Where(r => r.PhongBanId == phongBanId).Include(r => r.KhachHangMucTieu)
+            var db = await _crmDbContext.DonHangs.AsNoTracking().Where(r => r.PhongBanId == phongBanId &&
+                                                                            r.CreateAt >= tuNgay &&
+                                                                            r.CreateAt <= denNgay &&
+                                                                            r.IsDeleted == false).Include(r => r.KhachHangMucTieu)
                 .Include(r => r.Nguoidung).Include(r => r.TinhTrangDonHang).ToListAsync();
             return _mapper.Map<List<DonHangDTO>>(db);
         }
@@ -185,6 +200,27 @@ namespace CRM.Repositories.DonHangs
             }
 
 
+
+        }
+        public async Task<ResultModal> CapNhatThucThuDonHang(Guid id, decimal soTien)
+        {
+            try
+            {
+                var db = await _crmDbContext.DonHangs.Where(r => r.Id == id).FirstOrDefaultAsync();
+                if (db != null)
+                {
+                    db.ThucThuDonHang += soTien;
+                    db.SoTienConPhaiThu = db.GiaTriDonHang - db.ThucThuDonHang;
+                    _crmDbContext.DonHangs.Update(db);
+                    await _crmDbContext.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Thành công", Success = true };
+                }
+                else return new ResultModal() { Status = 202, Message = "Không tìm thấy dữ liệu", Success = false };
+            }
+            catch
+            {
+                return new ResultModal() { Status = 500, Message = "Lỗi", Success = false };
+            }
         }
     }
 }

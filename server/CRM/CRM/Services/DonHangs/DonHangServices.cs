@@ -13,14 +13,19 @@ namespace CRM.Services.DonHangs
             _donHangRepository = donHangRepository;
         }
 
+        public async Task<ResultModal> CapNhatThucThuDonHang(Guid id, decimal soTien)
+        {
+            return await _donHangRepository.CapNhatThucThuDonHang(id, soTien);
+        }
+
         public async Task<ResultModal> ConvertDonHang(DonHangModal modal, Guid nguoiDungId, Guid phongBanId)
         {
             return await _donHangRepository.ConvertDonHang(modal, nguoiDungId, phongBanId);
         }
 
-        public async Task<List<DonHangDTO>> GetAllDonHang()
+        public async Task<List<DonHangDTO>> GetAllDonHang(DateTime tuNgay, DateTime denNgay)
         {
-            return await _donHangRepository.GetAllDonHang();
+            return await _donHangRepository.GetAllDonHang(tuNgay, denNgay);
         }
 
         public Task<DonHangDTO> GetDonHangById(Guid id)
@@ -33,14 +38,14 @@ namespace CRM.Services.DonHangs
             return await _donHangRepository.GetDonHangByKhachHangId(khachHangId);
         }
 
-        public async Task<List<DonHangDTO>> GetDonHangByNguoiDungId(Guid nguoiDungId)
+        public async Task<List<DonHangDTO>> GetDonHangByNguoiDungId(Guid nguoiDungId, DateTime tuNgay, DateTime denNgay)
         {
-            return await _donHangRepository.GetDonHangByNguoiDungId(nguoiDungId);
+            return await _donHangRepository.GetDonHangByNguoiDungId(nguoiDungId, tuNgay, denNgay);
         }
 
-        public async Task<List<DonHangDTO>> GetDonHangByPhongBanId(Guid phongBanId)
+        public async Task<List<DonHangDTO>> GetDonHangByPhongBanId(Guid phongBanId, DateTime tuNgay, DateTime denNgay)
         {
-            return await _donHangRepository.GetDonHangByPhongBanId(phongBanId);
+            return await _donHangRepository.GetDonHangByPhongBanId(phongBanId, tuNgay, denNgay);
         }
 
         public async Task<DonHangDTO> GetDonHangId(Guid id)

@@ -18,7 +18,6 @@ import IconWord from "../../Assets/icon/word.png";
 import IconExcel from "../../Assets/icon/excel.png";
 import {
   useDeleteDonHangMutation,
-  useGetAllDonHangQuery,
   useGetGetDonHangListQuery,
 } from "src/App/Api/DonHangApi";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -45,6 +44,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import dayjs from "dayjs";
 import { useDownloadFileDonHangMutation } from "src/App/Api/FileApi";
+import ModalChiTietDonHang from "./Modal/ModalChiTietDonHang";
 const orderStatusColors = {
   Mới: "#3498db",
   "Ðang xử lý": "#f1c40f",
@@ -59,18 +59,22 @@ const orderStatusColors = {
 const userData = JSON.parse(localStorage.getItem("authorizationData"));
 
 const DonHang = () => {
-  const { data: dataDonHang, refetch } = useGetGetDonHangListQuery();
+  const [valueTuNgay, setValueTuNgay] = React.useState(
+    dayjs().startOf("month")
+  );
+  const [valueDenNgay, setValueDenNgay] = React.useState(
+    dayjs().endOf("month")
+  );
+  const { data: dataDonHang, refetch } = useGetGetDonHangListQuery({
+    tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+    denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+  });
   const [deleteDonHang] = useDeleteDonHangMutation();
   const [mailDonHang] = useGuiMailDonHangMutation();
   const [exportDonHang] = useDownloadFileDonHangMutation();
   const [modalThemMoiDonHang, setModalThemMoiDonHang] = useState(false);
   const [modalChinhSuaDonHang, setModalChinhSuaDonHang] = useState(false);
-    const [valueTuNgay, setValueTuNgay] = React.useState(
-      dayjs().startOf("month")
-    );
-    const [valueDenNgay, setValueDenNgay] = React.useState(
-      dayjs().endOf("month")
-    );
+  const [openModal, setOpenModal] = useState(false);
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
     [anchorEl, setAnchorEl] = useState(null);
@@ -81,6 +85,8 @@ const DonHang = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleOpenModal = () => setOpenModal(true);
+  const handeCloseModal = () => setOpenModal(false);
   const handleOpenModalThemDonHang = () => {
     setModalThemMoiDonHang(true);
   };
@@ -132,11 +138,6 @@ const DonHang = () => {
   const handleEmailDonHang = async (trangThaiId, donHangId) => {
     switch (trangThaiId) {
       case 2:
-        toast.warning(
-          "Đơn hàng đang trong trạng thái chưa xác nhận nên không thể gửi "
-        );
-        break;
-      case 3:
         {
           if (
             selectedRow[0]?.khachHangMucTieu?.email !== "" ||
@@ -185,36 +186,41 @@ const DonHang = () => {
           }}
         >
           <Tooltip title="Sửa thông tin ">
-            <IconButton
-              disabled={selectedRow.length === 0}
-              style={{}}
-              onClick={handleOpenModalChinhSuaDonHang}
-            >
-              <EditIcon color="success" />
-            </IconButton>
+            <span>
+              <IconButton
+                disabled={selectedRow.length === 0}
+                style={{}}
+                onClick={handleOpenModalChinhSuaDonHang}
+              >
+                <EditIcon color="success" />
+              </IconButton>
+            </span>
           </Tooltip>
           <Tooltip title="Xóa">
-            <IconButton
-              disabled={selectedRow.length === 0}
-              style={{}}
-              onClick={handleDeleteDonhang}
-            >
-              <DeleteIcon color="error" />
-            </IconButton>
+            <span>
+              <IconButton
+                disabled={selectedRow.length === 0}
+                onClick={handleDeleteDonhang}
+              >
+                <DeleteIcon color="error" />
+              </IconButton>
+            </span>
           </Tooltip>
           <Tooltip title="Gửi mail đơn hàng ">
-            <IconButton
-              disabled={selectedRow.length === 0}
-              style={{}}
-              onClick={() =>
-                handleEmailDonHang(
-                  selectedRow[0]?.maTinhTrangDonHang,
-                  selectedRow[0]?.id
-                )
-              }
-            >
-              <ForwardToInboxIcon color="primary" />
-            </IconButton>
+            <span>
+              <IconButton
+                disabled={selectedRow.length === 0}
+                style={{}}
+                onClick={() =>
+                  handleEmailDonHang(
+                    selectedRow[0]?.maTinhTrangDonHang,
+                    selectedRow[0]?.id
+                  )
+                }
+              >
+                <ForwardToInboxIcon color="primary" />
+              </IconButton>
+            </span>
           </Tooltip>
         </div>
       ),
@@ -284,19 +290,10 @@ const DonHang = () => {
       width: 400,
       renderCell: (params) => (
         <div>
-          <Link
-            to={`/baogia/${params.id}`}
-            style={{
-              textDecoration: "none",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              color: "inherit",
-            }}
-          >
-            <Person2Icon style={{ color: "#1976d2" }} />
-            <span style={{ fontWeight: "500" }}>{params.value}</span>
-          </Link>
+          <Person2Icon style={{ color: "#1976d2" }} />
+          <span style={{ fontWeight: "500" }} onClick={handleOpenModal} >
+            {params.value}
+          </span>
         </div>
       ),
     },
@@ -532,6 +529,13 @@ const DonHang = () => {
         selectedItem={selectedRow}
         openModal={modalChinhSuaDonHang}
         handleClose={handleCloseModalChinhSuaDonHang}
+        refetch={refetch}
+      />
+      {/* Modal chi tiết đơn hàng  */}
+      <ModalChiTietDonHang
+        open={openModal}
+        handleClose={handeCloseModal}
+        selectedRow={selectedRow}
         refetch={refetch}
       />
     </>
