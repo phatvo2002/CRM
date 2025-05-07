@@ -218,7 +218,6 @@ const KhachHangTiemNang = () => {
       { field: "EmailCoQuan", headerName: "Tài khoản", width: 200 },
       { field: "nguonGoc", headerName: "Nguồn gốc khách hàng", width: 200 },
       { field: "linhVuc", headerName: "Lĩnh vực", width: 200 },
-  
     ],
     [selectedRow]
   );
@@ -351,12 +350,8 @@ const KhachHangTiemNang = () => {
       sx={{ p: 3, bgcolor: "background.default" }}
     >
       {/* Header Section */}
-      <Stack
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        mb={3}
-      >
+      <div style={{padding : 2}}>
+
         <Typography
           variant="h4"
           sx={{
@@ -365,10 +360,22 @@ const KhachHangTiemNang = () => {
             letterSpacing: "-0.5px",
           }}
         >
-          Tất Cả Tiềm Năng
+          Tiềm Năng
         </Typography>
+        <Typography>
+          {"Tiềm năng"} là những khách hàng hoặc cơ hội có khả năng chuyển đổi
+          thành khách hàng thực sự trong tương lai, giúp đội ngũ kinh doanh tập
+          trung vào những cơ hội quan trọng để tối ưu hóa quy trình bán hàng.
+        </Typography>
+        </div>
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        mb={3}
+      >
 
-        <Stack direction="row" spacing={1.5}>
+        <Stack direction="row" spacing={1.5} >
           <Button
             variant="contained"
             color="primary"
@@ -418,6 +425,18 @@ const KhachHangTiemNang = () => {
             onClick={handleClick}
           >
             Tùy chỉnh
+          </Button>
+          <Button
+            variant="text"
+            startIcon={<UpdateIcon />}
+            sx={{
+              textTransform: "none",
+              color: "#616161",
+              "&:hover": { bgcolor: "#f5f5f5" },
+            }}
+            onClick={handleOpen}
+          >
+            Lịch sử tương tác
           </Button>
         </Stack>
       </Stack>
@@ -478,20 +497,7 @@ const KhachHangTiemNang = () => {
           bgcolor: "background.default",
         }}
       >
-        <Box sx={{ p: 2, borderBottom: "1px solid #e0e0e0" }}>
-          <Button
-            variant="text"
-            startIcon={<UpdateIcon />}
-            sx={{
-              textTransform: "none",
-              color: "#616161",
-              "&:hover": { bgcolor: "#f5f5f5" },
-            }}
-            onClick={handleOpen}
-          >
-            Lịch sử tương tác
-          </Button>
-        </Box>
+     
         <Grid2 size={12} sx={{ marginTop: 3, marginLeft: 3 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>

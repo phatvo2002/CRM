@@ -86,9 +86,11 @@ namespace CRM.Entities
         public virtual DbSet<KPINhanVien> KPINhanViens { get; set; }
         public virtual DbSet<XepLoai> XepLoais { get; set; }
 
+        public virtual DbSet<KhaoSat> KhaoSats { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            // optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=1000;");
+            //optionsBuilder.UseSqlServer("Server=tcp:vodangphat2024.database.windows.net;Initial Catalog=CRM;Persist Security Info=False;User ID=vodangphat2024;Password=crm@2024;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=1000;");
             //Local connection :
             optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=CRM_V2;User Id=sa;Password=abc@123;Encrypt=True;TrustServerCertificate=true;Connection Timeout=1000;");
             // optionsBuilder.UseSqlServer("Server=MSI\\MSSQLSERVER6;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=6000;");
@@ -1053,6 +1055,28 @@ namespace CRM.Entities
                 entity.Property(e => e.MaMau).HasMaxLength(50);
             });
             #endregion
+
+
+            modelBuilder.Entity<KhaoSat>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_KhaoSat");
+
+                entity.ToTable("KhaoSat");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.NhanVienId).HasMaxLength(50);
+                entity.Property(e => e.TenNhanVien).HasMaxLength(50);
+                entity.Property(e => e.DonHangId).HasColumnType("uniqueidentifier");
+                entity.Property(e => e.NhanVienId).HasColumnType("uniqueidentifier");
+                entity.Property(e => e.TenNhanVien).HasMaxLength(50);
+                entity.Property(e => e.TraiNghiemMuaSam).HasMaxLength(50);
+                entity.Property(e => e.TraiNghiemTuVan).HasMaxLength(50);
+                entity.Property(e => e.TraiNghiemTiepTheo).HasMaxLength(50);
+                entity.Property(e => e.DanhGiaTongThe).HasColumnType("int");
+                entity.Property(e => e.YKienKhac).HasMaxLength(50);
+                entity.Property(e => e.CreateAt).HasColumnType("datetime");
+
+            });
 
         }
 

@@ -77,15 +77,13 @@ namespace CRM.Repositories.BaoCaos
                     // Lấy tổng doanh thu của tháng trước 
                     baoCaoDTO.TongDoanhThuThangTruoc = await LayTongDoanhThu(_context.DonHangs, thoiGianTuNgayThangTruoc, thoiGianDenNgayThangTruoc, nguoiDungId);
                 }
-
-                return baoCaoDTO;
-
             }
-            catch
+            catch (Exception ex)
             {
-                return baoCaoDTO;
+                throw new Exception("Lỗi ", ex);
             }
 
+            return baoCaoDTO;
         }
         public async Task<List<BaoCaoCoHoiDTO>> BaoCaoTheoCoHoi(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
@@ -347,27 +345,45 @@ namespace CRM.Repositories.BaoCaos
         public async Task<List<BaoCaoTop5KhachHangTuongTac>> BaoCaoTop5KhachHangTuongTac(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
             var result = new List<BaoCaoTop5KhachHangTuongTac>();
-            var dbKhachHangTuongTac = await _context.CuocGois.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay))
-                .Include(r => r.KhachHangMucTieu).Include(r => r.KhachHangTiemNang)
-                .ToListAsync();
-            if (dbKhachHangTuongTac != null)
+
+            try
             {
-                var top5KhachHangTuongTac = dbKhachHangTuongTac.OrderByDescending(r => r.CreateAt).Take(5);
+                var dbKhachHangTuongTac = await _context.CuocGois
+                    .Where(r => r.NguoiDungId == nguoiDungId
+                                && r.IsDeleted == false
+                                && r.CreateAt >= tuNgay
+                                && r.CreateAt <= denNgay)
+                    .Include(r => r.KhachHangMucTieu)
+                    .Include(r => r.KhachHangTiemNang)
+                    .OrderByDescending(r => r.CreateAt)
+                    .Take(5)
+                    .ToListAsync();
+
                 int stt = 1;
-                foreach (var item in top5KhachHangTuongTac)
+                foreach (var item in dbKhachHangTuongTac)
                 {
+                    var tenKhachHang = item.KhachHangTiemNang?.TenKhachHang
+                                       ?? item.KhachHangMucTieu?.TenKhachHang
+                                       ?? "Không xác định";
+
                     result.Add(new BaoCaoTop5KhachHangTuongTac
                     {
                         Id = item.Id,
-                        STT = stt,
+                        STT = stt++,
                         TenHoatDong = item.TieuDe,
-                        TenKhachHang = item.KhachHangTiemNang.TenKhachHang != null ? item.KhachHangTiemNang.TenKhachHang : item.KhachHangMucTieu.TenKhachHang,
-                        ThoiGian = (DateTime)item.CreateAt,
-                        TrangThaiThucHien = item.IsHoanThanh == false ? "Chưa hoàn thành" : "Hoàn thành",
+                        TenKhachHang = tenKhachHang,
+                        ThoiGian = item.CreateAt ?? DateTime.MinValue,
+                        TrangThaiThucHien = item.IsHoanThanh == false ? "Chưa hoàn thành" : "Hoàn thành"
                     });
                 }
             }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi khi lấy báo cáo top 5 khách hàng tương tác", ex);
+            }
+
             return result;
+
         }
         public async Task<List<BaoCaoResultDTO>> BaoCaoCuocGoiTheoTrangThai(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
@@ -827,7 +843,7 @@ namespace CRM.Repositories.BaoCaos
                 {
                     var result = await query.Where(r => (EF.Property<DateTime>(r, "CreateAt") >= tuNgay
                                                          && EF.Property<DateTime>(r, "CreateAt") <= denNgay)
-                                                         && EF.Property<Guid>(r, "NguoiDungId") == nguoiDungId && EF.Property<bool>(r, "IsDelete") == false).ToListAsync();
+                                                         && EF.Property<Guid>(r, "NguoiDungId") == nguoiDungId && EF.Property<bool>(r, "IsDeleted") == false).ToListAsync();
                     if (result.Count() > 0)
                         return result.Count();
                     else return 0;
@@ -836,7 +852,7 @@ namespace CRM.Repositories.BaoCaos
                 {
                     var result = await query.Where(r => (EF.Property<DateTime>(r, "CreateAt") >= tuNgay
                                                           && EF.Property<DateTime>(r, "CreateAt") <= denNgay)
-                                                          && EF.Property<Guid>(r, "PhongBanId") == checkPermissionData.MaPhongBan && EF.Property<bool>(r, "IsDelete") == false).ToListAsync();
+                                                          && EF.Property<Guid>(r, "PhongBanId") == checkPermissionData.MaPhongBan && EF.Property<bool>(r, "IsDeleted") == false).ToListAsync();
 
                     if (result.Count() > 0)
                         return result.Count();
@@ -850,28 +866,40 @@ namespace CRM.Repositories.BaoCaos
         private async Task<decimal> LayTongDoanhThu<T>(IQueryable<T> query, DateTime tuNgay, DateTime denNgay, Guid nguoiDungId) where T : class
         {
             var checkPermissionData = await _context.Nguoidungs.FirstOrDefaultAsync(r => r.Id == nguoiDungId);
-            if (checkPermissionData != null)
+            try
             {
-                if (checkPermissionData.CheckIsTruongPhong == false)
+                if (checkPermissionData != null)
                 {
-                    var result = query.Where(r => (tuNgay >= EF.Property<DateTime>(r, "CreateAt")
-                                                         && EF.Property<DateTime>(r, "CreateAt") <= denNgay)
-                                                         && EF.Property<Guid>(r, "NguoiDungId") == nguoiDungId);
-                    if (result.Count() > 0)
-                        return result.Sum(r => EF.Property<decimal>(r, "ThuThuDonHang"));
-                    else return 0;
+                    if (checkPermissionData.CheckIsTruongPhong == false)
+                    {
+                        var result = await query.Where(r => (EF.Property<DateTime>(r, "CreateAt") >= tuNgay
+                                                             && EF.Property<DateTime>(r, "CreateAt") <= denNgay)
+                                                             && EF.Property<Guid>(r, "NguoiDungId") == nguoiDungId
+                                                             && EF.Property<bool>(r, "IsDeleted") == false
+                                                             && EF.Property<int>(r, "MaTinhTrangDonHang") == 3).SumAsync(r => EF.Property<decimal>(r, "ThucThuDonHang"));
+                        if (result > 0)
+                            return result;
+                        else return 0;
+                    }
+                    else
+                    {
+                        var result = await query.Where(r => (EF.Property<DateTime>(r, "CreateAt") >= tuNgay
+                                                            && EF.Property<DateTime>(r, "CreateAt") <= denNgay)
+                                                            && EF.Property<Guid>(r, "PhongBanId") == checkPermissionData.MaPhongBan
+                                                            && EF.Property<bool>(r, "IsDeleted") == false
+                                                            && EF.Property<int>(r, "MaTinhTrangDonHang") == 3).SumAsync(r => EF.Property<decimal>(r, "ThucThuDonHang"));
+                        if (result > 0)
+                            return result;
+                        else return 0;
+                    }
                 }
-                else
-                {
-                    var result = query.Where(r => (tuNgay >= EF.Property<DateTime>(r, "CreateAt")
-                                                        && EF.Property<DateTime>(r, "CreateAt") <= denNgay)
-                                                        && EF.Property<Guid>(r, "PhongBanId") == checkPermissionData.MaPhongBan);
-                    if (result.Count() > 0)
-                        return result.Sum(r => EF.Property<decimal>(r, "ThuThuDonHang"));
-                    else return 0;
-                }
+                else return 0;
             }
-            else return 0;
+            catch (Exception ex)
+            {
+                throw new Exception("lỗi", ex);
+            }
+
         }
         private string LayMauSacTheoGiaiDoan(int maGiaiDoan)
         {

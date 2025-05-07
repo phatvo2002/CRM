@@ -121,6 +121,7 @@ const ChiTietDonHang = () => {
     });
   };
 
+
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Paper sx={{ p: 4, borderRadius: 2, boxShadow: 3 }}>
@@ -294,7 +295,7 @@ const ChiTietDonHang = () => {
 
         {/* Action Buttons */}
         <Stack direction="row" spacing={2} justifyContent="center">
-          {dataDonhang?.maTinhTrangDonhang === 3 &&
+          {dataDonhang?.maTinhTrangDonHang == 2 &&
             ( (
               <>
                 <Button

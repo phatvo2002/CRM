@@ -322,6 +322,9 @@ namespace CRM.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("ChuTaiKhoan")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime");
 
@@ -339,6 +342,9 @@ namespace CRM.Migrations
 
                     b.Property<bool>("IsGhiDoanhSo")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LyDoHuyDon")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("MaBaoGia")
                         .HasColumnType("uniqueidentifier");
@@ -376,6 +382,12 @@ namespace CRM.Migrations
 
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PhuongThucThanhToan")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SoTaiKhoanNganHang")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("SoTienConPhaiThu")
                         .HasColumnType("decimal(18,2)");
@@ -1013,6 +1025,56 @@ namespace CRM.Migrations
                     b.ToTable("KhachHangTiemNang", (string)null);
                 });
 
+            modelBuilder.Entity("CRM.Entities.KhaoSat", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime");
+
+                    b.Property<int>("DanhGiaTongThe")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("DonHangId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("KhachHangId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("NhanVienId")
+                        .HasMaxLength(50)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TenKhachHang")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TenNhanVien")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TraiNghiemMuaSam")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TraiNghiemTiepTheo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TraiNghiemTuVan")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("YKienKhac")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_KhaoSat");
+
+                    b.ToTable("KhaoSat", (string)null);
+                });
+
             modelBuilder.Entity("CRM.Entities.LichHen", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1636,6 +1698,9 @@ namespace CRM.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<bool?>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IsGuiMail")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("IsThongBao")

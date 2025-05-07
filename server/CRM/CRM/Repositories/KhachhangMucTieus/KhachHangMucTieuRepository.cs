@@ -73,6 +73,7 @@ namespace CRM.Repositories.KhachhangMucTieus
                             hangHoaQuanTam.TienThue = h.TienThue;
                             hangHoaQuanTam.ThanhTien = h.ThanhTien;
                             hangHoaQuanTam.TongTien = h.TongTien;
+                            hangHoaQuanTam.MaDonViTinh = h.MaDonViTinh;
                             _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
                         }
                     }

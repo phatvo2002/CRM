@@ -1,33 +1,135 @@
-import React, { PureComponent } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React from 'react';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  Label,
+} from 'recharts';
+import { Box, Typography, useTheme } from '@mui/material';
 
+// Custom Tooltip Component
+const CustomTooltip = ({ active, payload, label }) => {
+  const theme = useTheme();
+  if (active && payload && payload.length) {
+    return (
+      <Box
+        sx={{
+          backgroundColor: theme.palette.background.paper,
+          border: `1px solid ${theme.palette.divider}`,
+          borderRadius: theme.shape.borderRadius,
+          padding: 1.5,
+          boxShadow: theme.shadows[3],
+        }}
+      >
+        <Typography variant="subtitle2" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
+          {label}
+        </Typography>
+        {payload.map((entry, index) => (
+          <Typography key={index} variant="body2" sx={{ color: entry.color }}>
+            {`${entry.name}: ${entry.value}`}
+          </Typography>
+        ))}
+      </Box>
+    );
+  }
+  return null;
+};
 
-const CustomBarchartDouble = ({data , dataKey1, dataKey2 , dataKeyName , height}) => {
+const CustomBarchartDouble = ({
+  data,
+  dataKey1,
+  dataKey2,
+  dataKeyName,
+  height = 300,
+  bar1Fill = '#8884d8',
+  bar2Fill = '#82ca9d',
+}) => {
+  const theme = useTheme();
+
   return (
-    <>
-       <ResponsiveContainer width="100%" height={height}>
+    <Box
+      sx={{
+        width: '100%',
+        height,
+        padding: 2,
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: theme.shape.borderRadius,
+        boxShadow: theme.shadows[2],
+      }}
+    >
+      <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          width={500}
-          height={300}
           data={data}
           margin={{
-            top: 5,
+            top: 20,
             right: 30,
             left: 20,
-            bottom: 5,
+            bottom: 20,
           }}
         >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey={dataKeyName} />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey={dataKey1} fill="#8884d8" background={{ fill: '#eee' }} />
-          <Bar dataKey={dataKey2} fill="#82ca9d" />
+          <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} opacity={0.5} />
+          <XAxis
+            dataKey={dataKeyName}
+            tick={{ fill: theme.palette.text.secondary, fontSize: 12 }}
+            axisLine={{ stroke: theme.palette.divider }}
+          >
+            <Label
+              value="Danh mục"
+              offset={-10}
+              position="insideBottom"
+              style={{ fill: theme.palette.text.primary, fontWeight: 'bold' }}
+            />
+          </XAxis>
+          <YAxis
+            tick={{ fill: theme.palette.text.secondary, fontSize: 12 }}
+            axisLine={{ stroke: theme.palette.divider }}
+          >
+            <Label
+              value="Giá trị"
+              angle={-90}
+              position="insideLeft"
+              style={{ fill: theme.palette.text.primary, fontWeight: 'bold', textAnchor: 'middle' }}
+            />
+          </YAxis>
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: theme.palette.action.hover }} />
+          <Legend
+            formatter={(value) => (
+              <span style={{ color: theme.palette.text.primary, fontSize: 14 }}>{value}</span>
+            )}
+            wrapperStyle={{ paddingTop: 10 }}
+          />
+          <Bar
+            dataKey={dataKey1}
+            fill={bar1Fill}
+            radius={[4, 4, 0, 0]}
+            animationDuration={1000}
+            background={{ fill: theme.palette.grey[100], opacity: 0.3 }}
+            activeBar={{
+              fill: bar1Fill,
+              stroke: theme.palette.primary.dark,
+              strokeWidth: 2,
+            }}
+          />
+          <Bar
+            dataKey={dataKey2}
+            fill={bar2Fill}
+            radius={[4, 4, 0, 0]}
+            animationDuration={1000}
+            activeBar={{
+              fill: bar2Fill,
+              stroke: theme.palette.primary.dark,
+              strokeWidth: 2,
+            }}
+          />
         </BarChart>
       </ResponsiveContainer>
-    </>
-  )
-}
+    </Box>
+  );
+};
 
-export default CustomBarchartDouble
+export default CustomBarchartDouble;

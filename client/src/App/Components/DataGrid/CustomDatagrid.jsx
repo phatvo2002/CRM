@@ -11,68 +11,60 @@ import {
 import { styled } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
-import "../DataGrid/CustomDatagrid.css"
-import { Box, MenuItem, Select } from '@mui/material';
+import { Box, MenuItem, Select, IconButton, Typography, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
+// Styled DataGrid with modern look
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
-  fontSize: "1rem",
-  "& .MuiDataGrid-row:nth-of-type(odd)": {
-    backgroundColor: "transparent", 
+  fontSize: '0.875rem',
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: theme.shadows[2],
+  backgroundColor: theme.palette.background.primary,
+  '& .MuiDataGrid-row': {
+    transition: 'background-color 0.2s ease',
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
   },
-  "& .MuiDataGrid-row:nth-of-type(even)": {
-    backgroundColor: "transparent",
+  '& .MuiDataGrid-cell': {
+    borderBottom: `1px solid ${theme.palette.divider}`,
+  },
+  '& .MuiDataGrid-columnHeaders': {
+    backgroundColor: theme.palette.grey[100],
+    borderBottom: `2px solid ${theme.palette.primary.main}`,
+  },
+  '& .MuiDataGrid-footerContainer': {
+    borderTop: `1px solid ${theme.palette.divider}`,
+    padding: theme.spacing(1),
   },
 }));
-// const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
-//   fontSize: '1rem',
-//   '& .MuiDataGrid-virtualScroller': {
-//     scrollbarWidth: 'none', 
-//     '&::-webkit-scrollbar': {
-//       display: 'none', 
-//     },
-//   },
-// }));
-// function CustomPagination() {
-//   const apiRef = useGridApiContext();
-//   const page = useGridSelector(apiRef, gridPageSelector);
-//   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
 
-//   return (
-//     <Pagination
-//       color="primary"
-//       variant="outlined"
-//       shape="rounded"
-//       showFirstButton 
-//       showLastButton
-//       page={page + 1}
-//       sx={{
-//         display: "flex",
-//         paddingRight: "50%",
-//       }}
-//       count={pageCount}
-//       renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
-//       onChange={(event, value) => apiRef.current.setPage(value - 1)}
-//     />
-//   );
-// }
+// Custom Pagination Component
 function CustomPagination() {
   const apiRef = useGridApiContext();
   const page = useGridSelector(apiRef, gridPageSelector);
   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
   const pageSize = useGridSelector(apiRef, gridPageSizeSelector);
 
-  const handlePageSizeChange = React.useCallback((event) => {
-    const newSize = event.target.value;
-    apiRef.current.setPageSize(newSize);
-  }, [apiRef]);
+  const handlePageSizeChange = React.useCallback(
+    (event) => {
+      const newSize = event.target.value;
+      apiRef.current.setPageSize(newSize);
+    },
+    [apiRef]
+  );
 
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "8px",
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 1,
+        backgroundColor: 'background.primary',
+        borderTop: 1,
+        borderColor: 'divider',
       }}
     >
       {/* Page Size Selector */}
@@ -81,11 +73,18 @@ function CustomPagination() {
         onChange={handlePageSizeChange}
         size="small"
         variant="outlined"
-        sx={{ minWidth: 100 }}
+        sx={{
+          minWidth: 120,
+          backgroundColor: 'background.primary',
+          borderRadius: 1,
+          '& .MuiSelect-select': {
+            padding: '6px 12px',
+          },
+        }}
       >
         {[5, 10, 20, 50, 100].map((size) => (
           <MenuItem key={size} value={size}>
-           Hiển thị {size} dòng
+            Hiển thị {size} dòng
           </MenuItem>
         ))}
       </Select>
@@ -98,28 +97,88 @@ function CustomPagination() {
         showFirstButton
         showLastButton
         page={page + 1}
-        sx={{
-          display: "flex",
-        }}
         count={pageCount}
-        renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
+        sx={{
+          '& .MuiPaginationItem-root': {
+            borderRadius: 1,
+            transition: 'all 0.2s ease',
+            '&:hover': {
+              backgroundColor: 'background.primary',
+              color: 'primary.contrastText',
+            },
+            '&.Mui-selected': {
+              backgroundColor: 'background.primary',
+              color: 'primary.contrastText',
+            },
+          },
+        }}
+        renderItem={(props) => <PaginationItem {...props} disableRipple />}
         onChange={(event, value) => apiRef.current.setPage(value - 1)}
       />
     </Box>
   );
 }
+
+// Custom Toolbar Component
+const CustomToolbar = () => {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: 1,
+        borderBottom: 1,
+        borderColor: 'divider',
+        backgroundColor: 'grey.50',
+      }}
+    >
+      <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+        Dữ liệu
+      </Typography>
+      <Box sx={{ display: 'flex', gap: 1 }}>
+        <GridToolbar
+          slotProps={{
+            quickFilter: {
+              placeholder: 'Tìm kiếm...',
+              InputProps: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              },
+              sx: {
+                width: 300,
+                '& .MuiInputBase-root': {
+                  borderRadius: 1,
+                  backgroundColor: 'background.primary',
+                },
+              },
+            },
+          }}
+        />
+        <IconButton color="primary" aria-label="filter">
+          <FilterListIcon />
+        </IconButton>
+      </Box>
+    </Box>
+  );
+};
+
+// Main CustomDatagrid Component
 const CustomDatagrid = ({
-  rows ,
-  columns ,
+  rows,
+  columns,
   pageSizeOptions = [10, 25, 50, 100],
   initialPageSize = 25,
   getRowId,
-  checkboxSelection ,
+  checkboxSelection,
   disableMultipleSelection = false,
   disableRowSelectionOnClick = true,
-  showTopToolbar ,
+  showTopToolbar = true,
   onRowSelectionChange,
-  height
+  height = 'auto',
 }) => {
   const [paginationModel, setPaginationModel] = React.useState({
     pageSize: initialPageSize,
@@ -132,16 +191,17 @@ const CustomDatagrid = ({
       onRowSelectionChange(selectedRows);
     }
   };
-  const CustomHeaderWithToolbar = () => {
-    return (
-      <div style={{ display: 'flex',fontSize:"1rem", justifyContent: 'space-between', alignItems: 'center' }}>
-        <GridToolbar/>
-      </div>
-    );
-  };
 
   return (
-    <div style={{  width: '100%', overflow: 'auto'  }}>
+    <Box
+      sx={{
+        width: '100%',
+        height :'80%',
+        overflow: 'auto',
+        borderRadius: 1,
+        backgroundColor: 'background.primary',
+      }}
+    >
       <StyledDataGrid
         rows={rows}
         columns={columns}
@@ -150,34 +210,30 @@ const CustomDatagrid = ({
         disableRowSelectionOnClick={disableRowSelectionOnClick}
         paginationModel={paginationModel}
         onPaginationModelChange={setPaginationModel}
-        showTopToolbar={showTopToolbar}
         pageSizeOptions={pageSizeOptions}
-        showCellVerticalBorder={true}
-        style={{ marginTop: '10px' }}
+        showCellVerticalBorder
+        getRowId={getRowId}
+        sx={{
+          '& .MuiDataGrid-main': {
+            borderRadius: 1,
+          },
+        }}
         localeText={{
-          toolbarColumns: "Cột",
-          toolbarFilters: "Bộ lọc",
-          toolbarDensity: "Mật độ",
-          toolbarExport: "Xuất dữ liệu",
-          toolbarQuickFilterPlaceholder:"Tìm kiếm"
+          toolbarColumns: 'Cột',
+          toolbarFilters: 'Bộ lọc',
+          toolbarDensity: 'Mật độ',
+          toolbarExport: 'Xuất dữ liệu',
+          toolbarQuickFilterPlaceholder: 'Tìm kiếm',
         }}
         initialState={{
           pagination: {
-            paginationModel: { pageSize: 10, page: 0 },
+            paginationModel: { pageSize: initialPageSize, page: 0 },
           },
-        }}
-        componentsProps={{
-          pagination: {
-            sx: {
-              justifyContent: "flex-start", 
-            },
-          },
-          
         }}
         onRowSelectionModelChange={handleRowSelectionChange}
         slots={{
           pagination: CustomPagination,
-          toolbar: GridToolbar,
+          toolbar: showTopToolbar ? CustomToolbar : null,
         }}
         slotProps={{
           toolbar: {
@@ -189,8 +245,8 @@ const CustomDatagrid = ({
           },
         }}
       />
-    </div>
+    </Box>
   );
 };
 
-export default CustomDatagrid;
+export default  CustomDatagrid;
