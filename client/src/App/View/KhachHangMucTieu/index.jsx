@@ -34,7 +34,10 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useNavigate } from "react-router-dom";
 import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
 import ModalBanGiaoKhachHangMucTieu from "./Modal/ModalBanGiaoKhachHangMucTieu";
-import { useGetTemplatesMutation, useGetTemplatesQuery } from "src/App/Api/KhachHangTiemNangApi";
+import {
+  useGetTemplatesMutation,
+  useGetTemplatesQuery,
+} from "src/App/Api/KhachHangTiemNangApi";
 import ModalImportKhachHang from "./Modal/ModalImportKhachHang";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
@@ -45,7 +48,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
@@ -85,35 +88,35 @@ const KhachHangMucTieu = () => {
         >
           <Tooltip title="Sửa thông tin ">
             <span>
-            <IconButton
-              disabled={selectedRow.length === 0}
-              style={{}}
-              onClick={handleOpenModalUpdateKhachHang}
-            >
-              <EditIcon color="success" />
-            </IconButton>
+              <IconButton
+                disabled={selectedRow.length === 0}
+                style={{}}
+                onClick={handleOpenModalUpdateKhachHang}
+              >
+                <EditIcon color="success" />
+              </IconButton>
             </span>
           </Tooltip>
           <Tooltip title="Xóa">
             <span>
-            <IconButton
-              disabled={selectedRow.length === 0}
-              style={{}}
-              onClick={() => handleDeleteKhachHang(params?.id)}
-            >
-              <DeleteIcon color="error" />
-            </IconButton>
+              <IconButton
+                disabled={selectedRow.length === 0}
+                style={{}}
+                onClick={() => handleDeleteKhachHang(params?.id)}
+              >
+                <DeleteIcon color="error" />
+              </IconButton>
             </span>
           </Tooltip>
           <Tooltip title="Bàn giao khách hàng">
             <span>
-            <IconButton
-              disabled={selectedRow.length === 0}
-              style={{}}
-              onClick={handleOpenModalBanGiao}
-            >
-              <ThreePIcon color="primary" />
-            </IconButton>
+              <IconButton
+                disabled={selectedRow.length === 0}
+                style={{}}
+                onClick={handleOpenModalBanGiao}
+              >
+                <ThreePIcon color="primary" />
+              </IconButton>
             </span>
           </Tooltip>
         </div>
@@ -235,8 +238,11 @@ const KhachHangMucTieu = () => {
     setAnchorEl(null);
   };
   const { data: dataKhachHangByNguoiDung, refetch } =
-    useGetKhachHangMucTieuByNguoiDungIdQuery({tuNgay : valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"), denNgay:valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS")});
-  const [ getTemplate ] = useGetTemplatesMutation();
+    useGetKhachHangMucTieuByNguoiDungIdQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+      denNgay: valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+    });
+  const [getTemplate] = useGetTemplatesMutation();
   const [deleteNguoiDung] = useDeleteKhachHangMucTieuMutation();
   const [deleteHangLoat] = useDeletehangLoatKhachHangMucTieuMutation();
 
@@ -340,17 +346,27 @@ const KhachHangMucTieu = () => {
               alignItems="center"
               mb={2}
             >
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: 700,
-                  color: "#1a237e",
-                  letterSpacing: "-0.5px",
-                }}
-              >
-                Tất Cả Khách Hàng
-              </Typography>
+              <div>
+                <Typography
+                  variant="h4"
+                  sx={{
+                    fontWeight: 700,
+                    color: "#1a237e",
+                    letterSpacing: "-0.5px",
+                  }}
+                >
+                  Tất Cả Khách Hàng
+                </Typography>
+                <Typography>
+                  danh sách này lưu trữ thông tin chi tiết như lịch sử mua hàng,
+                  nhu cầu, và tương tác, giúp đội ngũ bán hàng và tiếp thị cá
+                  nhân hóa trải nghiệm khách hàng. Quản lý hiệu quả danh sách
+                  này giúp xây dựng mối quan hệ bền vững, tối ưu hóa chiến lược
+                  chăm sóc, và thúc đẩy doanh thu dài hạn
+                </Typography>
+              </div>
 
+            </Stack>
               <Stack direction="row" spacing={1.5}>
                 <Button
                   variant="contained"
@@ -402,6 +418,18 @@ const KhachHangMucTieu = () => {
                 >
                   Bàn giao
                 </Button>
+                <Button
+                  variant="text"
+                  startIcon={<UpdateIcon />}
+                  sx={{
+                    textTransform: "none",
+                    color: "#616161",
+                    "&:hover": { bgcolor: "#f5f5f5" },
+                  }}
+                  onClick={handleOpen}
+                >
+                  Lịch sử mua hàng
+                </Button>
 
                 <Button
                   id="basic-button"
@@ -424,7 +452,6 @@ const KhachHangMucTieu = () => {
                   Tùy chỉnh
                 </Button>
               </Stack>
-            </Stack>
           </Grid2>
 
           {/* Dropdown Menu */}
@@ -486,20 +513,7 @@ const KhachHangMucTieu = () => {
                 bgcolor: "background.default",
               }}
             >
-              <Box sx={{ p: 2, borderBottom: "1px solid #e0e0e0" }}>
-                <Button
-                  variant="text"
-                  startIcon={<UpdateIcon />}
-                  sx={{
-                    textTransform: "none",
-                    color: "#616161",
-                    "&:hover": { bgcolor: "#f5f5f5" },
-                  }}
-                  onClick={handleOpen}
-                >
-                  Lịch sử mua hàng
-                </Button>
-              </Box>
+              
               <Grid2 size={12} sx={{ marginTop: 3, marginLeft: 3 }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer
@@ -576,7 +590,7 @@ const KhachHangMucTieu = () => {
           refetch={refetch}
           selectedItem={selectedRow}
         />
- 
+
         <ModalKhachHangMucTieuDaXoa
           open={modalKhDaXoa}
           handleClose={handleCloseKhDaXoa}

@@ -196,7 +196,7 @@ const CustomDatagrid = ({
     <Box
       sx={{
         width: '100%',
-        height :'80%',
+        height :'100%',
         overflow: 'auto',
         borderRadius: 1,
         backgroundColor: 'background.primary',

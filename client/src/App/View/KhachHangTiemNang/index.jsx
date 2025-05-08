@@ -53,8 +53,11 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import ModalBanGiaoKhachHangHangHoat from "./Modal/ModalBanGiaoKhachHangHangHoat";
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
+  const [selectRowId , setSelectedRowId] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isActionOpen, setIsActionOpen] = useState(false);
   const [KhachHangDaXoaModal, setKhachHangDaXoaModal] = useState(false);
@@ -240,6 +243,7 @@ const KhachHangTiemNang = () => {
     dayjs().endOf("month")
   );
   const [openModalBanGiao, setOpenModalBanGiao] = useState(false);
+  const [openModalBanGiaoHangLoat, setOpenModalBanGiaohangLoat] = useState(false);
   const [getTemplate] = useGetTemplatesMutation();
   const { data: dataKHByRole, refetch: refetchkh } =
     useGetKhachHangTiemNangByroleQuery({
@@ -264,6 +268,8 @@ const KhachHangTiemNang = () => {
     setOpenModalBanGiao(false);
     setTypeModal("");
   };
+  const handleOpenModalBanGiaoKhachHangHangLoat = () => setOpenModalBanGiaohangLoat(true)
+  const handleCloseModalBanGiaoKhachHangHangLoat = () => setOpenModalBanGiaohangLoat(false)
 
   const handleDeletePhongBan = async (id) => {
     if (
@@ -342,8 +348,9 @@ const KhachHangTiemNang = () => {
 
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
+    let selectedRow = selectedRows.map(r=>r.id)
+    setSelectedRowId(selectedRow)
   };
-
   return (
     <Box
       className="modern-crm-page"
@@ -427,7 +434,7 @@ const KhachHangTiemNang = () => {
             Tùy chỉnh
           </Button>
           <Button
-            variant="text"
+            variant="outlined"
             startIcon={<UpdateIcon />}
             sx={{
               textTransform: "none",
@@ -437,6 +444,22 @@ const KhachHangTiemNang = () => {
             onClick={handleOpen}
           >
             Lịch sử tương tác
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<PeopleOutlineIcon />}
+            sx={{
+              borderRadius: 2,
+              textTransform: "none",
+              px: 2.5,
+              py: 1,
+              borderColor: "#e0e0e0",
+              color: "#424242",
+            }}
+            disabled={selectRowId.length == 0}
+            onClick={handleOpenModalBanGiaoKhachHangHangLoat}
+          >
+            Bàn giao
           </Button>
         </Stack>
       </Stack>
@@ -588,6 +611,17 @@ const KhachHangTiemNang = () => {
         handleClose={handleCloseModalXem}
         open={KhachHangDaXoaModal}
         refetch={refetchkh}
+      />
+
+      {/* Modal bàn giao hàng loạt */}
+      <ModalBanGiaoKhachHangHangHoat
+         selectedItem={selectRowId}
+         closeModal={handleCloseModalBanGiaoKhachHangHangLoat}
+         typeModal={typeModal}
+         setTypeModal={setTypeModal}
+         showModal={openModalBanGiaoHangLoat}
+         setLoading={setLoading}
+         refetch={refetchkh}
       />
     </Box>
   );

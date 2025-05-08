@@ -97,6 +97,13 @@ export const apiKhachHangTiemNang = createApi({
         method: "PUT",
       }),
     }),
+    bangiaoHangLoat: builder.mutation({
+      query: ({ data, userId }) => ({
+        url: `/KhachHangTiemNang/bangiaohangloat/${userId}`,
+        method: "PUT",
+        body: data,
+      }),
+    }),
     PhucHoiHangLoatKhachHangTiemNang: builder.mutation({
       query: (data) => ({
         url: "/KhachHangTiemNang/phuchoihangloat",
@@ -136,6 +143,7 @@ export const {
   useImportKhachHangMutation,
   useDeleteKhachHangTiemNangMutation,
   useDeletehangLoatKhachHangTiemNangMutation,
+  useBangiaoHangLoatMutation
 } = apiKhachHangTiemNang;
 
 export default apiKhachHangTiemNang.reducer;

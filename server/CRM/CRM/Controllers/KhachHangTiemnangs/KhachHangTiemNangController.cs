@@ -448,6 +448,20 @@ namespace CRM.Controllers.KhachHangTiemnangs
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("bangiaohangloat/{UserId}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> BanGiaoHangLoat(List<BanGiaoList> modals, Guid UserId)
+        {
+            try
+            {
+                ResultModal result = await _khachHangTiemNangServices.BanGiaoHangLoat(modals, UserId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpDelete("deletekhachhangtiemnang/{id}")]
         [JwtAuthorize]
         public async Task<IActionResult> DeleteKhachHangTiemNang(Guid id)
