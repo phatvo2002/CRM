@@ -61,8 +61,10 @@ const TabBanHang = () => {
     if (currentRow.isNew === true) {
       updatedRow = await createData(currentRow).unwrap();
       currentRow.isNew = false;
+      refetch()
     } else {
       updatedRow = await updateData(currentRow).unwrap();
+      refetch()
     }
     // setHangHoa((prev) =>
     //   prev.map((row) => (row.id === id ? { ...updatedRow } : row))
@@ -102,6 +104,7 @@ const TabBanHang = () => {
       try {
         await deleteData(id).unwrap();
         setHangHoa((prev) => prev.filter((row) => row.id !== id));
+        refetch()
         toast.success("Xóa hàng hóa thành công!");
       } catch (error) {
         toast.error("Đã có lỗi trong quá trình xóa!");

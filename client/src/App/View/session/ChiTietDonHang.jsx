@@ -109,7 +109,7 @@ const ChiTietDonHang = () => {
             title: "Xác nhận đơn hàng thành công",
             icon: "success",
           }).then(() => {
-            window.location.href = "https://mail.google.com/mail/";
+            window.location.href = `http://localhost:3000/khaosat/${id}`;
           });
         } else {
           Swal.fire({
@@ -121,8 +121,9 @@ const ChiTietDonHang = () => {
     });
   };
 
+
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{ py: 4 }}>
       <Paper sx={{ p: 4, borderRadius: 2, boxShadow: 3 }}>
         {/* Header Section */}
         <Box textAlign="center" mb={4}>
@@ -294,8 +295,8 @@ const ChiTietDonHang = () => {
 
         {/* Action Buttons */}
         <Stack direction="row" spacing={2} justifyContent="center">
-          {dataDonhang?.maTinhTrangDonhang !== 3 ||
-            (dataDonhang?.maTinhTrangDonHang !== 4 && (
+          {dataDonhang?.maTinhTrangDonHang == 2 &&
+            ( (
               <>
                 <Button
                   variant="contained"

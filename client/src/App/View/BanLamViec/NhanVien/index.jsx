@@ -12,6 +12,7 @@ import {
   TableRow,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import SouthIcon from "@mui/icons-material/South";
 import NorthIcon from "@mui/icons-material/North";
@@ -26,7 +27,8 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TaskAltIcon from "@mui/icons-material/TaskAlt";
 import PhoneForwardedIcon from "@mui/icons-material/PhoneForwarded";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import Person2Icon from "@mui/icons-material/Person2";
 import PersonPinIcon from "@mui/icons-material/PersonPin";
 import PaidIcon from "@mui/icons-material/Paid";
@@ -209,106 +211,155 @@ const index = () => {
 
     const isIncrease = percentChange >= 0;
     const ChangeIcon = isIncrease ? NorthIcon : SouthIcon;
+    const theme = useTheme();
 
-    useEffect(() => {
-      if (dataBaoCaoTongThe) {
-        setDataBaoCao(dataBaoCaoTongThe);
-      }
-    }, [dataBaoCaoTongThe]);
-
-    useEffect(() => {
-      if (dataBaoCaoTheoCoHoi) {
-        setBaoCaoTheoCoHoiState(dataBaoCaoTheoCoHoi);
-      } else {
-        setBaoCaoTheoCoHoiState([]);
-      }
-    }, [dataBaoCaoTheoCoHoi]);
-
-    useEffect(() => {
-      if (dataBaoGia) {
-        setBaoCaoBaoGiaState(dataBaoGia);
-      } else {
-        setBaoCaoBaoGiaState([]);
-      }
-    }, [dataBaoGia]);
-
-    useEffect(() => {
-      if (dataDonHang) {
-        setBaoCaoDonHangState(dataDonHang);
-      } else {
-        setBaoCaoDonHangState([]);
-      }
-    }, [dataDonHang]);
-    useEffect(() => {
-      if (dataHoatDong) {
-        setBaoCaoHoatDongState(dataHoatDong);
-      } else {
-        setBaoCaoHoatDongState([]);
-      }
-    }, [dataHoatDong]);
-
-    useEffect(() => {
-      if (dataTop5KhachHangTuongTacGanDay) {
-        setBaoCaoTop5KhachHangTuongTacGanDay(dataTop5KhachHangTuongTacGanDay);
-      } else {
-        setBaoCaoTop5KhachHangTuongTacGanDay([]);
-      }
-    }, [dataTop5KhachHangTuongTacGanDay]);
-
-    useEffect(() => {
-      if (dataBaoCaoCuocGoiTheoTrangThai) {
-        setBaoCaoCuocGoiTheoTrangThaiState(dataBaoCaoCuocGoiTheoTrangThai);
-      } else {
-        setBaoCaoCuocGoiTheoTrangThaiState([]);
-      }
-    }, [dataBaoCaoCuocGoiTheoTrangThai]);
 
     return (
       <Paper
-        elevation={3}
+        elevation={4}
         sx={{
-          display: "flex",
-          alignItems: "center",
-          p: 2,
-          borderLeft: `8px solid ${color}`,
-          backgroundColor: "background.primary",
-          height: "150px",
+          display: 'flex',
+          alignItems: 'center',
+          p: 3,
+          borderLeft: `6px solid ${color}`,
+          backgroundColor: theme.palette.background.paper,
+          borderRadius: theme.shape.borderRadius,
+          transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: theme.shadows[6],
+          },
+          height: '150px',
+          width: '100%',
         }}
       >
-        <Box sx={{ mr: 2, color }}>{icon}</Box>
-        <Box>
+        {/* Icon */}
+        <Box
+          sx={{
+            mr: 2,
+            color,
+            display: 'flex',
+            alignItems: 'center',
+            fontSize: '2.5rem',
+          }}
+        >
+          {icon}
+        </Box>
+  
+        {/* Content */}
+        <Box sx={{ flex: 1 }}>
+          {/* Title */}
           <Typography
-            variant="subtitle2"
+            variant="subtitle1"
             fontWeight="bold"
             color={color}
-            sx={{ height: "40px", overflow: "hidden" }}
+            sx={{
+              mb: 1,
+              lineHeight: 1.3,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
           >
             {title}
           </Typography>
-
-          <Typography variant="h5" fontWeight="bold">
+  
+          {/* Current Value */}
+          <Typography variant="h4" fontWeight="bold" color="text.primary" sx={{ mb: 1 }}>
             {currentMonthValue}
           </Typography>
-
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <ChangeIcon
-              fontSize="small"
-              sx={{ color: isIncrease ? "green" : "red" }}
-            />
-            <Typography variant="caption" color={isIncrease ? "green" : "red"}>
-              {isIncrease ? "+" : ""}
-              {percentChange}%
+  
+          {/* Change Information */}
+          <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+            {isIncrease ? (
+              <ArrowUpwardIcon fontSize="small" sx={{ color: 'success.main' }} />
+            ) : (
+              <ArrowDownwardIcon fontSize="small" sx={{ color: 'error.main' }} />
+            )}
+            <Typography
+              variant="body2"
+              fontWeight="medium"
+              color={isIncrease ? 'success.main' : 'error.main'}
+            >
+              {isIncrease ? '+' : ''}{percentChange}%
             </Typography>
-            <Typography variant="caption" color="text.secondary">
+            <Typography variant="body2" color="text.secondary">
               so với tháng trước ({previousMonthValue})
             </Typography>
           </Stack>
-
-          <Typography variant="body2">{description}</Typography>
+  
+          {/* Description */}
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{
+              lineHeight: 1.4,
+              display: '-webkit-box',
+              WebkitLineClamp: 2,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+            }}
+          >
+            {description}
+          </Typography>
         </Box>
       </Paper>
     );
   };
+  useEffect(() => {
+    if (dataBaoCaoTongThe) {
+      setDataBaoCao(dataBaoCaoTongThe);
+    }
+  }, [dataBaoCaoTongThe]);
+
+  useEffect(() => {
+    if (dataBaoCaoTheoCoHoi) {
+      setBaoCaoTheoCoHoiState(dataBaoCaoTheoCoHoi);
+    } else {
+      setBaoCaoTheoCoHoiState([]);
+    }
+  }, [dataBaoCaoTheoCoHoi]);
+
+  useEffect(() => {
+    if (dataBaoGia) {
+      setBaoCaoBaoGiaState(dataBaoGia);
+    } else {
+      setBaoCaoBaoGiaState([]);
+    }
+  }, [dataBaoGia]);
+
+  useEffect(() => {
+    if (dataDonHang) {
+      setBaoCaoDonHangState(dataDonHang);
+    } else {
+      setBaoCaoDonHangState([]);
+    }
+  }, [dataDonHang]);
+  useEffect(() => {
+    if (dataHoatDong) {
+      setBaoCaoHoatDongState(dataHoatDong);
+    } else {
+      setBaoCaoHoatDongState([]);
+    }
+  }, [dataHoatDong]);
+
+  useEffect(() => {
+    if (dataTop5KhachHangTuongTacGanDay) {
+      setBaoCaoTop5KhachHangTuongTacGanDay(dataTop5KhachHangTuongTacGanDay);
+    } else {
+      setBaoCaoTop5KhachHangTuongTacGanDay([]);
+    }
+  }, [dataTop5KhachHangTuongTacGanDay]);
+
+  useEffect(() => {
+    if (dataBaoCaoCuocGoiTheoTrangThai) {
+      setBaoCaoCuocGoiTheoTrangThaiState(dataBaoCaoCuocGoiTheoTrangThai);
+    } else {
+      setBaoCaoCuocGoiTheoTrangThaiState([]);
+    }
+  }, [dataBaoCaoCuocGoiTheoTrangThai]);
+
   return (
     <>
       <Paper>

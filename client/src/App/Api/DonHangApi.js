@@ -20,7 +20,7 @@ export const apiDonHang = createApi({
         query: () => `/DonHang/getalldonhang`,
       }),
       getGetDonHangList: builder.query({
-        query: () => `/DonHang/getdonhanglist`,
+        query: ({tuNgay , denNgay}) => `/DonHang/getdonhanglist?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
       getGetDonHangById: builder.query({
         query: (id) => `/DonHang/getdonhangbyid/${id}`,
@@ -52,6 +52,12 @@ export const apiDonHang = createApi({
           body : data
         }),
       }),
+      updateThucThuDonHang: builder.mutation({
+        query: ({id , soTien}) => ({
+          url: `/DonHang/capnhatthucthudonhang?id=${id}&soTien=${soTien}`, 
+          method: 'PUT', 
+        }),
+      }),
     }),
   });
   export const { 
@@ -61,7 +67,8 @@ export const apiDonHang = createApi({
    useAddDonHangMutation,
    useUpdateDonhangMutation,
    useDeleteDonHangMutation,
-   useXacNhanDonhangMutation
+   useXacNhanDonhangMutation,
+   useUpdateThucThuDonHangMutation
   } = apiDonHang;
 
 

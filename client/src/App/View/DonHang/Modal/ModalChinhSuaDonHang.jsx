@@ -1,4 +1,5 @@
 import { Grid2, TextField } from "@mui/material";
+import dayjs from "dayjs";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useUpdateDonhangMutation } from "src/App/Api/DonHangApi";
@@ -84,6 +85,8 @@ const ModalChinhSuaDonHang = ({
 }) => {
   const [khachHangId, setKhachHangId] = useState(null);
   const [updateDonhang] = useUpdateDonhangMutation();
+    const valueTuNgay = dayjs("1900-01-01").format('YYYY-MM-DD');
+    const valueDenNgay = dayjs("2100-12-31").format('YYYY-MM-DD');
   const _isMounted = useRef(false),
     modalRef = useRef(null),
     { data: dataTinhTrangDonHang, isLoading: isGetTinhTrangIsFetching } =
@@ -101,7 +104,7 @@ const ModalChinhSuaDonHang = ({
         skip: openModal == false,
       }),
     { data: dataKhachhangMucTieu, isLoading: isGetKhachHangIsFeatching } =
-      useGetKhachHangMucTieuByNguoiDungIdQuery(undefined, {
+      useGetKhachHangMucTieuByNguoiDungIdQuery({tuNgay : valueTuNgay , denNgay :valueDenNgay }, {
         skip: openModal == false,
       });
       const isLoading =
@@ -109,6 +112,7 @@ const ModalChinhSuaDonHang = ({
     isGetLoaiDonHangFetching ||
     isGetLienHeFetching ||
     isGetKhachHangIsFeatching;
+    console.log(selectedItem)
   const submitForm = (data) => {
     const tempData = {
       [modelObj.tenDonHang]: data[modelObj.tenDonHang],

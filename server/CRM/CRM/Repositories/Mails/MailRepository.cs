@@ -124,7 +124,7 @@ namespace CRM.Repositories.Mails
                           <p style={{text-align : center}}>Xin chào {(db.KhachHangMucTieu.TenKhachHang != "" ? db.KhachHangMucTieu.TenKhachHang : "")}
                                     , Bạn vui lòng kiểm tra thông tin chi tiết đơn hàng và nhấn nút xác nhận để xác nhận nếu bạn đồng ý với mức giá của chúng tôi.</p>
                           <p>{request.Body}</p>
-                          <p>Bấm vào nút dưới đây để xem chi tiết đơn đặt hàng:</p>
+                          <p>Bấm vào nút dưới đây để xác nhân đơn hàng và xem chi tiết đơn đặt hàng :</p>
                           <a href='http://localhost:3000/donhang/chitietdonhang/{donHangId}' class='button'>Xem chi tiết đơn hàng</a>
                      </div>
                        <div> 

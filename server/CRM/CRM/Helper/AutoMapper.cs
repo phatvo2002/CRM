@@ -82,6 +82,8 @@ namespace CRM.Helper
             CreateMap<EmailDaGui, MailDaGuiDTO>();
             CreateMap<MailDaGuiModal, EmailDaGui>().ReverseMap();
 
+            CreateMap<KhaoSat, KhaoSatDTO>();
+            CreateMap<KhaoSatModal, KhaoSat>().ReverseMap();
         }
     }
 }

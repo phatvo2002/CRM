@@ -379,6 +379,7 @@ export const ModalConvertBaoGia = ({
         { keepDirty: true }
       );
     };
+    console.log(coHoiData)
   useEffect(() => {
     if (rows) {
       setHangHoa(rows);

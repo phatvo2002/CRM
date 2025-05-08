@@ -35,7 +35,7 @@ namespace CRM.Controllers.DonHangs
         }
         [HttpGet("getdonhanglist")]
         [JwtAuthorize]
-        public async Task<IActionResult> GetDonhangList()
+        public async Task<IActionResult> GetDonhangList(DateTime tuNgay, DateTime denNgay)
         {
             try
             {
@@ -44,17 +44,17 @@ namespace CRM.Controllers.DonHangs
                 var db = _crmDbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId);
                 if (db.CheckIsTruongPhong == true && db.CheckIsGiamDoc == false)
                 {
-                    List<DonHangDTO> result = await _donHangServices.GetDonHangByPhongBanId(phongBanid);
+                    List<DonHangDTO> result = await _donHangServices.GetDonHangByPhongBanId(phongBanid, tuNgay, denNgay);
                     return Ok(result);
                 }
                 else if (db.CheckIsTruongPhong == false && db.CheckIsGiamDoc == true)
                 {
-                    List<DonHangDTO> result = await _donHangServices.GetAllDonHang();
+                    List<DonHangDTO> result = await _donHangServices.GetAllDonHang(tuNgay, denNgay);
                     return Ok(result);
                 }
                 else
                 {
-                    List<DonHangDTO> result = await _donHangServices.GetDonHangByNguoiDungId(nguoiDungId);
+                    List<DonHangDTO> result = await _donHangServices.GetDonHangByNguoiDungId(nguoiDungId, tuNgay, denNgay);
                     return Ok(result);
                 }
             }
@@ -136,6 +136,20 @@ namespace CRM.Controllers.DonHangs
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut("capnhatthucthudonhang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> CapNhatThucThuDonHang(Guid id, decimal soTien)
+        {
+            try
+            {
+                var result = await _donHangServices.CapNhatThucThuDonHang(id, soTien);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpDelete("deletedonhang")]
         [JwtAuthorize]
         public async Task<IActionResult> DeleteDonHang(Guid id)
@@ -150,5 +164,6 @@ namespace CRM.Controllers.DonHangs
                 return BadRequest(ex.Message);
             }
         }
+
     }
 }

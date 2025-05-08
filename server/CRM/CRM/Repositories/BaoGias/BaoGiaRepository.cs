@@ -50,9 +50,7 @@ namespace CRM.Repositories.BaoGias
                             HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
                             hangHoaQuanTam.Id = Guid.NewGuid();
                             hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
-
                             var hanghoa = _crmDbContext.HangHoas.FirstOrDefault(r => r.Id == hangHoaQuanTam.MaHangHoaId);
-
                             hangHoaQuanTam.TenHangHoa = hanghoa != null ? hanghoa.TenHangHoa : "";
                             hangHoaQuanTam.KhachHangId = baoGia.MaKhachHang;
                             hangHoaQuanTam.CoHoiId = baoGia.MaCoHoi;
@@ -63,6 +61,7 @@ namespace CRM.Repositories.BaoGias
                             hangHoaQuanTam.TienThue = item.TienThue;
                             hangHoaQuanTam.ThanhTien = item.ThanhTien;
                             hangHoaQuanTam.TongTien = item.TongTien;
+                            hangHoaQuanTam.MaDonViTinh = item.MaDonViTinh;
                             hangHoaQuanTam.ChiecKhauDonHang = item.ChiecKhauDonHang;
                             _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
                         }

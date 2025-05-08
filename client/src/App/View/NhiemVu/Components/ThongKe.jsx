@@ -263,7 +263,6 @@ const ThongKe = () => {
           {Array.isArray(dataNhiemVuTheoTrangThai) &&
            dataNhiemVuTheoTrangThai.length >0 &&
            (<Piechart data={dataNhiemVuTheoTrangThai} dataKey={"number"} />)}
-          
         </Grid2>
       </Grid2>
     </>

@@ -1,8 +1,12 @@
 import {
   Box,
   Button,
+  FormControl,
+  FormControlLabel,
   Grid2,
   IconButton,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
@@ -62,6 +66,9 @@ const modelObj = {
     thongTinHoaDon: "thongTinHoaDon",
     thongTinGiaoHang: "thongTinGiaoHang",
     hangHoaQuanTam: "hangHoaQuanTam",
+    phuongThucThanhToan: "phuongThucThanhToan",
+    soTaiKhoanNganHang: "soTaiKhoanNganHang",
+    chuTaiKhoan: "chuTaiKhoan",
   },
   labelObj = {
     id: "Mã đơn hàng",
@@ -82,6 +89,8 @@ const modelObj = {
     maTinhTrangGhiDoanhSo: "Tình trạng ghi doanh số",
     thongTinHoaDon: "Thông tin hóa đơn",
     thongTinGiaoHang: "Thông tin giao hàng",
+    soTaiKhoanNganHang: "Số tài khoản ngân hàng",
+    chuTaiKhoan: "Chủ tài khoản",
   },
   initialFormState = {
     [modelObj.id]: "",
@@ -103,6 +112,9 @@ const modelObj = {
     [modelObj.thongTinHoaDon]: "",
     [modelObj.thongTinGiaoHang]: "",
     [modelObj.hangHoaQuanTam]: [],
+    [modelObj.phuongThucThanhToan]: null,
+    [modelObj.soTaiKhoanNganHang]: null,
+    [modelObj.chuTaiKhoan]: null,
   },
   schema = yup.object().shape({
     [modelObj.tenDonHang]: validateString(),
@@ -112,7 +124,7 @@ const modelObj = {
     [modelObj.thongTinGiaoHang]: validateString(),
   });
 export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
-  console.log(khachHangData)
+  const [phuongThucThanhToan, setPhuongThucThanhToanValue] = React.useState("");
   const [isSave, setIsSave] = useState(false);
   const _isMounted = useRef(false),
     modalRef = useRef(null),
@@ -158,7 +170,8 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
       tenHangHoa: "",
       khachHangTiemNangId: null,
       khachHangId: null,
-      baoGiaId : id,
+      maDonViTinh:0,
+      baoGiaId : null,
       coHoiId: null,
       soLuong: 0,
       thueSuat: 0,
@@ -204,8 +217,10 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
     const updateTongTien = selectedItem ? updatedThanhTien + updateTienThue : 0;
     const updatedRow = {
       ...newRow,
+      tenHangHoa : selectedItem?.tenHangHoa,
       tienThue: updateTienThue,
       thanhTien: updatedThanhTien,
+      maDonViTinh :selectedItem?.donViTinh?.id,
       tongTien: updateTongTien,
       donGia: selectedItem.donGia,
     };
@@ -243,6 +258,28 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
     hangHoa.reduce((sum, row) => sum + (Number(row.chiecKhauDonHang) || 0), 0);
   const columns = [
     {
+      field: "actions",
+      type: "actions",
+      headerName: "Hành động",
+      width: 200,
+      getActions: ({ id }) => [
+        <IconButton
+          key={`edit-${id}`}
+          onClick={() => handleSaveClick(id)}
+          color="primary"
+        >
+          <SaveIcon />
+        </IconButton>,
+        <IconButton
+          key={`delete-${id}`}
+          onClick={handleDeleteClick(id)}
+          color="error"
+        >
+          <DeleteIcon />
+        </IconButton>,
+      ],
+    },
+    {
       field: "maHangHoaId",
       headerName: "Hàng Hóa",
       width: 200,
@@ -266,6 +303,16 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
           (item) => item.id === params.row.maHangHoaId
         );
         return selectedItem ? selectedItem.tenHangHoa : "";
+      },
+    },
+    {
+      field: "maDonViTinh",
+      headerName: "Đơn vị tính",
+      width: 200,
+      editable: false,
+      renderCell: (params) => {
+        const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
+        return selectedItem ? selectedItem.donViTinh.name  : "" ;
       },
     },
     {
@@ -326,28 +373,7 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
       renderCell: (params) =>
         params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
-    {
-      field: "actions",
-      type: "actions",
-      headerName: "Hành động",
-      width: 200,
-      getActions: ({ id }) => [
-        <IconButton
-          key={`edit-${id}`}
-          onClick={() => handleSaveClick(id)}
-          color="primary"
-        >
-          <SaveIcon />
-        </IconButton>,
-        <IconButton
-          key={`delete-${id}`}
-          onClick={handleDeleteClick(id)}
-          color="error"
-        >
-          <DeleteIcon />
-        </IconButton>,
-      ],
-    },
+   
   ];
   const submitForm = (data) => {
         const tempData = {
@@ -401,6 +427,9 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
         },
         { keepDirty: true }
       );
+    };
+    const handleChangePhuongThucThanhToan = (event) => {
+      setPhuongThucThanhToanValue(event.target.value);
     };
   useEffect(() => {
     if (rows) {
@@ -604,6 +633,50 @@ export const ModalSinhDonHang = ({ khachHangData, showModal, closeModal }) => {
               disabled={isLoading}
             />
           </Grid2>
+           <Grid2 size={12}>
+                      <h3>Phương thức thanh toán</h3>
+                      <FormControl>
+                        <RadioGroup
+                          aria-labelledby="demo-controlled-radio-buttons-group"
+                          name="controlled-radio-buttons-group"
+                          value={phuongThucThanhToan}
+                          onChange={handleChangePhuongThucThanhToan}
+                        >
+                          <FormControlLabel
+                            value="Thanh toán khi nhận hàng"
+                            control={<Radio />}
+                            label="Thanh toán khi nhận hàng"
+                          />
+                          <FormControlLabel
+                            value="Thanh toán thông qua số tài khoản ngân hàng"
+                            control={<Radio />}
+                            label="Thanh toán thông qua số tài khoản ngân hàng"
+                          />
+                        </RadioGroup>
+                      </FormControl>
+                    </Grid2>
+                   
+                      {phuongThucThanhToan ==
+                        "Thanh toán thông qua số tài khoản ngân hàng" && (
+                        <>
+                          <Grid2 size={6}>
+                            <TextFieldRHF
+                              name={modelObj.soTaiKhoanNganHang}
+                              label={labelObj.soTaiKhoanNganHang}
+                              disabled={isLoading}
+                              required
+                            />
+                          </Grid2>
+                          <Grid2 size={6}>
+                            <TextFieldRHF
+                              name={modelObj.chuTaiKhoan}
+                              label={labelObj.chuTaiKhoan}
+                              disabled={isLoading}
+                              required
+                            />
+                          </Grid2>
+                        </>
+                      )}
           <Grid2 size={6}>
             <AutocompleteRHF
               name={modelObj.maTinhTrangDonHang}

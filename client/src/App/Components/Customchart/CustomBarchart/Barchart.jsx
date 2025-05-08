@@ -1,42 +1,114 @@
-import React, { PureComponent } from "react";
+import React from 'react';
 import {
   BarChart,
   Bar,
-  Rectangle,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from "recharts";
+  Label,
+} from 'recharts';
+import { Box, Typography, useTheme } from '@mui/material';
 
- const Barchart = ({ data , colorfill , height , dataKey , fill }) => {
-  return (
-    <ResponsiveContainer width="100%" height={height || 300}>
-      <BarChart
-        height={height}
-        data={data}
-        margin={{
-          top: 5,
-          right: 30,
-          left: 20,
-          bottom: 5,
+// Custom Tooltip Component
+const CustomTooltip = ({ active, payload, label }) => {
+  const theme = useTheme();
+  if (active && payload && payload.length) {
+    return (
+      <Box
+        sx={{
+          backgroundColor: theme.palette.background.paper,
+          border: `1px solid ${theme.palette.divider}`,
+          borderRadius: theme.shape.borderRadius,
+          padding: 1,
+          boxShadow: theme.shadows[3],
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis  dataKey="name"/>
-        <YAxis />
-        <Tooltip />
-        <Legend />
-        <Bar
-          dataKey={dataKey}
-          fill={fill}
-          activeBar={<Rectangle fill={colorfill} stroke="blue" />}
-        />
-      </BarChart>
-    </ResponsiveContainer>
+        <Typography variant="subtitle2" sx={{ fontWeight: 'bold', color: theme.palette.text.primary }}>
+          {label}
+        </Typography>
+        {payload.map((entry, index) => (
+          <Typography key={index} variant="body2" sx={{ color: entry.color }}>
+            {`${entry.name}: ${entry.value}`}
+          </Typography>
+        ))}
+      </Box>
+    );
+  }
+  return null;
+};
+
+const Barchart = ({ data, colorfill = '#3f51b5', height = 300, dataKey, fill = '#3f51b5' }) => {
+  const theme = useTheme();
+
+  return (
+    <Box
+      sx={{
+        width: '100%',
+        height,
+        padding: 2,
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: theme.shape.borderRadius,
+        boxShadow: theme.shadows[2],
+      }}
+    >
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={data}
+          margin={{
+            top: 20,
+            right: 30,
+            left: 20,
+            bottom: 20,
+          }}
+        >
+          <CartesianGrid strokeDasharray="3 3" stroke={theme.palette.divider} opacity={0.5} />
+          <XAxis
+            dataKey="name"
+            tick={{ fill: theme.palette.text.secondary, fontSize: 12 }}
+            axisLine={{ stroke: theme.palette.divider }}
+          >
+            {/* <Label
+              value="Danh mục"
+              offset={-10}
+              position="insideBottom"
+              style={{ fill: theme.palette.text.primary, fontWeight: 'bold' }}
+            /> */}
+          </XAxis>
+          <YAxis
+            tick={{ fill: theme.palette.text.secondary, fontSize: 12 }}
+            axisLine={{ stroke: theme.palette.divider }}
+          >
+            <Label
+              value="Giá trị"
+              angle={-90}
+              position="insideLeft"
+              style={{ fill: theme.palette.text.primary, fontWeight: 'bold', textAnchor: 'middle' }}
+            />
+          </YAxis>
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: theme.palette.action.hover }} />
+          <Legend
+            formatter={(value) => (
+              <span style={{ color: theme.palette.text.primary, fontSize: 14 }}>{value}</span>
+            )}
+          />
+          <Bar
+            dataKey={dataKey}
+            fill={fill}
+            radius={[4, 4, 0, 0]}
+            animationDuration={1000}
+            activeBar={{
+              fill: colorfill,
+              stroke: theme.palette.primary.dark,
+              strokeWidth: 2,
+            }}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </Box>
   );
 };
 
-export default Barchart
+export default Barchart;
