@@ -17,5 +17,6 @@ namespace CRM.Services
         Task<ResultModal> DeleteById(int id);
         Task<ResultModal> DeleteById(string id);
         Task<ResultModal> DeleteMultiple(List<TModal> modals);
+        Task<List<Tdto>> GetAllDto(DateTime tuNgay, DateTime denNgay);
     }
 }

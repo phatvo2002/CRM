@@ -5,6 +5,7 @@
         public Guid Id { get; set; }
         public Guid? NhanVienId { get; set; }
         public Guid? DonHangId { get; set; }
+        public Guid? PhongBanId { get; set; }
         public string? KhachHangId { get; set; }
         public string? TenNhanVien { get; set; }
         public string? TenKhachHang { get; set; }

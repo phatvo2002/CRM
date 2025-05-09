@@ -38,7 +38,11 @@ const index = () => {
   const [valueDenNgay, setValueDenNgay] = React.useState(
     dayjs().endOf("month")
   );
-  const { data: dataCoHoi, refetch } = useGetAllCoHoiQuery({tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"), denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59") });
+
+  const dataTuNgay = valueTuNgay.format("YYYY-MM-DDT00:00:00")
+  const dataDenNgay = valueDenNgay.format("YYYY-MM-DDT23:59:59")
+
+  const { data: dataCoHoi, refetch } = useGetAllCoHoiQuery({tuNgay: dataTuNgay, denNgay: dataDenNgay });
   const [modalThemMoi, setModalThemMoi] = useState(false);
   const handleOpenModalThemMoiCoHoi = () => setModalThemMoi(true);
   const handleCloseModalThemMoiCoHoi = () => setModalThemMoi(false);

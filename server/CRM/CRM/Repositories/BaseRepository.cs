@@ -265,5 +265,15 @@ namespace CRM.Repositories
             }
             return null;
         }
+
+        public async Task<List<TDto>> GetAllDto(DateTime tuNgay, DateTime denNgay)
+        {
+            return await _crmDbContext.Set<TEntity>()
+              .Where(r => tuNgay >= EF.Property<DateTime>(r, "CreateAt")
+                    && EF.Property<DateTime>(r, "CreateAt") <= denNgay
+                    && EF.Property<bool>(r, "IsDeleted") == false)
+              .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+              .ToListAsync();
+        }
     }
 }

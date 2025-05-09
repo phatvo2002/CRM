@@ -34,7 +34,7 @@ namespace CRM.Controllers.BaoGias
                 var db = _context.Nguoidungs.FirstOrDefault(r => r.Id == userId);
                 if (db.CheckIsGiamDoc)
                 {
-                    var result = await _baoGiaServices.GetAll();
+                    var result = await _baoGiaServices.GetAllDto(tuNgay, denNgay);
                     return Ok(result);
                 }
                 else if (db.CheckIsTruongPhong)

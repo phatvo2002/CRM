@@ -40,6 +40,7 @@ const KhaoSat = () => {
       NhanVienId: donHangData?.nguoiDung?.id,
       DonHangId: donhangid,
       KhachHangId: donHangData?.maKhachHang,
+      PhongBanId : donHangData?.nguoiDung?.maPhongBan,
       TenNhanVien: `${donHangData?.nguoiDung?.hoVaDem} ${donHangData?.nguoiDung?.ten}`,
       TenKhachHang: donHangData?.khachHangMucTieu?.tenKhachHang,
       TraiNghiemMuaSam: surveyData?.traiNghiemMuaSam,
@@ -49,6 +50,7 @@ const KhaoSat = () => {
       YKienKhac: surveyData?.yKienKhac,
       CreateAt: new Date(),
     };
+
     const response = await sendEsurvey(tempData);
     if (response?.data?.status === 200) {
       toast.success(

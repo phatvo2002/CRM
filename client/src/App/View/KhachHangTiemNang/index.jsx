@@ -245,10 +245,14 @@ const KhachHangTiemNang = () => {
   const [openModalBanGiao, setOpenModalBanGiao] = useState(false);
   const [openModalBanGiaoHangLoat, setOpenModalBanGiaohangLoat] = useState(false);
   const [getTemplate] = useGetTemplatesMutation();
+
+const tuNgayString = valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
+const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"); 
+
   const { data: dataKHByRole, refetch: refetchkh } =
     useGetKhachHangTiemNangByroleQuery({
-      tuNgay: valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
-      denNgay: valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+      tuNgay: tuNgayString,
+      denNgay: denNgayString,
     });
   const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation();
   const [deleteHangLoat] = useDeletehangLoatKhachHangTiemNangMutation();

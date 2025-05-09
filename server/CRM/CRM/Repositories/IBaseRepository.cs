@@ -9,6 +9,7 @@ namespace CRM.Repositories
         Task<Tdto> GetByIdDTO(TId id);
         Task<TEntity> GetById(int id);
         Task<TEntity> GetById(string id);
+        Task<List<Tdto>> GetAllDto(DateTime tuNgay, DateTime denNgay);
         Task<List<Tdto>> GetByNguoiDungId(Guid id);
         Task<List<Tdto>> GetByPhongBanId(Guid id);
         Task<ResultModal> Create(TModal modal);

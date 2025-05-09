@@ -63,14 +63,22 @@ namespace CRM.Controllers.KhachHangMucTieus
                 Guid nguoiDungId = HttpContext.GetUserId();
                 Guid phongBanId = HttpContext.GetPhongBanId();
                 var db = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId && r.MaPhongBan == phongBanId).FirstOrDefaultAsync();
-                if (db?.CheckIsTruongPhong == true)
+                if (db?.CheckIsGiamDoc == false)
                 {
-                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByPhongBanId(phongBanId, tuNgay, denNgay);
-                    return Ok(result);
+                    if (db?.CheckIsTruongPhong == true)
+                    {
+                        List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByPhongBanId(phongBanId, tuNgay, denNgay);
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByNguoiDungId(nguoiDungId, tuNgay, denNgay);
+                        return Ok(result);
+                    }
                 }
                 else
                 {
-                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByNguoiDungId(nguoiDungId, tuNgay, denNgay);
+                    List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetAllDto(tuNgay, denNgay);
                     return Ok(result);
                 }
             }

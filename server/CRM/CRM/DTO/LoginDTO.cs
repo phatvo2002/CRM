@@ -1,6 +1,4 @@
-﻿using CRM.Entities;
-
-namespace CRM.DTO
+﻿namespace CRM.DTO
 {
     public class LoginDTO
     {
@@ -16,7 +14,9 @@ namespace CRM.DTO
 
         public bool IsActive { get; set; }
 
-      // public string? TaiKhoan { get; set; }
+        public byte[]? HinhAnh { get; set; }
+
+        // public string? TaiKhoan { get; set; }
 
         //public string? MatKhau { get; set; }
         public Guid? MaChucVu { get; set; }
@@ -29,7 +29,7 @@ namespace CRM.DTO
         public bool CheckIsGiamDoc { get; set; }
 
         public int? MaTinhTrang { get; set; }
-    
+
         public string? Token { get; set; }
 
         public int Status { get; set; }

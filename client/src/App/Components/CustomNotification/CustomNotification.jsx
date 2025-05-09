@@ -36,7 +36,7 @@ export const CustomNotification = ({
   handleClose,
   intitialNoti,
 }) => {
-  const { data: dataNoti, refetch } = useGetThongBaoByNguoiDungIdQuery();
+  const { data: dataNoti, refetch : refetchThongBao } = useGetThongBaoByNguoiDungIdQuery();
   const { data: dataNotiNotRead ,refetch: refetchCheck } = useGetThongBaoNotReadByNguoiDungIdQuery();
   const [checkXemThonBao] = useCheckDocThongBaoMutation()
   const [CheckDeadline, { data, error }] = useCheckThongBaoMutation();
@@ -64,8 +64,8 @@ export const CustomNotification = ({
   // }, [CheckDeadline]);
 
   const handleCheckXemThongBao = async (id) => {
-    await checkXemThonBao()
-    refetch()
+    await checkXemThonBao(id)
+    refetchThongBao()
   }
  
 
@@ -74,6 +74,8 @@ export const CustomNotification = ({
       .then(() => {
         connection.off("ReceiveNotification");
         connection.on("ReceiveNotification", (message) => {
+          refetchCheck();
+          refetchThongBao()
           toast(message, {
             position: "top-right",
             autoClose: 5000,
@@ -84,7 +86,7 @@ export const CustomNotification = ({
             progress: undefined,
             theme: "light",
           });
-          refetchCheck()
+          
         });
       })
       .catch(err => console.error("SignalR Connection Error:", err));

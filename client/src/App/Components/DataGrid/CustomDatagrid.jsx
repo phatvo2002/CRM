@@ -82,7 +82,7 @@ function CustomPagination() {
           },
         }}
       >
-        {[5, 10, 20, 50, 100].map((size) => (
+        {[10, 25, 50, 100].map((size) => (
           <MenuItem key={size} value={size}>
             Hiển thị {size} dòng
           </MenuItem>

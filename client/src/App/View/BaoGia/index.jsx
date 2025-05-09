@@ -343,7 +343,10 @@ const index = () => {
         dayjs().endOf("month")
       );
       
-  const { data: dataBaogia, refetch } = useGetBaoGiaListQuery({tuNgay :valueTuNgay , denNgay : valueDenNgay });
+  const dataTuNgay = valueTuNgay.format("YYYY-MM-DDT00:00:00") 
+  const dataDenNgay  = valueDenNgay.format("YYYY-MM-DDT23:59:59")
+
+  const { data: dataBaogia, refetch } = useGetBaoGiaListQuery({tuNgay : dataTuNgay, denNgay : dataDenNgay });
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

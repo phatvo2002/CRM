@@ -833,6 +833,242 @@ namespace CRM.Repositories.BaoCaos
                                             }).ToListAsync();
             return db;
         }
+        public async Task<BaoCaoKhaoSatDTO> BaoCaoKhaoSat(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
+        {
+            var result = new BaoCaoKhaoSatDTO();
+            try
+            {
+                result.TraiNghiemMuaSam = await LayDanhSachBaoCaoAsync(tuNgay, denNgay, nguoiDungId, 1);
+                result.TraiNghiemTuVan = await LayDanhSachBaoCaoAsync(tuNgay, denNgay, nguoiDungId, 2);
+                result.TraiNghiemTiepTheo = await LayDanhSachBaoCaoAsync(tuNgay, denNgay, nguoiDungId, 3);
+                result.DanhGiaTongThe = await LayDanhSachBaoCaoAsync(tuNgay, denNgay, nguoiDungId, 4);
+
+                return result;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        private async Task<KhaoSatClassDTO> LayDanhSachBaoCaoAsync(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId, int type)
+        {
+            KhaoSatClassDTO result = new KhaoSatClassDTO();
+            var checkUser = await _context.Nguoidungs.FirstOrDefaultAsync(r => r.Id == nguoiDungId);
+            try
+            {
+                if (checkUser != null)
+                {
+                    if (checkUser.CheckIsGiamDoc == false)
+                    {
+                        #region nếu tài khoản là nhân viên
+                        if (checkUser.CheckIsTruongPhong == false)
+                        {
+                            switch (type)
+                            {
+                                case 1:
+                                    var db1 = await _context.KhaoSats.Where(r => r.NhanVienId == nguoiDungId &&
+                                                                                 tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                    .GroupBy(r => r.TraiNghiemMuaSam)
+                                                                    .Select(g => new KhaoSatClassDTO
+                                                                    {
+                                                                        Name = g.First().TraiNghiemMuaSam,
+                                                                        Number = g.Count()
+                                                                    }).FirstOrDefaultAsync();
+                                    if (db1 != null)
+                                    {
+                                        result = db1;
+                                    }
+                                    break;
+                                case 2:
+                                    var db2 = await _context.KhaoSats.Where(r => r.NhanVienId == nguoiDungId &&
+                                                                                  tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                     .GroupBy(r => r.TraiNghiemTuVan)
+                                                                     .Select(g => new KhaoSatClassDTO
+                                                                     {
+                                                                         Name = g.First().TraiNghiemTuVan,
+                                                                         Number = g.Count()
+                                                                     }).FirstOrDefaultAsync();
+                                    if (db2 != null)
+                                    {
+                                        result = db2;
+                                    }
+                                    break;
+                                case 3:
+                                    var db3 = await _context.KhaoSats.Where(r => r.NhanVienId == nguoiDungId
+                                                                                && tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                     .GroupBy(r => r.TraiNghiemTiepTheo)
+                                                                     .Select(g => new KhaoSatClassDTO
+                                                                     {
+                                                                         Name = g.First().TraiNghiemTiepTheo,
+                                                                         Number = g.Count()
+                                                                     }).FirstOrDefaultAsync();
+                                    if (db3 != null)
+                                    {
+                                        result = db3;
+                                    }
+                                    break;
+                                case 4:
+                                    var db4 = await _context.KhaoSats.Where(r => r.NhanVienId == nguoiDungId && tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                      .GroupBy(r => r.DanhGiaTongThe)
+                                                                      .Select(g => new KhaoSatClassDTO
+                                                                      {
+                                                                          Name = g.First().DanhGiaTongThe.ToString(),
+                                                                          Number = g.Count()
+                                                                      }).FirstOrDefaultAsync();
+                                    if (db4 != null)
+                                    {
+                                        result = db4;
+                                    }
+                                    break;
+                                default:
+
+                                    break;
+                            }
+                        }
+                        #endregion
+                        #region nếu tài khoản là trưởng phòng
+                        else
+                        {
+                            switch (type)
+                            {
+                                case 1:
+                                    var db1 = await _context.KhaoSats.Where(r => r.PhongBanId == checkUser.MaPhongBan && tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                    .GroupBy(r => r.TraiNghiemMuaSam)
+                                                                    .Select(g => new KhaoSatClassDTO
+                                                                    {
+                                                                        Name = g.First().TraiNghiemMuaSam,
+                                                                        Number = g.Count()
+                                                                    }).FirstOrDefaultAsync();
+                                    if (db1 != null)
+                                    {
+                                        result = db1;
+                                    }
+                                    break;
+                                case 2:
+                                    var db2 = await _context.KhaoSats.Where(r => r.PhongBanId == checkUser.MaPhongBan && tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                     .GroupBy(r => r.TraiNghiemTuVan)
+                                                                     .Select(g => new KhaoSatClassDTO
+                                                                     {
+                                                                         Name = g.First().TraiNghiemTuVan,
+                                                                         Number = g.Count()
+                                                                     }).FirstOrDefaultAsync();
+                                    if (db2 != null)
+                                    {
+                                        result = db2;
+                                    }
+                                    break;
+                                case 3:
+                                    var db3 = await _context.KhaoSats.Where(r => r.PhongBanId == checkUser.MaPhongBan && tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                     .GroupBy(r => r.TraiNghiemTiepTheo)
+                                                                     .Select(g => new KhaoSatClassDTO
+                                                                     {
+                                                                         Name = g.First().TraiNghiemTiepTheo,
+                                                                         Number = g.Count()
+                                                                     }).FirstOrDefaultAsync();
+                                    if (db3 != null)
+                                    {
+                                        result = db3;
+                                    }
+                                    break;
+                                case 4:
+                                    var db4 = await _context.KhaoSats.Where(r => r.PhongBanId == checkUser.MaPhongBan && tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                      .GroupBy(r => r.DanhGiaTongThe)
+                                                                      .Select(g => new KhaoSatClassDTO
+                                                                      {
+                                                                          Name = g.First().DanhGiaTongThe.ToString(),
+                                                                          Number = g.Count()
+                                                                      }).FirstOrDefaultAsync();
+                                    if (db4 != null)
+                                    {
+                                        result = db4;
+                                    }
+                                    break;
+                                default:
+
+                                    break;
+                            }
+                        }
+                        #endregion
+                    }
+                    else
+                    {
+                        #region Nếu tải khoản là ban giám đốc
+                        switch (type)
+                        {
+                            case 1:
+                                var db1 = await _context.KhaoSats.Where(r => tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                .GroupBy(r => r.TraiNghiemMuaSam)
+                                                                .Select(g => new KhaoSatClassDTO
+                                                                {
+                                                                    Name = g.First().TraiNghiemMuaSam,
+                                                                    Number = g.Count()
+                                                                }).FirstOrDefaultAsync();
+                                if (db1 != null)
+                                {
+                                    result = db1;
+                                }
+                                break;
+                            case 2:
+                                var db2 = await _context.KhaoSats.Where(r => tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                 .GroupBy(r => r.TraiNghiemTuVan)
+                                                                 .Select(g => new KhaoSatClassDTO
+                                                                 {
+                                                                     Name = g.First().TraiNghiemTuVan,
+                                                                     Number = g.Count()
+                                                                 }).FirstOrDefaultAsync();
+                                if (db2 != null)
+                                {
+                                    result = db2;
+                                }
+                                break;
+                            case 3:
+                                var db3 = await _context.KhaoSats.Where(r => tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                 .GroupBy(r => r.TraiNghiemTiepTheo)
+                                                                 .Select(g => new KhaoSatClassDTO
+                                                                 {
+                                                                     Name = g.First().TraiNghiemTiepTheo,
+                                                                     Number = g.Count()
+                                                                 }).FirstOrDefaultAsync();
+                                if (db3 != null)
+                                {
+                                    result = db3;
+                                }
+                                break;
+                            case 4:
+                                var db4 = await _context.KhaoSats.Where(r => tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                                                  .GroupBy(r => r.DanhGiaTongThe)
+                                                                  .Select(g => new KhaoSatClassDTO
+                                                                  {
+                                                                      Name = g.First().DanhGiaTongThe.ToString(),
+                                                                      Number = g.Count()
+                                                                  }).FirstOrDefaultAsync();
+                                if (db4 != null)
+                                {
+                                    result = db4;
+                                }
+                                break;
+                            default:
+
+                                break;
+                        }
+                        #endregion
+                    }
+                    return result;
+                }
+                else
+                {
+                    return result;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi", ex);
+            }
+
+        }
+
         private async Task<int> LayTongSoTheoNguoiDungAsync<T>(IQueryable<T> query, DateTime tuNgay, DateTime denNgay, Guid nguoiDungId) where T : class
         {
 
@@ -860,9 +1096,8 @@ namespace CRM.Repositories.BaoCaos
                 }
             }
             else return 0;
-
-
         }
+
         private async Task<decimal> LayTongDoanhThu<T>(IQueryable<T> query, DateTime tuNgay, DateTime denNgay, Guid nguoiDungId) where T : class
         {
             var checkPermissionData = await _context.Nguoidungs.FirstOrDefaultAsync(r => r.Id == nguoiDungId);
