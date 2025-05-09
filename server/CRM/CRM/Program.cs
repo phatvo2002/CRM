@@ -1,6 +1,8 @@
-﻿using CRM.Entities;
+﻿using CRM;
+using CRM.Entities;
 using CRM.Entities.StoreProcedure;
 using CRM.Filters;
+using CRM.Helper;
 using CRM.Modal;
 using CRM.Repositories.BaoCaos;
 using CRM.Repositories.BaoGias;
@@ -64,11 +66,14 @@ using CRM.Services.ThongBaos;
 using CRM.Services.TinhTrangs;
 using CRM.Services.XepLoais;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.MSSqlServer;
+using System.Text;
 using System.Text.Json.Serialization;
 
 
@@ -211,19 +216,65 @@ builder.Services.AddAutoMapper(typeof(Program));
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 
-builder.Services.AddHttpContextAccessor();
-// Đăng ký dịch vụ phân quyền
-builder.Services.AddAuthorization();
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-});
-builder.Services.AddCors(options => options.AddPolicy("Cors", build =>
-{
-    build.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
-}));
 
+//builder.Services.AddAuthorization();
+//builder.Services.AddAuthentication(options =>
+//{
+//    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+//    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+//});
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var key = Encoding.ASCII.GetBytes(AppSettingsProvider.Get("JWT:IssuerSigningKey") ?? "");
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+
+        // Đảm bảo SignalR lấy token từ query string cho WebSocket
+        options.Events = new JwtBearerEvents
+        {
+            OnMessageReceived = context =>
+            {
+                var accessToken = context.Request.Query["access_token"];
+
+                var path = context.HttpContext.Request.Path;
+                if (!string.IsNullOrEmpty(accessToken) &&
+                    path.StartsWithSegments("/notificationHub"))
+                {
+                    context.Token = accessToken;
+                }
+
+                return Task.CompletedTask;
+            }
+        };
+    });
+
+//builder.Services.AddCors(options => options.AddPolicy("Cors", build =>
+//{
+//    build.WithOrigins("http://localhost:3000")
+//            .AllowAnyHeader()
+//            .AllowAnyMethod()
+//            .AllowCredentials();
+//}));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", builder =>
+    {
+        builder
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
 
 builder.Services.AddSwaggerGen(opt =>
@@ -256,17 +307,23 @@ builder.Services.AddSwaggerGen(opt =>
 });
 var app = builder.Build();
 
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"));
+//app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
+app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.UseAuthentication();
+
+// đăng ký dịch vụ signal R
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.MapControllers();
 

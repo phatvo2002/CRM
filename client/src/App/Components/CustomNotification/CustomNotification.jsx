@@ -17,10 +17,11 @@ import ErrorIcon from "@mui/icons-material/Error";
 import IconButton from "@mui/material/IconButton";
 import { vi } from "date-fns/locale";
 import { formatDistanceToNow } from "date-fns";
-import { Link as BrowserRowter} from "react-router-dom";
+import { Link as BrowserRowter } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import NotificationImportantIcon from "@mui/icons-material/NotificationImportant";
 import { useEffect } from "react";
+import * as signalR from '@microsoft/signalr';
 import {
   useCheckDocThongBaoMutation,
   useCheckThongBaoMutation,
@@ -28,7 +29,6 @@ import {
   useGetThongBaoNotReadByNguoiDungIdQuery,
 } from "src/App/Api/ThongBaoApi";
 import { Link } from "react-router-dom";
-import moment from "moment";
 import { toast } from "react-toastify";
 export const CustomNotification = ({
   openNoti,
@@ -36,29 +36,59 @@ export const CustomNotification = ({
   handleClose,
   intitialNoti,
 }) => {
-  const { data: dataNoti ,refetch } = useGetThongBaoByNguoiDungIdQuery();
-  const { data: dataNotiNotRead } = useGetThongBaoNotReadByNguoiDungIdQuery();
+  const { data: dataNoti, refetch } = useGetThongBaoByNguoiDungIdQuery();
+  const { data: dataNotiNotRead ,refetch: refetchCheck } = useGetThongBaoNotReadByNguoiDungIdQuery();
   const [checkXemThonBao] = useCheckDocThongBaoMutation()
   const [CheckDeadline, { data, error }] = useCheckThongBaoMutation();
-  useEffect(() => {
-    const interval = setInterval(() => {
-      CheckDeadline()
-        .then((response) => {
-          window.location.reload();
-          toast.info("Bạn có 1 thông báo mới chưa đọc !")
-        })
-        .catch((err) => {
-          console.error("Error checking deadlines:", err);``
-        });
-    }, 600000);
-    return () => clearInterval(interval);
-  }, [CheckDeadline]);
 
-  const handleCheckXemThongBao = async(id)=> 
-  {
-      await checkXemThonBao()
-      refetch()
+
+ const connection = new signalR.HubConnectionBuilder()
+    .withUrl("http://localhost:5020/notificationHub", {
+      accessTokenFactory: () => localStorage.getItem("token")
+    })
+    .withAutomaticReconnect()
+    .build();
+    
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     CheckDeadline()
+  //       .then((response) => {
+  //         window.location.reload();
+  //         toast.info("Bạn có 1 thông báo mới chưa đọc !")
+  //       })
+  //       .catch((err) => {
+  //         console.error("Error checking deadlines:", err); ``
+  //       });
+  //   }, 600000);
+  //   return () => clearInterval(interval);
+  // }, [CheckDeadline]);
+
+  const handleCheckXemThongBao = async (id) => {
+    await checkXemThonBao()
+    refetch()
   }
+ 
+
+  useEffect(() => {
+    connection.start()
+      .then(() => {
+        connection.off("ReceiveNotification");
+        connection.on("ReceiveNotification", (message) => {
+          toast(message, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+          refetchCheck()
+        });
+      })
+      .catch(err => console.error("SignalR Connection Error:", err));
+  }, []);
   return (
     <>
       <IconButton color="primary" onClick={handleOpenNoti}>
@@ -105,9 +135,9 @@ export const CustomNotification = ({
                   <ListItemText
                     primary={
                       <Box display="flex" alignItems="center">
-                         <BrowserRowter to={noti.duongDan} style={{textDecoration:"none" , color:"text.primary"}} onClick={()=> handleCheckXemThongBao(noti?.id)}>
-                            {noti.tieuDe}
-                         </BrowserRowter>
+                        <BrowserRowter to={noti.duongDan} style={{ textDecoration: "none", color: "text.primary" }} onClick={() => handleCheckXemThongBao(noti?.id)}>
+                          {noti.tieuDe}
+                        </BrowserRowter>
                         {!noti.isRead && (
                           <Tooltip title="Chưa đọc">
                             <Icon sx={{ color: "#2196f3", marginRight: "8px" }}>

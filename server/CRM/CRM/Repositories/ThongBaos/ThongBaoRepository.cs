@@ -8,6 +8,7 @@ namespace CRM.Repositories.ThongBaos
 {
     public class ThongBaoRepository : BaseRepository<ThongBao, ThongBaoModal, Guid, ThongBaoDTO>, IThongBaoRepository
     {
+
         public ThongBaoRepository(CrmDbContext crmDbContext, IMapper mapper) : base(crmDbContext, mapper)
         {
         }
@@ -47,6 +48,7 @@ namespace CRM.Repositories.ThongBaos
                     _crmDbContext.ThongBaos.Add(thongBao);
                     item.IsThongBao = true;
                     _crmDbContext.NhiemVus.Update(item);
+
                 }
 
 

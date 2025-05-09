@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using CRM.DTO;
 using CRM.Entities;
+using CRM.Helper;
 using CRM.Modal;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace CRM.Repositories.NhiemVus
@@ -11,12 +13,14 @@ namespace CRM.Repositories.NhiemVus
         private readonly CrmDbContext _context;
         private readonly ILogger<NhiemVuRepository> _logger;
         private readonly IMapper _mapper;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public NhiemVuRepository(CrmDbContext context, IMapper mapper, ILogger<NhiemVuRepository> logger)
+        public NhiemVuRepository(CrmDbContext context, IMapper mapper, ILogger<NhiemVuRepository> logger, IHubContext<NotificationHub> hubContext)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+            _hubContext = hubContext;
         }
         public async Task<ResultModal> CreateNhiemVu(NhiemVuModal modal, Guid phongBanId)
         {
@@ -54,6 +58,9 @@ namespace CRM.Repositories.NhiemVus
                         thongBao.IsDelete = false;
                         thongBao.NguoiDungId = modal.NguoiDungId;
                         _context.ThongBaos.Add(thongBao);
+
+                        await _hubContext.Clients.User(thongBao.NguoiDungId.ToString())
+                       .SendAsync("ReceiveNotification", thongBao.TieuDe);
                     }
                     if (modal.KhachHangId != null)
                     {
@@ -68,9 +75,13 @@ namespace CRM.Repositories.NhiemVus
                         thongBao.CreateAt = DateTime.Now;
                         thongBao.NguoiDungId = modal.NguoiDungId;
                         _context.ThongBaos.Add(thongBao);
+                        await _hubContext.Clients.User(thongBao.NguoiDungId.ToString())
+                       .SendAsync("ReceiveNotification", thongBao.TieuDe);
                     }
                     _context.NhiemVus.Add(nhiemVu);
                     await _context.SaveChangesAsync();
+
+
                     return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };
                 }
                 else

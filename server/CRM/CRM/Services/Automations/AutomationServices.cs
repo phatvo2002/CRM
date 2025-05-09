@@ -96,7 +96,7 @@ namespace CRM.Services.Automations
                     // cập nhật trạng thái khi hết hạn nhiệm vụ
                     if (r.HanHoanThanh == vnNow || r.HanHoanThanh <= vnNow)
                     {
-                        r.TrangThaiThucHienId = Guid.Parse("06B2047E-4009-4080-81EF-928ECD061836");
+                        r.TrangThaiThucHienId = Guid.Parse("9027DBA4-EDE1-4701-BE0D-95B9820B2A4B");
                         dbContext.NhiemVus.Update(r);
                         await dbContext.SaveChangesAsync();
                     }

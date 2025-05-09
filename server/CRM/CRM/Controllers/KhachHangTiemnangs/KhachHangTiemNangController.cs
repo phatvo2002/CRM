@@ -102,7 +102,7 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
 
         }
-        [HttpGet("getkhachhangtiemnangbynguoidungid/{id}")]
+        [HttpGet("getkhachhangtiemnangbynguoidungid")]
         [JwtAuthorize]
         public async Task<IActionResult> GetKhachHangTiemNangByNguoiDungId(Guid Id, DateTime tuNgay, DateTime denNgay)
         {

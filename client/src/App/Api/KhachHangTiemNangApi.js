@@ -22,8 +22,8 @@ export const apiKhachHangTiemNang = createApi({
       query: (id) => `/KhachHangTiemNang/getkhachhangtiemnangbyid/${id}`,
     }),
     getKhachHangTiemNangByNguoiDungId: builder.query({
-      query: (id) =>
-        `/KhachHangTiemNang/getkhachhangtiemnangbynguoidungid/${id}`,
+      query: ({id , tuNgay , denNgay}) =>
+        `/KhachHangTiemNang/getkhachhangtiemnangbynguoidungid?id=${id}&tuNgay=${tuNgay}&denNgay=${denNgay}`,
     }),
     getKhachHangTiemNangByPhongBanId: builder.query({
       query: (id) =>

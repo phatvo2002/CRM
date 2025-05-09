@@ -19,6 +19,7 @@ import { useAddNhiemVuMutation } from "src/App/Api/NhiemVuApi";
 import { useGetUserByPhongBanIdQuery } from "src/App/Api/UserApi";
 import { useGetKhachHangTiemNangByNguoiDungIdQuery, useGetKhachHangTiemNangByPhongBanIdContextQuery } from "src/App/Api/KhachHangTiemNangApi";
 import { useGetKhachHangMucTieuByNguoiDungIdQuery, useGetKhachHangMucTieuByNguoiDungIdQueryQuery, useGetKhachHangMucTieuByPhongBanIdQuery } from "src/App/Api/KhachHangMucTieuApi";
+import dayjs from "dayjs";
 // ------ Form Config ------ //
 const modelObj = {
     tieuDe: "tieuDe",
@@ -72,12 +73,19 @@ export const ModalThemNhiemVu = (props) => {
     isLoading = false,
     header = "Thêm nhiệm vụ";
   const [nguoidungId, setNguoiDungId] = useState('')
+  const valueTuNgay = dayjs("1900-01-01").format('YYYY-MM-DD');
+  const valueDenNgay = dayjs("2100-12-31").format('YYYY-MM-DD');
   const { data: trangThaiThucHienData, isFetching: isGetTrangThaiThucHienFetching } =
   useGetAllTrangThaiThucHienQuery({skip: showModal== false});
   const { data: nguoiDungData, isFetching: isGetNguoiDungFetching } =
   useGetUserByPhongBanIdQuery({skip: showModal== false});
   const { data: khachhangTiemNangData, isFetching: isGetKhachHangTiemNangFetching } =
-  useGetKhachHangTiemNangByNguoiDungIdQuery(nguoidungId,{skip: showModal== false});
+  useGetKhachHangTiemNangByNguoiDungIdQuery(
+    {
+      id : nguoidungId,
+      tuNgay : valueTuNgay,
+      denNgay : valueDenNgay
+    },{skip: showModal== false || nguoidungId == null});
   const { data: khachhangMucTieuData, isFetching: isGetKhachHangMucTieuFetching } =
   useGetKhachHangMucTieuByNguoiDungIdQueryQuery(nguoidungId,{skip: showModal== false});
   const { data: mucDoUuTienData, isFetching: isGetMucDoUuTienFetching } =
