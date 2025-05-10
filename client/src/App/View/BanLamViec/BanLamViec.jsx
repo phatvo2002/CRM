@@ -39,6 +39,7 @@ import {
   useGetBaoCaoDoanhThuQuery,
   useGetBaoCaoDoanhThuTheoNamQuery,
   useGetBaoCaoDoanhThuTheoPhongBanQuery,
+  useGetBaoCaoKhaoSatQuery,
   useGetBaoCaoNguonGocKhachHangQuery,
   useGetBaoCaoSoSanhMucTieuDoanhSoQuery,
   useGetBaoCaoTheoCoHoiQuery,
@@ -46,7 +47,6 @@ import {
   useGetBaoCaoTop5NhanVienSuatSacNhatQuery,
 } from "src/App/Api/BaoCao.api";
 import FunnelChartCustom from "src/App/Components/Customchart/CustomFunnelChart/FunnelChart";
-
 const userData = JSON.parse(localStorage.getItem("authorizationData"));
 const BanLamViec = () => {
 
@@ -120,6 +120,14 @@ const BanLamViec = () => {
       type :2
     }
   )
+
+  const {data : dataKhaoSat} = useGetBaoCaoKhaoSatQuery(
+    {
+      tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
+      denNgay: valueDenNgay.format("YYYY-MM-DDT23:59:59"),
+    }
+  )
+
 
   useEffect(() => {
     if (dataBaoCaoDoanhThu) {
@@ -718,6 +726,80 @@ const BanLamViec = () => {
             />
              )}
            
+          </Grid2>
+          <Grid2 size={12}>
+           <Typography variant="h5" sx={{ textAlign: "center" }}>
+              <b>Mức độ hài lòng của khách hàng</b>
+            </Typography>
+          </Grid2>
+          <Grid2 size={6}>
+             <Paper>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
+                <b>Mức độ hài lòng khi trải nghiệm mua sắm</b>
+              </Typography>
+              {Array.isArray(dataKhaoSat?.traiNghiemMuaSam) && dataKhaoSat?.traiNghiemMuaSam.length > 0 &&
+              (
+                <Barchart
+                data={dataKhaoSat.traiNghiemMuaSam}
+                dataKey={"number"}
+                height={440}
+              />
+
+              )}
+            
+            </Paper>
+          </Grid2>
+            <Grid2 size={6}>
+             <Paper>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
+                <b>Trải nghiệm tư vấn của nhân viên với khách hàng</b>
+              </Typography>
+              {console.log(dataKhaoSat?.traiNghiemTuVan)}
+              {Array.isArray(dataKhaoSat?.traiNghiemTuVan) && dataKhaoSat?.traiNghiemTuVan.length > 0 &&
+              (
+                <Barchart
+                data={dataKhaoSat.traiNghiemTuVan}
+                dataKey={"number"}
+                height={440}
+              />
+
+              )}
+            
+            </Paper>
+          </Grid2>
+           <Grid2 size={6}>
+             <Paper>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
+                <b>Mức độ mong muốn làm việc của khách hàng với nhân viên kinh doanh</b>
+              </Typography>
+              {Array.isArray(dataKhaoSat?.traiNghiemTiepTheo) && dataKhaoSat?.traiNghiemTiepTheo.length > 0 &&
+              (
+              <Piechart
+                  data={dataKhaoSat?.traiNghiemTiepTheo}
+                  dataKey={"number"}
+                  height={400}
+                />
+
+              )}
+            
+            </Paper>
+          </Grid2>
+           <Grid2 size={6}>
+             <Paper>
+              <Typography variant="body1" sx={{ textAlign: "center" }}>
+                <b>Đánh giá tổng thể mức độ hài lòng</b>
+              </Typography>
+              {Array.isArray(dataKhaoSat?.danhGiaTongThe) && dataKhaoSat?.danhGiaTongThe.length > 0 &&
+              (
+              <Piechart
+                  data={dataKhaoSat?.danhGiaTongThe}
+                  dataKey={"number"}
+                  height={400}
+                />
+
+              )}
+            
+            </Paper>
           </Grid2>
         </Grid2>
       </Paper>

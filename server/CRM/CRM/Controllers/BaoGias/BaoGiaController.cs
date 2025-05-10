@@ -32,7 +32,7 @@ namespace CRM.Controllers.BaoGias
                 Guid phongbanId = HttpContext.GetPhongBanId();
                 Guid userId = HttpContext.GetUserId();
                 var db = _context.Nguoidungs.FirstOrDefault(r => r.Id == userId);
-                if (db.CheckIsGiamDoc)
+                if (db.CheckIsGiamDoc == true)
                 {
                     var result = await _baoGiaServices.GetAllDto(tuNgay, denNgay);
                     return Ok(result);

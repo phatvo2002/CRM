@@ -851,9 +851,9 @@ namespace CRM.Repositories.BaoCaos
             }
         }
 
-        private async Task<KhaoSatClassDTO> LayDanhSachBaoCaoAsync(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId, int type)
+        private async Task<List<KhaoSatClassDTO>> LayDanhSachBaoCaoAsync(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId, int type)
         {
-            KhaoSatClassDTO result = new KhaoSatClassDTO();
+            List<KhaoSatClassDTO> result = new List<KhaoSatClassDTO>();
             var checkUser = await _context.Nguoidungs.FirstOrDefaultAsync(r => r.Id == nguoiDungId);
             try
             {
@@ -874,7 +874,7 @@ namespace CRM.Repositories.BaoCaos
                                                                     {
                                                                         Name = g.First().TraiNghiemMuaSam,
                                                                         Number = g.Count()
-                                                                    }).FirstOrDefaultAsync();
+                                                                    }).ToListAsync();
                                     if (db1 != null)
                                     {
                                         result = db1;
@@ -888,7 +888,7 @@ namespace CRM.Repositories.BaoCaos
                                                                      {
                                                                          Name = g.First().TraiNghiemTuVan,
                                                                          Number = g.Count()
-                                                                     }).FirstOrDefaultAsync();
+                                                                     }).ToListAsync();
                                     if (db2 != null)
                                     {
                                         result = db2;
@@ -902,7 +902,7 @@ namespace CRM.Repositories.BaoCaos
                                                                      {
                                                                          Name = g.First().TraiNghiemTiepTheo,
                                                                          Number = g.Count()
-                                                                     }).FirstOrDefaultAsync();
+                                                                     }).ToListAsync();
                                     if (db3 != null)
                                     {
                                         result = db3;
@@ -915,7 +915,7 @@ namespace CRM.Repositories.BaoCaos
                                                                       {
                                                                           Name = g.First().DanhGiaTongThe.ToString(),
                                                                           Number = g.Count()
-                                                                      }).FirstOrDefaultAsync();
+                                                                      }).ToListAsync();
                                     if (db4 != null)
                                     {
                                         result = db4;
@@ -939,7 +939,7 @@ namespace CRM.Repositories.BaoCaos
                                                                     {
                                                                         Name = g.First().TraiNghiemMuaSam,
                                                                         Number = g.Count()
-                                                                    }).FirstOrDefaultAsync();
+                                                                    }).ToListAsync();
                                     if (db1 != null)
                                     {
                                         result = db1;
@@ -952,7 +952,7 @@ namespace CRM.Repositories.BaoCaos
                                                                      {
                                                                          Name = g.First().TraiNghiemTuVan,
                                                                          Number = g.Count()
-                                                                     }).FirstOrDefaultAsync();
+                                                                     }).ToListAsync();
                                     if (db2 != null)
                                     {
                                         result = db2;
@@ -965,7 +965,7 @@ namespace CRM.Repositories.BaoCaos
                                                                      {
                                                                          Name = g.First().TraiNghiemTiepTheo,
                                                                          Number = g.Count()
-                                                                     }).FirstOrDefaultAsync();
+                                                                     }).ToListAsync();
                                     if (db3 != null)
                                     {
                                         result = db3;
@@ -978,7 +978,7 @@ namespace CRM.Repositories.BaoCaos
                                                                       {
                                                                           Name = g.First().DanhGiaTongThe.ToString(),
                                                                           Number = g.Count()
-                                                                      }).FirstOrDefaultAsync();
+                                                                      }).ToListAsync();
                                     if (db4 != null)
                                     {
                                         result = db4;
@@ -997,52 +997,52 @@ namespace CRM.Repositories.BaoCaos
                         switch (type)
                         {
                             case 1:
-                                var db1 = await _context.KhaoSats.Where(r => tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                var db1 = await _context.KhaoSats.Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
                                                                 .GroupBy(r => r.TraiNghiemMuaSam)
                                                                 .Select(g => new KhaoSatClassDTO
                                                                 {
                                                                     Name = g.First().TraiNghiemMuaSam,
                                                                     Number = g.Count()
-                                                                }).FirstOrDefaultAsync();
+                                                                }).ToListAsync();
                                 if (db1 != null)
                                 {
                                     result = db1;
                                 }
                                 break;
                             case 2:
-                                var db2 = await _context.KhaoSats.Where(r => tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                var db2 = await _context.KhaoSats.Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
                                                                  .GroupBy(r => r.TraiNghiemTuVan)
                                                                  .Select(g => new KhaoSatClassDTO
                                                                  {
                                                                      Name = g.First().TraiNghiemTuVan,
                                                                      Number = g.Count()
-                                                                 }).FirstOrDefaultAsync();
+                                                                 }).ToListAsync();
                                 if (db2 != null)
                                 {
                                     result = db2;
                                 }
                                 break;
                             case 3:
-                                var db3 = await _context.KhaoSats.Where(r => tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                var db3 = await _context.KhaoSats.Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
                                                                  .GroupBy(r => r.TraiNghiemTiepTheo)
                                                                  .Select(g => new KhaoSatClassDTO
                                                                  {
                                                                      Name = g.First().TraiNghiemTiepTheo,
                                                                      Number = g.Count()
-                                                                 }).FirstOrDefaultAsync();
+                                                                 }).ToListAsync();
                                 if (db3 != null)
                                 {
                                     result = db3;
                                 }
                                 break;
                             case 4:
-                                var db4 = await _context.KhaoSats.Where(r => tuNgay >= r.CreateAt && r.CreateAt <= denNgay)
+                                var db4 = await _context.KhaoSats.Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
                                                                   .GroupBy(r => r.DanhGiaTongThe)
                                                                   .Select(g => new KhaoSatClassDTO
                                                                   {
-                                                                      Name = g.First().DanhGiaTongThe.ToString(),
+                                                                      Name = $"{g.First().DanhGiaTongThe} Sao",
                                                                       Number = g.Count()
-                                                                  }).FirstOrDefaultAsync();
+                                                                  }).ToListAsync();
                                 if (db4 != null)
                                 {
                                     result = db4;

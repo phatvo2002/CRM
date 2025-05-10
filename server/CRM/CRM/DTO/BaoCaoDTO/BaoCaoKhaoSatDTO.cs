@@ -2,9 +2,9 @@
 {
     public class BaoCaoKhaoSatDTO
     {
-        public KhaoSatClassDTO? TraiNghiemMuaSam { get; set; }
-        public KhaoSatClassDTO? TraiNghiemTuVan { get; set; }
-        public KhaoSatClassDTO? TraiNghiemTiepTheo { get; set; }
-        public KhaoSatClassDTO? DanhGiaTongThe { get; set; }
+        public List<KhaoSatClassDTO>? TraiNghiemMuaSam { get; set; }
+        public List<KhaoSatClassDTO>? TraiNghiemTuVan { get; set; }
+        public List<KhaoSatClassDTO>? TraiNghiemTiepTheo { get; set; }
+        public List<KhaoSatClassDTO>? DanhGiaTongThe { get; set; }
     }
 }
