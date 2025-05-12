@@ -1152,6 +1152,31 @@ namespace CRM.Repositories.BaoCaos
             return maMau;
         }
 
+        public async Task<BaoCaoKhachHangDTO> BaoCaoKhachHang(string KhachHangId)
+        {
 
+            try
+            {
+                var donHangdata = await _context.DonHangs.Where(r => r.MaKhachHang == KhachHangId
+                                                                 && r.IsDeleted == false
+                                                                 && r.MaTinhTrangDonHang == 3)
+                                                         .GroupBy(g => g.MaKhachHang)
+                                                         .Select(g => new BaoCaoKhachHangDTO
+                                                         {
+                                                             SoLuongDonHang = g.Count(),
+                                                             GiaTriDonHang = g.Sum(r => r.GiaTriDonHang),
+                                                             CongNo = g.Sum(r => r.SoTienConPhaiThu)
+                                                         }).FirstOrDefaultAsync();
+                if (donHangdata != null)
+                {
+                    return donHangdata;
+                }
+                else return new BaoCaoKhachHangDTO();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi", ex);
+            }
+        }
     }
 }

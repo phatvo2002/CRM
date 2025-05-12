@@ -53,7 +53,6 @@ const ModalUpdatePhongBan = (props) => {
     [updatephongban ,{isLoading : isUpdatePhongBan}] = useUpdatePhongBanMutation(),
     isLoading =   isUpdatePhongBan,
     header = getHeader(typeModal);
-    console.log(selectedItem)
   const submitForm = (data) => {
     const tempData = {
       id  : data.id,

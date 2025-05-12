@@ -7,7 +7,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { TextField } from "@mui/material";
-import PSCInputSkeleton from "../../PSCInputSkeleton";
+import PSCInputSkeleton from "../../InputSkeleton";
 import { getError, getErrorMessage } from "src/App/Until/common";
 
 const MIN_DATE = new Date("1900-01-01T00:00:00");

@@ -319,7 +319,6 @@ selectedRow,
     },
     callApiConvert = async (paramData) => {
       try {
-        console.log(paramData);
         await convertBaoGia(paramData).unwrap();
         toast.success("Nhân bản thành công")
         closeModalWithOtherFunc()

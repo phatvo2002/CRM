@@ -97,7 +97,7 @@ const ModlaAddCuocGoi = (props) => {
   },
     callApiInsert = async (data) => {
       try {
-        console.log(data);
+
         await addCuocGoi(data).unwrap();
         toast.success("Thêm mới thành công!", {
           position: "top-center",

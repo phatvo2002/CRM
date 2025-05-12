@@ -3,7 +3,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { bool, number, oneOf, oneOfType, string } from "prop-types";
 import { getError ,getErrorMessage } from "../../../Until/common";
 import { TextField } from "@mui/material";
-import PSCInputSkeleton from "../../PSCInputSkeleton";
+import PSCInputSkeleton from "../../InputSkeleton";
 const TextAreaRHF = (props) => {
   const inputRef = useRef(),
     {

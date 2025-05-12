@@ -16,7 +16,13 @@ import {
     MenuItem,
     Icon,
   } from "@mui/material";
+import { useParams } from 'react-router-dom';
+import { useGetBaoCaoKhachHangQuery } from 'src/App/Api/BaoCao.api';
 const TabTongQuan = () => {
+  const {id}=useParams()
+
+  const {data : baoCaoKhachHang} = useGetBaoCaoKhachHangQuery(id)
+
   return (
     <>
        <Box mt={3}>
@@ -33,7 +39,7 @@ const TabTongQuan = () => {
                         >
                           Số lượng đơn hàng
                         </Typography>
-                        <Typography variant="h5">0</Typography>
+                        <Typography variant="h5">{baoCaoKhachHang?.soLuongDonHang}</Typography>
                       </CardContent>
                     </Card>
                   </Grid2>
@@ -47,7 +53,7 @@ const TabTongQuan = () => {
                         >
                           Giá trị đơn hàng
                         </Typography>
-                        <Typography variant="h5">0 Triệu</Typography>
+                        <Typography variant="h5">{baoCaoKhachHang?.giaTriDonHang.toLocaleString("vi-VN")} Triệu</Typography>
                       </CardContent>
                     </Card>
                   </Grid2>
@@ -62,10 +68,7 @@ const TabTongQuan = () => {
                           Công nợ
                         </Typography>
                         <Typography variant="h5" color="error">
-                          0 Triệu
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          Hạn mức: 0 Triệu
+                          {baoCaoKhachHang?.congNo.toLocaleString("vi-VN")} Triệu
                         </Typography>
                       </CardContent>
                     </Card>

@@ -303,5 +303,20 @@ namespace CRM.Controllers.BaoCaos
             }
         }
 
+        [HttpGet("getbaocaokhachhang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoKhachHang(string khachHangId)
+        {
+            try
+            {
+                var result = await _baoCaoServices.BaoCaoKhachHang(khachHangId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }

@@ -338,6 +338,7 @@ export const ModalSinhCoHoi = ({
     
       callApiConvert(tempData);
     },
+
     callApiConvert = async (paramData) => {
       try {
           await convertCoHoi(paramData).unwrap();
@@ -365,6 +366,8 @@ export const ModalSinhCoHoi = ({
         { keepDirty: true }
       );
     };
+
+  
 
   const handleGiaiDoanChange = (value) => {
     setSelectedGiaiDoan(value);

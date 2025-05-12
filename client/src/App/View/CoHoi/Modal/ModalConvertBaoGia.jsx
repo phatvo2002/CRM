@@ -353,7 +353,6 @@ export const ModalConvertBaoGia = ({
     },
     callApiConvert = async (paramData) => {
       try {
-        console.log(paramData);
         await convertBaoGia(paramData).unwrap();
         toast.success("Chuyển đổi thành công")
         closeModalWithOtherFunc()
@@ -379,7 +378,6 @@ export const ModalConvertBaoGia = ({
         { keepDirty: true }
       );
     };
-    console.log(coHoiData)
   useEffect(() => {
     if (rows) {
       setHangHoa(rows);

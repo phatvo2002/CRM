@@ -5,7 +5,7 @@ import { string, bool, oneOf } from "prop-types";
 import { getErrorMessage ,getError} from "src/App/Until/common";
 import { TextField } from "@mui/material";
 import { forwardRef } from "react";
-import PSCInputSkeleton from "../../PSCInputSkeleton";
+import PSCInputSkeleton from "../../InputSkeleton";
 import "./NumberFormatRHF.styles.scss";
 
 const X = forwardRef(function X(props, ref) {

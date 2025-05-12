@@ -16,9 +16,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
 import { useUpdateSoTienMutation } from "src/App/Api/CoHoiApi";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 
-const BanHangTab = ({dataCoHoi , refetchCoHoi}) => {
+const BanHangTab = ({ dataCoHoi, refetchCoHoi }) => {
   const { id } = useParams();
   const [hangHoa, setHangHoa] = useState([]);
   const { data: rows, refetch } = useGetHangHoaQuanTamByCoHoiIdQuery(id);
@@ -26,7 +26,8 @@ const BanHangTab = ({dataCoHoi , refetchCoHoi}) => {
   const [createData] = useAddHangHoaQuanTamMutation();
   const [updateData] = useUpdateHangHoaQuanTamMutation();
   const [deleteData] = useDeleteHangHoaQuanTamMutation();
-  const [updateCost] = useUpdateSoTienMutation()
+  const [updateCost] = useUpdateSoTienMutation();
+  console.log(dataCoHoi);
   useEffect(() => {
     if (rows) {
       setHangHoa(rows);
@@ -39,13 +40,17 @@ const BanHangTab = ({dataCoHoi , refetchCoHoi}) => {
       id: uuidv4(),
       maHangHoaId: "",
       khachHangTiemNangId: null,
-      khachHangId: id,
-      thueSuat:0,
-      tienThue:0,
-      donGia : 0,
+      khachHangId: dataCoHoi?.maKhachHang,
+      maDonViTinh: 0,
+      baoGiaId: null,
+      coHoiId: id,
       soLuong: 0,
+      thueSuat: 0,
+      tienThue: 0,
+      donGia: 0,
       thanhTien: 0,
       tongTien: 0,
+      chiecKhauDonHang: 0,
       isNew: true,
     };
 
@@ -62,15 +67,17 @@ const BanHangTab = ({dataCoHoi , refetchCoHoi}) => {
     if (currentRow.isNew === true) {
       updatedRow = await createData(currentRow).unwrap();
       currentRow.isNew = false;
+      refetch();
     } else {
       updatedRow = await updateData(currentRow).unwrap();
+      refetch();
     }
     // setHangHoa((prev) =>
     //   prev.map((row) => (row.id === id ? { ...updatedRow } : row))
     // );
     toast.success("Lưu dữ liệu thành công!");
   };
-  const processRowUpdate = (newRow) => {
+   const processRowUpdate = (newRow) => {
     const selectedItem = hangHoas?.find(
       (item) => item.id === newRow.maHangHoaId
     );
@@ -78,14 +85,18 @@ const BanHangTab = ({dataCoHoi , refetchCoHoi}) => {
       ? selectedItem.donGia * (newRow.soLuong || 0)
       : 0;
     // const updateTongTien = selectedItem ? updatedThanhTien : 0;
-    const updateTienThue = selectedItem ? (((selectedItem.donGia * (newRow?.thueSuat))) * (newRow.soLuong || 0)) / 100 : 0;
+    const updateTienThue = selectedItem
+      ? (selectedItem.donGia * newRow?.thueSuat * (newRow.soLuong || 0)) / 100
+      : 0;
     const updateTongTien = selectedItem ? updatedThanhTien + updateTienThue : 0;
     const updatedRow = {
       ...newRow,
-      tienThue : updateTienThue,
+      tenHangHoa : selectedItem?.tenHangHoa,
+      tienThue: updateTienThue,
       thanhTien: updatedThanhTien,
+      maDonViTinh :selectedItem?.donViTinh?.id,
       tongTien: updateTongTien,
-      donGia : selectedItem.donGia
+      donGia: selectedItem.donGia,
     };
     setHangHoa((prev) =>
       prev.map((row) => (row.id === updatedRow.id ? updatedRow : row))
@@ -109,14 +120,18 @@ const BanHangTab = ({dataCoHoi , refetchCoHoi}) => {
   };
 
   const handleUpdateCost = async () => {
-     const response = await updateCost({cohoiId :dataCoHoi?.id , sotien : totalAmount })
-     if(response?.data.status === 200)
-     {
-        toast.success("Cập nhật số tiền thành công")
-        refetchCoHoi()
-     }
-     else  toast.error("Đã có lỗi xảy ra , vui lòng liên hệ bộ phận quản trị hệ thống")
-  }
+    const response = await updateCost({
+      cohoiId: dataCoHoi?.id,
+      sotien: totalAmount,
+    });
+    if (response?.data.status === 200) {
+      toast.success("Cập nhật số tiền thành công");
+      refetchCoHoi();
+    } else
+      toast.error(
+        "Đã có lỗi xảy ra , vui lòng liên hệ bộ phận quản trị hệ thống"
+      );
+  };
 
   const columns = [
     {
@@ -167,8 +182,10 @@ const BanHangTab = ({dataCoHoi , refetchCoHoi}) => {
       width: 200,
       editable: false,
       renderCell: (params) => {
-        const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
-        return selectedItem ? selectedItem.donGia.toLocaleString("vi-VN") : 0 ;
+        const selectedItem = hangHoas?.find(
+          (item) => item.id === params.row.maHangHoaId
+        );
+        return selectedItem ? selectedItem.donGia.toLocaleString("vi-VN") : 0;
       },
     },
     {
@@ -182,42 +199,61 @@ const BanHangTab = ({dataCoHoi , refetchCoHoi}) => {
       headerName: "Tiền thuế",
       width: 200,
       editable: false,
-      renderCell: (params) =>  params.value ? params.value.toLocaleString("vi-VN") : 0,
+      renderCell: (params) =>
+        params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
     {
       field: "thanhTien",
       headerName: "Thành Tiền",
       width: 200,
       editable: false,
-      renderCell: (params) =>  params.value ? params.value.toLocaleString("vi-VN") : 0,
+      renderCell: (params) =>
+        params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
     {
       field: "tongTien",
       headerName: "Tổng Tiền",
       width: 200,
-      renderCell: (params) =>  params.value ? params.value.toLocaleString("vi-VN") : 0,
+      renderCell: (params) =>
+        params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
-   
   ];
 
-  const totalAmount = hangHoa.reduce((sum, row) => sum + (row.tongTien || 0), 0);
+  const totalAmount = hangHoa.reduce(
+    (sum, row) => sum + (row.tongTien || 0),
+    0
+  );
   return (
     <div>
-    <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%", mt: 2, margin: 2 }}>
-       <Button variant="contained" onClick={handleUpdateCost} startIcon={<EditIcon/>}>Cập nhật</Button>
-    </Box> 
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          width: "100%",
+          mt: 2,
+          margin: 2,
+        }}
+      >
+        <Button
+          variant="contained"
+          onClick={handleUpdateCost}
+          startIcon={<EditIcon />}
+        >
+          Cập nhật
+        </Button>
+      </Box>
       <DataGrid
         rows={hangHoa}
         columns={columns}
         editMode="row"
-        sx={{width:"100%"}}
+        sx={{ width: "100%" }}
         style={{ fontSize: "1rem" }}
         processRowUpdate={processRowUpdate}
         componentsProps={{
-            footer: {
-              style: { padding: "10px", fontWeight: "bold", textAlign: "right" },
-            },
-          }}
+          footer: {
+            style: { padding: "10px", fontWeight: "bold", textAlign: "right" },
+          },
+        }}
         slots={{
           toolbar: () => (
             <GridToolbarContainer>
@@ -231,9 +267,17 @@ const BanHangTab = ({dataCoHoi , refetchCoHoi}) => {
             </GridToolbarContainer>
           ),
           footer: () => (
-            <Box sx={{ display: "flex", justifyContent: "flex-end", p: 2, bgcolor: "#f1f1f1" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                p: 2,
+                bgcolor: "#f1f1f1",
+              }}
+            >
               <Typography variant="h6">
-                Tổng tiền: {totalAmount.toLocaleString("vi-VN")} <span>&#x0111;</span>
+                Tổng tiền: {totalAmount.toLocaleString("vi-VN")}{" "}
+                <span>&#x0111;</span>
               </Typography>
             </Box>
           ),

@@ -15,6 +15,7 @@ import {
 } from "../../../Api/Phongban";
 import { useNavigate } from "react-router-dom";
 import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Swal from "sweetalert2";
 const QuanLyPhongban = () => {
   const columns = [
@@ -110,7 +111,9 @@ const QuanLyPhongban = () => {
       setRows(phongbanlist);
     }
   }, [phongbanlist]);
-
+  const handleRowSelectionChange = (selectedRows) => {
+    setSelectedRow(selectedRows);
+  };
   return (
     <Container style={{ maxWidth: "100%" }}>
       <Button style={{}} onClick={gotoLink}>
@@ -143,33 +146,14 @@ const QuanLyPhongban = () => {
           </Button>
         </div>
 
-        <DataGrid
+        <CustomDatagrid
           rows={rows}
           columns={columns}
-          showCellVerticalBorder
-          style={{ marginTop: "10px" }}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 25 },
-            },
-          }}
-          showTopToolbar={true}
-          onRowSelectionModelChange={(newRowSelectionModel) => {
-            const selectedRows = rows.filter((row) =>
-              newRowSelectionModel.includes(row.id)
-            );
-            setSelectedRow(selectedRows);
-          }}
-          slotProps={{
-            toolbar: {
-              showQuickFilter: true,
-            },
-          }}
-          slots={{ toolbar: GridToolbar }}
-          pageSizeOptions={[25, 50, 75, 100]}
+          pageSizeOptions={[10, 25, 50]}
+          initialPageSize={25}
           checkboxSelection={true}
-          disableMultipleSelection={true}
-          disableRowSelectionOnClick={false}
+          showTopToolbar={true}
+          onRowSelectionChange={handleRowSelectionChange}
         />
       </div>
       {/* <ModalThemSua openModal={openModal} selectedRow={selectedRow} closeModal={handelCloseModalThemSua} /> */}

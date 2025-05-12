@@ -41,18 +41,19 @@ namespace CRM.Repositories.CoHois
 
                     foreach (var item in modal.HangHoaQuanTams)
                     {
-
                         HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
                         hangHoaQuanTam.Id = Guid.NewGuid();
                         hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
                         hangHoaQuanTam.KhachHangId = modal.MaKhachHang;
                         hangHoaQuanTam.CoHoiId = modal.Id;
                         hangHoaQuanTam.SoLuong = item.SoLuong;
+                        hangHoaQuanTam.DonGia = item.DonGia;
+                        hangHoaQuanTam.ThueSuat = item.ThueSuat;
                         hangHoaQuanTam.TienThue = item.TienThue;
-                        hangHoaQuanTam.TenHangHoa = item.TenHangHoa;
-                        hangHoaQuanTam.MaDonViTinh = item.MaDonViTinh;
                         hangHoaQuanTam.ThanhTien = item.ThanhTien;
                         hangHoaQuanTam.TongTien = item.TongTien;
+                        hangHoaQuanTam.TenHangHoa = item.TenHangHoa;
+                        hangHoaQuanTam.MaDonViTinh = item.MaDonViTinh;
                         _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
                     }
                     _crmDbContext.CoHois.Add(cohoi);

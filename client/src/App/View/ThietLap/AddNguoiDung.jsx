@@ -99,7 +99,7 @@ const AddNguoiDung = () => {
   const handleSave = async () => {
     try {
        const response = await addUser(obj)
-       console.log(response)
+   
        if(response?.data?.status === 200)
        {
         toast.success("Thêm người dùng thành công", {

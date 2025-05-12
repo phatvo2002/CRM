@@ -70,9 +70,6 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Serilog;
-using Serilog.Events;
-using Serilog.Sinks.MSSqlServer;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -89,20 +86,20 @@ builder.Services.AddDbContext<CrmDbContext>(options =>
 builder.Services.AddDbContext<AppCrmContext>(options =>
         options.UseSqlServer(settings["DefaultConnection"]));
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-var logger = new LoggerConfiguration()
-    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-    .Enrich.FromLogContext()
-    .WriteTo.Console()
-    .WriteTo.MSSqlServer(
-        connectionString: settings["DefaultConnection"],
-        sinkOptions: new MSSqlServerSinkOptions
-        {
-            TableName = "Logs",
-            AutoCreateSqlTable = true
-        })
-    .CreateLogger();
+//var logger = new LoggerConfiguration()
+//    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+//    .Enrich.FromLogContext()
+//    .WriteTo.Console()
+//    .WriteTo.MSSqlServer(
+//        connectionString: settings["DefaultConnection"],
+//        sinkOptions: new MSSqlServerSinkOptions
+//        {
+//            TableName = "Logs",
+//            AutoCreateSqlTable = true
+//        })
+//    .CreateLogger();
 
-builder.Host.UseSerilog(logger);
+//builder.Host.UseSerilog(logger);
 builder.Services.AddControllers()
        .AddJsonOptions(options =>
        {
