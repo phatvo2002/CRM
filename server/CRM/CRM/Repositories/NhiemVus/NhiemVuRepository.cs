@@ -52,7 +52,7 @@ namespace CRM.Repositories.NhiemVus
                         thongBao.TieuDe = $"Bạn có một nhiệm vụ mới được giao : {modal.TieuDe}";
                         thongBao.NoiDung = modal.MoTa;
                         thongBao.Type = "new";
-                        thongBao.DuongDan = $"http://localhost:3000/tiemnang/{modal.KhachHangTiemNangId}";
+                        thongBao.DuongDan = $"https://crm2024-sand.vercel.app/tiemnang/{modal.KhachHangTiemNangId}";
                         thongBao.CreateAt = DateTime.Now;
                         thongBao.IsRead = false;
                         thongBao.IsDelete = false;
@@ -71,7 +71,7 @@ namespace CRM.Repositories.NhiemVus
                         thongBao.Type = "new";
                         thongBao.IsRead = false;
                         thongBao.IsDelete = false;
-                        thongBao.DuongDan = $"http://localhost:3000/khachhang/{modal.KhachHangId}";
+                        thongBao.DuongDan = $"https://crm2024-sand.vercel.app/khachhang/{modal.KhachHangId}";
                         thongBao.CreateAt = DateTime.Now;
                         thongBao.NguoiDungId = modal.NguoiDungId;
                         _context.ThongBaos.Add(thongBao);

@@ -94,7 +94,7 @@ namespace CRM.Entities
             //Local connection :
             //  optionsBuilder.UseSqlServer("Server=DESKTOP-7IV23S1;Database=CRM;User Id=sa;Password=abc@123;Encrypt=True;TrustServerCertificate=true;Connection Timeout=1000;");
             // optionsBuilder.UseSqlServer("Server=MSI\\MSSQLSERVER6;Database=CRM;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=6000;");
-            optionsBuilder.UseSqlServer("Server=MSI\\SQLEXPRESS;Database=CRM_v2; User Id=sa;Password=abc@123;Integrated Security=True;Encrypt=True;Trusted_Connection=True;TrustServerCertificate=true;Connection Timeout=1000;");
+            optionsBuilder.UseSqlServer("Server=113.161.75.106,5858;Database=CRM_v2;User Id=sa;Password=abc@123;Encrypt=True;TrustServerCertificate=true;Connection Timeout=1000;");
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

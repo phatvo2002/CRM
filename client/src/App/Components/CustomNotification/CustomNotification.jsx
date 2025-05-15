@@ -43,7 +43,7 @@ export const CustomNotification = ({
 
 
  const connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://localhost:5020/notificationHub", {
+    .withUrl("https://apicrm-cmg0due3eye9bvcw.ukwest-01.azurewebsites.net/notificationHub", {
       accessTokenFactory: () => localStorage.getItem("token")
     })
     .withAutomaticReconnect()
