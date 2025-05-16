@@ -103,10 +103,10 @@ const ModalUpdatePhongBan = (props) => {
     };
 
   useEffect(() => {
-    if (selectedItem[0] && typeModal === TYPE_MODAL.UPDATE) {
-      getInitialStateFromApiToUpdate(selectedItem[0]);
+    if (selectedItem && typeModal === TYPE_MODAL.UPDATE) {
+      getInitialStateFromApiToUpdate(selectedItem);
     }
-  }, [selectedItem[0], typeModal]);
+  }, [selectedItem, typeModal]);
 
   useEffect(() => {
     _isMounted.current = true;

@@ -47,9 +47,9 @@ namespace CRM.Services.NhiemVus
             return await _nhiemVuRepository.GetNhiemVuByNguoiDungId(NguoiDungId);
         }
 
-        public async Task<List<NhiemVuDTO>> GetNhiemVuByPhongBanId(Guid phongBan)
+        public async Task<List<NhiemVuDTO>> GetNhiemVuByPhongBanId(Guid phongBan, DateTime tungay, DateTime deNgay)
         {
-            return await _nhiemVuRepository.GetNhiemVuByPhongBanId(phongBan);
+            return await _nhiemVuRepository.GetNhiemVuByPhongBanId(phongBan, tungay, deNgay);
         }
 
         public async Task<ResultModal> UpdateNhiemVu(NhiemVuModal modal, Guid nguoiDungId, Guid phongBanId)

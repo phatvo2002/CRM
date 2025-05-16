@@ -19,7 +19,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { DataGrid, GridToolbarContainer } from "@mui/x-data-grid";
-
+import ButtonCustom from "src/App/Components/CustomButton/ButtonCustom";
 const index = () => {
   const [data, setData] = useState([]);
   const { data: loaiDuBao } = useGetAllLoaiDuBaoQuery();
@@ -186,14 +186,7 @@ const index = () => {
                 margin: "10px 0",
               }}
             >
-              <Button
-                style={{ margin: "10px 0" }}
-                variant="contained"
-                onClick={backLink}
-              >
-                {" "}
-                <ArrowBackIosIcon /> Quay lại
-              </Button>
+              <ButtonCustom handle={backLink}/>
               <Button
                 color="primary"
                 startIcon={<AddIcon />}

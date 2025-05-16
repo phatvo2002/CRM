@@ -34,10 +34,10 @@ namespace CRM.Repositories.NhiemVus
                     nhiemVu.TieuDe = modal.TieuDe;
                     nhiemVu.MoTa = modal.MoTa;
                     nhiemVu.HanHoanThanh = modal.HanHoanThanh;
-                    nhiemVu.KhachHangTiemNangId = modal.KhachHangTiemNangId;
-                    nhiemVu.KhachHangMucTieuId = modal.KhachHangId;
+                    nhiemVu.KhachHangTiemNangId = modal.KhachHangTiemNangId != null ? modal.KhachHangTiemNangId : null;
+                    nhiemVu.KhachHangMucTieuId = modal.KhachHangId != null ? modal.KhachHangId : null;
                     nhiemVu.MucDoUuTienId = modal.MucDoUuTienId;
-                    nhiemVu.TrangThaiThucHienId = modal.TrangThaiThucHienId;
+                    nhiemVu.TrangThaiThucHienId = Guid.Parse("DC08A44C-6A39-426F-89C2-C6068C248573");
                     nhiemVu.CoHoiId = modal.CoHoiId;
                     nhiemVu.IsThongBao = false;
                     nhiemVu.IsDeleted = false;
@@ -139,9 +139,9 @@ namespace CRM.Repositories.NhiemVus
             return _mapper.Map<List<NhiemVuDTO>>(db);
         }
 
-        public async Task<List<NhiemVuDTO>> GetNhiemVuByPhongBanId(Guid phongBan)
+        public async Task<List<NhiemVuDTO>> GetNhiemVuByPhongBanId(Guid phongBan, DateTime tungay, DateTime deNgay)
         {
-            var db = await _context.NhiemVus.Where(r => r.PhongBanId == phongBan).Include(r => r.Nguoidung).Include(r => r.TrangThaiThucHien).Include(r => r.MucDoUuTien).ToListAsync();
+            var db = await _context.NhiemVus.Where(r => r.PhongBanId == phongBan && (r.CreateAt >= tungay && r.CreateAt <= deNgay)).Include(r => r.Nguoidung).Include(r => r.TrangThaiThucHien).Include(r => r.MucDoUuTien).ToListAsync();
             return _mapper.Map<List<NhiemVuDTO>>(db);
         }
 

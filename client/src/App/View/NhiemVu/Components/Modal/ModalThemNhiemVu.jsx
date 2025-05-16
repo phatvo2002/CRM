@@ -17,8 +17,15 @@ import {
 } from "src/App/Api/GetDataApi";
 import { useAddNhiemVuMutation } from "src/App/Api/NhiemVuApi";
 import { useGetUserByPhongBanIdQuery } from "src/App/Api/UserApi";
-import { useGetKhachHangTiemNangByNguoiDungIdQuery, useGetKhachHangTiemNangByPhongBanIdContextQuery } from "src/App/Api/KhachHangTiemNangApi";
-import { useGetKhachHangMucTieuByNguoiDungIdQuery, useGetKhachHangMucTieuByNguoiDungIdQueryQuery, useGetKhachHangMucTieuByPhongBanIdQuery } from "src/App/Api/KhachHangMucTieuApi";
+import {
+  useGetKhachHangTiemNangByNguoiDungIdQuery,
+  useGetKhachHangTiemNangByPhongBanIdContextQuery,
+} from "src/App/Api/KhachHangTiemNangApi";
+import {
+  useGetKhachHangMucTieuByNguoiDungIdQuery,
+  useGetKhachHangMucTieuByNguoiDungIdQueryQuery,
+  useGetKhachHangMucTieuByPhongBanIdQuery,
+} from "src/App/Api/KhachHangMucTieuApi";
 import dayjs from "dayjs";
 // ------ Form Config ------ //
 const modelObj = {
@@ -26,20 +33,20 @@ const modelObj = {
     moTa: "moTa",
     hanHoanThanh: "hanHoanThanh",
     khachHangTiemNangId: "khachHangTiemNangId",
-    khachHangId:"khachHangId",
+    khachHangId: "khachHangId",
     mucDoUuTienId: "mucDoUuTienId",
     trangThaiThucHienId: "trangThaiThucHienId",
-    nguoiDungId:"nguoiDungId",
+    nguoiDungId: "nguoiDungId",
   },
   labelObj = {
     tieuDe: "Tiêu đề",
     moTa: "Mô tả ",
     hanHoanThanh: "Hạn hoàn thành",
     mucDoUuTienId: "Mức độ ưu tiên",
-    khachHangTiemNangId :"Tiềm năng",
-    khachHangId :"Khách hàng ",
+    khachHangTiemNangId: "Tiềm năng",
+    khachHangId: "Khách hàng ",
     trangThaiThucHienId: "Trạng thái thực hiện",
-    nguoiDungId:"Nhân viên",
+    nguoiDungId: "Nhân viên",
   },
   initialFormState = {
     [modelObj.tieuDe]: "",
@@ -53,43 +60,41 @@ const modelObj = {
   },
   schema = yup.object().shape({
     [modelObj.tieuDe]: validateString(),
-    [modelObj.hanHoanThanh]: validateDatePicker(),
-    [modelObj.mucDoUuTienId]: validateString(),
-    [modelObj.trangThaiThucHienId]: validateString(),
+    // [modelObj.hanHoanThanh]: validateDatePicker(),
+    // [modelObj.trangThaiThucHienId]: validateString(),
   });
 // ------ End Of Form Config ------ //
 
-
-
 export const ModalThemNhiemVu = (props) => {
-  const {
-      showModal,
-      closeModal,
-      typeModal,
-      refetch,
-    } = props,
+  const { showModal, closeModal, typeModal, refetch } = props,
     _isMounted = useRef(false),
     modalRef = useRef(null),
     isLoading = false,
     header = "Thêm nhiệm vụ";
-  const [nguoidungId, setNguoiDungId] = useState('')
-  const valueTuNgay = dayjs("1900-01-01").format('YYYY-MM-DD');
-  const valueDenNgay = dayjs("2100-12-31").format('YYYY-MM-DD');
-  const { data: trangThaiThucHienData, isFetching: isGetTrangThaiThucHienFetching } =
-  useGetAllTrangThaiThucHienQuery({skip: showModal== false});
+  const [nguoidungId, setNguoiDungId] = useState("");
+  const valueTuNgay = dayjs("1900-01-01").format("YYYY-MM-DD");
+  const valueDenNgay = dayjs("2100-12-31").format("YYYY-MM-DD");
   const { data: nguoiDungData, isFetching: isGetNguoiDungFetching } =
-  useGetUserByPhongBanIdQuery({skip: showModal== false});
-  const { data: khachhangTiemNangData, isFetching: isGetKhachHangTiemNangFetching } =
-  useGetKhachHangTiemNangByNguoiDungIdQuery(
+    useGetUserByPhongBanIdQuery({ skip: showModal == false });
+  const {
+    data: khachhangTiemNangData,
+    isFetching: isGetKhachHangTiemNangFetching,
+  } = useGetKhachHangTiemNangByNguoiDungIdQuery(
     {
-      id : nguoidungId,
-      tuNgay : valueTuNgay,
-      denNgay : valueDenNgay
-    },{skip: showModal== false || nguoidungId == null});
-  const { data: khachhangMucTieuData, isFetching: isGetKhachHangMucTieuFetching } =
-  useGetKhachHangMucTieuByNguoiDungIdQueryQuery(nguoidungId,{skip: showModal== false});
+      id: nguoidungId,
+      tuNgay: valueTuNgay,
+      denNgay: valueDenNgay,
+    },
+    { skip: showModal == false || nguoidungId == null || nguoidungId == "" }
+  );
+  const {
+    data: khachhangMucTieuData,
+    isFetching: isGetKhachHangMucTieuFetching,
+  } = useGetKhachHangMucTieuByNguoiDungIdQueryQuery(nguoidungId, {
+    skip: showModal == false,
+  });
   const { data: mucDoUuTienData, isFetching: isGetMucDoUuTienFetching } =
-  useGetAllMucDoUuTienQuery({skip: showModal== false});
+    useGetAllMucDoUuTienQuery({ skip: showModal == false });
   const [addNhiemVu] = useAddNhiemVuMutation();
   const submitForm = (data) => {
       const tempData = {
@@ -97,12 +102,11 @@ export const ModalThemNhiemVu = (props) => {
         [modelObj.moTa]: data[modelObj.moTa],
         [modelObj.hanHoanThanh]: moment(data[modelObj.hanHoanThanh]).format(),
         [modelObj.mucDoUuTienId]: data[modelObj.mucDoUuTienId],
-        [modelObj.trangThaiThucHienId]: data[modelObj.trangThaiThucHienId],
         [modelObj.khachHangTiemNangId]: data[modelObj.khachHangTiemNangId],
         [modelObj.khachHangId]: data[modelObj.khachHangId],
         [modelObj.nguoiDungId]: data[modelObj.nguoiDungId],
       };
-        callApiInsert(tempData);
+      callApiInsert(tempData);
     },
     callApiInsert = async (data) => {
       try {
@@ -128,12 +132,13 @@ export const ModalThemNhiemVu = (props) => {
           draggable: true,
           progress: undefined,
         });
-      } 
+      }
     },
     closeModalWithOtherFunc = () => {
       modalRef.current.reset(initialFormState);
       closeModal();
     };
+
   useEffect(() => {
     _isMounted.current = true;
     return () => {
@@ -178,7 +183,7 @@ export const ModalThemNhiemVu = (props) => {
             disabled={isLoading}
             data={commonMapDataAutocomplete(nguoiDungData, "name")}
             skeletonLoading={isGetNguoiDungFetching}
-            onChangeCallback={(e)=> setNguoiDungId(e)}
+            onChangeCallback={(e) => setNguoiDungId(e)}
           />
         </Grid2>
         <Grid2 size={12}>
@@ -208,7 +213,7 @@ export const ModalThemNhiemVu = (props) => {
             disabled={isLoading}
             required
           />
-        </Grid2> 
+        </Grid2>
         <Grid2 size={12}>
           <AutocompleteRHF
             name={modelObj.mucDoUuTienId}
@@ -219,20 +224,7 @@ export const ModalThemNhiemVu = (props) => {
             skeletonLoading={isGetMucDoUuTienFetching}
           />
         </Grid2>
-         <Grid2 size={12}>
-          <AutocompleteRHF
-            name={modelObj.trangThaiThucHienId}
-            label={labelObj.trangThaiThucHienId}
-            isGetOnlyId
-            disabled={isLoading}
-            data={commonMapDataAutocomplete(trangThaiThucHienData, "name")}
-            skeletonLoading={isGetTrangThaiThucHienFetching}
-          />
-        </Grid2>
-       
       </Grid2>
     </RHFDrawer>
   );
 };
-
-

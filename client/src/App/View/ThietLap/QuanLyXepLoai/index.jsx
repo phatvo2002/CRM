@@ -10,6 +10,7 @@ import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import { toast } from "react-toastify";
+import ButtonCustom from "src/App/Components/CustomButton/ButtonCustom";
 const index = () => {
 
  
@@ -110,21 +111,7 @@ const index = () => {
               margin: "10px 0",
             }}
           >
-            <Button
-              variant="contained"
-              onClick={backLink}
-              startIcon={<ArrowBackIosIcon />}
-              sx={{
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  transform: "translateX(-5px)",
-                  boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
-                },
-                "&:active": {
-                  transform: "scale(0.98)",
-                },
-              }}
-            ></Button>
+            <ButtonCustom handle={backLink}/>
             <Button
               variant="contained"
               style={{ marginTop: "10px" }}

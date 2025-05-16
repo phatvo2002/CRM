@@ -43,7 +43,7 @@ namespace CRM.Services.Automations
                  .Where(r =>
                 r.TrangThaiThucHienId == Guid.Parse("DC08A44C-6A39-426F-89C2-C6068C248573") &&
                 r.HanHoanThanh.HasValue &&
-                vnNow >= r.HanHoanThanh.Value.AddMinutes(-30) &&
+                vnNow >= r.HanHoanThanh.Value.AddMinutes(-10) &&
                 vnNow < r.HanHoanThanh.Value && r.IsGuiMail == false
                     )
             .Include(r => r.Nguoidung).ToList();

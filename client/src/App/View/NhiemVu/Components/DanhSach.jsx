@@ -15,8 +15,9 @@ import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import Moment from "react-moment";
 import LinearScaleIcon from "@mui/icons-material/LinearScale";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
+import CheckIcon from '@mui/icons-material/Check';
 import Swal from "sweetalert2";
-const DanhSach = () => {
+const DanhSach = ({tuNgay , denNgay}) => {
   const columnsNhiemVu = [
     {
       field: "action",
@@ -63,7 +64,7 @@ const DanhSach = () => {
 
         return (
           <Chip
-            icon={<AssignmentIcon color="white" />}
+            icon={<CheckIcon color="white" />}
             sx={style}
             label={status}
             variant="filled"
@@ -158,7 +159,12 @@ const DanhSach = () => {
     handleCloseModal = () => setModalAdd(false),
     [rowNhiemVu, setRowNhiemVu] = useState([]),
     [deleteNhiemVu] = useDeleteNhiemVuMutation(),
-    { data: dataNhiemVu, refetch } = useGetNhiemVuByPhongBanIdQuery(),
+    { data: dataNhiemVu, refetch } = useGetNhiemVuByPhongBanIdQuery(
+      {
+         tuNgay: tuNgay.format("YYYY-MM-DDT00:00:00"),
+       denNgay: denNgay.format("YYYY-MM-DDT23:59:59"),
+      }
+    ),
     [selectedRowNhiemVu, setSelectedRowNhiemVu] = useState([]),
     handleRowNhiemVuSelectionChange = (selectedRows) => {
       setSelectedRowNhiemVu(selectedRows);

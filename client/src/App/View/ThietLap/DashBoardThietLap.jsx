@@ -117,7 +117,7 @@ const DashBoardThietLap = () => {
                     to={"/quantrihethong/quytrinhbanhang"}
                     style={{ textDecoration: "none", color: "primary.main"  }}
                   >
-                     Quy trình bán hàng
+                     Giai Đoạn bán hàng
                   </Link>
                 </Button>
               </CardActions>

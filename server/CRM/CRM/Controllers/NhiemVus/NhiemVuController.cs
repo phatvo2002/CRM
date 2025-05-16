@@ -51,12 +51,12 @@ namespace CRM.Controllers.NhiemVus
         }
         [HttpGet("getnhiemvubyphongban")]
         [JwtAuthorize]
-        public async Task<ActionResult> GetNhiemVuByPhongBanId()
+        public async Task<ActionResult> GetNhiemVuByPhongBanId(DateTime tuNgay, DateTime denNgay)
         {
             try
             {
                 Guid phongBanId = HttpContext.GetPhongBanId();
-                List<NhiemVuDTO> result = await _nhiemVuServices.GetNhiemVuByPhongBanId(phongBanId);
+                List<NhiemVuDTO> result = await _nhiemVuServices.GetNhiemVuByPhongBanId(phongBanId, tuNgay, denNgay);
                 return Ok(result);
             }
             catch (Exception ex)

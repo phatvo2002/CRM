@@ -16,6 +16,7 @@ import { useGetUserAllQuery } from "../../Api/UserApi";
 import ModalUpdateDepartment from "./Modal/ModalUpdateDepartment";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Tooltip from "@mui/material/Tooltip";
+import ButtonCustom from "src/App/Components/CustomButton/ButtonCustom";
 const ThietLap = () => {
   const navigate = useNavigate();
   // const [user, setUser] = useState([]);
@@ -140,13 +141,6 @@ const ThietLap = () => {
     navigate("/quantrihethong");
   };
 
-  // useEffect(() => {
-  //   getData();
-  // }, []);
-  // useEffect(() => {
-  //   if (loading) getData();
-  //   setLoading(false);
-  // }, [loading]);
 
   useEffect(() => {
     if (userList) {
@@ -279,10 +273,7 @@ const ThietLap = () => {
             <PersonAddIcon />
             <span style={{ marginLeft: "8px" }}>Thêm mới tài khoản</span>
           </Button>
-          <Button variant="contained" onClick={backLink}>
-            {" "}
-            <ArrowBackIosIcon /> Quay lại
-          </Button>
+         <ButtonCustom handle={backLink}/>
         </div>
 
         <CustomDatagrid

@@ -156,95 +156,165 @@ const index = () => {
                   border: "1px solid #e0e0e0",
                   borderRadius: "8px",
                   overflow: "auto",
+                  backgroundColor: "#fff",
                 }}
               >
                 <TableHead>
-                  <TableRow sx={{ backgroundColor: "background.primary" }}>
-                    <TableCell></TableCell>
+                  <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
                     <TableCell
-                      sx={{ fontWeight: "bold", color: "#333", width: "200px" }}
+                      sx={{ borderRight: "1px solid #e0e0e0", width: "60px" }}
+                    />
+                    <TableCell
+                      align="center"
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "120px",
+                      }}
                     >
                       Hành động
                     </TableCell>
                     <TableCell
+                      align="center"
                       sx={{
                         fontWeight: "bold",
-                      //  color: "#333",
-                        width: "300px",
-                        flex: 1,
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "200px",
                       }}
                     >
                       Trưởng phòng phụ trách
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold",width: "200px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "200px",
+                      }}
                     >
                       Tên KPI
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold",  width: "200px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "200px",
+                      }}
                     >
                       Tên phòng ban
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold",  width: "300px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "150px",
+                      }}
                     >
                       Ngày bắt đầu
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", width: "300px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "150px",
+                      }}
                     >
                       Ngày kết thúc
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold",  width: "300px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "200px",
+                      }}
                     >
                       SL Cuộc Gọi / Thực Tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold",  width: "300px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "200px",
+                      }}
                     >
                       SL Lịch Hẹn / Thực Tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold",width: "300px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "200px",
+                      }}
                     >
-                      SL Email Tương Tác Khách Hàng / Thực Tế
+                      SL Email Tương Tác / Thực Tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", width: "300px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "200px",
+                      }}
                     >
-                      SL Tiềm Năng Đã Chuyển Đổi / Thực tế
+                      SL Tiềm Năng Đã Chuyển Đổi / Thực Tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold",  width: "300px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "200px",
+                      }}
                     >
-                      SL Email Báo Giá/ Thực tế
+                      SL Email Báo Giá / Thực Tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold",  width: "300px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "200px",
+                      }}
                     >
-                      Doanh Số / Thực tế
+                      Doanh Số / Thực Tế
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold", width: "300px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "150px",
+                      }}
                     >
                       Tổng tỷ lệ (%)
                     </TableCell>
                     <TableCell
                       align="center"
-                      sx={{ fontWeight: "bold",  width: "300px" }}
+                      sx={{
+                        fontWeight: "bold",
+                        color: "#333",
+                        borderRight: "1px solid #e0e0e0",
+                        width: "150px",
+                      }}
                     >
                       Đánh giá
                     </TableCell>
@@ -256,7 +326,6 @@ const index = () => {
                       <React.Fragment key={index}>
                         <TableRow
                           hover
-                          //  onClick={() => setSelectedRow(item)}
                           selected={selectedRow?.id === item.id}
                           sx={{
                             cursor: "pointer",
@@ -264,26 +333,34 @@ const index = () => {
                               selectedRow?.id === item.id
                                 ? "#e3f2fd"
                                 : "inherit",
+                            "& > *": { borderBottom: "1px solid #e0e0e0" },
                           }}
                         >
-                          <TableCell padding="checkbox">
-                            {checkPermission == false && (
-                              <>
-                                <Checkbox
-                                  color="primary"
-                                  checked={selectedRow?.id === item.id}
-                                  onChange={(e) => {
-                                    if (e.target.checked) {
-                                      setSelectedRow(item);
-                                    } else {
-                                      setSelectedRow(null);
-                                    }
-                                  }}
-                                />
-                              </>
+                          <TableCell
+                            padding="checkbox"
+                            sx={{ borderRight: "1px solid #e0e0e0" }}
+                          >
+                            {checkPermission === false && (
+                              <Checkbox
+                                color="primary"
+                                checked={selectedRow?.id === item.id}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setSelectedRow(item);
+                                  } else {
+                                    setSelectedRow(null);
+                                  }
+                                }}
+                              />
                             )}
                           </TableCell>
-                          <TableCell sx={{ width: 120 }}>
+                          <TableCell
+                            align="center"
+                            sx={{
+                              borderRight: "1px solid #e0e0e0",
+                              width: "120px",
+                            }}
+                          >
                             <IconButton
                               size="small"
                               onClick={(e) => {
@@ -297,23 +374,23 @@ const index = () => {
                                 <KeyboardArrowDown />
                               )}
                             </IconButton>
-                            {checkPermission == false && (
-                              <>
-                                <IconButton
-                                  color="success"
-                                  disabled={selectedRow == null}
-                                  onClick={handleOpenModalChinhSua}
-                                >
-                                  <EditIcon />
-                                </IconButton>
-                                {/* <IconButton color="error">
-                                  <DeleteIcon />
-                                </IconButton> */}
-                              </>
+                            {checkPermission === false && (
+                              <IconButton
+                                color="success"
+                                disabled={selectedRow == null}
+                                onClick={handleOpenModalChinhSua}
+                              >
+                                <EditIcon />
+                              </IconButton>
                             )}
                           </TableCell>
-
-                          <TableCell align="center">
+                          <TableCell
+                            align="center"
+                            sx={{
+                              borderRight: "1px solid #e0e0e0",
+                              width: "200px",
+                            }}
+                          >
                             <Box
                               display="flex"
                               flexDirection="column"
@@ -326,7 +403,12 @@ const index = () => {
                                     ? NoImage
                                     : `data:image/jpeg;base64,${item?.nguoiDung?.hinhAnh}`
                                 }
-                                sx={{ width: 40, height: 40, mb: 0.5 }}
+                                sx={{
+                                  width: 40,
+                                  height: 40,
+                                  mb: 0.5,
+                                  margin: "0 auto",
+                                }}
                               />
                               <Typography variant="body2">
                                 {item?.nguoiDung?.hoVaDem}{" "}
@@ -334,27 +416,50 @@ const index = () => {
                               </Typography>
                             </Box>
                           </TableCell>
-
-                          <TableCell sx={{ color: "#555" }}>
+                          <TableCell
+                            align="center"
+                            sx={{
+                              color: "#555",
+                              borderRight: "1px solid #e0e0e0",
+                              width: "200px",
+                            }}
+                          >
                             {item?.tenKPI}
                           </TableCell>
-
-                          <TableCell align="center" sx={{ color: "#555" }}>
+                          <TableCell
+                            align="center"
+                            sx={{
+                              color: "#555",
+                              borderRight: "1px solid #e0e0e0",
+                              width: "200px",
+                            }}
+                          >
                             {item?.phongBan?.tenPhongBan}
                           </TableCell>
-
-                          <TableCell align="center" sx={{ color: "#555" }}>
+                          <TableCell
+                            align="center"
+                            sx={{
+                              color: "#555",
+                              borderRight: "1px solid #e0e0e0",
+                              width: "150px",
+                            }}
+                          >
                             <Moment format="DD/MM/YYYY">
                               {item?.ngayBatDau}
                             </Moment>
                           </TableCell>
-
-                          <TableCell align="center" sx={{ color: "#555" }}>
+                          <TableCell
+                            align="center"
+                            sx={{
+                              color: "#555",
+                              borderRight: "1px solid #e0e0e0",
+                              width: "150px",
+                            }}
+                          >
                             <Moment format="DD/MM/YYYY">
                               {item?.ngayKetThuc}
                             </Moment>
                           </TableCell>
-
                           {[
                             {
                               value1: item?.soCuocGoi,
@@ -367,6 +472,11 @@ const index = () => {
                               percent: item?.tileLichHenThucTe,
                             },
                             {
+                              value1: item?.soEmailTuongTacKhachHang,
+                              value2: item?.soEmailTruongTacKhachHangThucTe,
+                              percent: item?.tileEmailTuongTacThucTe,
+                            },
+                            {
                               value1: item?.soKhachHangTiemNangDaChuyenDoi,
                               value2:
                                 item?.soKhachHangTiemNangDaChuyenDoiThucTe,
@@ -374,70 +484,93 @@ const index = () => {
                                 item?.tiLeSoKhachHangTiemNangDaChuyenDoiThucTe,
                             },
                             {
-                              value1: item?.soEmailTuongTacKhachHang,
-                              value2: item?.soEmailTruongTacKhachHangThucTe,
-                              percent: item?.tileEmailTuongTacThucTe,
-                            },
-                            {
                               value1: item?.soEmailBaoGia,
                               value2: item?.soEmailBaoGiaThucTe,
                               percent: item?.tiLeEmailBaoGiaThucTe,
                             },
                           ].map((data, i) => (
-                            <TableCell align="center" key={i}>
+                            <TableCell
+                              align="center"
+                              key={i}
+                              sx={{
+                                borderRight: "1px solid #e0e0e0",
+                                width: "200px",
+                              }}
+                            >
                               <Typography variant="body2">
                                 {data.value1} / {data.value2}
                               </Typography>
                               <Typography
                                 variant="caption"
-                               
+                                sx={{ color: "#777" }}
                               >
                                 {data.percent} %
                               </Typography>
                             </TableCell>
                           ))}
-
-                          <TableCell align="center">
+                          <TableCell
+                            align="center"
+                            sx={{
+                              borderRight: "1px solid #e0e0e0",
+                              width: "200px",
+                            }}
+                          >
                             <Typography variant="body2">
                               {item?.doanhSo.toLocaleString("vi-VN")} /{" "}
                               {item?.doanhSoThucTe.toLocaleString("vi-VN")}
                             </Typography>
                             <Typography
                               variant="caption"
-                           
+                              sx={{ color: "#777" }}
                             >
                               {item?.tiLeDoanhSoThucTe} %
                             </Typography>
                           </TableCell>
-
-                          <TableCell align="center">
+                          <TableCell
+                            align="center"
+                            sx={{
+                              borderRight: "1px solid #e0e0e0",
+                              width: "150px",
+                            }}
+                          >
                             <Typography variant="body2">
                               {item?.tongTiLeThucTe.toFixed(2)} %
                             </Typography>
                           </TableCell>
-                          <TableCell align="center">
-                            {item.xepLoai || ""}
-                            <div
-                              style={{
+                          <TableCell
+                            align="center"
+                            sx={{
+                              borderRight: "1px solid #e0e0e0",
+                              width: "150px",
+                            }}
+                          >
+                            <Typography variant="body2">
+                              {item.xepLoai || ""}
+                            </Typography>
+                            <Box
+                              sx={{
                                 display: "flex",
                                 justifyContent: "center",
                                 alignItems: "center",
                                 height: "60px",
                               }}
                             >
-                              <div
-                                style={{
+                              <Box
+                                sx={{
                                   width: "50px",
                                   height: "50px",
                                   backgroundColor: item?.color,
+                                  borderRadius: "4px",
                                 }}
-                              ></div>
-                            </div>
+                              />
+                            </Box>
                           </TableCell>
                         </TableRow>
-
                         <TableRow>
-                          <TableCell colSpan={15} sx={{ padding: 0 }}>
+                          <TableCell
+                            colSpan={15}
+                            sx={{ padding: 0, borderBottom: "none" }}
+                          >
                             <Collapse
                               in={openRow === index}
                               timeout="auto"
@@ -446,9 +579,9 @@ const index = () => {
                               <Box
                                 sx={{
                                   m: 2,
-                                  backgroundColor: "background.primary",
-                                  borderRadius: 2,
-                                  boxShadow: 2,
+                                  backgroundColor: "#fafafa",
+                                  borderRadius: "8px",
+                                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                                   border: "1px solid #e0e0e0",
                                   p: 2,
                                 }}
@@ -460,11 +593,13 @@ const index = () => {
                                 >
                                   Thông tin KPI chi tiết
                                 </Typography>
-
-                                <Table size="small">
+                                <Table
+                                  size="small"
+                                  sx={{ border: "1px solid #e0e0e0" }}
+                                >
                                   <TableHead>
                                     <TableRow
-                                      sx={{ backgroundColor: "background.primary" }}
+                                      sx={{ backgroundColor: "#f5f5f5" }}
                                     >
                                       {[
                                         "",
@@ -485,38 +620,66 @@ const index = () => {
                                         <TableCell
                                           key={idx}
                                           align="center"
-                                          sx={{ fontWeight: "bold" }}
+                                          sx={{
+                                            fontWeight: "bold",
+                                            color: "#333",
+                                            borderRight: "1px solid #e0e0e0",
+                                            width:
+                                              idx === 0 || idx === 13
+                                                ? "60px"
+                                                : idx === 1
+                                                  ? "120px"
+                                                  : idx === 2
+                                                    ? "200px"
+                                                    : "150px",
+                                          }}
                                         >
                                           {text}
                                         </TableCell>
                                       ))}
                                     </TableRow>
                                   </TableHead>
-
                                   <TableBody>
                                     {item?.kpiNhanViens.map((kpi, subIndex) => (
-                                      <TableRow key={subIndex}>
-                                        <TableCell padding="checkbox">
-                                          {checkPermission == true && (
-                                            <>
-                                              <Checkbox
-                                                color="primary"
-                                                checked={
-                                                  selectedRow?.id === kpi?.id
+                                      <TableRow
+                                        key={subIndex}
+                                        sx={{
+                                          "& > *": {
+                                            borderBottom: "1px solid #e0e0e0",
+                                          },
+                                        }}
+                                      >
+                                        <TableCell
+                                          padding="checkbox"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "60px",
+                                          }}
+                                        >
+                                          {checkPermission === true && (
+                                            <Checkbox
+                                              color="primary"
+                                              checked={
+                                                selectedRow?.id === kpi?.id
+                                              }
+                                              onChange={(e) => {
+                                                if (e.target.checked) {
+                                                  setSelectedRow(kpi);
+                                                } else {
+                                                  setSelectedRow(null);
                                                 }
-                                                onChange={(e) => {
-                                                  if (e.target.checked) {
-                                                    setSelectedRow(kpi);
-                                                  } else {
-                                                    setSelectedRow(null);
-                                                  }
-                                                }}
-                                              />
-                                            </>
+                                              }}
+                                            />
                                           )}
                                         </TableCell>
-                                        <TableCell align="center">
-                                          {checkPermission == true && (
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "120px",
+                                          }}
+                                        >
+                                          {checkPermission === true && (
                                             <IconButton
                                               color="success"
                                               disabled={selectedRow == null}
@@ -526,8 +689,13 @@ const index = () => {
                                             </IconButton>
                                           )}
                                         </TableCell>
-
-                                        <TableCell align="center">
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "200px",
+                                          }}
+                                        >
                                           <Box
                                             display="flex"
                                             flexDirection="column"
@@ -544,6 +712,7 @@ const index = () => {
                                                 width: 40,
                                                 height: 40,
                                                 mb: 0.5,
+                                                margin: "0 auto",
                                               }}
                                             />
                                             <Typography variant="body2">
@@ -552,62 +721,134 @@ const index = () => {
                                             </Typography>
                                           </Box>
                                         </TableCell>
-
-                                        <TableCell align="center">
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "150px",
+                                          }}
+                                        >
                                           <Moment format="DD/MM/YYYY">
                                             {kpi?.ngayBatDau}
                                           </Moment>
                                         </TableCell>
-                                        <TableCell align="center">
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "150px",
+                                          }}
+                                        >
                                           <Moment format="DD/MM/YYYY">
                                             {kpi?.ngayKetThuc}
                                           </Moment>
                                         </TableCell>
-                                        <TableCell align="center">
-                                          <div>
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "150px",
+                                          }}
+                                        >
+                                          <Typography variant="body2">
                                             {kpi.soCuocGoi} /{" "}
                                             {kpi.soCuocGoiThucTe}
-                                          </div>
-                                          {kpi.tileCuocGoiThucTe} %
+                                          </Typography>
+                                          <Typography
+                                            variant="caption"
+                                            sx={{ color: "#777" }}
+                                          >
+                                            {kpi.tileCuocGoiThucTe} %
+                                          </Typography>
                                         </TableCell>
-                                        <TableCell align="center">
-                                          <div>
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "150px",
+                                          }}
+                                        >
+                                          <Typography variant="body2">
                                             {kpi.soLichHen} /{" "}
                                             {kpi.soLichHenThucTe}
-                                          </div>
-                                          {kpi.tileLichHenThucTe} %
+                                          </Typography>
+                                          <Typography
+                                            variant="caption"
+                                            sx={{ color: "#777" }}
+                                          >
+                                            {kpi.tileLichHenThucTe} %
+                                          </Typography>
                                         </TableCell>
-                                        <TableCell align="center">
-                                          <div>
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "150px",
+                                          }}
+                                        >
+                                          <Typography variant="body2">
                                             {kpi.soEmailTuongTacKhachHang} /{" "}
                                             {
                                               kpi.soEmailTruongTacKhachHangThucTe
                                             }
-                                          </div>
-                                          {kpi.tileEmailTuongTacThucTe} %
+                                          </Typography>
+                                          <Typography
+                                            variant="caption"
+                                            sx={{ color: "#777" }}
+                                          >
+                                            {kpi.tileEmailTuongTacThucTe} %
+                                          </Typography>
                                         </TableCell>
-                                        <TableCell align="center">
-                                          <div>
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "150px",
+                                          }}
+                                        >
+                                          <Typography variant="body2">
                                             {kpi.soKhachHangTiemNangDaChuyenDoi}{" "}
                                             /{" "}
                                             {
                                               kpi.soKhachHangTiemNangDaChuyenDoiThucTe
                                             }
-                                          </div>
-                                          {
-                                            kpi.tiLeSoKhachHangTiemNangDaChuyenDoiThucTe
-                                          }{" "}
-                                          %
+                                          </Typography>
+                                          <Typography
+                                            variant="caption"
+                                            sx={{ color: "#777" }}
+                                          >
+                                            {
+                                              kpi.tiLeSoKhachHangTiemNangDaChuyenDoiThucTe
+                                            }{" "}
+                                            %
+                                          </Typography>
                                         </TableCell>
-                                        <TableCell align="center">
-                                          <div>
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "150px",
+                                          }}
+                                        >
+                                          <Typography variant="body2">
                                             {kpi.soEmailBaoGia} /{" "}
                                             {kpi.soEmailBaoGiaThucTe}
-                                          </div>
-                                          {kpi.tiLeEmailBaoGiaThucTe} %
+                                          </Typography>
+                                          <Typography
+                                            variant="caption"
+                                            sx={{ color: "#777" }}
+                                          >
+                                            {kpi.tiLeEmailBaoGiaThucTe} %
+                                          </Typography>
                                         </TableCell>
-                                        <TableCell align="center">
-                                          <div>
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "150px",
+                                          }}
+                                        >
+                                          <Typography variant="body2">
                                             {kpi.doanhSo.toLocaleString(
                                               "vi-VN"
                                             )}{" "}
@@ -615,33 +856,59 @@ const index = () => {
                                             {kpi.doanhSoThucTe.toLocaleString(
                                               "vi-VN"
                                             )}
-                                          </div>
-                                          {kpi.tiLeDoanhSoThucTe} %
+                                          </Typography>
+                                          <Typography
+                                            variant="caption"
+                                            sx={{ color: "#777" }}
+                                          >
+                                            {kpi.tiLeDoanhSoThucTe} %
+                                          </Typography>
                                         </TableCell>
-                                        <TableCell align="center">
-                                          {kpi.tongTiLeThucTe.toFixed(2)} %
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "150px",
+                                          }}
+                                        >
+                                          <Typography variant="body2">
+                                            {kpi.tongTiLeThucTe.toFixed(2)} %
+                                          </Typography>
                                         </TableCell>
-                                        <TableCell align="center">
-                                          {kpi.xepLoai || ""}
-                                          <div
-                                            style={{
+                                        <TableCell
+                                          align="center"
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "150px",
+                                          }}
+                                        >
+                                          <Typography variant="body2">
+                                            {kpi.xepLoai || ""}
+                                          </Typography>
+                                          <Box
+                                            sx={{
                                               display: "flex",
                                               justifyContent: "center",
                                               alignItems: "center",
                                               height: "60px",
                                             }}
                                           >
-                                            <div
-                                              style={{
+                                            <Box
+                                              sx={{
                                                 width: "50px",
                                                 height: "50px",
                                                 backgroundColor: kpi.color,
+                                                borderRadius: "4px",
                                               }}
-                                            ></div>
-                                          </div>
+                                            />
+                                          </Box>
                                         </TableCell>
-
-                                        <TableCell align="center" />
+                                        <TableCell
+                                          sx={{
+                                            borderRight: "1px solid #e0e0e0",
+                                            width: "60px",
+                                          }}
+                                        />
                                       </TableRow>
                                     ))}
                                   </TableBody>

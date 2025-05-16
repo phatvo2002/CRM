@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import { TYPE_MODAL } from "../../../Until/constant";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import { useNavigate } from "react-router-dom";
+import ButtonCustom from "src/App/Components/CustomButton/ButtonCustom";
 const ThietLapVaiTro = () => {
   const navigate = useNavigate();
   const columns = [
@@ -119,10 +120,7 @@ const ThietLapVaiTro = () => {
             margin: "10px 0",
           }}
         >
-          <Button variant="contained" onClick={backLink}>
-            {" "}
-            <ArrowBackIosIcon /> Quay lại
-          </Button>
+           <ButtonCustom handle={backLink}/>
           <div
             style={{
               display: "flex",

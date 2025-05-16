@@ -10,7 +10,7 @@
         public string? KhachHangId { get; set; }
         public string? CoHoiId { get; set; }
         public Guid MucDoUuTienId { get; set; }
-        public Guid TrangThaiThucHienId { get; set; }
+        public Guid? TrangThaiThucHienId { get; set; }
         public Guid NguoiDungId { get; set; }
     }
 }

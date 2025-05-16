@@ -29,7 +29,7 @@ export const apiNhiemVu = createApi({
         query: (id) => `/NhiemVu/getnhiemvubykhachhangid/${id}`,
       }),
       getNhiemVuByPhongBanId: builder.query({
-        query: () => `/NhiemVu/getnhiemvubyphongban`,
+        query: ({tuNgay , denNgay}) => `/NhiemVu/getnhiemvubyphongban?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
       getNhiemVuById: builder.query({
         query: (id) => `/NhiemVu/getnhiemvuid/${id}`,
