@@ -273,7 +273,7 @@ const QuanLyPhongban = () => {
                             borderRight: "1px solid rgba(224, 224, 224, 1)",
                           }}
                         >
-                          {item2?.hinhAnh == null ? (
+                          {item2?.hinhAnh == "" ? (
                             <div>
                               <img
                                 src={NoImage}

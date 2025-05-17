@@ -70,7 +70,6 @@ export const ModalGuiMailBaoGia = ({ showModal, typeModal, closeModal ,baoGiaDat
   const callApiSentFile = async (params) => {
     try {
       const response =  await guiMail(params);
-      console.log(response)
       if(response?.data.status == 200)
       {
           toast.success(response?.data.message);

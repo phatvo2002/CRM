@@ -22,7 +22,10 @@ import WidgetsIcon from "@mui/icons-material/Widgets";
 import { TabBieuDoCoHoi } from "./Pages/Tabs/TabBieuDoCoHoi";
 import { TabListCoHoi } from "./Pages/Tabs/TabListCoHoi";
 import ModalThemMoiCoHoi from "./Modal/ModalThemMoiCoHoi";
-import { useGetAllCoHoiQuery, useGetCoHoiListQuery } from "src/App/Api/CoHoiApi";
+import {
+  useGetAllCoHoiQuery,
+  useGetCoHoiListQuery,
+} from "src/App/Api/CoHoiApi";
 import EditIcon from "@mui/icons-material/Edit";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -39,10 +42,13 @@ const index = () => {
     dayjs().endOf("month")
   );
 
-  const dataTuNgay = valueTuNgay.format("YYYY-MM-DDT00:00:00")
-  const dataDenNgay = valueDenNgay.format("YYYY-MM-DDT23:59:59")
+  const dataTuNgay = valueTuNgay.format("YYYY-MM-DDT00:00:00");
+  const dataDenNgay = valueDenNgay.format("YYYY-MM-DDT23:59:59");
 
-  const { data: dataCoHoi, refetch } = useGetAllCoHoiQuery({tuNgay: dataTuNgay, denNgay: dataDenNgay });
+  const { data: dataCoHoi, refetch } = useGetAllCoHoiQuery({
+    tuNgay: dataTuNgay,
+    denNgay: dataDenNgay,
+  });
   const [modalThemMoi, setModalThemMoi] = useState(false);
   const handleOpenModalThemMoiCoHoi = () => setModalThemMoi(true);
   const handleCloseModalThemMoiCoHoi = () => setModalThemMoi(false);
@@ -61,21 +67,23 @@ const index = () => {
     <>
       <Grid2 container spacing={2} alignItems="center">
         {/* Tiêu đề */}
-        <Grid2 xs={12} md={8}>
+        <Grid2 xs={12} size={12} md={12}>
           <Typography
             variant="h5"
             sx={{ fontWeight: "bold", color: "#1976d2" }}
           >
-            📋 Tất cả cơ hội
+            📋 Cơ hội bán hàng
+          </Typography>
+          <Typography variant="body2">
+            “Cơ hội” (Opportunity) là một thương vụ bán hàng tiềm năng phát sinh
+            từ một khách hàng mục tiêu đã được xác định và phân loại rõ ràng (ví
+            dụ: khách hàng doanh nghiệp lớn, thuộc ngành ưu tiên, hoặc đã từng
+            mua sản phẩm dịch vụ).
           </Typography>
         </Grid2>
 
         {/* Các nút chức năng */}
-        <Grid2
-          xs={12}
-          md={4}
-          sx={{ display: "flex", justifyContent: "flex-end" }}
-        >
+        <Grid2 xs={12} md={4}>
           <Button
             variant="contained"
             startIcon={<AddIcon />}
@@ -165,7 +173,7 @@ const index = () => {
                 </TabList>
               </Box>
               <TabPanel value="1">
-                <TabListCoHoi dataCoHoi={dataCoHoi} refetch={refetch}  />
+                <TabListCoHoi dataCoHoi={dataCoHoi} refetch={refetch} />
               </TabPanel>
               <TabPanel value="2">
                 <TabBieuDoCoHoi dataCoHoi={dataCoHoi} refetch={refetch} />

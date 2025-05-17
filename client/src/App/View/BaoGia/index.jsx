@@ -336,17 +336,20 @@ const index = () => {
       ),
     },
   ];
-   const [valueTuNgay, setValueTuNgay] = React.useState(
-        dayjs().startOf("month")
-      );
-   const [valueDenNgay, setValueDenNgay] = React.useState(
-        dayjs().endOf("month")
-      );
-      
-  const dataTuNgay = valueTuNgay.format("YYYY-MM-DDT00:00:00") 
-  const dataDenNgay  = valueDenNgay.format("YYYY-MM-DDT23:59:59")
+  const [valueTuNgay, setValueTuNgay] = React.useState(
+    dayjs().startOf("month")
+  );
+  const [valueDenNgay, setValueDenNgay] = React.useState(
+    dayjs().endOf("month")
+  );
 
-  const { data: dataBaogia, refetch } = useGetBaoGiaListQuery({tuNgay : dataTuNgay, denNgay : dataDenNgay });
+  const dataTuNgay = valueTuNgay.format("YYYY-MM-DDT00:00:00");
+  const dataDenNgay = valueDenNgay.format("YYYY-MM-DDT23:59:59");
+
+  const { data: dataBaogia, refetch } = useGetBaoGiaListQuery({
+    tuNgay: dataTuNgay,
+    denNgay: dataDenNgay,
+  });
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -364,12 +367,17 @@ const index = () => {
     <>
       <Grid2 container alignItems="center" spacing={3}>
         {/* Tiêu đề */}
-        <Grid2 xs={12}>
+        <Grid2 xs={12} size={12}>
           <Typography
             variant="h5"
             sx={{ fontWeight: "bold", color: "#1976d2", mb: 1 }}
           >
             📄 Tất Cả Báo Giá
+          </Typography>
+          <Typography variant="body2">
+            Báo giá là một tài liệu chính thức được tạo ra trong CRM để đề xuất
+            mức giá bán cho một hoặc nhiều sản phẩm/dịch vụ cho khách hàng
+            (thường là khách hàng mục tiêu đã có cơ hội cụ thể).
           </Typography>
         </Grid2>
 
@@ -480,43 +488,43 @@ const index = () => {
             </MenuItem>
           </Menu>
         </Grid2>
-           <Grid2 size={12}>
-                  <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
-                    <Grid2 size={12}>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoContainer
-                          components={["DateTimePicker", "DateTimePicker"]}
-                        >
-                          <Stack
-                            direction={{ xs: "column", sm: "row" }}
-                            spacing={2}
-                            alignItems={{ xs: "stretch", sm: "center" }}
-                          >
-                            <DateTimePicker
-                              label="Từ ngày"
-                              value={valueTuNgay}
-                              onChange={(newValue) => setValueTuNgay(newValue)}
-                            />
-                            <DateTimePicker
-                              label="Đến ngày"
-                              value={valueDenNgay}
-                              onChange={(newValue) => setValueDenNgay(newValue)}
-                            />
-                          </Stack>
-                        </DemoContainer>
-                      </LocalizationProvider>
-                    </Grid2>
-                    <CustomDatagrid
-                      rows={rows}
-                      columns={columns}
-                      pageSizeOptions={[10, 25, 50]}
-                      initialPageSize={25}
-                      checkboxSelection={true}
-                      showTopToolbar={true}
-                      onRowSelectionChange={handleRowSelectionChange}
+        <Grid2 size={12}>
+          <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
+            <Grid2 size={12}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer
+                  components={["DateTimePicker", "DateTimePicker"]}
+                >
+                  <Stack
+                    direction={{ xs: "column", sm: "row" }}
+                    spacing={2}
+                    alignItems={{ xs: "stretch", sm: "center" }}
+                  >
+                    <DateTimePicker
+                      label="Từ ngày"
+                      value={valueTuNgay}
+                      onChange={(newValue) => setValueTuNgay(newValue)}
                     />
-                  </Paper>
-                </Grid2>
+                    <DateTimePicker
+                      label="Đến ngày"
+                      value={valueDenNgay}
+                      onChange={(newValue) => setValueDenNgay(newValue)}
+                    />
+                  </Stack>
+                </DemoContainer>
+              </LocalizationProvider>
+            </Grid2>
+            <CustomDatagrid
+              rows={rows}
+              columns={columns}
+              pageSizeOptions={[10, 25, 50]}
+              initialPageSize={25}
+              checkboxSelection={true}
+              showTopToolbar={true}
+              onRowSelectionChange={handleRowSelectionChange}
+            />
+          </Paper>
+        </Grid2>
       </Grid2>
       {/* Modal thêm mới báo giá */}
       <ModalThemBaoGia

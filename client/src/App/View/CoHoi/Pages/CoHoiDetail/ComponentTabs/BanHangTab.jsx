@@ -27,7 +27,7 @@ const BanHangTab = ({ dataCoHoi, refetchCoHoi }) => {
   const [updateData] = useUpdateHangHoaQuanTamMutation();
   const [deleteData] = useDeleteHangHoaQuanTamMutation();
   const [updateCost] = useUpdateSoTienMutation();
-  console.log(dataCoHoi);
+
   useEffect(() => {
     if (rows) {
       setHangHoa(rows);

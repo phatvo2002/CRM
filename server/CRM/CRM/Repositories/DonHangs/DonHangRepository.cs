@@ -222,5 +222,47 @@ namespace CRM.Repositories.DonHangs
                 return new ResultModal() { Status = 500, Message = "Lỗi", Success = false };
             }
         }
+
+        public async Task<List<LichSuMuaHangDTO>> GetLichSuMuaHang(string khachHangId)
+        {
+            var result = new List<LichSuMuaHangDTO>();
+            var db = await _crmDbContext.DonHangs.Where(r => r.MaKhachHang == khachHangId && r.IsDeleted == false).ToListAsync();
+            if (db != null)
+            {
+                foreach (var item in db)
+                {
+                    LichSuMuaHangDTO data = new LichSuMuaHangDTO();
+                    data.TenDonHang = item.TenDonHang;
+                    data.NgayDatHang = item.NgayDatHang;
+                    data.MoTaDonHang = item.MoTaDonHang;
+                    data.ThucThuDonHang = item.ThucThuDonHang;
+                    data.GiaTriDonHang = item.GiaTriDonHang;
+                    data.SoTienConPhaiThu = item.SoTienConPhaiThu;
+                    var dataHangHoaQuanTam = await _crmDbContext.HangHoaQuanTams.Where(r => r.HoaDonId == item.Id).Include(r => r.DonViTinh).ToListAsync();
+                    List<HangHoaQuanTamDTO> ListHangHoa = new List<HangHoaQuanTamDTO>();
+                    foreach (var item2 in dataHangHoaQuanTam)
+                    {
+                        HangHoaQuanTamDTO hangHoaQuanTam = new HangHoaQuanTamDTO();
+                        hangHoaQuanTam.MaHangHoaId = item2.MaHangHoaId;
+                        hangHoaQuanTam.TenHangHoa = item2.TenHangHoa;
+                        hangHoaQuanTam.TenDonViTinh = item2?.DonViTinh?.Name;
+                        hangHoaQuanTam.SoLuong = item2?.SoLuong;
+                        hangHoaQuanTam.DonGia = item2?.DonGia;
+                        hangHoaQuanTam.TienThue = item2?.TienThue;
+                        hangHoaQuanTam.ThanhTien = item2?.ThanhTien;
+                        hangHoaQuanTam.TongTien = item2?.TongTien;
+                        ListHangHoa.Add(hangHoaQuanTam);
+                    }
+                    data.HangHoaDTOs = ListHangHoa;
+
+                    result.Add(data);
+                }
+                return result;
+            }
+            else
+            {
+                throw new Exception("Không tìm thấy dữ liệu");
+            };
+        }
     }
 }

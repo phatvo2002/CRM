@@ -325,7 +325,7 @@ export default function RootLayout() {
                 </Link>
               </MenuItem>
               <MenuItem onClick={gotoLink}>Đổi mật khẩu</MenuItem>
-              <MenuItem onClick={logout}>Logout</MenuItem>
+              <MenuItem onClick={logout}>Đăng Xuất</MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>
@@ -368,12 +368,24 @@ export default function RootLayout() {
           </div>
           <Button
             variant="outlined"
-            color="text.primary"
+            color="primary" 
             startIcon={<LogoutIcon />}
+            onClick={logout}
             sx={{
-              fontWeight: "bold",
+              fontWeight: "600",
               marginTop: "auto",
               mb: 2,
+              padding: "8px 16px", 
+              borderRadius: "8px", 
+              textTransform: "none", 
+              fontSize: "0.95rem", 
+              borderColor: "primary.main", 
+              "&:hover": {
+                backgroundColor: "primary.main", 
+                color: "white", 
+                borderColor: "primary.main",
+              },
+              transition: "all 0.3s ease", 
             }}
           >
             Đăng Xuất

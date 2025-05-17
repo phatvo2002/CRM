@@ -133,7 +133,6 @@ export const ModalConvertBaoGia = ({
       isNew: true,
     };
     setHangHoa((prev) => [...prev, newRow]);
-    console.log(newRow)
     
   };
   const handleSaveClick = async (id) => {
@@ -388,7 +387,6 @@ export const ModalConvertBaoGia = ({
       getInitialStateFromApiToUpdate(coHoiData);
     }
   }, [coHoiData]);
-  console.log(coHoiData)
   useEffect(() => {
     _isMounted.current = true;
     return () => {

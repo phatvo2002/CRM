@@ -51,7 +51,6 @@ const KhaoSat = () => {
       CreateAt: new Date(),
     };
 
-    console.log(tempData)
 
     const response = await sendEsurvey(tempData);
     if (response?.data?.status === 200) {

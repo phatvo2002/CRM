@@ -113,6 +113,8 @@ const ThongTinNguoiDung = () => {
     }
   };
 
+
+
   const { logout } = React.useContext(AuthContext);
 
   return (
@@ -265,7 +267,7 @@ const ThongTinNguoiDung = () => {
                       <StyledTableCell>{dataUser?.email}</StyledTableCell>
                       <StyledTableCell>{dataUser?.diaChi}</StyledTableCell>
                       <StyledTableCell>{dataUser?.chucVu?.tenChucVu}</StyledTableCell>
-                      <StyledTableCell>Phòng công nghệ thông tin</StyledTableCell>
+                      <StyledTableCell>{dataUser?.phongBan?.tenPhongBan}</StyledTableCell>
                     </StyledTableRow>
                   </TableBody>
                 </Table>

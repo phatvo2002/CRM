@@ -73,7 +73,6 @@ const HangHoaQuanTamTab = () => {
     }
       let updatedRow;
       if (currentRow.isNew === true) {
-        console.log(currentRow)
         updatedRow = await createData(currentRow).unwrap();
         currentRow.isNew = false; 
         refetch()

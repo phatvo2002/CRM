@@ -241,7 +241,7 @@ const DonHang = () => {
                 height: "40px",
               }}
             >
-              {params?.row?.nguoiDung?.hinhAnh == null ? (
+              {params?.row?.nguoiDung?.hinhAnh == "" ? (
                 <img
                   src={NoImage}
                   style={{

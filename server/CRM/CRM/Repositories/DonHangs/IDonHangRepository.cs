@@ -14,5 +14,6 @@ namespace CRM.Repositories.DonHangs
         Task<DonHangDTO> GetDonHangId(Guid id);
         Task<ResultModal> XacNhanDonHang(XacNhanDonHangModal modal);
         Task<ResultModal> CapNhatThucThuDonHang(Guid id, decimal soTien);
+        Task<List<LichSuMuaHangDTO>> GetLichSuMuaHang(string khachHangId);
     }
 }

@@ -51,7 +51,6 @@ const index = () => {
   const checkPermission = userData?.response?.checkIsTruongPhong;
   const checkAdminPerMission = userData?.response?.phongBan?.id;
 
-  console.log(selectedRow);
 
   const handleOpenModalThemMoiMucTieu = () => {
     setModalThemMoiMucTieu(true);

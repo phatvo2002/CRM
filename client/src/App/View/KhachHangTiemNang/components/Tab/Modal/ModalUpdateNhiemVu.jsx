@@ -119,7 +119,6 @@ const ModalUpdateNhiemVu = (props) => {
       );
     };
 
-  console.log(selectedItem[0]?.ngayBatDau)
   useEffect(() => {
     if (selectedItem[0] && typeModal === TYPE_MODAL.UPDATE) {
       getInitialStateFromApiToUpdate(selectedItem[0]);

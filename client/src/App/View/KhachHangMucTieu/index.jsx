@@ -130,7 +130,7 @@ const KhachHangMucTieu = () => {
         return params?.row?.nguoiDung?.ten ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <div>
-              {params?.row?.nguoiDung?.hinhAnh == null ? (
+              {params?.row?.nguoiDung?.hinhAnh == "" ? (
                 <div>
                   <img
                     src={NoImage}
