@@ -18,7 +18,10 @@ namespace CRM.Repositories.KhachHangTiemNangs
         }
         public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync(DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _context.KhachHangTiemNangs.AsNoTracking().Where(r => r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.AsNoTracking().Where(r => r.IsDeleted == false &&
+                                                                            r.CreateAt >= tuNgay &&
+                                                                            r.CreateAt <= denNgay)
+                                                                    .Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
 

@@ -424,6 +424,7 @@ const BanLamViec = () => {
                 data={baoCaoDoanhThuTheoPhongBan}
                 dataKey={"doanhThu"}
                 height={440}
+              
               />
             </Paper>
           </Grid2>

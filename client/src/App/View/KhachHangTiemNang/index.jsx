@@ -26,9 +26,7 @@ import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
 import { TYPE_MODAL } from "../../Until/constant";
-import EmailIcon from "@mui/icons-material/Email";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ThreePIcon from "@mui/icons-material/ThreeP";
 import Person2Icon from "@mui/icons-material/Person2";
@@ -235,6 +233,7 @@ const KhachHangTiemNang = () => {
   const [rows, setRows] = useState([]);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [typeModal, setTypeModal] = useState("");
+  const [openModalAdd, setOpenModalAdd] = useState(false)
   const [loading, setLoading] = useState(false);
   const [valueTuNgay, setValueTuNgay] = React.useState(
     dayjs().startOf("month")

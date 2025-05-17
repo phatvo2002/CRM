@@ -268,8 +268,9 @@ namespace CRM.Repositories
 
         public async Task<List<TDto>> GetAllDto(DateTime tuNgay, DateTime denNgay)
         {
+
             return await _crmDbContext.Set<TEntity>()
-              .Where(r => tuNgay >= EF.Property<DateTime>(r, "CreateAt")
+              .Where(r => EF.Property<DateTime>(r, "CreateAt") >= tuNgay
                     && EF.Property<DateTime>(r, "CreateAt") <= denNgay
                     && EF.Property<bool>(r, "IsDeleted") == false)
               .ProjectTo<TDto>(_mapper.ConfigurationProvider)

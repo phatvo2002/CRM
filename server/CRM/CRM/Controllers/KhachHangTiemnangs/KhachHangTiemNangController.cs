@@ -157,16 +157,25 @@ namespace CRM.Controllers.KhachHangTiemnangs
                 Guid nguoiDungId = HttpContext.GetUserId();
                 Guid phongBanId = HttpContext.GetPhongBanId();
                 var db = _dbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId);
-                if (db.CheckIsTruongPhong == true)
+                if (db.CheckIsGiamDoc == true)
                 {
-                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
+                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetAllKhachHangTiemNangAsync(tuNgay, denNgay);
                     return Ok(result);
                 }
                 else
                 {
-                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByNguoiDungIdAsync(nguoiDungId, tuNgay, denNgay);
-                    return Ok(result);
+                    if (db.CheckIsTruongPhong == true)
+                    {
+                        List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
+                        return Ok(result);
+                    }
+                    else
+                    {
+                        List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByNguoiDungIdAsync(nguoiDungId, tuNgay, denNgay);
+                        return Ok(result);
+                    }
                 }
+
             }
             catch (Exception e)
             {

@@ -462,7 +462,7 @@ namespace CRM.Repositories.BaoCaos
                 DoanhThu = g.Sum(r => r.ThucThuDonHang),
             });
             var fullResult = Enumerable.Range(1, 12)
-       .Select(thang => result.FirstOrDefault(r => r.Thang == thang) ?? new BaoCaoDoanhThuTheoNamDTO
+       .Select(thang => dbDoanhThuTheoThang.FirstOrDefault(r => r.Thang == thang) ?? new BaoCaoDoanhThuTheoNamDTO
        {
            Thang = thang,
            DoanhThu = 0
@@ -546,7 +546,7 @@ namespace CRM.Repositories.BaoCaos
             {
                 var dbGroup = db.GroupBy(r => r.MaNguonGocKhachHang).Select(g => new BaoCaoResultDTO
                 {
-                    Name = g.First().NguonGocKhachHang.TenNguonGoc,
+                    Name = g.First().NguonGocKhachHang?.TenNguonGoc,
                     Number = g.Count(),
                 }).ToList();
                 return dbGroup;
