@@ -39,6 +39,7 @@ namespace CRM.Entities
 
         public virtual DbSet<DoanhThu> DoanhThus { get; set; }
         public virtual DbSet<ThongBao> ThongBaos { get; set; }
+        public virtual DbSet<PhanLoaiKhachHang> PhanLoaiKhachHangs { get; set; }
 
         //Hoạt động 
         public virtual DbSet<CuocGoi> CuocGois { get; set; }
@@ -244,6 +245,16 @@ namespace CRM.Entities
 
                 entity.Property(e => e.Id).ValueGeneratedOnAdd();
                 entity.Property(e => e.TenLoaiTiemNang).HasMaxLength(50);
+
+            });
+            modelBuilder.Entity<PhanLoaiKhachHang>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_PhanLoaiKhachHang");
+
+                entity.ToTable("PhanLoaiKhachHang");
+
+                entity.Property(e => e.Id).ValueGeneratedOnAdd();
+                entity.Property(e => e.Name).HasMaxLength(50);
 
             });
             modelBuilder.Entity<LoaiHinhNgheNghiep>(entity =>
@@ -663,6 +674,10 @@ namespace CRM.Entities
                 .HasForeignKey(d => d.MaDoanhThu)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_DoanhThu_KhachHangMucTieu");
+                entity.HasOne(d => d.PhanLoaiKhachHang).WithMany(p => p.KhachHangMucTieus)
+                .HasForeignKey(d => d.MaPhanLoaiKhachHang)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_PhanLoaiKhachHang_KhachHangMucTieu");
             });
             #endregion
 

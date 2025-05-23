@@ -45,7 +45,7 @@ namespace CRM.Controllers.KhachHangMucTieus
         {
             try
             {
-                var result = await _khacHangMucTieuServices.GetById(id);
+                var result = await _khacHangMucTieuServices.GetKhachHangMucTieuById(id);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -126,21 +126,7 @@ namespace CRM.Controllers.KhachHangMucTieus
                 return BadRequest(ex.Message);
             }
         }
-        //[HttpGet("getkhachhangmuctieubyphongbanid")]
-        //[JwtAuthorize]
-        //public async Task<IActionResult> GetKhachHangMucTieuByPhongBanId()
-        //{
-        //    try
-        //    {
-        //        Guid phongBanId = HttpContext.GetPhongBanId();
-        //        List<KhachHangMucTieuDTO> result = await _khacHangMucTieuServices.GetKhachHangMucTieuByPhongBanId(phongBanId);
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
+
         [HttpPost("convertkhachhangmuctieu")]
         [JwtAuthorize]
         public async Task<IActionResult> ConvertKhachHangMucTieu(ConvertKhachHangModal modal)
@@ -336,6 +322,7 @@ namespace CRM.Controllers.KhachHangMucTieus
                                 khachHangMucTieu.CreateAt = DateTime.Now;
                                 khachHangMucTieu.NguoiDungId = userId;
                                 khachHangMucTieu.PhongBanId = phongBanId;
+                                khachHangMucTieu.MaPhanLoaiKhachHang = 5;
                                 _context.KhachHangMucTieus.Add(khachHangMucTieu);
                             };
                             await _context.SaveChangesAsync();

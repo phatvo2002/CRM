@@ -6,6 +6,7 @@ namespace CRM.Repositories.KhachhangMucTieus
 {
     public interface IKhachHangMucTieuRepository : IBaseRepository<KhachHangMucTieu, KhachHangMucTieuModal, Guid, KhachHangMucTieuDTO>
     {
+        Task<KhachHangMucTieuDTO> GetKhachHangMucTieuById(string khachHangId);
         Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId, DateTime tuNgay, DateTime denNgay);
         Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByPhongBanId(Guid PhongBanId, DateTime tuNgay, DateTime denNgay);
         Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungIdQuery(Guid NguoiDungId);
