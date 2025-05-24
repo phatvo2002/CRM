@@ -25,6 +25,7 @@
         public int? MaLinhVuc { get; set; }
         public int? MaDoanhThu { get; set; }
         public int? MaPhanLoaiKhachHang { get; set; }
+        public int? NamGuiMailSinhNhat { get; set; }
         public DateTime? DeleteAt { get; set; }
         public DateTime? UpdateAt { get; set; }
         public virtual PhongBanKhachHang? PhongBanKhachHang { get; set; }

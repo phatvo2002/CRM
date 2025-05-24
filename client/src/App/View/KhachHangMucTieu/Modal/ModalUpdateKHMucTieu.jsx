@@ -26,6 +26,7 @@ import {
   useGetAllPhongBanKhachHangQuery,
 } from "src/App/Api/GetDataApi";
 import { useUpdateKhachHangTiemNangMucTieuMutation } from "src/App/Api/KhachHangMucTieuApi";
+import DateTimePickerRHF from "src/App/Components/ReactHookFormComp/DateTimePickerRHF";
 // ------ Form Config ------ //
 const modelObj = {
   id: "id",
@@ -60,7 +61,7 @@ const modelObj = {
     email: "Email",
     taiKhoanNganHang: "Tài khoản ngân hàng",
     website: "Website",
-    ngayThanhLap: "Ngày thành lập",
+    ngayThanhLap: "Ngày thành lập / Ngày sinh",
     moTa: "Mô tả",
     isDungChung: "Khách hàng dùng chung",
     isKhachHangCaNhan: "Khách hàng cá nhân",
@@ -340,10 +341,9 @@ const ModalUpdateKHMucTieu = (props) => {
           // disabled={isLoading}
           />
         </Grid2>
-        <DatePickerRHF
+        <DateTimePickerRHF
           name={modelObj.ngayThanhLap}
           label={labelObj.ngayThanhLap}
-          maxDate={modelObj.ngayThanhLap}
         />
         <Grid2 size={6}>
           <AutocompleteRHF

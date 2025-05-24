@@ -638,6 +638,7 @@ namespace CRM.Entities
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
                 entity.Property(e => e.DeleteAt).HasColumnType("datetime");
                 entity.Property(e => e.UpdateAt).HasColumnType("datetime");
+                entity.Property(e => e.NamGuiMailSinhNhat).HasColumnType("int");
                 entity.HasOne(d => d.Nguoidung).WithMany(p => p.KhachHangMucTieus)
                   .HasForeignKey(d => d.NguoiDungId)
                   .OnDelete(DeleteBehavior.ClientSetNull)

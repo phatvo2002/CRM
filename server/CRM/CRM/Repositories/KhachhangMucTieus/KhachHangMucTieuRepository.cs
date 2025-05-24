@@ -49,6 +49,7 @@ namespace CRM.Repositories.KhachhangMucTieus
                     khachHangMucTieu.MaPhanLoaiKhachHang = 5;
                     khachHangMucTieu.IsDeleted = false;
                     khachHangMucTieu.CreateAt = DateTime.Now;
+                    khachHangMucTieu.NamGuiMailSinhNhat = null;
 
                     // Đưa toàn bộ dữ liệu hàng hóa của tiềm năng đang quan tâm thành của KH mục tiêu 
                     foreach (var h in modal.HangHoaQuanTam)
@@ -155,6 +156,7 @@ namespace CRM.Repositories.KhachhangMucTieus
                     khachHangMucTieu.IsDeleted = false;
                     khachHangMucTieu.CreateAt = DateTime.Now;
                     khachHangMucTieu.MaPhanLoaiKhachHang = 5;
+                    khachHangMucTieu.NamGuiMailSinhNhat = null;
                     _crmDbContext.KhachHangMucTieus.Add(khachHangMucTieu);
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm khách hàng thành công", Success = true };
