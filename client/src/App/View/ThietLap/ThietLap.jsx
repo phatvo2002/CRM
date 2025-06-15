@@ -138,7 +138,7 @@ const ThietLap = () => {
   };
 
   const backLink = async () => {
-    navigate("/quantrihethong");
+    navigate(-1)
   };
 
 

@@ -252,19 +252,24 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-//builder.Services.AddCors(options => options.AddPolicy("Cors", build =>
+
+//builder.Services.AddCors(options =>
 //{
-//    build.WithOrigins("http://localhost:3000")
+//    options.AddPolicy("AllowSpecificOrigin", builder =>
+//    {
+//        builder
+//            .WithOrigins("https://crm2024-sand.vercel.app")
 //            .AllowAnyHeader()
 //            .AllowAnyMethod()
 //            .AllowCredentials();
-//}));
+//    });
+//});
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", builder =>
     {
         builder
-            .WithOrigins("https://crm2024-sand.vercel.app")
+            .WithOrigins("http://localhost:3000")
             .AllowAnyHeader()
             .AllowAnyMethod()
             .AllowCredentials();

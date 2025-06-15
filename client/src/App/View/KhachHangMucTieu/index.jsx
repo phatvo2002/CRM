@@ -32,7 +32,7 @@ import ThreePIcon from "@mui/icons-material/ThreeP";
 import { ActionComponents } from "./Components/Action";
 import UpdateIcon from "@mui/icons-material/Update";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
 import ModalBanGiaoKhachHangMucTieu from "./Modal/ModalBanGiaoKhachHangMucTieu";
 import {
@@ -72,6 +72,9 @@ const KhachHangMucTieu = () => {
   const handleCloseAction = () => {
     setIsActionOpen(false);
   };
+
+  const {menuId} = useParams()
+
   const columns = [
     {
       field: "action",
@@ -177,7 +180,7 @@ const KhachHangMucTieu = () => {
       renderCell: (params) => (
         <div>
           <Link
-            to={`/khachhang/${params.id}`}
+            to={`/khachhang/${menuId}/${params.id}`}
             style={{
               textDecoration: "none",
               display: "flex",
@@ -267,14 +270,6 @@ const KhachHangMucTieu = () => {
   const [deleteHangLoat] = useDeletehangLoatKhachHangMucTieuMutation();
 
   const handleDeleteKhachHang = async (id) => {
-    // if (
-    //   !userData?.response.checkIsTruongPhong
-    // ) {
-    //   toast.warning(
-    //     "Chỉ trưởng phòng mới có quyền xóa khách hàng."
-    //   );
-    //   return;
-    // }
     Swal.fire({
       title: "Bạn có muốn xóa khách hàng này?",
       icon: "warning",

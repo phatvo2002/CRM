@@ -65,7 +65,7 @@ const index = () => {
   const [modalUpdate,setModalUpdate] = useState();
   const navigate = useNavigate();
   const backLink = async () => {
-    navigate("/quantrihethong");
+    navigate("-1");
   };
   const [rows, setRows] = useState([]);
   const { data: dataXepLoai , refetch:refetch } = useGetAllQuery();

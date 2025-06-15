@@ -24,6 +24,13 @@ export const LOAI_HOI_DONG_ID_DEFAULT = {
   NghiemThu: "00000000-0000-0000-0000-000000000004",
 };
 
+export const ACTION = {
+  Xem : "xem",
+  Them :"them",
+  Sua : "sua",
+  Xoa : "xoa"
+}
+
 export const USER_TYPE = {
   Khac: "8284bebe-1154-43c3-97d2-80e868636471",
   SV: "57ba4e7b-761e-48fd-a931-a703cf515661"

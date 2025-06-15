@@ -13,6 +13,11 @@ namespace CRM.Extensions
             return httpContext.Items["PhongBan"] as Guid? ??
                 throw new Exception("User ID not found in HttpContext.Items");
         }
+        public static Guid GetChucVuId(this HttpContext httpContext)
+        {
+            return httpContext.Items["MaChucVu"] as Guid? ??
+                throw new Exception("User ID not found in HttpContext.Items");
+        }
 
 
     }

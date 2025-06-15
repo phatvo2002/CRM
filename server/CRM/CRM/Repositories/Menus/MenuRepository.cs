@@ -74,15 +74,21 @@ namespace CRM.Repositories.Menus
 
         }
 
-        public async Task<List<MenuDTO>> GetAllMenu()
+        public async Task<List<MenuDTO>> GetAllMenu(Guid groupId)
         {
-            var data = await _context.Menus.AsNoTracking().OrderBy(r => r.OrderNumber).ToListAsync();
+            var data = await _context.Menus.AsNoTracking()
+                                           .Include(r=> r.MenuRoles.Where(m => m.GroupId == groupId))
+                                           .OrderBy(r => r.OrderNumber).ToListAsync();
             return _mapper.Map<List<MenuDTO>>(data);
         }
 
         public async Task<List<MenuRoleDTO>> GetAllMenuRole(Guid Id)
         {
-            var result = await _context.MenuRoles.Where(r => r.GroupId == Id).AsNoTracking().Include(r => r.Menu).OrderBy(p => p.Menu.OrderNumber).ToListAsync();
+            var result = await _context.MenuRoles.Where(r => r.GroupId == Id)
+                                                 .AsNoTracking()
+                                                 .Include(r => r.Menu)
+                                                 .OrderBy(p => p.Menu.OrderNumber)
+                                                 .ToListAsync();
             return _mapper.Map<List<MenuRoleDTO>>(result);
         }
 
@@ -93,26 +99,41 @@ namespace CRM.Repositories.Menus
 
         public async Task<ResultModal> UpdateGroup(GroupModel model)
         {
-            var data = _context.ChucVus.FirstOrDefault(r => r.Id == model.Oid);
-
-            if (data != null)
-            {
-                List<Guid> menulist = data.MenuRole.Where(r => !model.Menu!.Contains(r.MenuId)).Select(x => x.MenuId).ToList();
-                var menugroup = _context.MenuRoles.Where(r => r.GroupId == model.Oid);
-                foreach (var item in menugroup)
+            var data = _context.ChucVus.AsNoTracking().FirstOrDefault(r => r.Id == model.Oid);
+            var menugroup = await _context.MenuRoles.Where(r => r.GroupId == model.Oid).ToListAsync();
+            try {
+                if (data != null)
                 {
-                    _context.MenuRoles.Remove(item);
-                }
-                foreach (var item in model.Menu)
-                {
-                    data.MenuRole.Add(new MenuRole() { GroupId = model.Oid, MenuId = item, Xem = model.Xem, Them = model.Them, Sua = model.Sua, Xoa = model.Xoa });
-                }
+                    _context.MenuRoles.RemoveRange(menugroup);
+                    await _context.SaveChangesAsync();
+                    foreach (var item in model.Menu)
+                    {
+                        var tracked = _context.ChangeTracker.Entries<MenuRole>()
+                            .FirstOrDefault(e => e.Entity.MenuId == item.Menu && e.Entity.GroupId == model.Oid);
 
-                _context.ChucVus.Update(data);
-                await _context.SaveChangesAsync();
-                return new ResultModal() { Status = 200, Message = "Cập nhật thành công", Success = true };
+                        if (tracked != null)
+                        {
+                            _context.Entry(tracked.Entity).State = EntityState.Detached;
+                        }
+
+                        _context.MenuRoles.Add(new MenuRole
+                        {
+                            GroupId = model.Oid,
+                            MenuId = item.Menu,
+                            Xem = item.Xem,
+                            Them = item.Them,
+                            Sua = item.Sua,
+                            Xoa = item.Xoa
+                        });
+                    }
+                    await _context.SaveChangesAsync();
+                    return new ResultModal() { Status = 200, Message = "Cập nhật thành công", Success = true };
+                }
+                return new ResultModal() { Status = 202, Message = "Lỗi", Success = false };
+            } catch(Exception ex) {
+                return new ResultModal() { Status = 500, Message = ex.Message, Success = false };
             }
-            return new ResultModal() { Status = 202, Message = "Lỗi", Success = false };
+           
         }
 
         public async Task<ResultModal> UpdateMenu(MenuModel model)

@@ -15,10 +15,7 @@
         public bool IsActive { get; set; }
 
         public byte[]? HinhAnh { get; set; }
-
-        // public string? TaiKhoan { get; set; }
-
-        //public string? MatKhau { get; set; }
+        
         public Guid? MaChucVu { get; set; }
 
         public Guid? MaPhongBan { get; set; }

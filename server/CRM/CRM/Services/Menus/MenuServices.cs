@@ -16,9 +16,9 @@ namespace CRM.Services.Menus
             return await _menuRepository.DeleteMenu(Id);
         }
 
-        public async Task<List<MenuDTO>> GetAllMenu()
+        public async Task<List<MenuDTO>> GetAllMenu(Guid groupId)
         {
-            return await _menuRepository.GetAllMenu();
+            return await _menuRepository.GetAllMenu(groupId);
         }
 
         public async Task<List<MenuRoleDTO>> GetAllMenuRoles(Guid roleid)

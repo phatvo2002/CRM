@@ -58,7 +58,7 @@ const KhachHangMucTieuDetail = () => {
     setActiveTab(newValue);
   };
   const backPreviousPage = () => {
-    navigate("/khachhang");
+    navigate(-1);
   };
   const open = Boolean(anchorEl);
   const handleClick = (event) => {

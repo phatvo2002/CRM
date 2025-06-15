@@ -30,6 +30,7 @@ import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import panner from "../../Assets/image/banner.png";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { json } from "@files-ui/core";
 
 function Copyright(props) {
   return (
@@ -172,6 +173,7 @@ export default function RootLayout() {
   React.useEffect(() => {
     if (menuRoleData) {
       if (menuRoleData.length > 0) {
+        localStorage.setItem("permission",JSON.stringify({menuRoleData}))
         setMenu(menuRoleData);
       } else {
         setMenu([]);
