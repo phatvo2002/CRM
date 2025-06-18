@@ -53,6 +53,11 @@ namespace CRM.Services.DonHangs
             return await _donHangRepository.GetDonHangId(id);
         }
 
+        public async Task<List<LichSuMuaHangDTO>> GetLichSuMuaHang(string khachHangId)
+        {
+            return await _donHangRepository.GetLichSuMuaHang(khachHangId);
+        }
+
         public async Task<ResultModal> XacNhanDonHang(XacNhanDonHangModal modal)
         {
             return await _donHangRepository.XacNhanDonHang(modal);

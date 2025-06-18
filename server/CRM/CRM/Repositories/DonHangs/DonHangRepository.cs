@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using CRM.Repositories.Mails;
 using CRM.Repositories.MucTieuDoanhSos;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,10 +12,12 @@ namespace CRM.Repositories.DonHangs
     {
         private readonly IMapper _mapper;
         private readonly IMucTieuDoanhSoRepository _mucTieuDoanhSoRepository;
-        public DonHangRepository(CrmDbContext crmDbContext, IMapper mapper, IMucTieuDoanhSoRepository mucTieuDoanhSoRepository) : base(crmDbContext, mapper)
+        private readonly IMailRepository _mailRepository;
+        public DonHangRepository(CrmDbContext crmDbContext, IMapper mapper, IMucTieuDoanhSoRepository mucTieuDoanhSoRepository, IMailRepository mailRepository) : base(crmDbContext, mapper)
         {
             _mapper = mapper;
             _mucTieuDoanhSoRepository = mucTieuDoanhSoRepository;
+            _mailRepository = mailRepository;
         }
 
 
@@ -54,15 +57,6 @@ namespace CRM.Repositories.DonHangs
 
                     foreach (var item in modal.HangHoaQuanTam)
                     {
-                        //var dbHangHoa = _crmDbContext.HangHoaQuanTams.Where(r => r.Id == item.Id ).FirstOrDefault();
-                        //if (dbHangHoa != null)
-                        //{
-                        //    dbHangHoa.KhachHangId = donHang.MaKhachHang;
-                        //    dbHangHoa.HoaDonId = donHang.Id;
-                        //    _crmDbContext.HangHoaQuanTams.Update(dbHangHoa);
-                        //}
-                        //else
-                        //{
                         HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
                         hangHoaQuanTam.Id = Guid.NewGuid();
                         hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
@@ -84,6 +78,9 @@ namespace CRM.Repositories.DonHangs
                         //}
                     }
                     await _crmDbContext.SaveChangesAsync();
+
+                    // gửi mail sau khi tạo đơn hàng 
+
                     return new ResultModal() { Message = "Tạo đơn hàng thành công", Status = 200, Success = true };
                 }
                 return new ResultModal() { Message = "Đơn hàng đã tồn tại trong hệ thống", Status = 202, Success = true };
@@ -221,6 +218,48 @@ namespace CRM.Repositories.DonHangs
             {
                 return new ResultModal() { Status = 500, Message = "Lỗi", Success = false };
             }
+        }
+
+        public async Task<List<LichSuMuaHangDTO>> GetLichSuMuaHang(string khachHangId)
+        {
+            var result = new List<LichSuMuaHangDTO>();
+            var db = await _crmDbContext.DonHangs.Where(r => r.MaKhachHang == khachHangId && r.IsDeleted == false).ToListAsync();
+            if (db != null)
+            {
+                foreach (var item in db)
+                {
+                    LichSuMuaHangDTO data = new LichSuMuaHangDTO();
+                    data.TenDonHang = item.TenDonHang;
+                    data.NgayDatHang = item.NgayDatHang;
+                    data.MoTaDonHang = item.MoTaDonHang;
+                    data.ThucThuDonHang = item.ThucThuDonHang;
+                    data.GiaTriDonHang = item.GiaTriDonHang;
+                    data.SoTienConPhaiThu = item.SoTienConPhaiThu;
+                    var dataHangHoaQuanTam = await _crmDbContext.HangHoaQuanTams.Where(r => r.HoaDonId == item.Id).Include(r => r.DonViTinh).ToListAsync();
+                    List<HangHoaQuanTamDTO> ListHangHoa = new List<HangHoaQuanTamDTO>();
+                    foreach (var item2 in dataHangHoaQuanTam)
+                    {
+                        HangHoaQuanTamDTO hangHoaQuanTam = new HangHoaQuanTamDTO();
+                        hangHoaQuanTam.MaHangHoaId = item2.MaHangHoaId;
+                        hangHoaQuanTam.TenHangHoa = item2.TenHangHoa;
+                        hangHoaQuanTam.TenDonViTinh = item2?.DonViTinh?.Name;
+                        hangHoaQuanTam.SoLuong = item2?.SoLuong;
+                        hangHoaQuanTam.DonGia = item2?.DonGia;
+                        hangHoaQuanTam.TienThue = item2?.TienThue;
+                        hangHoaQuanTam.ThanhTien = item2?.ThanhTien;
+                        hangHoaQuanTam.TongTien = item2?.TongTien;
+                        ListHangHoa.Add(hangHoaQuanTam);
+                    }
+                    data.HangHoaDTOs = ListHangHoa;
+
+                    result.Add(data);
+                }
+                return result;
+            }
+            else
+            {
+                throw new Exception("Không tìm thấy dữ liệu");
+            };
         }
     }
 }

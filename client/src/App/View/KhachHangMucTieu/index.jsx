@@ -10,6 +10,7 @@ import {
   Stack,
   Typography,
   Divider,
+  Chip,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import GetAppIcon from "@mui/icons-material/GetApp";
@@ -31,10 +32,13 @@ import ThreePIcon from "@mui/icons-material/ThreeP";
 import { ActionComponents } from "./Components/Action";
 import UpdateIcon from "@mui/icons-material/Update";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
 import ModalBanGiaoKhachHangMucTieu from "./Modal/ModalBanGiaoKhachHangMucTieu";
-import { useGetTemplatesMutation, useGetTemplatesQuery } from "src/App/Api/KhachHangTiemNangApi";
+import {
+  useGetTemplatesMutation,
+  useGetTemplatesQuery,
+} from "src/App/Api/KhachHangTiemNangApi";
 import ModalImportKhachHang from "./Modal/ModalImportKhachHang";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
@@ -45,7 +49,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
@@ -68,6 +72,9 @@ const KhachHangMucTieu = () => {
   const handleCloseAction = () => {
     setIsActionOpen(false);
   };
+
+  const {menuId} = useParams()
+
   const columns = [
     {
       field: "action",
@@ -85,35 +92,35 @@ const KhachHangMucTieu = () => {
         >
           <Tooltip title="Sửa thông tin ">
             <span>
-            <IconButton
-              disabled={selectedRow.length === 0}
-              style={{}}
-              onClick={handleOpenModalUpdateKhachHang}
-            >
-              <EditIcon color="success" />
-            </IconButton>
+              <IconButton
+                disabled={selectedRow.length === 0}
+                style={{}}
+                onClick={handleOpenModalUpdateKhachHang}
+              >
+                <EditIcon color="success" />
+              </IconButton>
             </span>
           </Tooltip>
           <Tooltip title="Xóa">
             <span>
-            <IconButton
-              disabled={selectedRow.length === 0}
-              style={{}}
-              onClick={() => handleDeleteKhachHang(params?.id)}
-            >
-              <DeleteIcon color="error" />
-            </IconButton>
+              <IconButton
+                disabled={selectedRow.length === 0}
+                style={{}}
+                onClick={() => handleDeleteKhachHang(params?.id)}
+              >
+                <DeleteIcon color="error" />
+              </IconButton>
             </span>
           </Tooltip>
           <Tooltip title="Bàn giao khách hàng">
             <span>
-            <IconButton
-              disabled={selectedRow.length === 0}
-              style={{}}
-              onClick={handleOpenModalBanGiao}
-            >
-              <ThreePIcon color="primary" />
-            </IconButton>
+              <IconButton
+                disabled={selectedRow.length === 0}
+                style={{}}
+                onClick={handleOpenModalBanGiao}
+              >
+                <ThreePIcon color="primary" />
+              </IconButton>
             </span>
           </Tooltip>
         </div>
@@ -127,7 +134,7 @@ const KhachHangMucTieu = () => {
         return params?.row?.nguoiDung?.ten ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <div>
-              {params?.row?.nguoiDung?.hinhAnh == null ? (
+              {params?.row?.nguoiDung?.hinhAnh == "" ? (
                 <div>
                   <img
                     src={NoImage}
@@ -173,7 +180,7 @@ const KhachHangMucTieu = () => {
       renderCell: (params) => (
         <div>
           <Link
-            to={`/khachhang/${params.id}`}
+            to={`/khachhang/${menuId}/${params.id}`}
             style={{
               textDecoration: "none",
               display: "flex",
@@ -189,18 +196,37 @@ const KhachHangMucTieu = () => {
       ),
     },
     { field: "id", headerName: "Mã khách hàng", width: 200 },
+    {
+      field: "phanLoaiKhachHang",
+      headerName: "Phân loại khách hàng",
+      width: 200,
+      renderCell: (params) => {
+        const name = params?.row?.phanLoaiKhachHang?.id || "";
+
+        const getColor = (name) => {
+          switch (name) {
+            case 1:
+              return "#FFD700";
+            case 2:
+              return "#90EE90"; 
+            case 3:
+              return "#ADD8E6"; 
+            case 4:
+              return "#FFA07A"; 
+            case 5:
+              return "#e32d14"; 
+            default:
+              return "#FFFFFF"; 
+          }
+        };
+
+        return (
+           <Chip label={params?.row?.phanLoaiKhachHang?.name} sx={{backgroundColor:getColor(name) , color:"white"}} />
+        );
+      },
+    },
     { field: "tenVietTat", headerName: "Tên viết tắt", width: 200 },
     { field: "maSoThue", headerName: "Mã số thuế", width: 200 },
-    // {
-    //   field: "soDienThoai",
-    //   headerName: "Số điện thoại cá nhân",
-    //   width: 200,
-    //   renderCell: (params) => (
-    //     <div>
-    //       {params.value ?  <div><PhoneIcon/>{params.value}</div> : <div></div>}
-    //     </div>
-    //   ),
-    // },
     {
       field: "soDienThoai",
       headerName: "Số điện thoại",
@@ -235,20 +261,15 @@ const KhachHangMucTieu = () => {
     setAnchorEl(null);
   };
   const { data: dataKhachHangByNguoiDung, refetch } =
-    useGetKhachHangMucTieuByNguoiDungIdQuery({tuNgay : valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"), denNgay:valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS")});
-  const [ getTemplate ] = useGetTemplatesMutation();
+    useGetKhachHangMucTieuByNguoiDungIdQuery({
+      tuNgay: valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+      denNgay: valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+    });
+  const [getTemplate] = useGetTemplatesMutation();
   const [deleteNguoiDung] = useDeleteKhachHangMucTieuMutation();
   const [deleteHangLoat] = useDeletehangLoatKhachHangMucTieuMutation();
 
   const handleDeleteKhachHang = async (id) => {
-    // if (
-    //   !userData?.response.checkIsTruongPhong
-    // ) {
-    //   toast.warning(
-    //     "Chỉ trưởng phòng mới có quyền xóa khách hàng."
-    //   );
-    //   return;
-    // }
     Swal.fire({
       title: "Bạn có muốn xóa khách hàng này?",
       icon: "warning",
@@ -340,90 +361,110 @@ const KhachHangMucTieu = () => {
               alignItems="center"
               mb={2}
             >
-              <Typography
-                variant="h4"
+              <div>
+                <Typography
+                  variant="h4"
+                  sx={{
+                    fontWeight: 700,
+                    color: "#1a237e",
+                    letterSpacing: "-0.5px",
+                  }}
+                >
+                  Tất Cả Khách Hàng
+                </Typography>
+                <Typography>
+                  danh sách này lưu trữ thông tin chi tiết như lịch sử mua hàng,
+                  nhu cầu, và tương tác, giúp đội ngũ bán hàng và tiếp thị cá
+                  nhân hóa trải nghiệm khách hàng. Quản lý hiệu quả danh sách
+                  này giúp xây dựng mối quan hệ bền vững, tối ưu hóa chiến lược
+                  chăm sóc, và thúc đẩy doanh thu dài hạn
+                </Typography>
+              </div>
+            </Stack>
+            <Stack direction="row" spacing={1.5}>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<AddIcon />}
                 sx={{
-                  fontWeight: 700,
-                  color: "#1a237e",
-                  letterSpacing: "-0.5px",
+                  borderRadius: 2,
+                  textTransform: "none",
+                  px: 2.5,
+                  py: 1,
+                  bgcolor: "#1976d2",
+                  "&:hover": { bgcolor: "#1565c0" },
                 }}
+                onClick={gotoLink}
               >
-                Tất Cả Khách Hàng
-              </Typography>
+                Thêm mới
+              </Button>
 
-              <Stack direction="row" spacing={1.5}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  startIcon={<AddIcon />}
-                  sx={{
-                    borderRadius: 2,
-                    textTransform: "none",
-                    px: 2.5,
-                    py: 1,
-                    bgcolor: "#1976d2",
-                    "&:hover": { bgcolor: "#1565c0" },
-                  }}
-                  onClick={gotoLink}
-                >
-                  Thêm mới
-                </Button>
+              <Button
+                variant="outlined"
+                color="primary"
+                startIcon={<FileDownloadDoneIcon />}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: "none",
+                  px: 2.5,
+                  py: 1,
+                  borderColor: "#e0e0e0",
+                  color: "#424242",
+                }}
+                onClick={handleOpenModalImportKhachHang}
+              >
+                Nhập dữ liệu
+              </Button>
 
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  startIcon={<FileDownloadDoneIcon />}
-                  sx={{
-                    borderRadius: 2,
-                    textTransform: "none",
-                    px: 2.5,
-                    py: 1,
-                    borderColor: "#e0e0e0",
-                    color: "#424242",
-                  }}
-                  onClick={handleOpenModalImportKhachHang}
-                >
-                  Nhập dữ liệu
-                </Button>
+              <Button
+                variant="outlined"
+                color="warning"
+                startIcon={<SupervisedUserCircleIcon />}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: "none",
+                  px: 2.5,
+                  py: 1,
+                  borderColor: "#e0e0e0",
+                  color: "#424242",
+                }}
+                // onClick={handleOpenModalImportKhachHang}
+              >
+                Bàn giao
+              </Button>
+              <Button
+                variant="text"
+                startIcon={<UpdateIcon />}
+                sx={{
+                  textTransform: "none",
+                  color: "#616161",
+                  "&:hover": { bgcolor: "#f5f5f5" },
+                }}
+                onClick={handleOpen}
+              >
+                Lịch sử mua hàng
+              </Button>
 
-                <Button
-                  variant="outlined"
-                  color="warning"
-                  startIcon={<SupervisedUserCircleIcon />}
-                  sx={{
-                    borderRadius: 2,
-                    textTransform: "none",
-                    px: 2.5,
-                    py: 1,
-                    borderColor: "#e0e0e0",
-                    color: "#424242",
-                  }}
-                  // onClick={handleOpenModalImportKhachHang}
-                >
-                  Bàn giao
-                </Button>
-
-                <Button
-                  id="basic-button"
-                  aria-controls={open ? "basic-menu" : undefined}
-                  aria-haspopup="true"
-                  aria-expanded={open ? "true" : undefined}
-                  variant="outlined"
-                  startIcon={<OpenInNewIcon />}
-                  endIcon={<KeyboardArrowDownIcon />}
-                  sx={{
-                    borderRadius: 2,
-                    textTransform: "none",
-                    px: 2.5,
-                    py: 1,
-                    borderColor: "#e0e0e0",
-                    color: "#424242",
-                  }}
-                  onClick={handleClick}
-                >
-                  Tùy chỉnh
-                </Button>
-              </Stack>
+              <Button
+                id="basic-button"
+                aria-controls={open ? "basic-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
+                variant="outlined"
+                startIcon={<OpenInNewIcon />}
+                endIcon={<KeyboardArrowDownIcon />}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: "none",
+                  px: 2.5,
+                  py: 1,
+                  borderColor: "#e0e0e0",
+                  color: "#424242",
+                }}
+                onClick={handleClick}
+              >
+                Tùy chỉnh
+              </Button>
             </Stack>
           </Grid2>
 
@@ -486,20 +527,6 @@ const KhachHangMucTieu = () => {
                 bgcolor: "background.default",
               }}
             >
-              <Box sx={{ p: 2, borderBottom: "1px solid #e0e0e0" }}>
-                <Button
-                  variant="text"
-                  startIcon={<UpdateIcon />}
-                  sx={{
-                    textTransform: "none",
-                    color: "#616161",
-                    "&:hover": { bgcolor: "#f5f5f5" },
-                  }}
-                  onClick={handleOpen}
-                >
-                  Lịch sử mua hàng
-                </Button>
-              </Box>
               <Grid2 size={12} sx={{ marginTop: 3, marginLeft: 3 }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DemoContainer
@@ -576,7 +603,7 @@ const KhachHangMucTieu = () => {
           refetch={refetch}
           selectedItem={selectedRow}
         />
- 
+
         <ModalKhachHangMucTieuDaXoa
           open={modalKhDaXoa}
           handleClose={handleCloseKhDaXoa}

@@ -261,25 +261,7 @@ const JwtLogin = () => {
                         width: "100%",
                       }}
                     >
-                      {/* <GoogleLogin
-                        onSuccess={async (credentialResponse) => {
-                          const res = await axios.post(
-                            `v2/auths/login_google`,
-                            {
-                              idToken: credentialResponse?.credential,
-                            }
-                          );
-                          if (res?.data?.succeed) {
-                            await loginWithGoogle(res);
-                            navigate("/");
-                          } else {
-                            toastr.error(res?.data?.message);
-                          }
-                        }}
-                        onError={() => {
-                          toastr.error("Login Failed");
-                        }}
-                      /> */}
+                     
                     </Box>
                   </form>
                 )}

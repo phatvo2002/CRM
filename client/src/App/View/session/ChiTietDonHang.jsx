@@ -109,7 +109,7 @@ const ChiTietDonHang = () => {
             title: "Xác nhận đơn hàng thành công",
             icon: "success",
           }).then(() => {
-            window.location.href = `http://localhost:3000/khaosat/${id}`;
+            window.location.href = `https://crm2024-sand.vercel.app/khaosat/${id}`;
           });
         } else {
           Swal.fire({

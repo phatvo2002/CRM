@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 import "./CheckBoxRHF.styles.scss";
 import { string, node, bool } from "prop-types";
 import { Checkbox } from "@mui/material";
-import PSCInputSkeleton from "../../PSCInputSkeleton";
+import PSCInputSkeleton from "../../InputSkeleton";
 
 const CheckBoxRHF = (props) => {
   const component = "CheckBoxRHFWrapper",

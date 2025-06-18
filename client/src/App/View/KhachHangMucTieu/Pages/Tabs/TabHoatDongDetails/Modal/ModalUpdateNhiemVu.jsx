@@ -112,7 +112,7 @@ const ModalUpdateNhiemVu = (props) => {
       );
     };
 
-  console.log(selectedItem[0])
+ 
   useEffect(() => {
     if (selectedItem[0]) {
       getInitialStateFromApiToUpdate(selectedItem[0]);

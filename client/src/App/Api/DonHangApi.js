@@ -25,6 +25,9 @@ export const apiDonHang = createApi({
       getGetDonHangById: builder.query({
         query: (id) => `/DonHang/getdonhangbyid/${id}`,
       }),
+       getGetLichSuMuaHang: builder.query({
+        query: (khachHangId) => `/DonHang/getlichsumuahang/${khachHangId}`,
+      }),
       addDonHang: builder.mutation({
         query: (data) => ({
           url: '/DonHang/convertdonhang',
@@ -68,7 +71,8 @@ export const apiDonHang = createApi({
    useUpdateDonhangMutation,
    useDeleteDonHangMutation,
    useXacNhanDonhangMutation,
-   useUpdateThucThuDonHangMutation
+   useUpdateThucThuDonHangMutation,
+   useGetGetLichSuMuaHangQuery
   } = apiDonHang;
 
 

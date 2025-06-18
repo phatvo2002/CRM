@@ -18,7 +18,10 @@ namespace CRM.Repositories.KhachHangTiemNangs
         }
         public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync(DateTime tuNgay, DateTime denNgay)
         {
-            var db = await _context.KhachHangTiemNangs.AsNoTracking().Where(r => r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay).ToListAsync();
+            var db = await _context.KhachHangTiemNangs.AsNoTracking().Where(r => r.IsDeleted == false &&
+                                                                            r.CreateAt >= tuNgay &&
+                                                                            r.CreateAt <= denNgay)
+                                                                    .Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
 
@@ -203,6 +206,33 @@ namespace CRM.Repositories.KhachHangTiemNangs
             catch (Exception ex)
             {
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = true };
+            }
+        }
+
+        public async Task<ResultModal> BanGiaoHangLoat(List<BanGiaoList> models, Guid userId)
+        {
+            try
+            {
+                foreach (var item in models)
+                {
+                    var db = await _context.KhachHangTiemNangs.Where(r => r.Id == item.Id).FirstOrDefaultAsync();
+                    if (db != null)
+                    {
+                        if (db.IsChuyenDoi == false)
+                        {
+                            db.NguoiDungId = userId;
+                            _context.KhachHangTiemNangs.Update(db);
+                        }
+                        else continue;
+                    }
+
+                }
+                await _context.SaveChangesAsync();
+                return new ResultModal() { Message = "Bàn giao thành công", Status = 200, Success = true };
+            }
+            catch (Exception ex)
+            {
+                return new ResultModal() { Message = ex.Message, Status = 500, Success = false };
             }
         }
     }

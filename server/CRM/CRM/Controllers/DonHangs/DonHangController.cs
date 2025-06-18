@@ -92,6 +92,20 @@ namespace CRM.Controllers.DonHangs
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getlichsumuahang/{khachHangId}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetLichSuDonHang(string khachHangId)
+        {
+            try
+            {
+                var result = await _donHangServices.GetLichSuMuaHang(khachHangId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost("convertdonhang")]
         [JwtAuthorize]
         public async Task<IActionResult> ConvertDonhang(DonHangModal modal)

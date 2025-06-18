@@ -1,5 +1,6 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
+using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services;
 using CRM.Services.Menus;
@@ -26,7 +27,8 @@ namespace CRM.Controllers.Menus
         {
             try
             {
-                List<MenuDTO> result = await _menuServices.GetAllMenu();
+                Guid groupId = HttpContext.GetChucVuId();
+                List<MenuDTO> result = await _menuServices.GetAllMenu(groupId);
                 return Ok(result);
             }
             catch (ArgumentException ex)

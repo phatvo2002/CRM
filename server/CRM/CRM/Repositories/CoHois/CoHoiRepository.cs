@@ -41,18 +41,19 @@ namespace CRM.Repositories.CoHois
 
                     foreach (var item in modal.HangHoaQuanTams)
                     {
-
                         HangHoaQuanTam hangHoaQuanTam = new HangHoaQuanTam();
                         hangHoaQuanTam.Id = Guid.NewGuid();
                         hangHoaQuanTam.MaHangHoaId = item.MaHangHoaId;
                         hangHoaQuanTam.KhachHangId = modal.MaKhachHang;
                         hangHoaQuanTam.CoHoiId = modal.Id;
                         hangHoaQuanTam.SoLuong = item.SoLuong;
+                        hangHoaQuanTam.DonGia = item.DonGia;
+                        hangHoaQuanTam.ThueSuat = item.ThueSuat;
                         hangHoaQuanTam.TienThue = item.TienThue;
-                        hangHoaQuanTam.TenHangHoa = item.TenHangHoa;
-                        hangHoaQuanTam.MaDonViTinh = item.MaDonViTinh;
                         hangHoaQuanTam.ThanhTien = item.ThanhTien;
                         hangHoaQuanTam.TongTien = item.TongTien;
+                        hangHoaQuanTam.TenHangHoa = item.TenHangHoa;
+                        hangHoaQuanTam.MaDonViTinh = item.MaDonViTinh;
                         _crmDbContext.HangHoaQuanTams.Add(hangHoaQuanTam);
                     }
                     _crmDbContext.CoHois.Add(cohoi);
@@ -159,18 +160,26 @@ namespace CRM.Repositories.CoHois
                 {
                     if (dataNguoiDung.CheckIsTruongPhong == false)
                     {
-                        var dataCoHoi = await _crmDbContext.CoHois.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).ToListAsync();
+                        var dataCoHoi = await _crmDbContext.CoHois.Where(r => r.NguoiDungId == nguoiDungId &&
+                                                                             (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) &&
+                                                                             r.IsDeleted == false)
+                                                                 .Include(r => r.GiaiDoanBanHang)
+                                                                 .Include(r => r.Nguoidung).ToListAsync();
                         return _mapper.Map<List<CoHoiDTO>>(dataCoHoi);
                     }
                     else
                     {
-                        var dataCoHoi = await _crmDbContext.CoHois.Where(r => r.PhongBanId == dataNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).ToListAsync();
+                        var dataCoHoi = await _crmDbContext.CoHois.Where(r => r.PhongBanId == dataNguoiDung.MaPhongBan &&
+                                                                             (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) &&
+                                                                             r.IsDeleted == false)
+                                                                  .Include(r => r.GiaiDoanBanHang)
+                                                                  .Include(r => r.Nguoidung).ToListAsync();
                         return _mapper.Map<List<CoHoiDTO>>(dataCoHoi);
                     }
                 }
                 else
                 {
-                    var dataCoHoi = await _crmDbContext.CoHois.Where(r => (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).ToListAsync();
+                    var dataCoHoi = await _crmDbContext.CoHois.Where(r => (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.GiaiDoanBanHang).Include(r => r.Nguoidung).ToListAsync();
                     return _mapper.Map<List<CoHoiDTO>>(dataCoHoi);
                 }
             }

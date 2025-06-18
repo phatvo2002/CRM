@@ -28,6 +28,11 @@ namespace CRM.Services.KhachHangMucTieus
             return await _khachHangMucTieuRepository.CreateKhachHangMucTieu(modal, nguoiDungId, phongBanId);
         }
 
+        public async Task<KhachHangMucTieuDTO> GetKhachHangMucTieuById(string khachHangId)
+        {
+            return await _khachHangMucTieuRepository.GetKhachHangMucTieuById(khachHangId);
+        }
+
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId, DateTime tuNgay, DateTime denNgay)
         {
             return await _khachHangMucTieuRepository.GetKhachHangMucTieuByNguoiDungId(NguoiDungId, tuNgay, denNgay);

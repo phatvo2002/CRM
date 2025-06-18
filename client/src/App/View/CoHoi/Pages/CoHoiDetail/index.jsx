@@ -69,7 +69,7 @@ const index = () => {
     setAnchorEl(null);
   };
   const handleReturn = () => {
-    navigate("/cohoi");
+    navigate(-1);
   };
   const handleReload = () => {
     refetch();

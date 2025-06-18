@@ -287,6 +287,36 @@ namespace CRM.Controllers.BaoCaos
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getbaocaokhaosat")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoKhaoSat(DateTime tuNgay, DateTime denNgay)
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                var result = await _baoCaoServices.BaoCaoKhaoSat(tuNgay, denNgay, nguoiDungId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("getbaocaokhachhang")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetBaoCaoKhachHang(string khachHangId)
+        {
+            try
+            {
+                var result = await _baoCaoServices.BaoCaoKhachHang(khachHangId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }

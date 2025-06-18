@@ -3,7 +3,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { string, array, bool, func, number } from "prop-types";
 import { Autocomplete, CircularProgress, TextField } from "@mui/material";
 import { filterSelectedItemsAutocompleteRHF } from "../../../Until/mapData.helper";
-import PSCInputSkeleton from "../../PSCInputSkeleton";
+import PSCInputSkeleton from "../../InputSkeleton";
 import { getError, getErrorMessage } from "../../../Until/common";
 
 const AutocompleteRHF = (props) => {

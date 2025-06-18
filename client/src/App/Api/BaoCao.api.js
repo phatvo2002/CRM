@@ -72,6 +72,12 @@ export const baoCaoApi = createApi({
       getBaoCaoNhiemVuTheoTrangThai: builder.query({
         query: ({tuNgay , denNgay }) => `/BaoCao/getbaocaonhiemvutheotrangthai?tuNgay=${tuNgay}&denNgay=${denNgay}`,
       }),
+       getBaoCaoKhaoSat: builder.query({
+        query: ({tuNgay , denNgay }) => `/BaoCao/getbaocaokhaosat?tuNgay=${tuNgay}&denNgay=${denNgay}`,
+      }),
+       getBaoCaoKhachHang: builder.query({
+        query: (khachHangId) => `/BaoCao/getbaocaokhachhang?khachHangId=${khachHangId}`,
+      }),
     }),
   });
   export const { 
@@ -92,7 +98,9 @@ export const baoCaoApi = createApi({
     useGetBaoCaoSoSanhDoanhThuNhanVienQuery,
     useGetBaoCaoNhiemVuQuery,
     useGetBaoCaoTop3NhanVienHoanThanhNhiemVuQuery,
-    useGetBaoCaoNhiemVuTheoTrangThaiQuery
+    useGetBaoCaoNhiemVuTheoTrangThaiQuery,
+    useGetBaoCaoKhaoSatQuery,
+    useGetBaoCaoKhachHangQuery
   } = baoCaoApi;
 
 

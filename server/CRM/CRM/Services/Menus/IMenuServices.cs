@@ -9,7 +9,7 @@ namespace CRM.Services.Menus
 
         public Task<ResultModal> DeleteMenu(Guid Id);
 
-        public Task<List<MenuDTO>> GetAllMenu();
+        public Task<List<MenuDTO>> GetAllMenu(Guid groupId);
 
         public Task<ResultModal> UpdateMenuRole(GroupModel model);
 

@@ -3,7 +3,6 @@ using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace CRM.Repositories.PhongBans
 {
@@ -61,7 +60,7 @@ namespace CRM.Repositories.PhongBans
 
         public async Task<List<PhongBanDTO>> GetAllPhongBan()
         {
-            var db = await _context.PhongBans.OrderBy(e => e.SoThuTu).Include(e => e.Nguoidung).ToListAsync();
+            var db = await _context.PhongBans.Include(e => e.Nguoidung).ThenInclude(r => r.ChucVu).OrderBy(r => r.SoThuTu).ToListAsync();
             return _mapper.Map<List<PhongBanDTO>>(db);
         }
 

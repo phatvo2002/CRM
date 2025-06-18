@@ -52,7 +52,7 @@ const XacNhanPage = () => {
             baoGiaId: id,
             trangThaiId: xacNhanId,
           });
-          console.log(response);
+
           if (response?.data?.status == 200) {
             Swal.fire({
               title: "Xác nhận báo giá thành công",

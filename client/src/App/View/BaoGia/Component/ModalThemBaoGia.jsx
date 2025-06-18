@@ -310,13 +310,11 @@ const ModalThemBaoGia = ({
   },
   callApiThemBaoGia = async (paramData) => {
     try {
-      console.log(paramData);
       await convertBaoGia(paramData).unwrap();
       toast.success("Thêm báo giá thành công");
       closeModalWithOtherFunc();
       refetch()
     } catch (error) {
-      console.log(error);
       toast.error(error);
     }
   },

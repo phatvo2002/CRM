@@ -7,7 +7,7 @@ namespace CRM.Repositories.Menus
     {
         public Task<ResultModal> AddMenu(MenuModel modal);
 
-        public Task<List<MenuDTO>> GetAllMenu();
+        public Task<List<MenuDTO>> GetAllMenu(Guid groupId);
 
         public Task<MenuDTO> GetMenuById(Guid id);
 

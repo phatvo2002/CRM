@@ -18,5 +18,6 @@
         public decimal? TongTien { get; set; }
         public decimal? ChiecKhauDonHang { get; set; }
         public int? MaDonViTinh { get; set; }
+
     }
 }

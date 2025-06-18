@@ -1,4 +1,4 @@
-import { Box, Button, Grid2, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Button, Grid2, Stack, Tab, Tabs, Typography } from "@mui/material";
 import React from "react";
 import PropTypes from "prop-types";
 import TimeLine from "./Components/TimeLine";
@@ -7,9 +7,18 @@ import ChecklistIcon from "@mui/icons-material/Checklist";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import BarChartIcon from "@mui/icons-material/BarChart";
 import ThongKe from "./Components/ThongKe";
+import dayjs from "dayjs";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 const index = () => {
   const [value, setValue] = React.useState(0);
-
+  const [valueTuNgay, setValueTuNgay] = React.useState(
+    dayjs().startOf("month")
+  );
+  const [valueDenNgay, setValueDenNgay] = React.useState(
+    dayjs().endOf("month")
+  );
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -49,6 +58,28 @@ const index = () => {
     <>
       <Grid2 container spacing={2}>
         <Grid2 size={12}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
+              <Stack
+                direction={{ xs: "column", sm: "row" }}
+                spacing={2}
+                alignItems={{ xs: "stretch", sm: "center" }}
+              >
+                <DateTimePicker
+                  label="Từ ngày"
+                  value={valueTuNgay}
+                  onChange={(newValue) => setValueTuNgay(newValue)}
+                />
+                <DateTimePicker
+                  label="Đến ngày"
+                  value={valueDenNgay}
+                  onChange={(newValue) => setValueDenNgay(newValue)}
+                />
+              </Stack>
+            </DemoContainer>
+          </LocalizationProvider>
+        </Grid2>
+        <Grid2 size={12}>
           <Tabs
             orientation="horizontal"
             variant="scrollable"
@@ -66,13 +97,13 @@ const index = () => {
             <Tab icon={<BarChartIcon />} label="Thống kê" {...a11yProps(2)} />
           </Tabs>
           <TabPanel value={value} index={0}>
-            <DanhSach />
+            <DanhSach tuNgay={valueTuNgay} denNgay={valueDenNgay} />
           </TabPanel>
           <TabPanel value={value} index={1}>
             <TimeLine />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <ThongKe />
+            <ThongKe valueTuNgay={valueTuNgay} valueDenNgay={valueDenNgay}  />
           </TabPanel>
         </Grid2>
       </Grid2>

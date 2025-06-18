@@ -24,5 +24,6 @@
         public int? MaNganhNghe { get; set; }
         public int? MaLinhVuc { get; set; }
         public int? MaDoanhThu { get; set; }
+        public int? MaPhanLoaiKhachHang { get; set; }
     }
 }

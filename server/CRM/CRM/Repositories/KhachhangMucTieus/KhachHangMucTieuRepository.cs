@@ -46,8 +46,10 @@ namespace CRM.Repositories.KhachhangMucTieus
                     khachHangMucTieu.MaNganhNghe = modal.MaNganhNghe;
                     khachHangMucTieu.NguoiDungId = nguoiDungId;
                     khachHangMucTieu.PhongBanId = phongBanId;
+                    khachHangMucTieu.MaPhanLoaiKhachHang = 5;
                     khachHangMucTieu.IsDeleted = false;
                     khachHangMucTieu.CreateAt = DateTime.Now;
+                    khachHangMucTieu.NamGuiMailSinhNhat = null;
 
                     // Đưa toàn bộ dữ liệu hàng hóa của tiềm năng đang quan tâm thành của KH mục tiêu 
                     foreach (var h in modal.HangHoaQuanTam)
@@ -153,6 +155,8 @@ namespace CRM.Repositories.KhachhangMucTieus
                     khachHangMucTieu.PhongBanId = phongBanId;
                     khachHangMucTieu.IsDeleted = false;
                     khachHangMucTieu.CreateAt = DateTime.Now;
+                    khachHangMucTieu.MaPhanLoaiKhachHang = 5;
+                    khachHangMucTieu.NamGuiMailSinhNhat = null;
                     _crmDbContext.KhachHangMucTieus.Add(khachHangMucTieu);
                     await _crmDbContext.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Thêm khách hàng thành công", Success = true };
@@ -169,14 +173,19 @@ namespace CRM.Repositories.KhachhangMucTieus
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungId(Guid NguoiDungId, DateTime tuNgay, DateTime denNgay)
         {
             var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.NguoiDungId == NguoiDungId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
-                .Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang).Include(r => r.Nguoidung).ToListAsync();
+                .Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang)
+                .Include(r => r.Nguoidung)
+                .Include(r => r.PhanLoaiKhachHang).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
 
         public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungIdQuery(Guid NguoiDungId)
         {
             var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.NguoiDungId == NguoiDungId && r.IsDeleted == false)
-               .Include(r => r.NguonGocKhachHang).Include(r => r.LoaiTiemNang).Include(r => r.Nguoidung).ToListAsync();
+               .Include(r => r.NguonGocKhachHang)
+               .Include(r => r.LoaiTiemNang)
+               .Include(r => r.Nguoidung)
+               .Include(r => r.PhanLoaiKhachHang).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
 
@@ -184,7 +193,9 @@ namespace CRM.Repositories.KhachhangMucTieus
         {
             var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.PhongBanId == PhongBanId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
                 .Include(r => r.NguonGocKhachHang)
-                .Include(r => r.LoaiTiemNang).Include(r => r.Nguoidung).ToListAsync();
+                .Include(r => r.LoaiTiemNang)
+                .Include(r => r.Nguoidung)
+                .Include(r => r.PhanLoaiKhachHang).ToListAsync();
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
 
@@ -333,6 +344,16 @@ namespace CRM.Repositories.KhachhangMucTieus
                 return new ResultModal() { Status = 500, Message = ex.Message, Success = true };
             }
 
+        }
+
+        public async Task<KhachHangMucTieuDTO> GetKhachHangMucTieuById(string khachHangId)
+        {
+            var db = await _crmDbContext.KhachHangMucTieus.Include(r => r.NguonGocKhachHang)
+                                                          .Include(r => r.LoaiTiemNang)
+                                                          .Include(r => r.Nguoidung)
+                                                          .Include(r => r.PhanLoaiKhachHang)
+                                                          .FirstOrDefaultAsync(r => r.Id == khachHangId);
+            return _mapper.Map<KhachHangMucTieuDTO>(db);
         }
     }
 }

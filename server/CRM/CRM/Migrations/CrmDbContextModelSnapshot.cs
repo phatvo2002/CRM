@@ -829,6 +829,9 @@ namespace CRM.Migrations
                     b.Property<int?>("MaNguonGocKhachHang")
                         .HasColumnType("int");
 
+                    b.Property<int?>("MaPhanLoaiKhachHang")
+                        .HasColumnType("int");
+
                     b.Property<int?>("MaPhongbanKhachHang")
                         .HasColumnType("int");
 
@@ -894,6 +897,8 @@ namespace CRM.Migrations
                     b.HasIndex("MaNganhNghe");
 
                     b.HasIndex("MaNguonGocKhachHang");
+
+                    b.HasIndex("MaPhanLoaiKhachHang");
 
                     b.HasIndex("MaPhongbanKhachHang");
 
@@ -1044,6 +1049,9 @@ namespace CRM.Migrations
 
                     b.Property<Guid?>("NhanVienId")
                         .HasMaxLength(50)
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TenKhachHang")
@@ -1770,6 +1778,24 @@ namespace CRM.Migrations
                     b.ToTable("PhanLoaiDuBao", (string)null);
                 });
 
+            modelBuilder.Entity("CRM.Entities.PhanLoaiKhachHang", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_PhanLoaiKhachHang");
+
+                    b.ToTable("PhanLoaiKhachHang", (string)null);
+                });
+
             modelBuilder.Entity("CRM.Entities.PhongBan", b =>
                 {
                     b.Property<Guid>("Id")
@@ -2357,6 +2383,11 @@ namespace CRM.Migrations
                         .HasForeignKey("MaNguonGocKhachHang")
                         .HasConstraintName("FK_NguonGocKhachHang_KhachHangMucTieu");
 
+                    b.HasOne("CRM.Entities.PhanLoaiKhachHang", "PhanLoaiKhachHang")
+                        .WithMany("KhachHangMucTieus")
+                        .HasForeignKey("MaPhanLoaiKhachHang")
+                        .HasConstraintName("FK_PhanLoaiKhachHang_KhachHangMucTieu");
+
                     b.HasOne("CRM.Entities.PhongBanKhachHang", "PhongBanKhachHang")
                         .WithMany("KhachHangMucTieus")
                         .HasForeignKey("MaPhongbanKhachHang")
@@ -2385,6 +2416,8 @@ namespace CRM.Migrations
                     b.Navigation("Nguoidung");
 
                     b.Navigation("NguonGocKhachHang");
+
+                    b.Navigation("PhanLoaiKhachHang");
 
                     b.Navigation("PhongBan");
 
@@ -2860,6 +2893,11 @@ namespace CRM.Migrations
             modelBuilder.Entity("CRM.Entities.PhanLoaiDuBao", b =>
                 {
                     b.Navigation("GiaiDoanBanHangs");
+                });
+
+            modelBuilder.Entity("CRM.Entities.PhanLoaiKhachHang", b =>
+                {
+                    b.Navigation("KhachHangMucTieus");
                 });
 
             modelBuilder.Entity("CRM.Entities.PhongBan", b =>

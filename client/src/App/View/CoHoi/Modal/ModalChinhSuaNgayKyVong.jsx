@@ -70,7 +70,6 @@ const ModalChinhSuaNgayKyVong = (prop) => {
         { keepDirty: true }
       );
     };
-  console.log(selectedItem);
   useEffect(() => {
     if (selectedItem[0]) {
       getInitialStateFromApiToUpdate(selectedItem[0]);

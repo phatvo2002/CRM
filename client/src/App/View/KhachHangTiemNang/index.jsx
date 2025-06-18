@@ -26,9 +26,7 @@ import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Tooltip from "@mui/material/Tooltip";
 import { useNavigate } from "react-router-dom";
 import { TYPE_MODAL } from "../../Until/constant";
-import EmailIcon from "@mui/icons-material/Email";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
-import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import ThreePIcon from "@mui/icons-material/ThreeP";
 import Person2Icon from "@mui/icons-material/Person2";
@@ -53,8 +51,11 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
+import ModalBanGiaoKhachHangHangHoat from "./Modal/ModalBanGiaoKhachHangHangHoat";
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
+  const [selectRowId , setSelectedRowId] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isActionOpen, setIsActionOpen] = useState(false);
   const [KhachHangDaXoaModal, setKhachHangDaXoaModal] = useState(false);
@@ -232,6 +233,7 @@ const KhachHangTiemNang = () => {
   const [rows, setRows] = useState([]);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [typeModal, setTypeModal] = useState("");
+  const [openModalAdd, setOpenModalAdd] = useState(false)
   const [loading, setLoading] = useState(false);
   const [valueTuNgay, setValueTuNgay] = React.useState(
     dayjs().startOf("month")
@@ -240,11 +242,16 @@ const KhachHangTiemNang = () => {
     dayjs().endOf("month")
   );
   const [openModalBanGiao, setOpenModalBanGiao] = useState(false);
+  const [openModalBanGiaoHangLoat, setOpenModalBanGiaohangLoat] = useState(false);
   const [getTemplate] = useGetTemplatesMutation();
+
+const tuNgayString = valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
+const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"); 
+
   const { data: dataKHByRole, refetch: refetchkh } =
     useGetKhachHangTiemNangByroleQuery({
-      tuNgay: valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
-      denNgay: valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+      tuNgay: tuNgayString,
+      denNgay: denNgayString,
     });
   const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation();
   const [deleteHangLoat] = useDeletehangLoatKhachHangTiemNangMutation();
@@ -264,6 +271,8 @@ const KhachHangTiemNang = () => {
     setOpenModalBanGiao(false);
     setTypeModal("");
   };
+  const handleOpenModalBanGiaoKhachHangHangLoat = () => setOpenModalBanGiaohangLoat(true)
+  const handleCloseModalBanGiaoKhachHangHangLoat = () => setOpenModalBanGiaohangLoat(false)
 
   const handleDeletePhongBan = async (id) => {
     if (
@@ -342,8 +351,9 @@ const KhachHangTiemNang = () => {
 
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
+    let selectedRow = selectedRows.map(r=>r.id)
+    setSelectedRowId(selectedRow)
   };
-
   return (
     <Box
       className="modern-crm-page"
@@ -427,7 +437,7 @@ const KhachHangTiemNang = () => {
             Tùy chỉnh
           </Button>
           <Button
-            variant="text"
+            variant="outlined"
             startIcon={<UpdateIcon />}
             sx={{
               textTransform: "none",
@@ -437,6 +447,22 @@ const KhachHangTiemNang = () => {
             onClick={handleOpen}
           >
             Lịch sử tương tác
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<PeopleOutlineIcon />}
+            sx={{
+              borderRadius: 2,
+              textTransform: "none",
+              px: 2.5,
+              py: 1,
+              borderColor: "#e0e0e0",
+              color: "#424242",
+            }}
+            disabled={selectRowId.length == 0}
+            onClick={handleOpenModalBanGiaoKhachHangHangLoat}
+          >
+            Bàn giao
           </Button>
         </Stack>
       </Stack>
@@ -588,6 +614,17 @@ const KhachHangTiemNang = () => {
         handleClose={handleCloseModalXem}
         open={KhachHangDaXoaModal}
         refetch={refetchkh}
+      />
+
+      {/* Modal bàn giao hàng loạt */}
+      <ModalBanGiaoKhachHangHangHoat
+         selectedItem={selectRowId}
+         closeModal={handleCloseModalBanGiaoKhachHangHangLoat}
+         typeModal={typeModal}
+         setTypeModal={setTypeModal}
+         showModal={openModalBanGiaoHangLoat}
+         setLoading={setLoading}
+         refetch={refetchkh}
       />
     </Box>
   );

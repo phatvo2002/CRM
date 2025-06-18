@@ -133,7 +133,6 @@ export const ModalConvertBaoGia = ({
       isNew: true,
     };
     setHangHoa((prev) => [...prev, newRow]);
-    console.log(newRow)
     
   };
   const handleSaveClick = async (id) => {
@@ -353,7 +352,6 @@ export const ModalConvertBaoGia = ({
     },
     callApiConvert = async (paramData) => {
       try {
-        console.log(paramData);
         await convertBaoGia(paramData).unwrap();
         toast.success("Chuyển đổi thành công")
         closeModalWithOtherFunc()
@@ -379,7 +377,6 @@ export const ModalConvertBaoGia = ({
         { keepDirty: true }
       );
     };
-    console.log(coHoiData)
   useEffect(() => {
     if (rows) {
       setHangHoa(rows);
@@ -390,7 +387,6 @@ export const ModalConvertBaoGia = ({
       getInitialStateFromApiToUpdate(coHoiData);
     }
   }, [coHoiData]);
-  console.log(coHoiData)
   useEffect(() => {
     _isMounted.current = true;
     return () => {

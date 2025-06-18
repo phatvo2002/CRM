@@ -8,7 +8,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { TextField } from "@mui/material";
-import PSCInputSkeleton from "../../PSCInputSkeleton";
+import PSCInputSkeleton from "../../InputSkeleton";
 import { styled } from "@mui/material";
 import Textfield from "../../../CustomCard"
 

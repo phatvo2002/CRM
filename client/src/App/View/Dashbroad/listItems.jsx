@@ -16,7 +16,7 @@ const ListItems = (props) => {
             <ListItemButton
               key={index}
               component={RouterLink}
-              to={item.menu.url}
+              to={`${item.menu.url}/${item.menu.id}`}
               sx={{
                 backgroundColor: isActive
                   ? theme.palette.primary.light

@@ -17,6 +17,7 @@ namespace CRM.Services.KhahHangTiemNangs
         Task<ResultModal> BanGiaoKhachHangTiemNang(Guid id, Guid userId);
         Task<ResultModal> XoaHangLoatKhTiemNangAssync(List<KhachHangTiemNangModel> models);
         Task<ResultModal> PhucHoiLoatKhTiemNangAsync(List<KhachHangTiemNangModel> models);
+        Task<ResultModal> BanGiaoHangLoat(List<BanGiaoList> models, Guid userId);
 
     }
 }

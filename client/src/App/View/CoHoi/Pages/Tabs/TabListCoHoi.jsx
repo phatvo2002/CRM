@@ -11,27 +11,42 @@ import EditIcon from "@mui/icons-material/Edit";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import ModalChinhSuaGiaiDoan from "../../Modal/ModalChinhSuaGiaiDoan";
 import ModalChinhSuaNgayKyVong from "../../Modal/ModalChinhSuaNgayKyVong";
-export const TabListCoHoi = ({ dataCoHoi , refetch }) => {
+export const TabListCoHoi = ({ dataCoHoi, refetch }) => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
-    [modalChinhSua , setModalChinhSua] = useState(false),
-    [modalChinhSuaNgayKyVong ,setModalChinhSuaNgayKyVong] = useState(false);
-    
-  const handleOpenModalChinhSuaGiaiDoan = () => setModalChinhSua(true)
-  const handleCloseModalChinhSuaGiaiDoan = () => setModalChinhSua(false)
-  const handleOpenModalChinhSuaNgayKyVong = () => setModalChinhSuaNgayKyVong(true)
-  const handleCloseModalChinhSuaNgayKyVong = () => setModalChinhSuaNgayKyVong(false)
+    [modalChinhSua, setModalChinhSua] = useState(false),
+    [modalChinhSuaNgayKyVong, setModalChinhSuaNgayKyVong] = useState(false);
+
+  const handleOpenModalChinhSuaGiaiDoan = () => setModalChinhSua(true);
+  const handleCloseModalChinhSuaGiaiDoan = () => setModalChinhSua(false);
+  const handleOpenModalChinhSuaNgayKyVong = () =>
+    setModalChinhSuaNgayKyVong(true);
+  const handleCloseModalChinhSuaNgayKyVong = () =>
+    setModalChinhSuaNgayKyVong(false);
   const columns = [
     {
       field: "action",
       headerName: "Thao tác",
       width: 200,
       renderCell: () => (
-        <div style={{ display: "flex", alignItems: "center", overflow: "auto", maxWidth: "150px" }}>
-          <IconButton disabled={selectedRow.length === 0} onClick={handleOpenModalChinhSuaGiaiDoan}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            overflow: "auto",
+            maxWidth: "150px",
+          }}
+        >
+          <IconButton
+            disabled={selectedRow.length === 0}
+            onClick={handleOpenModalChinhSuaGiaiDoan}
+          >
             <EditIcon color="success"></EditIcon>
           </IconButton>
-          <IconButton disabled={selectedRow.length === 0} onClick={handleOpenModalChinhSuaNgayKyVong}>
+          <IconButton
+            disabled={selectedRow.length === 0}
+            onClick={handleOpenModalChinhSuaNgayKyVong}
+          >
             <CalendarMonthIcon color="warning"></CalendarMonthIcon>
           </IconButton>
           <IconButton
@@ -65,7 +80,7 @@ export const TabListCoHoi = ({ dataCoHoi , refetch }) => {
                 height: "40px",
               }}
             >
-              {params?.row?.nguoiDung?.hinhAnh == null ? (
+              {params?.row?.nguoiDung?.hinhAnh == "" ? (
                 <img
                   src={NoImage}
                   style={{
@@ -137,7 +152,9 @@ export const TabListCoHoi = ({ dataCoHoi , refetch }) => {
       headerName: "Số tiền",
       width: 200,
       renderCell: (params) => (
-        <div>{params.value.toLocaleString("vi-VN")} <span>&#x0111;</span></div>
+        <div>
+          {params.value.toLocaleString("vi-VN")} <span>&#x0111;</span>
+        </div>
       ),
     },
     {
@@ -199,10 +216,10 @@ export const TabListCoHoi = ({ dataCoHoi , refetch }) => {
       />
       {/* Modal chỉnh sửa ngày kỳ vọng */}
       <ModalChinhSuaNgayKyVong
-       showModal={modalChinhSuaNgayKyVong}
-       closeModal={handleCloseModalChinhSuaNgayKyVong}
-       selectedItem={selectedRow}
-       refetch={refetch}
+        showModal={modalChinhSuaNgayKyVong}
+        closeModal={handleCloseModalChinhSuaNgayKyVong}
+        selectedItem={selectedRow}
+        refetch={refetch}
       />
     </>
   );

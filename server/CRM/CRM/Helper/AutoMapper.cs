@@ -18,6 +18,7 @@ namespace CRM.Helper
             CreateMap<ChucVu, ChucVuDTO>();
             CreateMap<TinhTrang, TinhTrangDTO>();
             CreateMap<KetQuaCuocGoi, KetQuaCuocGoiDTO>();
+            CreateMap<MenuRole , MenuRoleDTO>();
             CreateMap<Menu, MenuDTO>();
             CreateMap<MenuRole, MenuRoleDTO>();
             CreateMap<PhongBan, PhongBanDTO>();
@@ -84,6 +85,8 @@ namespace CRM.Helper
 
             CreateMap<KhaoSat, KhaoSatDTO>();
             CreateMap<KhaoSatModal, KhaoSat>().ReverseMap();
+            CreateMap<PhanLoaiKhachHang, ClassDTO>();
+
         }
     }
 }

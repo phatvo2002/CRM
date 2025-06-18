@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using CRM.DTO;
 using CRM.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,8 @@ namespace CRM.Repositories.GetDatas
         }
         public async Task<List<DoanhThuDTO>> GetAllDoanhThu()
         {
-            var db = await _context.DoanhThus.AsNoTracking().ToListAsync();
-            return _mapper.Map<List<DoanhThuDTO>>(db);
+
+            return await _context.DoanhThus.AsNoTracking().ProjectTo<DoanhThuDTO>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
         public async Task<List<KetQuaCuocGoiDTO>> GetAllKetQuaCuocGoi()
@@ -115,8 +116,10 @@ namespace CRM.Repositories.GetDatas
 
         public async Task<List<ClassDTO>> GetAllLoaiDoanhang()
         {
-            var db = await _context.LoaiDonHangs.AsNoTracking().ToListAsync();
-            return _mapper.Map<List<ClassDTO>>(db);
+            return await _context.LoaiDonHangs
+       .AsNoTracking()
+       .ProjectTo<ClassDTO>(_mapper.ConfigurationProvider)
+       .ToListAsync();
         }
 
         public async Task<List<ClassDTO>> GetAllTinhTrangGhiDoanhSo()

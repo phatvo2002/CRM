@@ -13,5 +13,6 @@
         public int? OrderNumber { get; set; }
 
         public bool? IsActive { get; set; }
+        public List<MenuRoleDTO>? MenuRoles { get; set; }
     }
 }

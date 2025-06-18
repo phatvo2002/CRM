@@ -12,6 +12,11 @@ namespace CRM.Services.KhahHangTiemNangs
             _khachHangTiemNang = khachHangTiemNang;
         }
 
+        public async Task<ResultModal> BanGiaoHangLoat(List<BanGiaoList> models, Guid userId)
+        {
+            return await _khachHangTiemNang.BanGiaoHangLoat(models, userId);
+        }
+
         public async Task<ResultModal> BanGiaoKhachHangTiemNang(Guid id, Guid userId)
         {
             return await _khachHangTiemNang.BanGiaoKhachHangTiemNang(id, userId);

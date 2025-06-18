@@ -15,12 +15,7 @@ import {
 import React, { useEffect, useState } from "react";
 import SouthIcon from "@mui/icons-material/South";
 import NorthIcon from "@mui/icons-material/North";
-
 import AddTaskIcon from "@mui/icons-material/AddTask";
-import dayjs from "dayjs";
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import Piechart from "src/App/Components/Customchart/CustomPieChart/Piechart";
 import {
   useGetBaoCaoNhiemVuQuery,
@@ -30,9 +25,7 @@ import {
 import NoImage from "src/App/Assets/image/no-image.png";
 
 
-const ThongKe = () => {
-  const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));
-  const [valueDenNgay, setValueDenNgay] = useState(dayjs().endOf("month"));
+const ThongKe = ({valueTuNgay , valueDenNgay}) => {
   const [baoCaoTongNhiemVu, setBaoCaoTongNhiemVu] = useState(null);
   const { data: dataTongNhiemVu } = useGetBaoCaoNhiemVuQuery({
     tuNgay: valueTuNgay.format("YYYY-MM-DDT00:00:00"),
@@ -70,28 +63,6 @@ const ThongKe = () => {
   return (
     <>
       <Grid2 container spacing={2}>
-        <Grid2 size={12} marginLeft={"30%"}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
-              <Stack
-                direction={{ xs: "column", sm: "row" }}
-                spacing={2}
-                alignItems={{ xs: "stretch", sm: "center" }}
-              >
-                <DateTimePicker
-                  label="Từ ngày"
-                  value={valueTuNgay}
-                  onChange={(newValue) => setValueTuNgay(newValue)}
-                />
-                <DateTimePicker
-                  label="Đến ngày"
-                  value={valueDenNgay}
-                  onChange={(newValue) => setValueDenNgay(newValue)}
-                />
-              </Stack>
-            </DemoContainer>
-          </LocalizationProvider>
-        </Grid2>
         <Grid2 size={4}></Grid2>
         <Grid2 size={4}>
           {" "}
@@ -157,7 +128,7 @@ const ThongKe = () => {
             >
               <Table
                 sx={{
-                  minWidth: 650,
+                  minWidth: 600,
                   "& .MuiTableCell-root": { padding: "12px 16px" },
                 }}
               >
@@ -245,7 +216,7 @@ const ThongKe = () => {
                             </Typography>
                           </Box>
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="center">
                           <Typography
                             sx={{ fontWeight: 500, color: "#2e7d32" }}
                           >

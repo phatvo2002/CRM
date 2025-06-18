@@ -11,10 +11,10 @@ import {
 import { styled } from '@mui/material/styles';
 import Pagination from '@mui/material/Pagination';
 import PaginationItem from '@mui/material/PaginationItem';
-import { Box, MenuItem, Select, IconButton, Typography, InputAdornment } from '@mui/material';
+import { Box, MenuItem, Select, IconButton, Typography, InputAdornment, Tooltip, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import FilterListIcon from '@mui/icons-material/FilterList';
-
+import DownloadIcon from '@mui/icons-material/Download';
 // Styled DataGrid with modern look
 const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   fontSize: '0.875rem',
@@ -82,7 +82,7 @@ function CustomPagination() {
           },
         }}
       >
-        {[5, 10, 20, 50, 100].map((size) => (
+        {[10, 25, 50, 100].map((size) => (
           <MenuItem key={size} value={size}>
             Hiển thị {size} dòng
           </MenuItem>
@@ -120,6 +120,52 @@ function CustomPagination() {
 }
 
 // Custom Toolbar Component
+// const CustomToolbar = () => {
+//   return (
+//     <Box
+//       sx={{
+//         display: 'flex',
+//         justifyContent: 'space-between',
+//         alignItems: 'center',
+//         padding: 1,
+//         borderBottom: 1,
+//         borderColor: 'divider',
+//         backgroundColor: 'grey.50',
+//       }}
+//     >
+//       <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+//         Dữ liệu
+//       </Typography>
+//       <Box sx={{ display: 'flex', gap: 1 }}>
+//         <GridToolbar
+//           slotProps={{
+//             quickFilter: {
+//               placeholder: 'Tìm kiếm...',
+//               InputProps: {
+//                 startAdornment: (
+//                   <InputAdornment position="start">
+//                     <SearchIcon />
+//                   </InputAdornment>
+//                 ),
+//               },
+//               sx: {
+//                 width: 300,
+//                 '& .MuiInputBase-root': {
+//                   borderRadius: 1,
+//                   backgroundColor: 'background.primary',
+//                 },
+//               },
+//             },
+//           }}
+//         />
+//         <IconButton color="primary" aria-label="filter">
+//           <FilterListIcon />
+//         </IconButton>
+//       </Box>
+//     </Box>
+//   );
+// };
+
 const CustomToolbar = () => {
   return (
     <Box
@@ -127,45 +173,51 @@ const CustomToolbar = () => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 1,
-        borderBottom: 1,
-        borderColor: 'divider',
+        padding: 1.5,
         backgroundColor: 'grey.50',
+        borderRadius: '8px 8px 0 0',
       }}
     >
-      <Typography variant="h6" sx={{ fontWeight: 'medium' }}>
+      <Typography variant="h6" fontWeight="bold" color="text.primary">
         Dữ liệu
       </Typography>
-      <Box sx={{ display: 'flex', gap: 1 }}>
-        <GridToolbar
-          slotProps={{
-            quickFilter: {
-              placeholder: 'Tìm kiếm...',
-              InputProps: {
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                ),
-              },
-              sx: {
-                width: 300,
-                '& .MuiInputBase-root': {
-                  borderRadius: 1,
-                  backgroundColor: 'background.primary',
-                },
+      <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+        <TextField
+          variant="outlined"
+          size="small"
+          placeholder="Tìm kiếm..."
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon sx={{ color: 'text.secondary' }} />
+              </InputAdornment>
+            ),
+          }}
+          sx={{
+            width: 250,
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 1,
+              backgroundColor: 'background.paper',
+              '&:hover .MuiOutlinedInput-notchedOutline': {
+                borderColor: 'primary.main',
               },
             },
           }}
         />
-        <IconButton color="primary" aria-label="filter">
-          <FilterListIcon />
-        </IconButton>
+        <Tooltip title="Bộ lọc">
+          <IconButton color="primary" aria-label="filter">
+            <FilterListIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Xuất dữ liệu">
+          <IconButton color="primary" aria-label="export">
+            <DownloadIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
     </Box>
   );
 };
-
 // Main CustomDatagrid Component
 const CustomDatagrid = ({
   rows,
@@ -196,7 +248,7 @@ const CustomDatagrid = ({
     <Box
       sx={{
         width: '100%',
-        height :'80%',
+        height :'100%',
         overflow: 'auto',
         borderRadius: 1,
         backgroundColor: 'background.primary',

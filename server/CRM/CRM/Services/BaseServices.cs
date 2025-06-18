@@ -42,6 +42,12 @@ namespace CRM.Services
         {
             return await _repository.GetAll();
         }
+
+        public async Task<List<TDto>> GetAllDto(DateTime tuNgay, DateTime denNgay)
+        {
+            return await _repository.GetAllDto(tuNgay, denNgay);
+        }
+
         public async Task<TEntity> GetById(TId id)
         {
             return await _repository.GetById(id);

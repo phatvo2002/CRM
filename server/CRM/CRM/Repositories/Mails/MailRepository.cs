@@ -125,7 +125,7 @@ namespace CRM.Repositories.Mails
                                     , Bạn vui lòng kiểm tra thông tin chi tiết đơn hàng và nhấn nút xác nhận để xác nhận nếu bạn đồng ý với mức giá của chúng tôi.</p>
                           <p>{request.Body}</p>
                           <p>Bấm vào nút dưới đây để xác nhân đơn hàng và xem chi tiết đơn đặt hàng :</p>
-                          <a href='http://localhost:3000/donhang/chitietdonhang/{donHangId}' class='button'>Xem chi tiết đơn hàng</a>
+                          <a href='https://crm2024-sand.vercel.app/donhang/chitietdonhang/{donHangId}' class='button'>Xem chi tiết đơn hàng</a>
                      </div>
                        <div> 
                      <table border='1' cellpadding='8' cellspacing='0' style='border-collapse: collapse; width: 100%; margin: 20px 0;'>
@@ -244,8 +244,8 @@ namespace CRM.Repositories.Mails
     <p><strong>Tổng cộng: {string.Format(new CultureInfo("vi-VN"), "{0:N0} đ", tongTien)}</strong></p>
 
     <p>
-      👉 Để tiếp tục vui lòng quý khách nhấn nút xác nhận báo giá hoặc từ chối báo giá thông qua đường link : <a href='http://localhost:3000/XemBaoGia/{baoGiaId}'>
-        http://localhost:3000/XemBaoGia/{baoGiaId}
+      👉 Để tiếp tục vui lòng quý khách nhấn nút xác nhận báo giá hoặc từ chối báo giá thông qua đường link : <a href=' https://crm2024-sand.vercel.app/XemBaoGia/{baoGiaId}'>
+        https://crm2024-sand.vercel.app/XemBaoGia/{baoGiaId}
       </a>
     </p>
     <p> </p>

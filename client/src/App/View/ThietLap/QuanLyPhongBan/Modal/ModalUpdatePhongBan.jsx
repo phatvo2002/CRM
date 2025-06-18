@@ -53,7 +53,6 @@ const ModalUpdatePhongBan = (props) => {
     [updatephongban ,{isLoading : isUpdatePhongBan}] = useUpdatePhongBanMutation(),
     isLoading =   isUpdatePhongBan,
     header = getHeader(typeModal);
-    console.log(selectedItem)
   const submitForm = (data) => {
     const tempData = {
       id  : data.id,
@@ -104,10 +103,10 @@ const ModalUpdatePhongBan = (props) => {
     };
 
   useEffect(() => {
-    if (selectedItem[0] && typeModal === TYPE_MODAL.UPDATE) {
-      getInitialStateFromApiToUpdate(selectedItem[0]);
+    if (selectedItem && typeModal === TYPE_MODAL.UPDATE) {
+      getInitialStateFromApiToUpdate(selectedItem);
     }
-  }, [selectedItem[0], typeModal]);
+  }, [selectedItem, typeModal]);
 
   useEffect(() => {
     _isMounted.current = true;

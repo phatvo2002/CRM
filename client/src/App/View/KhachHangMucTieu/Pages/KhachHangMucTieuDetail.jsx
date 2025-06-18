@@ -11,6 +11,7 @@ import {
   Menu,
   MenuItem,
   Stack,
+  Chip,
 } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import TabList from "@mui/lab/TabList";
@@ -57,7 +58,7 @@ const KhachHangMucTieuDetail = () => {
     setActiveTab(newValue);
   };
   const backPreviousPage = () => {
-    navigate("/khachhang");
+    navigate(-1);
   };
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -80,6 +81,24 @@ const KhachHangMucTieuDetail = () => {
   const handleCloseModalGuiMail = ()=> setModalGuiMail(false);
   const handleOpenModalSinhDonHang = ()=> setModalSinhDonHang(true);
   const handleCloseModalSinhDonHang = ()=> setModalSinhDonHang(false);
+
+   const getColor = (name) => {
+          switch (name) {
+            case 1:
+              return "#FFD700";
+            case 2:
+              return "#90EE90"; 
+            case 3:
+              return "#ADD8E6"; 
+            case 4:
+              return "#FFA07A"; 
+            case 5:
+              return "#e32d14"; 
+            default:
+              return "#FFFFFF"; 
+          }
+        };
+
   return (
     <>
       <Grid2 container spacing={2} sx={{ padding: 2 }}>
@@ -163,9 +182,10 @@ const KhachHangMucTieuDetail = () => {
                   alt=""
                   sx={{ width: 80, height: 80, margin: "0 auto", marginTop: 3 }}
                 />
-                <Typography variant="h6" mt={2}>
+                <Typography variant="h6" mt={2} >
                   {KhachhangData?.tenKhachHang}
                 </Typography>
+                <Chip label={KhachhangData?.phanLoaiKhachHang?.name} style={{margin : 5 , backgroundColor:getColor(KhachhangData?.phanLoaiKhachHang?.id) , color:"white" }}/>
                 <Typography variant="body2" color="text.secondary">
                   Mã số thuế: -{" "}
                   {KhachhangData?.maSoThue ? (
@@ -236,7 +256,7 @@ const KhachHangMucTieuDetail = () => {
         </Grid2>
         <Grid2 size={10}>
           {/* Tabs */}
-          <Paper style={{ width: "100%", height: "100vh" }}>
+          <Paper style={{ width: "100%" }}>
             <Box sx={{ typography: "body1" }}>
               <TabContext value={value}>
                 <Box
@@ -253,7 +273,7 @@ const KhachHangMucTieuDetail = () => {
                     scrollButtons={"auto"}
                   >
                     <Tab label="Tổng quan" value="1" />
-                    <Tab label="Thông tin chi tiết" value="2" />
+                    {/* <Tab label="Thông tin chi tiết" value="2" /> */}
                     <Tab label="Liên hệ" value="3" />
                     <Tab label="Hoạt động" value="4" />
                     <Tab label="Bán hàng" value="5" />
@@ -263,11 +283,11 @@ const KhachHangMucTieuDetail = () => {
                   </TabList>
                 </Box>
                 <TabPanel value="1">
-                  <TabTongQuan />
+                  <TabTongQuan customerData={KhachhangData}/>
                 </TabPanel>
-                <TabPanel value="2">
-                  <TabThongTinChiTiet id={id}/>
-                </TabPanel>
+                {/* <TabPanel value="2">
+                  <TabThongTinChiTiet id={id} customerData={KhachhangData}/>
+                </TabPanel> */}
                 <TabPanel value="3">
                   <TabLienHe />
                 </TabPanel>

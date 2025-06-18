@@ -11,6 +11,7 @@ import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import ModalAddMenu from "./Modal/ModalAddMenu";
 import ModalUpdateMenu from "./Modal/ModalUpdateMenu";
 import { useDeleteMenuMutation, useGetAllMenuQuery } from "src/App/Api/MenuApi";
+import ButtonCustom from "src/App/Components/CustomButton/ButtonCustom";
 const QuanLyMenu = () => {
   const columns = [
     { field: "orderNumber", headerName: "Số thứ tự", width: 200, flex: 1 },
@@ -136,10 +137,7 @@ const QuanLyMenu = () => {
             margin: "10px 0",
           }}
         >
-          <Button variant="contained" onClick={backLink}>
-            {" "}
-            <ArrowBackIosIcon /> Quay lại
-          </Button>
+          <ButtonCustom handle={backLink}/>
           <Button
             variant="contained"
             style={{ marginTop: "10px" }}

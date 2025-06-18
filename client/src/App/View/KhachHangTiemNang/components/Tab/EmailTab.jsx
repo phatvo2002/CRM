@@ -62,7 +62,7 @@ const EmailTab = () => {
   const handleDelete = async()=>
   {
      const response = await deleteMail(selectedRows[0]?.id)
-     console.log(response)
+
      if(response?.data?.status === 200)
      {
       toast.success("Xóa dữ liệu thành công")

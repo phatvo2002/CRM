@@ -13,7 +13,7 @@ import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
-import { Breadcrumbs, Button, Fab, Grid2, Link } from "@mui/material";
+import { Avatar, Breadcrumbs, Button, Fab, Grid2, Link } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -21,7 +21,6 @@ import ListItems from "../Dashbroad/listItems";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Context/AuthContext";
-import PersonIcon from "@mui/icons-material/Person";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { CustomNotification } from "src/App/Components/CustomNotification/CustomNotification";
@@ -31,6 +30,7 @@ import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import panner from "../../Assets/image/banner.png";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { json } from "@files-ui/core";
 
 function Copyright(props) {
   return (
@@ -126,6 +126,7 @@ export default function RootLayout() {
   const [darkMode, setDarkMode] = React.useState(() => {
     return localStorage.getItem("darkMode") === "true";
   });
+  const userData = JSON.parse(localStorage.getItem("authorizationData"));
   // Hàm toggle dark mode
   const toggleTheme = () => {
     setDarkMode((prevMode) => {
@@ -172,6 +173,7 @@ export default function RootLayout() {
   React.useEffect(() => {
     if (menuRoleData) {
       if (menuRoleData.length > 0) {
+        localStorage.setItem("permission",JSON.stringify({menuRoleData}))
         setMenu(menuRoleData);
       } else {
         setMenu([]);
@@ -179,11 +181,6 @@ export default function RootLayout() {
     }
   }, [menuRoleData]);
 
-  //   const gotoLinkThietLap  = ()=>{
-  //     navigate("/thietlap")
-  // }
-
-  //handle noti
   const [openNoti, setOpenNoti] = React.useState(null);
   const [openSetting, setOpenSetting] = React.useState(null);
   const handleOpenNoti = (event) => {
@@ -250,38 +247,6 @@ export default function RootLayout() {
                 );
               })}
             </Breadcrumbs>
-            {/* <Grid2 style={{ width: "80%" }} overflow={"clip"}>
-              {menu.length !== 0 && (
-                <Stack
-                  direction="row"
-                  spacing={4}
-                  fontSize={"1.5rem"}
-                  alignItems="center"
-                >
-                  {menu.map((item, index) => (
-                    <Stack
-                      direction="row"
-                      spacing={1}
-                      key={index}
-                      alignItems="center"
-                    >
-                      <Tooltip title={item?.menu?.name}>
-                        <Link
-                          component={RouterLink}
-                          style={{
-                            textDecoration: "none",
-                            color: theme.palette.text.primary,
-                          }}
-                          to={item.menu.url}
-                        >
-                          <Icon>{item.menu.icon}</Icon>
-                        </Link>
-                      </Tooltip>
-                    </Stack>
-                  ))}
-                </Stack>
-              )}
-            </Grid2> */}
 
             <Typography
               component="h6"
@@ -320,15 +285,33 @@ export default function RootLayout() {
             />
             <IconButton
               onClick={handleClick}
-              style={{ border: "1px solid", padding: 10, marginLeft: "20px" }}
+              sx={{
+                border: "1px solid #ccc",
+                ml: 2,
+                p: 0.5,
+                transition: "0.3s",
+                "&:hover": {
+                  borderColor: "primary.main",
+                  boxShadow: 2,
+                },
+              }}
               id="basic-button"
               aria-controls={open ? "basic-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
             >
-              <PersonIcon />
+              <Avatar
+                src={
+                  userData?.response?.hinhAnh
+                    ? "data:image/jpeg;base64," + userData.response.hinhAnh
+                    : undefined
+                }
+                alt="User"
+                sx={{ width: 32, height: 32 }}
+              >
+                {userData?.response?.ten?.charAt(0) ?? "U"}
+              </Avatar>
             </IconButton>
-
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -344,7 +327,7 @@ export default function RootLayout() {
                 </Link>
               </MenuItem>
               <MenuItem onClick={gotoLink}>Đổi mật khẩu</MenuItem>
-              <MenuItem onClick={logout}>Logout</MenuItem>
+              <MenuItem onClick={logout}>Đăng Xuất</MenuItem>
             </Menu>
           </Toolbar>
         </AppBar>
@@ -387,12 +370,24 @@ export default function RootLayout() {
           </div>
           <Button
             variant="outlined"
-            color="text.primary"
+            color="primary" 
             startIcon={<LogoutIcon />}
+            onClick={logout}
             sx={{
-              fontWeight: "bold",
+              fontWeight: "600",
               marginTop: "auto",
               mb: 2,
+              padding: "8px 16px", 
+              borderRadius: "8px", 
+              textTransform: "none", 
+              fontSize: "0.95rem", 
+              borderColor: "primary.main", 
+              "&:hover": {
+                backgroundColor: "primary.main", 
+                color: "white", 
+                borderColor: "primary.main",
+              },
+              transition: "all 0.3s ease", 
             }}
           >
             Đăng Xuất
