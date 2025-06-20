@@ -13,11 +13,12 @@ namespace CRM.Controllers.Menus
     [ApiController]
     public class MenuController : ControllerBase
     {
-        public readonly IMenuServices _menuServices;
-
-        public MenuController(IMenuServices menuServices)
+        private readonly IMenuServices _menuServices;
+        private readonly ILogger<MenuController> _logger;
+        public MenuController(IMenuServices menuServices, ILogger<MenuController> logger)
         {
             _menuServices = menuServices;
+            _logger = logger;
         }
 
 
@@ -33,6 +34,8 @@ namespace CRM.Controllers.Menus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -47,6 +50,8 @@ namespace CRM.Controllers.Menus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -61,6 +66,8 @@ namespace CRM.Controllers.Menus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -75,6 +82,8 @@ namespace CRM.Controllers.Menus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -89,6 +98,8 @@ namespace CRM.Controllers.Menus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -103,6 +114,8 @@ namespace CRM.Controllers.Menus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

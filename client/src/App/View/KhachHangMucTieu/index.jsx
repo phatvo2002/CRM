@@ -37,7 +37,6 @@ import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
 import ModalBanGiaoKhachHangMucTieu from "./Modal/ModalBanGiaoKhachHangMucTieu";
 import {
   useGetTemplatesMutation,
-  useGetTemplatesQuery,
 } from "src/App/Api/KhachHangTiemNangApi";
 import ModalImportKhachHang from "./Modal/ModalImportKhachHang";
 import Swal from "sweetalert2";
@@ -50,6 +49,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import CustomButtonAction from "src/App/Components/CustomButtonAction/CustomButtonAction";
 const KhachHangMucTieu = () => {
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
@@ -73,7 +73,7 @@ const KhachHangMucTieu = () => {
     setIsActionOpen(false);
   };
 
-  const {menuId} = useParams()
+  const { menuId } = useParams()
 
   const columns = [
     {
@@ -92,35 +92,38 @@ const KhachHangMucTieu = () => {
         >
           <Tooltip title="Sửa thông tin ">
             <span>
-              <IconButton
-                disabled={selectedRow.length === 0}
-                style={{}}
-                onClick={handleOpenModalUpdateKhachHang}
-              >
-                <EditIcon color="success" />
-              </IconButton>
+              <CustomButtonAction
+                menuId={menuId}
+                action={handleOpenModalUpdateKhachHang}
+                typeButton={2}
+                icon={<EditIcon color="success" />}
+                type={"sua"}
+                styleText={"Chỉnh sửa dữ liệu"}
+              />
             </span>
           </Tooltip>
           <Tooltip title="Xóa">
             <span>
-              <IconButton
-                disabled={selectedRow.length === 0}
-                style={{}}
-                onClick={() => handleDeleteKhachHang(params?.id)}
-              >
-                <DeleteIcon color="error" />
-              </IconButton>
+              <CustomButtonAction
+                menuId={menuId}
+                action={() => handleDeleteKhachHang(params?.id)}
+                typeButton={2}
+                icon={<DeleteIcon color="error" />}
+                type={"xoa"}
+                styleText={"xóa dữ liệu"}
+              />
             </span>
           </Tooltip>
           <Tooltip title="Bàn giao khách hàng">
             <span>
-              <IconButton
-                disabled={selectedRow.length === 0}
-                style={{}}
-                onClick={handleOpenModalBanGiao}
-              >
-                <ThreePIcon color="primary" />
-              </IconButton>
+              <CustomButtonAction
+                menuId={menuId}
+                action={handleOpenModalBanGiao}
+                typeButton={2}
+                icon={<ThreePIcon color="primary" />}
+                type={"sua"}
+                styleText={"Bàn giao khách hàng"}
+              />
             </span>
           </Tooltip>
         </div>
@@ -208,20 +211,20 @@ const KhachHangMucTieu = () => {
             case 1:
               return "#FFD700";
             case 2:
-              return "#90EE90"; 
+              return "#90EE90";
             case 3:
-              return "#ADD8E6"; 
+              return "#ADD8E6";
             case 4:
-              return "#FFA07A"; 
+              return "#FFA07A";
             case 5:
-              return "#e32d14"; 
+              return "#e32d14";
             default:
-              return "#FFFFFF"; 
+              return "#FFFFFF";
           }
         };
 
         return (
-           <Chip label={params?.row?.phanLoaiKhachHang?.name} sx={{backgroundColor:getColor(name) , color:"white"}} />
+          <Chip label={params?.row?.phanLoaiKhachHang?.name} sx={{ backgroundColor: getColor(name), color: "white" }} />
         );
       },
     },
@@ -382,68 +385,45 @@ const KhachHangMucTieu = () => {
               </div>
             </Stack>
             <Stack direction="row" spacing={1.5}>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<AddIcon />}
-                sx={{
-                  borderRadius: 2,
-                  textTransform: "none",
-                  px: 2.5,
-                  py: 1,
-                  bgcolor: "#1976d2",
-                  "&:hover": { bgcolor: "#1565c0" },
-                }}
-                onClick={gotoLink}
-              >
-                Thêm mới
-              </Button>
-
-              <Button
-                variant="outlined"
-                color="primary"
-                startIcon={<FileDownloadDoneIcon />}
-                sx={{
-                  borderRadius: 2,
-                  textTransform: "none",
-                  px: 2.5,
-                  py: 1,
-                  borderColor: "#e0e0e0",
-                  color: "#424242",
-                }}
-                onClick={handleOpenModalImportKhachHang}
-              >
-                Nhập dữ liệu
-              </Button>
-
-              <Button
-                variant="outlined"
-                color="warning"
-                startIcon={<SupervisedUserCircleIcon />}
-                sx={{
-                  borderRadius: 2,
-                  textTransform: "none",
-                  px: 2.5,
-                  py: 1,
-                  borderColor: "#e0e0e0",
-                  color: "#424242",
-                }}
-                // onClick={handleOpenModalImportKhachHang}
-              >
-                Bàn giao
-              </Button>
-              <Button
-                variant="text"
-                startIcon={<UpdateIcon />}
-                sx={{
-                  textTransform: "none",
-                  color: "#616161",
-                  "&:hover": { bgcolor: "#f5f5f5" },
-                }}
-                onClick={handleOpen}
-              >
-                Lịch sử mua hàng
-              </Button>
+              <CustomButtonAction
+                menuId={menuId}
+                action={gotoLink}
+                typeButton={1}
+                icon={<AddIcon />}
+                type={"them"}
+                styleText={"Thêm khách hàng"}
+                nameButton={"Thêm mới"}
+                colorStyle={"primary"}
+              />
+              <CustomButtonAction
+                menuId={menuId}
+                action={handleOpenModalImportKhachHang}
+                typeButton={1}
+                icon={<FileDownloadDoneIcon />}
+                type={"them"}
+                styleText={"Nhập khẩu khách hàng"}
+                nameButton={"Nhập dữ liệu"}
+                colorStyle={"success"}
+              />
+              <CustomButtonAction
+                menuId={menuId}
+                typeButton={1}
+                icon={<SupervisedUserCircleIcon />}
+                type={"sua"}
+                styleText={"Bàn giao khách hàng"}
+                nameButton={"bàn giao"}
+                colorStyle={"primary"}
+              />
+              <CustomButtonAction
+                menuId={menuId}
+                typeButton={1}
+                action={handleOpen}
+                icon={<UpdateIcon />}
+                type={"xem"}
+                styleText={"Xem lịch sử mua hàng"}
+                nameButton={"Lịch sử mua hàng"}
+                colorStyle={"primary"}
+              />
 
               <Button
                 id="basic-button"
@@ -484,17 +464,34 @@ const KhachHangMucTieu = () => {
               },
             }}
           >
-            <MenuItem onClick={handleGetTemplates}>
+            <MenuItem >
+
               <Stack direction="row" spacing={1} alignItems="center">
-                <GetAppIcon color="primary" />
-                <Typography>Xuất mẫu</Typography>
+                 <CustomButtonAction
+                menuId={menuId}
+                action={handleGetTemplates}
+                typeButton={2}
+                icon={<GetAppIcon color="primary" />}
+                type={"xem"}
+                styleText={"tải file"}
+                nameButton={"Xuất mẫu"}
+                colorStyle={"success"}
+              />
               </Stack>
             </MenuItem>
 
             <MenuItem onClick={handleOpenKhDaXoa}>
               <Stack direction="row" spacing={1} alignItems="center">
-                <AutoDeleteIcon color="error" />
-                <Typography>Đã xóa</Typography>
+                <CustomButtonAction
+                menuId={menuId}
+                action={handleOpenKhDaXoa}
+                typeButton={2}
+                icon={<AutoDeleteIcon color="error" />}
+                type={"xoa"}
+                styleText={"Đã xóa"}
+                nameButton={"Đã xóa"}
+                colorStyle={"error"}
+              />
               </Stack>
             </MenuItem>
 

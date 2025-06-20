@@ -11,10 +11,11 @@ namespace CRM.Controllers
     public class KPINhanVienController : ControllerBase
     {
         private readonly IKPIServices _kPINhanVienServices;
-
-        public KPINhanVienController(IKPIServices kPINhanVienServices)
+        private readonly ILogger<KPINhanVienController> _logger;
+        public KPINhanVienController(IKPIServices kPINhanVienServices, ILogger<KPINhanVienController> logger)
         {
             _kPINhanVienServices = kPINhanVienServices;
+            _logger = logger;
         }
         [HttpGet("getall")]
         [JwtAuthorize]
@@ -27,6 +28,8 @@ namespace CRM.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -41,6 +44,8 @@ namespace CRM.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -56,6 +61,8 @@ namespace CRM.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex);
             }
         }
@@ -70,6 +77,8 @@ namespace CRM.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -84,6 +93,8 @@ namespace CRM.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

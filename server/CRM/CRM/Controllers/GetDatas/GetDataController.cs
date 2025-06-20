@@ -10,9 +10,11 @@ namespace CRM.Controllers.GetDatas
     public class GetDataController : ControllerBase
     {
         private readonly IGetDataServices _getDataServices;
-        public GetDataController(IGetDataServices getDataServices)
+        private readonly ILogger<GetDataController> _logger;
+        public GetDataController(IGetDataServices getDataServices, ILogger<GetDataController> logger)
         {
             _getDataServices = getDataServices;
+            _logger = logger;
         }
         [HttpGet("getallphongbankhachhang")]
         [JwtAuthorize]
@@ -25,6 +27,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -39,6 +43,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -53,6 +59,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -67,6 +75,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -81,6 +91,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -95,6 +107,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -109,6 +123,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -123,6 +139,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -137,6 +155,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -151,6 +171,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -165,6 +187,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -179,6 +203,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -193,6 +219,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -207,6 +235,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
 
@@ -222,6 +252,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -236,6 +268,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -250,6 +284,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -264,6 +300,8 @@ namespace CRM.Controllers.GetDatas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

@@ -13,11 +13,12 @@ namespace CRM.Controllers.Mails
     {
         private readonly IMailServices _mailService;
         private readonly CrmDbContext _crmDbContext;
-
-        public MailController(IMailServices mailService, CrmDbContext crmDbContext)
+        private readonly ILogger<MailController> _logger;   
+        public MailController(IMailServices mailService, CrmDbContext crmDbContext, ILogger<MailController> logger)
         {
             _mailService = mailService;
             _crmDbContext = crmDbContext;
+            _logger = logger;
         }
         [HttpPost("GuiMail")]
         [JwtAuthorize]
@@ -41,6 +42,8 @@ namespace CRM.Controllers.Mails
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -66,6 +69,8 @@ namespace CRM.Controllers.Mails
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -91,6 +96,8 @@ namespace CRM.Controllers.Mails
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

@@ -12,10 +12,11 @@ namespace CRM.Controllers.Users
     public class UserController : ControllerBase
     {
         private readonly IUserServices _userService;
-
-        public UserController(IUserServices userService)
+        private readonly ILogger<UserController> _logger;
+        public UserController(IUserServices userService, ILogger<UserController> logger)
         {
             _userService = userService;
+            _logger = logger;
         }
 
 
@@ -30,6 +31,8 @@ namespace CRM.Controllers.Users
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -44,6 +47,8 @@ namespace CRM.Controllers.Users
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -59,6 +64,8 @@ namespace CRM.Controllers.Users
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -75,6 +82,8 @@ namespace CRM.Controllers.Users
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -90,6 +99,8 @@ namespace CRM.Controllers.Users
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -105,6 +116,8 @@ namespace CRM.Controllers.Users
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -120,6 +133,8 @@ namespace CRM.Controllers.Users
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -134,6 +149,8 @@ namespace CRM.Controllers.Users
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -148,6 +165,8 @@ namespace CRM.Controllers.Users
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -163,6 +182,8 @@ namespace CRM.Controllers.Users
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

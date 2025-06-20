@@ -12,9 +12,11 @@ namespace CRM.Controllers.LienHes
     public class LienHeController : ControllerBase
     {
         private readonly ILienHeServices _lienHeServices;
-        public LienHeController(ILienHeServices lienHeServices)
+        private readonly ILogger<LienHeController> _logger;
+        public LienHeController(ILienHeServices lienHeServices, ILogger<LienHeController> logger)
         {
             _lienHeServices = lienHeServices;
+            _logger = logger;
         }
 
         [HttpGet("getalllienhe")]
@@ -28,6 +30,8 @@ namespace CRM.Controllers.LienHes
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -42,6 +46,8 @@ namespace CRM.Controllers.LienHes
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -56,6 +62,8 @@ namespace CRM.Controllers.LienHes
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -70,6 +78,8 @@ namespace CRM.Controllers.LienHes
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -86,6 +96,8 @@ namespace CRM.Controllers.LienHes
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -100,6 +112,8 @@ namespace CRM.Controllers.LienHes
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -114,6 +128,8 @@ namespace CRM.Controllers.LienHes
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

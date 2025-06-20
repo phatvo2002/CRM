@@ -10,10 +10,12 @@ namespace CRM.Controllers.KhaoSats
     public class KhaoSatController : ControllerBase
     {
         private readonly IKhaoSatServices _khaoSatServices;
+        private readonly ILogger<KhaoSatController> _logger;
 
-        public KhaoSatController(IKhaoSatServices khaoSatServices)
+        public KhaoSatController(IKhaoSatServices khaoSatServices, ILogger<KhaoSatController> logger)
         {
             _khaoSatServices = khaoSatServices;
+            _logger = logger;
         }
 
         [HttpGet("getall")]
@@ -27,6 +29,8 @@ namespace CRM.Controllers.KhaoSats
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -41,6 +45,8 @@ namespace CRM.Controllers.KhaoSats
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -54,6 +60,8 @@ namespace CRM.Controllers.KhaoSats
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -68,6 +76,8 @@ namespace CRM.Controllers.KhaoSats
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -82,6 +92,8 @@ namespace CRM.Controllers.KhaoSats
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

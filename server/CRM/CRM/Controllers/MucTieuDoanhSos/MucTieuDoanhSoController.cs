@@ -15,10 +15,12 @@ namespace CRM.Controllers.MucTieuDoanhSos
     {
         private readonly IMucTieuDoanhSoServices _mucTieuDoanhSoservices;
         private readonly CrmDbContext _context;
-        public MucTieuDoanhSoController(IMucTieuDoanhSoServices mucTieuDoanhSoServices, CrmDbContext context)
+        private readonly ILogger<MucTieuDoanhSoController> _logger;
+        public MucTieuDoanhSoController(IMucTieuDoanhSoServices mucTieuDoanhSoServices, CrmDbContext context, ILogger<MucTieuDoanhSoController> logger)
         {
             _mucTieuDoanhSoservices = mucTieuDoanhSoServices;
             _context = context;
+            _logger = logger;
         }
 
 
@@ -48,6 +50,8 @@ namespace CRM.Controllers.MucTieuDoanhSos
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -62,6 +66,8 @@ namespace CRM.Controllers.MucTieuDoanhSos
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -77,6 +83,8 @@ namespace CRM.Controllers.MucTieuDoanhSos
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -91,6 +99,8 @@ namespace CRM.Controllers.MucTieuDoanhSos
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -105,6 +115,8 @@ namespace CRM.Controllers.MucTieuDoanhSos
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

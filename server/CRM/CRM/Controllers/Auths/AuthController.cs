@@ -34,24 +34,7 @@ namespace CRM.Controllers.Auths
                 return BadRequest(ex.Message);
             }
         }
-        //[HttpGet("getprofileuser")]
-        //[JwtAuthorize]
-        //public async Task<IActionResult> GetProfile()
-        //{
-        //    try
-        //    {
-        //        LoginDTO result = new LoginDTO();
-        //        // Lấy UserId từ context
-        //        var userID = HttpContext.GetUserId();
 
-        //        result = await _userServices.GetUserById(userID);
-        //        return Ok(result);
-        //    }
-        //    catch (ArgumentException ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
         [HttpPut("ActiveAccount")]
         [JwtAuthorize]
         public async Task<IActionResult> ActiveAccount(AcviteModal modal)
@@ -63,6 +46,8 @@ namespace CRM.Controllers.Auths
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -78,6 +63,8 @@ namespace CRM.Controllers.Auths
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -94,6 +81,8 @@ namespace CRM.Controllers.Auths
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

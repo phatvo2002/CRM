@@ -24,7 +24,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AutoDeleteIcon from "@mui/icons-material/AutoDelete";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
 import Tooltip from "@mui/material/Tooltip";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { TYPE_MODAL } from "../../Until/constant";
 import ImportExportIcon from "@mui/icons-material/ImportExport";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -53,9 +53,10 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import ModalBanGiaoKhachHangHangHoat from "./Modal/ModalBanGiaoKhachHangHangHoat";
+import CustomButtonAction from "src/App/Components/CustomButtonAction/CustomButtonAction";
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
-  const [selectRowId , setSelectedRowId] = useState([]);
+  const [selectRowId, setSelectedRowId] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isActionOpen, setIsActionOpen] = useState(false);
   const [KhachHangDaXoaModal, setKhachHangDaXoaModal] = useState(false);
@@ -70,6 +71,8 @@ const KhachHangTiemNang = () => {
   const gotoLinkImport = () => {
     navigate("/tiemnang/uploadkhachhang");
   };
+
+  const { menuId } = useParams()
 
   const columns = useMemo(
     () => [
@@ -89,32 +92,38 @@ const KhachHangTiemNang = () => {
           >
             <Tooltip title="Sửa thông tin ">
               <span>
-                <IconButton
-                  disabled={selectedRow.length === 0}
-                  onClick={onOpenModalUpdateKhachHang}
-                >
-                  <EditIcon color="success" />
-                </IconButton>
+                <CustomButtonAction
+                  menuId={menuId}
+                  action={onOpenModalUpdateKhachHang}
+                  typeButton={2}
+                  icon={<EditIcon color="success" />}
+                  type={"sua"}
+                  styleText={"Chỉnh sửa dữ liệu"}
+                />
               </span>
             </Tooltip>
             <Tooltip title="Xóa">
               <span>
-                <IconButton
-                  disabled={selectedRow.length === 0}
-                  onClick={() => handleDeletePhongBan(params?.id)}
-                >
-                  <DeleteIcon color="error" />
-                </IconButton>
+                <CustomButtonAction
+                  menuId={menuId}
+                  action={() => handleDeletePhongBan(params?.id)}
+                  typeButton={2}
+                  icon={<DeleteIcon color="error" />}
+                  type={"xoa"}
+                  styleText={"xóa dữ liệu"}
+                />
               </span>
             </Tooltip>
             <Tooltip title="Bàn giao tiềm năng">
               <span>
-                <IconButton
-                  disabled={selectedRow.length === 0}
-                  onClick={handleOpenModalBanGiaoKhachHang}
-                >
-                  <ThreePIcon color="primary" />
-                </IconButton>
+                <CustomButtonAction
+                  menuId={menuId}
+                  action={handleOpenModalBanGiaoKhachHang}
+                  typeButton={2}
+                  icon={<ThreePIcon color="primary" />}
+                  type={"sua"}
+                  styleText={"bàn giao"}
+                />
               </span>
             </Tooltip>
           </div>
@@ -245,8 +254,8 @@ const KhachHangTiemNang = () => {
   const [openModalBanGiaoHangLoat, setOpenModalBanGiaohangLoat] = useState(false);
   const [getTemplate] = useGetTemplatesMutation();
 
-const tuNgayString = valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
-const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"); 
+  const tuNgayString = valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
+  const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
 
   const { data: dataKHByRole, refetch: refetchkh } =
     useGetKhachHangTiemNangByroleQuery({
@@ -351,7 +360,7 @@ const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
 
   const handleRowSelectionChange = (selectedRows) => {
     setSelectedRow(selectedRows);
-    let selectedRow = selectedRows.map(r=>r.id)
+    let selectedRow = selectedRows.map(r => r.id)
     setSelectedRowId(selectedRow)
   };
   return (
@@ -360,7 +369,7 @@ const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
       sx={{ p: 3, bgcolor: "background.default" }}
     >
       {/* Header Section */}
-      <div style={{padding : 2}}>
+      <div style={{ padding: 2 }}>
 
         <Typography
           variant="h4"
@@ -377,7 +386,7 @@ const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
           thành khách hàng thực sự trong tương lai, giúp đội ngũ kinh doanh tập
           trung vào những cơ hội quan trọng để tối ưu hóa quy trình bán hàng.
         </Typography>
-        </div>
+      </div>
       <Stack
         direction="row"
         justifyContent="space-between"
@@ -386,40 +395,37 @@ const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
       >
 
         <Stack direction="row" spacing={1.5} >
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<AddIcon />}
-            sx={{
-              borderRadius: 2,
-              textTransform: "none",
-              px: 2.5,
-              py: 1,
-              bgcolor: "#1976d2",
-              "&:hover": { bgcolor: "#1565c0" },
-            }}
-            onClick={gotoLink}
-          >
-            Thêm mới
-          </Button>
+          <CustomButtonAction
+            menuId={menuId}
+            action={gotoLink}
+            typeButton={1}
+            icon={<AddIcon />}
+            type={"them"}
+            styleText={"Thêm tiềm năng"}
+            nameButton={"Thêm mới"}
+            colorStyle={"primary"}
+          />
+          <CustomButtonAction
+            menuId={menuId}
+            action={gotoLinkImport}
+            typeButton={1}
+            icon={<GetAppIcon />}
+            type={"them"}
+            styleText={"Nhập khẩu"}
+            nameButton={"Nhập khẩu khách hàng"}
+            colorStyle={""}
+          />
 
-          <Button
-            variant="outlined"
-            color="primary"
-            startIcon={<GetAppIcon />}
-            sx={{
-              borderRadius: 2,
-              textTransform: "none",
-              px: 2.5,
-              py: 1,
-              borderColor: "#e0e0e0",
-              color: "#424242",
-            }}
-            onClick={gotoLinkImport}
-          >
-            Nhập dữ liệu
-          </Button>
-
+          <CustomButtonAction
+            menuId={menuId}
+            action={handleOpen}
+            typeButton={1}
+            icon={<UpdateIcon />}
+            type={"xem"}
+            styleText={"Nhập khẩu"}
+            nameButton={"Lịch sử tương tác"}
+            colorStyle={""}
+          />
           <Button
             variant="outlined"
             startIcon={<OpenInNewIcon />}
@@ -436,34 +442,17 @@ const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
           >
             Tùy chỉnh
           </Button>
-          <Button
-            variant="outlined"
-            startIcon={<UpdateIcon />}
-            sx={{
-              textTransform: "none",
-              color: "#616161",
-              "&:hover": { bgcolor: "#f5f5f5" },
-            }}
-            onClick={handleOpen}
-          >
-            Lịch sử tương tác
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<PeopleOutlineIcon />}
-            sx={{
-              borderRadius: 2,
-              textTransform: "none",
-              px: 2.5,
-              py: 1,
-              borderColor: "#e0e0e0",
-              color: "#424242",
-            }}
-            disabled={selectRowId.length == 0}
-            onClick={handleOpenModalBanGiaoKhachHangHangLoat}
-          >
-            Bàn giao
-          </Button>
+
+          <CustomButtonAction
+            menuId={menuId}
+            action={handleOpenModalBanGiaoKhachHangHangLoat}
+            typeButton={1}
+            icon={<PeopleOutlineIcon />}
+            type={"sua"}
+            styleText={"bàn giao"}
+            nameButton={"Bàn giao tiềm năng"}
+            colorStyle={"primary"}
+          />
         </Stack>
       </Stack>
 
@@ -523,7 +512,7 @@ const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
           bgcolor: "background.default",
         }}
       >
-     
+
         <Grid2 size={12} sx={{ marginTop: 3, marginLeft: 3 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
@@ -618,13 +607,13 @@ const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
 
       {/* Modal bàn giao hàng loạt */}
       <ModalBanGiaoKhachHangHangHoat
-         selectedItem={selectRowId}
-         closeModal={handleCloseModalBanGiaoKhachHangHangLoat}
-         typeModal={typeModal}
-         setTypeModal={setTypeModal}
-         showModal={openModalBanGiaoHangLoat}
-         setLoading={setLoading}
-         refetch={refetchkh}
+        selectedItem={selectRowId}
+        closeModal={handleCloseModalBanGiaoKhachHangHangLoat}
+        typeModal={typeModal}
+        setTypeModal={setTypeModal}
+        showModal={openModalBanGiaoHangLoat}
+        setLoading={setLoading}
+        refetch={refetchkh}
       />
     </Box>
   );

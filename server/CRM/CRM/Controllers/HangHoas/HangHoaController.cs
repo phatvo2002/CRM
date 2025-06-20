@@ -11,9 +11,11 @@ namespace CRM.Controllers.HangHoas
     public class HangHoaController : ControllerBase
     {
         private readonly IHangHoaServices _hangHoaServices;
-        public HangHoaController(IHangHoaServices hangHoaServices)
+        private readonly ILogger<HangHoaController> _logger;
+        public HangHoaController(IHangHoaServices hangHoaServices, ILogger<HangHoaController> logger)
         {
             _hangHoaServices = hangHoaServices;
+            _logger = logger;
         }
 
         [HttpGet("getallhanghoa")]
@@ -27,6 +29,8 @@ namespace CRM.Controllers.HangHoas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -41,6 +45,8 @@ namespace CRM.Controllers.HangHoas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -55,6 +61,8 @@ namespace CRM.Controllers.HangHoas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -69,6 +77,8 @@ namespace CRM.Controllers.HangHoas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -83,6 +93,8 @@ namespace CRM.Controllers.HangHoas
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

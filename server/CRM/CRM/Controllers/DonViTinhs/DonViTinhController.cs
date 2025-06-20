@@ -10,9 +10,11 @@ namespace CRM.Controllers.DonViTinhs
     public class DonViTinhController : ControllerBase
     {
         private readonly IDonViTinhServices _donViTinhServices;
-        public DonViTinhController(IDonViTinhServices donViTinhServices)
+        private readonly ILogger<DonViTinhController> _logger;
+        public DonViTinhController(IDonViTinhServices donViTinhServices, ILogger<DonViTinhController> logger)
         {
             _donViTinhServices = donViTinhServices;
+            _logger = logger;
         }
 
         [HttpGet("getalldonvitinh")]
@@ -26,6 +28,8 @@ namespace CRM.Controllers.DonViTinhs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -40,6 +44,8 @@ namespace CRM.Controllers.DonViTinhs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -54,6 +60,8 @@ namespace CRM.Controllers.DonViTinhs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -68,6 +76,8 @@ namespace CRM.Controllers.DonViTinhs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -82,6 +92,8 @@ namespace CRM.Controllers.DonViTinhs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

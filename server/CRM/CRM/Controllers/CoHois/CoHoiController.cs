@@ -14,11 +14,12 @@ namespace CRM.Controllers.CoHois
     {
         private readonly ICoHoiServices _coHoiServices;
         private readonly CrmDbContext _context;
-
-        public CoHoiController(ICoHoiServices coHoiServices, CrmDbContext context)
+        private readonly ILogger<CoHoiController> _logger;
+        public CoHoiController(ICoHoiServices coHoiServices, CrmDbContext context, ILogger<CoHoiController> logger)
         {
             _coHoiServices = coHoiServices;
             _context = context;
+            _logger = logger;
         }
 
         [HttpGet("getallcohoi")]
@@ -33,6 +34,8 @@ namespace CRM.Controllers.CoHois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -47,6 +50,8 @@ namespace CRM.Controllers.CoHois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -72,6 +77,8 @@ namespace CRM.Controllers.CoHois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -89,6 +96,8 @@ namespace CRM.Controllers.CoHois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -103,6 +112,8 @@ namespace CRM.Controllers.CoHois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -118,6 +129,8 @@ namespace CRM.Controllers.CoHois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -132,6 +145,8 @@ namespace CRM.Controllers.CoHois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -147,6 +162,8 @@ namespace CRM.Controllers.CoHois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

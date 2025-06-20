@@ -19,13 +19,15 @@ namespace CRM.Controllers.Files
         private readonly IHangHoaQuanTamServices _hangHoaQuanTamServices;
         private readonly IDonHangServices _donHangServices;
         private readonly IHangHoaQuanTamServices _hoaQuanTamServices;
-        public FileController(IWebHostEnvironment webHostEnvironment, IBaoGiaServices baoGiaServices, IHangHoaQuanTamServices hangHoaQuanTamServices, IDonHangServices donHangServices, IHangHoaQuanTamServices hoaQuanTamServices)
+        private readonly ILogger _logger;   
+        public FileController(IWebHostEnvironment webHostEnvironment, IBaoGiaServices baoGiaServices, IHangHoaQuanTamServices hangHoaQuanTamServices, IDonHangServices donHangServices, IHangHoaQuanTamServices hoaQuanTamServices, ILogger logger)
         {
             _webHostEnvironment = webHostEnvironment;
             _baoGiaServices = baoGiaServices;
             _hangHoaQuanTamServices = hangHoaQuanTamServices;
             _donHangServices = donHangServices;
             _hoaQuanTamServices = hoaQuanTamServices;
+            _logger = logger;
         }
         [HttpGet("file")]
         [JwtAuthorize]
@@ -60,6 +62,8 @@ namespace CRM.Controllers.Files
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(new { ex.Message });
             }
 
@@ -132,6 +136,8 @@ namespace CRM.Controllers.Files
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -187,7 +193,8 @@ namespace CRM.Controllers.Files
             }
             catch (Exception ex)
             {
-
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

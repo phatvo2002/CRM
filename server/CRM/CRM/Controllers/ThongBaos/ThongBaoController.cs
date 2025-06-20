@@ -12,9 +12,11 @@ namespace CRM.Controllers.ThongBaos
     public class ThongBaoController : ControllerBase
     {
         private readonly IThongBaoServices _thongBaoServices;
-        public ThongBaoController(IThongBaoServices thongBaoServices)
+        private readonly ILogger<ThongBaoController> _logger;
+        public ThongBaoController(IThongBaoServices thongBaoServices, ILogger<ThongBaoController> logger)
         {
             _thongBaoServices = thongBaoServices;
+            _logger = logger;
         }
 
         [HttpGet("getallthongbao")]
@@ -28,6 +30,8 @@ namespace CRM.Controllers.ThongBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -43,6 +47,8 @@ namespace CRM.Controllers.ThongBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -58,6 +64,8 @@ namespace CRM.Controllers.ThongBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -72,6 +80,8 @@ namespace CRM.Controllers.ThongBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -86,6 +96,8 @@ namespace CRM.Controllers.ThongBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -100,6 +112,8 @@ namespace CRM.Controllers.ThongBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -114,6 +128,8 @@ namespace CRM.Controllers.ThongBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -134,6 +150,8 @@ namespace CRM.Controllers.ThongBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

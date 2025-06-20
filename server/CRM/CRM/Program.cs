@@ -70,6 +70,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
 using System.Text;
 using System.Text.Json.Serialization;
 
@@ -86,20 +87,13 @@ builder.Services.AddDbContext<CrmDbContext>(options =>
 builder.Services.AddDbContext<AppCrmContext>(options =>
         options.UseSqlServer(settings["DefaultConnection"]));
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
-//var logger = new LoggerConfiguration()
-//    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-//    .Enrich.FromLogContext()
-//    .WriteTo.Console()
-//    .WriteTo.MSSqlServer(
-//        connectionString: settings["DefaultConnection"],
-//        sinkOptions: new MSSqlServerSinkOptions
-//        {
-//            TableName = "Logs",
-//            AutoCreateSqlTable = true
-//        })
-//    .CreateLogger();
 
-//builder.Host.UseSerilog(logger);
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Debug()
+    .WriteTo.File("Logs/log.txt", rollingInterval: RollingInterval.Day)
+    .CreateLogger();
+builder.Host.UseSerilog();
+
 builder.Services.AddControllers()
        .AddJsonOptions(options =>
        {
@@ -264,17 +258,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //            .AllowCredentials();
 //    });
 //});
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowSpecificOrigin", builder =>
-    {
-        builder
-            .WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowSpecificOrigin", builder =>
+//    {
+//        builder
+//            .WithOrigins("*")
+//            .AllowAnyHeader()
+//            .AllowAnyMethod()
+//            .AllowCredentials();
+//    });
+//});
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
 
@@ -321,7 +315,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-//app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"));
+app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"));
 app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
 

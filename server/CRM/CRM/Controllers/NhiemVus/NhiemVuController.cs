@@ -14,10 +14,12 @@ namespace CRM.Controllers.NhiemVus
     {
         private readonly INhiemVuServices _nhiemVuServices;
         private readonly CrmDbContext _dbContext;
-        public NhiemVuController(INhiemVuServices nhiemVuServices, CrmDbContext dbContext)
+        private readonly ILogger<NhiemVuController> _logger;
+        public NhiemVuController(INhiemVuServices nhiemVuServices, CrmDbContext dbContext, ILogger<NhiemVuController> logger)
         {
             _nhiemVuServices = nhiemVuServices;
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         [HttpGet("getallnhiemvu")]
@@ -31,6 +33,8 @@ namespace CRM.Controllers.NhiemVus
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -46,6 +50,8 @@ namespace CRM.Controllers.NhiemVus
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -61,6 +67,8 @@ namespace CRM.Controllers.NhiemVus
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -76,6 +84,8 @@ namespace CRM.Controllers.NhiemVus
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -90,6 +100,8 @@ namespace CRM.Controllers.NhiemVus
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -104,6 +116,8 @@ namespace CRM.Controllers.NhiemVus
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -119,6 +133,8 @@ namespace CRM.Controllers.NhiemVus
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -134,6 +150,8 @@ namespace CRM.Controllers.NhiemVus
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -150,6 +168,8 @@ namespace CRM.Controllers.NhiemVus
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

@@ -1,15 +1,18 @@
 ﻿using CRM.DTO.BaoCaoDTO;
 using CRM.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace CRM.Repositories.BaoCaos
 {
     public class BaoCaoRepository : IBaoCaoRepository
     {
         private readonly CrmDbContext _context;
-        public BaoCaoRepository(CrmDbContext context)
+        private readonly ILogger<BaoCaoRepository> _logger; 
+        public BaoCaoRepository(CrmDbContext context, ILogger<BaoCaoRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
         public async Task<BaoCaoDTO> GetBaoCaoTheoNguoiDung(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
@@ -80,6 +83,8 @@ namespace CRM.Repositories.BaoCaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 throw new Exception("Lỗi ", ex);
             }
 
@@ -89,32 +94,54 @@ namespace CRM.Repositories.BaoCaos
         {
             var dataNguoiDung = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefaultAsync();
             List<BaoCaoCoHoiDTO> result = new List<BaoCaoCoHoiDTO>();
-            if (dataNguoiDung != null)
+            try
             {
-                if (dataNguoiDung.CheckIsGiamDoc == false)
+                if (dataNguoiDung != null)
                 {
-                    // nếu là nhân viên kinh doanh thì có thể thấy được dữ liệu của chính bản thân
-                    if (dataNguoiDung.CheckIsTruongPhong == false)
+                    if (dataNguoiDung.CheckIsGiamDoc == false)
                     {
-                        var dbCoHoi = await _context.CoHois.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)).Include(r => r.GiaiDoanBanHang).ToListAsync();
-                        if (dbCoHoi.Count > 0)
+                        // nếu là nhân viên kinh doanh thì có thể thấy được dữ liệu của chính bản thân
+                        if (dataNguoiDung.CheckIsTruongPhong == false)
                         {
-                            var data = dbCoHoi.GroupBy(r => r.MaGiaiDoanBanHang);
-                            foreach (var item in data)
+                            var dbCoHoi = await _context.CoHois.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)).Include(r => r.GiaiDoanBanHang).ToListAsync();
+                            if (dbCoHoi.Count > 0)
                             {
-                                result.Add(new BaoCaoCoHoiDTO
+                                var data = dbCoHoi.GroupBy(r => r.MaGiaiDoanBanHang);
+                                foreach (var item in data)
                                 {
-                                    TenCoHoi = item.First().GiaiDoanBanHang.TenGiaiDoan,
-                                    SoLuong = item.Count(),
-                                    MauSac = LayMauSacTheoGiaiDoan((int)item.First().GiaiDoanBanHang.Stt),
-                                });
+                                    result.Add(new BaoCaoCoHoiDTO
+                                    {
+                                        TenCoHoi = item.First().GiaiDoanBanHang.TenGiaiDoan,
+                                        SoLuong = item.Count(),
+                                        MauSac = LayMauSacTheoGiaiDoan((int)item.First().GiaiDoanBanHang.Stt),
+                                    });
+                                }
                             }
                         }
+                        // nếu là trưởng phòng thì có thể thấy dữ liệu của tất cả phòng ban
+                        else
+                        {
+                            var dbCoHoi = await _context.CoHois.Where(r => r.PhongBanId == dataNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)).Include(r => r.GiaiDoanBanHang).ToListAsync();
+                            if (dbCoHoi.Count > 0)
+                            {
+                                var data = dbCoHoi.GroupBy(r => r.MaGiaiDoanBanHang);
+                                foreach (var item in data)
+                                {
+                                    result.Add(new BaoCaoCoHoiDTO
+                                    {
+                                        TenCoHoi = item.First().GiaiDoanBanHang.TenGiaiDoan,
+                                        SoLuong = item.Count(),
+                                        MauSac = LayMauSacTheoGiaiDoan((int)item.First().GiaiDoanBanHang.Stt),
+                                    });
+                                }
+                            }
+
+                        }
                     }
-                    // nếu là trưởng phòng thì có thể thấy dữ liệu của tất cả phòng ban
+                    // nếu là giám đốc thì có thể xem hết
                     else
                     {
-                        var dbCoHoi = await _context.CoHois.Where(r => r.PhongBanId == dataNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)).Include(r => r.GiaiDoanBanHang).ToListAsync();
+                        var dbCoHoi = await _context.CoHois.Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay).Include(r => r.GiaiDoanBanHang).ToListAsync();
                         if (dbCoHoi.Count > 0)
                         {
                             var data = dbCoHoi.GroupBy(r => r.MaGiaiDoanBanHang);
@@ -122,126 +149,134 @@ namespace CRM.Repositories.BaoCaos
                             {
                                 result.Add(new BaoCaoCoHoiDTO
                                 {
-                                    TenCoHoi = item.First().GiaiDoanBanHang.TenGiaiDoan,
+                                    TenCoHoi = item.First()?.GiaiDoanBanHang.TenGiaiDoan,
                                     SoLuong = item.Count(),
-                                    MauSac = LayMauSacTheoGiaiDoan((int)item.First().GiaiDoanBanHang.Stt),
+                                    MauSac = LayMauSacTheoGiaiDoan((int)item?.First()?.GiaiDoanBanHang.Stt),
                                 });
                             }
                         }
+                    }
+                }
 
-                    }
-                }
-                // nếu là giám đốc thì có thể xem hết
-                else
-                {
-                    var dbCoHoi = await _context.CoHois.Where(r => r.CreateAt >= tuNgay && r.CreateAt <= denNgay).Include(r => r.GiaiDoanBanHang).ToListAsync();
-                    if (dbCoHoi.Count > 0)
-                    {
-                        var data = dbCoHoi.GroupBy(r => r.MaGiaiDoanBanHang);
-                        foreach (var item in data)
-                        {
-                            result.Add(new BaoCaoCoHoiDTO
-                            {
-                                TenCoHoi = item.First().GiaiDoanBanHang.TenGiaiDoan,
-                                SoLuong = item.Count(),
-                                MauSac = LayMauSacTheoGiaiDoan((int)item.First().GiaiDoanBanHang.Stt),
-                            });
-                        }
-                    }
-                }
+                return result;
             }
-
-            return result;
+            catch(Exception ex)
+            {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
+                 return new List<BaoCaoCoHoiDTO>();
+            }
+           
         }
         public async Task<List<BaoCaoResultDTO>> BaoCaoBaoGia(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
-            var dataNguoiDung = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefaultAsync();
-            var result = new List<BaoCaoResultDTO>();
-            if (dataNguoiDung != null)
+            try
             {
-                if (dataNguoiDung.CheckIsTruongPhong == false)
+                var dataNguoiDung = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefaultAsync();
+                var result = new List<BaoCaoResultDTO>();
+                if (dataNguoiDung != null)
                 {
-                    var dbBaoGia = await _context.BaoGias.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.TinhTrangBaoGia).ToListAsync();
-                    if (dbBaoGia != null)
+                    if (dataNguoiDung.CheckIsTruongPhong == false)
                     {
-                        var groupBaoGia = dbBaoGia.GroupBy(r => r.MaTinhTrangBaoGia);
-                        foreach (var group in groupBaoGia)
+                        var dbBaoGia = await _context.BaoGias.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.TinhTrangBaoGia).ToListAsync();
+                        if (dbBaoGia != null)
                         {
-                            result.Add(new BaoCaoResultDTO
+                            var groupBaoGia = dbBaoGia.GroupBy(r => r.MaTinhTrangBaoGia);
+                            foreach (var group in groupBaoGia)
                             {
-                                Name = group.First().TinhTrangBaoGia.Name,
-                                Number = group.Count()
-                            });
+                                result.Add(new BaoCaoResultDTO
+                                {
+                                    Name = group.First().TinhTrangBaoGia.Name,
+                                    Number = group.Count()
+                                });
+                            }
+
+                        }
+                    }
+                    else
+                    {
+                        var dbBaoGia = await _context.BaoGias.Where(r => r.PhongBanId == dataNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.TinhTrangBaoGia).ToListAsync();
+                        if (dbBaoGia != null)
+                        {
+                            var groupBaoGia = dbBaoGia.GroupBy(r => r.MaTinhTrangBaoGia);
+                            foreach (var group in groupBaoGia)
+                            {
+                                result.Add(new BaoCaoResultDTO
+                                {
+                                    Name = group.First().TinhTrangBaoGia.Name,
+                                    Number = group.Count()
+                                });
+                            }
+
                         }
 
                     }
                 }
-                else
-                {
-                    var dbBaoGia = await _context.BaoGias.Where(r => r.PhongBanId == dataNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.TinhTrangBaoGia).ToListAsync();
-                    if (dbBaoGia != null)
-                    {
-                        var groupBaoGia = dbBaoGia.GroupBy(r => r.MaTinhTrangBaoGia);
-                        foreach (var group in groupBaoGia)
-                        {
-                            result.Add(new BaoCaoResultDTO
-                            {
-                                Name = group.First().TinhTrangBaoGia.Name,
-                                Number = group.Count()
-                            });
-                        }
-
-                    }
-
-                }
+                else return new List<BaoCaoResultDTO>();
+                return result;
             }
-            else return new List<BaoCaoResultDTO>();
-            return result;
+            catch(Exception ex)
+            {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
+                return new List<BaoCaoResultDTO> ();
+            }
+         
         }
         public async Task<List<BaoCaoResultDTO>> BaoCaoDonHang(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
             var dbNguoiDung = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefaultAsync();
             var result = new List<BaoCaoResultDTO>();
-            if (dbNguoiDung != null)
+            try
             {
-                if (dbNguoiDung.CheckIsTruongPhong == false)
+                if (dbNguoiDung != null)
                 {
-                    var dbDonhang = await _context.DonHangs.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.TinhTrangDonHang).ToListAsync();
-                    if (dbDonhang != null)
+                    if (dbNguoiDung.CheckIsTruongPhong == false)
                     {
-                        var groupDonHang = dbDonhang.GroupBy(r => r.MaTinhTrangDonHang);
-                        foreach (var item in groupDonHang)
+                        var dbDonhang = await _context.DonHangs.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.TinhTrangDonHang).ToListAsync();
+                        if (dbDonhang != null)
                         {
-                            result.Add(new BaoCaoResultDTO
+                            var groupDonHang = dbDonhang.GroupBy(r => r.MaTinhTrangDonHang);
+                            foreach (var item in groupDonHang)
                             {
-                                Name = item.First().TinhTrangDonHang.Name,
-                                Number = item.Count(),
+                                result.Add(new BaoCaoResultDTO
+                                {
+                                    Name = item.First().TinhTrangDonHang.Name,
+                                    Number = item.Count(),
 
-                            });
+                                });
+                            }
+                        }
+                    }
+                    else
+                    {
+                        var dbDonhang = await _context.DonHangs.Where(r => r.PhongBanId == dbNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.TinhTrangDonHang).ToListAsync();
+                        if (dbDonhang != null)
+                        {
+                            var groupDonHang = dbDonhang.GroupBy(r => r.MaTinhTrangDonHang);
+                            foreach (var item in groupDonHang)
+                            {
+                                result.Add(new BaoCaoResultDTO
+                                {
+                                    Name = item.First().TinhTrangDonHang.Name,
+                                    Number = item.Count(),
+
+                                });
+                            }
                         }
                     }
                 }
-                else
-                {
-                    var dbDonhang = await _context.DonHangs.Where(r => r.PhongBanId == dbNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.TinhTrangDonHang).ToListAsync();
-                    if (dbDonhang != null)
-                    {
-                        var groupDonHang = dbDonhang.GroupBy(r => r.MaTinhTrangDonHang);
-                        foreach (var item in groupDonHang)
-                        {
-                            result.Add(new BaoCaoResultDTO
-                            {
-                                Name = item.First().TinhTrangDonHang.Name,
-                                Number = item.Count(),
+                else return new List<BaoCaoResultDTO>();
 
-                            });
-                        }
-                    }
-                }
+                return result;
             }
-            else return new List<BaoCaoResultDTO>();
+            catch(Exception ex)
+            {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
+                return new List<BaoCaoResultDTO>();
+            }
 
-            return result;
 
         }
         public async Task<BaoCaoHoatDongDTO> GetBaoCaoHoatDong(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
@@ -250,97 +285,158 @@ namespace CRM.Repositories.BaoCaos
             var thoiGianDenNgayThangTruoc = denNgay.AddMonths(-1);
             var nguoiDungData = _context.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId);
             var result = new BaoCaoHoatDongDTO();
-            if (nguoiDungData != null)
+            try
             {
-                if (nguoiDungData.CheckIsGiamDoc == false)
+                if (nguoiDungData != null)
                 {
-                    // lấy dữ liệu nếu nếu người dùng là nhân viên 
-                    if (nguoiDungData.CheckIsTruongPhong == false)
+                    if (nguoiDungData.CheckIsGiamDoc == false)
                     {
-                        // lấy data cuộc gọi đã hoàn thành
-                        var dbCuoiGoiHienTai = await _context.CuocGois.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsHoanThanh == true && r.IsDeleted == false).ToListAsync();
-                        if (dbCuoiGoiHienTai != null) { result.TongSoCuocGoiHienTai = dbCuoiGoiHienTai.Count(); }
-                        else result.TongSoCuocGoiHienTai = 0;
-                        var dbCuoiGoiThangTruoc = await _context.CuocGois.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc) && r.IsHoanThanh == true && r.IsDeleted == false).ToListAsync();
-                        if (dbCuoiGoiThangTruoc != null)
-                        { result.TongSoCuocGoiThangTruoc = dbCuoiGoiThangTruoc.Count(); }
-                        else result.TongSoCuocGoiThangTruoc = 0;
+                        // lấy dữ liệu nếu nếu người dùng là nhân viên 
+                        if (nguoiDungData.CheckIsTruongPhong == false)
+                        {
+                            // lấy data cuộc gọi đã hoàn thành
+                            var dbCuoiGoiHienTai = await _context.CuocGois.Where(r => r.NguoiDungId == nguoiDungId
+                                                                              && (r.CreateAt >= tuNgay
+                                                                              && r.CreateAt <= denNgay)
+                                                                              && r.IsHoanThanh == true
+                                                                              && r.IsDeleted == false)
+                                                                             .ToListAsync();
+                            if (dbCuoiGoiHienTai != null) { result.TongSoCuocGoiHienTai = dbCuoiGoiHienTai.Count(); }
+                            else result.TongSoCuocGoiHienTai = 0;
+                            var dbCuoiGoiThangTruoc = await _context.CuocGois.Where(r => r.NguoiDungId == nguoiDungId
+                                                                               && (r.CreateAt <= thoiGianTuNgayThangTruoc
+                                                                               && r.CreateAt <= thoiGianDenNgayThangTruoc)
+                                                                               && r.IsHoanThanh == true
+                                                                               && r.IsDeleted == false)
+                                                                              .ToListAsync();
+                            if (dbCuoiGoiThangTruoc != null)
+                            { result.TongSoCuocGoiThangTruoc = dbCuoiGoiThangTruoc.Count(); }
+                            else result.TongSoCuocGoiThangTruoc = 0;
 
 
-                        // lấy data nhiệm vụ đã hoàn thành
-                        var dbNhiemVuHienTai = await _context.NhiemVus.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
-                        if (dbNhiemVuHienTai != null) { result.TongSoNhiemVuDaHoanThanhhienTai = dbNhiemVuHienTai.Count(); }
-                        else result.TongSoNhiemVuDaHoanThanhhienTai = 0;
-                        var dbNhiemVuThangTruoc = await _context.NhiemVus.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
-                        if (dbNhiemVuThangTruoc != null) { result.TongSoNhiemVuDaHoanThanhThangTruoc = dbNhiemVuThangTruoc.Count(); }
-                        else result.TongSoNhiemVuDaHoanThanhThangTruoc = 0;
+                            // lấy data nhiệm vụ đã hoàn thành
+                            var dbNhiemVuHienTai = await _context.NhiemVus.Where(r => r.NguoiDungId == nguoiDungId
+                                                                               && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
+                                                                               && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5")
+                                                                               && r.IsDeleted == false).ToListAsync();
+                            if (dbNhiemVuHienTai != null) { result.TongSoNhiemVuDaHoanThanhhienTai = dbNhiemVuHienTai.Count(); }
+                            else result.TongSoNhiemVuDaHoanThanhhienTai = 0;
+                            var dbNhiemVuThangTruoc = await _context.NhiemVus.Where(r => r.NguoiDungId == nguoiDungId
+                                                                               && (r.CreateAt <= thoiGianTuNgayThangTruoc
+                                                                               && r.CreateAt <= thoiGianDenNgayThangTruoc)
+                                                                               && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5")
+                                                                               && r.IsDeleted == false).ToListAsync();
+                            if (dbNhiemVuThangTruoc != null) { result.TongSoNhiemVuDaHoanThanhThangTruoc = dbNhiemVuThangTruoc.Count(); }
+                            else result.TongSoNhiemVuDaHoanThanhThangTruoc = 0;
 
-                        // lấy data lịch hẹn 
-                        var dbLichHenHienTai = await _context.LichHens.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
-                        if (dbLichHenHienTai != null) { result.TongSoLichHenHienTai = dbLichHenHienTai.Count(); }
-                        else result.TongSoLichHenHienTai = 0;
-                        var dbLichHenThangTruoc = await _context.LichHens.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
-                        if (dbLichHenThangTruoc != null) { result.TongSoLichHenCuaThangTruoc = dbLichHenThangTruoc.Count(); }
-                        else result.TongSoLichHenCuaThangTruoc = 0;
+                            // lấy data lịch hẹn 
+                            var dbLichHenHienTai = await _context.LichHens.Where(r => r.NguoiDungId == nguoiDungId &&
+                                                                                (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
+                                                                                && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5")
+                                                                                && r.IsDeleted == false).ToListAsync();
+                            if (dbLichHenHienTai != null) { result.TongSoLichHenHienTai = dbLichHenHienTai.Count(); }
+                            else result.TongSoLichHenHienTai = 0;
+                            var dbLichHenThangTruoc = await _context.LichHens.Where(r => r.NguoiDungId == nguoiDungId
+                                                                                && (r.CreateAt <= thoiGianTuNgayThangTruoc
+                                                                                && r.CreateAt <= thoiGianDenNgayThangTruoc)
+                                                                                && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5")
+                                                                                && r.IsDeleted == false).ToListAsync();
+                            if (dbLichHenThangTruoc != null) { result.TongSoLichHenCuaThangTruoc = dbLichHenThangTruoc.Count(); }
+                            else result.TongSoLichHenCuaThangTruoc = 0;
 
+                        }
+                        // lấy dữ liệu người dùng là trưởng phòng
+                        else
+                        {
+                            // lấy data cuộc gọi đã hoàn thành
+                            var dbCuoiGoiHienTai = await _context.CuocGois.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan
+                                                                             && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
+                                                                             && r.IsHoanThanh == true && r.IsDeleted == false)
+                                                                            .ToListAsync();
+                            if (dbCuoiGoiHienTai != null) { result.TongSoCuocGoiHienTai = dbCuoiGoiHienTai.Count(); }
+                            else result.TongSoCuocGoiHienTai = 0;
+                            var dbCuoiGoiThangTruoc = await _context.CuocGois.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan
+                                                                                && (r.CreateAt <= thoiGianTuNgayThangTruoc
+                                                                                && r.CreateAt <= thoiGianDenNgayThangTruoc)
+                                                                                && r.IsHoanThanh == true && r.IsDeleted == false)
+                                                                                .ToListAsync();
+                            if (dbCuoiGoiThangTruoc != null)
+                            { result.TongSoCuocGoiThangTruoc = dbCuoiGoiThangTruoc.Count(); }
+                            else result.TongSoCuocGoiThangTruoc = 0;
+                            // lấy data nhiệm vụ đã hoàn thành
+                            var dbNhiemVuHienTai = await _context.NhiemVus.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan
+                                                                             && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
+                                                                             && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5")
+                                                                             && r.IsDeleted == false).ToListAsync();
+                            if (dbNhiemVuHienTai != null) { result.TongSoNhiemVuDaHoanThanhhienTai = dbNhiemVuHienTai.Count(); }
+                            else result.TongSoNhiemVuDaHoanThanhhienTai = 0;
+                            var dbNhiemVuThangTruoc = await _context.NhiemVus.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan
+                                                                                && (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc)
+                                                                                && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5")
+                                                                                && r.IsDeleted == false).ToListAsync();
+                            if (dbNhiemVuThangTruoc != null) { result.TongSoNhiemVuDaHoanThanhThangTruoc = dbNhiemVuThangTruoc.Count(); }
+                            else result.TongSoNhiemVuDaHoanThanhThangTruoc = 0;
+
+                            // lấy data lịch hẹn 
+                            var dbLichHenHienTai = await _context.LichHens.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan &&
+                                                                                (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) &&
+                                                                                 r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5")
+                                                                                 && r.IsDeleted == false).ToListAsync();
+                            if (dbLichHenHienTai != null) { result.TongSoLichHenHienTai = dbLichHenHienTai.Count(); }
+                            else result.TongSoLichHenHienTai = 0;
+                            var dbLichHenThangTruoc = await _context.LichHens.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan &&
+                                                                             (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc)
+                                                                              && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5")
+                                                                              && r.IsDeleted == false).ToListAsync();
+                            if (dbLichHenThangTruoc != null) { result.TongSoLichHenCuaThangTruoc = dbLichHenThangTruoc.Count(); }
+                            else result.TongSoLichHenCuaThangTruoc = 0;
+                        }
                     }
-                    // lấy dữ liệu người dùng là trưởng phòng
+                    // lấy dữ liệu nếu người dùng là ban lãnh đạo
                     else
                     {
                         // lấy data cuộc gọi đã hoàn thành
-                        var dbCuoiGoiHienTai = await _context.CuocGois.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsHoanThanh == true && r.IsDeleted == false).ToListAsync();
+                        var dbCuoiGoiHienTai = await _context.CuocGois.Where(r => (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsHoanThanh == true && r.IsDeleted == false).ToListAsync();
                         if (dbCuoiGoiHienTai != null) { result.TongSoCuocGoiHienTai = dbCuoiGoiHienTai.Count(); }
                         else result.TongSoCuocGoiHienTai = 0;
-                        var dbCuoiGoiThangTruoc = await _context.CuocGois.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan && (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc) && r.IsHoanThanh == true && r.IsDeleted == false).ToListAsync();
+                        var dbCuoiGoiThangTruoc = await _context.CuocGois.Where(r => (r.CreateAt <= thoiGianTuNgayThangTruoc
+                                                                             && r.CreateAt <= thoiGianDenNgayThangTruoc)
+                                                                             && r.IsHoanThanh == true && r.IsDeleted == false)
+                                                                                .ToListAsync();
                         if (dbCuoiGoiThangTruoc != null)
                         { result.TongSoCuocGoiThangTruoc = dbCuoiGoiThangTruoc.Count(); }
                         else result.TongSoCuocGoiThangTruoc = 0;
                         // lấy data nhiệm vụ đã hoàn thành
-                        var dbNhiemVuHienTai = await _context.NhiemVus.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
+                        var dbNhiemVuHienTai = await _context.NhiemVus.Where(r => (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
+                                                                               && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5")
+                                                                               && r.IsDeleted == false).ToListAsync();
                         if (dbNhiemVuHienTai != null) { result.TongSoNhiemVuDaHoanThanhhienTai = dbNhiemVuHienTai.Count(); }
                         else result.TongSoNhiemVuDaHoanThanhhienTai = 0;
-                        var dbNhiemVuThangTruoc = await _context.NhiemVus.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan && (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
+                        var dbNhiemVuThangTruoc = await _context.NhiemVus.Where(r => (r.CreateAt <= thoiGianTuNgayThangTruoc
+                                                                             && r.CreateAt <= thoiGianDenNgayThangTruoc)
+                                                                             && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5")
+                                                                             && r.IsDeleted == false).ToListAsync();
                         if (dbNhiemVuThangTruoc != null) { result.TongSoNhiemVuDaHoanThanhThangTruoc = dbNhiemVuThangTruoc.Count(); }
                         else result.TongSoNhiemVuDaHoanThanhThangTruoc = 0;
 
                         // lấy data lịch hẹn 
-                        var dbLichHenHienTai = await _context.LichHens.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
+                        var dbLichHenHienTai = await _context.LichHens.Where(r => (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
                         if (dbLichHenHienTai != null) { result.TongSoLichHenHienTai = dbLichHenHienTai.Count(); }
                         else result.TongSoLichHenHienTai = 0;
-                        var dbLichHenThangTruoc = await _context.LichHens.Where(r => r.PhongBanId == nguoiDungData.MaPhongBan && (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
+                        var dbLichHenThangTruoc = await _context.LichHens.Where(r => (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
                         if (dbLichHenThangTruoc != null) { result.TongSoLichHenCuaThangTruoc = dbLichHenThangTruoc.Count(); }
                         else result.TongSoLichHenCuaThangTruoc = 0;
                     }
                 }
-                // lấy dữ liệu nếu người dùng là ban lãnh đạo
-                else
-                {
-                    // lấy data cuộc gọi đã hoàn thành
-                    var dbCuoiGoiHienTai = await _context.CuocGois.Where(r => (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsHoanThanh == true && r.IsDeleted == false).ToListAsync();
-                    if (dbCuoiGoiHienTai != null) { result.TongSoCuocGoiHienTai = dbCuoiGoiHienTai.Count(); }
-                    else result.TongSoCuocGoiHienTai = 0;
-                    var dbCuoiGoiThangTruoc = await _context.CuocGois.Where(r => (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc) && r.IsHoanThanh == true && r.IsDeleted == false).ToListAsync();
-                    if (dbCuoiGoiThangTruoc != null)
-                    { result.TongSoCuocGoiThangTruoc = dbCuoiGoiThangTruoc.Count(); }
-                    else result.TongSoCuocGoiThangTruoc = 0;
-                    // lấy data nhiệm vụ đã hoàn thành
-                    var dbNhiemVuHienTai = await _context.NhiemVus.Where(r => (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
-                    if (dbNhiemVuHienTai != null) { result.TongSoNhiemVuDaHoanThanhhienTai = dbNhiemVuHienTai.Count(); }
-                    else result.TongSoNhiemVuDaHoanThanhhienTai = 0;
-                    var dbNhiemVuThangTruoc = await _context.NhiemVus.Where(r => (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
-                    if (dbNhiemVuThangTruoc != null) { result.TongSoNhiemVuDaHoanThanhThangTruoc = dbNhiemVuThangTruoc.Count(); }
-                    else result.TongSoNhiemVuDaHoanThanhThangTruoc = 0;
-
-                    // lấy data lịch hẹn 
-                    var dbLichHenHienTai = await _context.LichHens.Where(r => (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
-                    if (dbLichHenHienTai != null) { result.TongSoLichHenHienTai = dbLichHenHienTai.Count(); }
-                    else result.TongSoLichHenHienTai = 0;
-                    var dbLichHenThangTruoc = await _context.LichHens.Where(r => (r.CreateAt <= thoiGianTuNgayThangTruoc && r.CreateAt <= thoiGianDenNgayThangTruoc) && r.TrangThaiThucHienId == Guid.Parse("7980BB30-26AF-4D8A-BDD9-F4DC630CA8D5") && r.IsDeleted == false).ToListAsync();
-                    if (dbLichHenThangTruoc != null) { result.TongSoLichHenCuaThangTruoc = dbLichHenThangTruoc.Count(); }
-                    else result.TongSoLichHenCuaThangTruoc = 0;
-                }
+                return result;
             }
-            return result;
+            catch(Exception ex)
+            {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
+                return new BaoCaoHoatDongDTO();
+            }
+           
         }
         public async Task<List<BaoCaoTop5KhachHangTuongTac>> BaoCaoTop5KhachHangTuongTac(DateTime tuNgay, DateTime denNgay, Guid nguoiDungId)
         {
@@ -349,15 +445,15 @@ namespace CRM.Repositories.BaoCaos
             try
             {
                 var dbKhachHangTuongTac = await _context.CuocGois
-                    .Where(r => r.NguoiDungId == nguoiDungId
-                                && r.IsDeleted == false
-                                && r.CreateAt >= tuNgay
-                                && r.CreateAt <= denNgay)
-                    .Include(r => r.KhachHangMucTieu)
-                    .Include(r => r.KhachHangTiemNang)
-                    .OrderByDescending(r => r.CreateAt)
-                    .Take(5)
-                    .ToListAsync();
+                                                .Where(r => r.NguoiDungId == nguoiDungId
+                                                    && r.IsDeleted == false
+                                                    && r.CreateAt >= tuNgay
+                                                    && r.CreateAt <= denNgay)
+                                                 .Include(r => r.KhachHangMucTieu)
+                                                 .Include(r => r.KhachHangTiemNang)
+                                                 .OrderByDescending(r => r.CreateAt)
+                                                 .Take(5)
+                                                 .ToListAsync();
 
                 int stt = 1;
                 foreach (var item in dbKhachHangTuongTac)
@@ -379,6 +475,8 @@ namespace CRM.Repositories.BaoCaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 throw new Exception("Lỗi khi lấy báo cáo top 5 khách hàng tương tác", ex);
             }
 
@@ -389,47 +487,60 @@ namespace CRM.Repositories.BaoCaos
         {
             var result = new List<BaoCaoResultDTO>();
             var dbNguoiDung = await _context.Nguoidungs.Where(r => r.Id == nguoiDungId).FirstOrDefaultAsync();
-            if (dbNguoiDung != null)
+            try
             {
-                // lấy dữ liệu khi là nhân viên
-                if (dbNguoiDung.CheckIsTruongPhong == false)
+                if (dbNguoiDung != null)
                 {
-                    var dbCuocGoi = await _context.CuocGois.Where(r => r.NguoiDungId == nguoiDungId && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay) && r.IsDeleted == false).Include(r => r.KetQuaCuocGoi).ToListAsync();
-                    if (dbCuocGoi != null)
+                    // lấy dữ liệu khi là nhân viên
+                    if (dbNguoiDung.CheckIsTruongPhong == false)
                     {
-                        var dbCuocGoiGroup = dbCuocGoi.GroupBy(r => r.KetQuaCuocGoiId);
-                        foreach (var item in dbCuocGoiGroup)
+                        var dbCuocGoi = await _context.CuocGois.Where(r => r.NguoiDungId == nguoiDungId &&
+                                                                     (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
+                                                                   && r.IsDeleted == false)
+                                                                    .Include(r => r.KetQuaCuocGoi)
+                                                                    .ToListAsync();
+                        if (dbCuocGoi != null)
                         {
-                            result.Add(new BaoCaoResultDTO
+                            var dbCuocGoiGroup = dbCuocGoi.GroupBy(r => r.KetQuaCuocGoiId);
+                            foreach (var item in dbCuocGoiGroup)
                             {
-                                Name = item.First().KetQuaCuocGoi.Name,
-                                Number = item.Count()
-                            });
+                                result.Add(new BaoCaoResultDTO
+                                {
+                                    Name = item.First().KetQuaCuocGoi.Name,
+                                    Number = item.Count()
+                                });
+                            }
                         }
+                        else { result.Add(new BaoCaoResultDTO { Name = "Không có dữ liệu", Number = 0 }); }
                     }
-                    else { result.Add(new BaoCaoResultDTO { Name = "Không có dữ liệu", Number = 0 }); }
-                }
-                // lấy dữ liệu khi là trưởng phòng
-                else
-                {
-                    var dbCuocGoi = await _context.CuocGois.Where(r => r.PhongBanId == dbNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)).Include(r => r.KetQuaCuocGoi).ToListAsync();
-                    if (dbCuocGoi != null)
+                    // lấy dữ liệu khi là trưởng phòng
+                    else
                     {
-                        var dbCuocGoiGroup = dbCuocGoi.GroupBy(r => r.KetQuaCuocGoiId);
-                        foreach (var item in dbCuocGoiGroup)
+                        var dbCuocGoi = await _context.CuocGois.Where(r => r.PhongBanId == dbNguoiDung.MaPhongBan && (r.CreateAt >= tuNgay && r.CreateAt <= denNgay)).Include(r => r.KetQuaCuocGoi).ToListAsync();
+                        if (dbCuocGoi != null)
                         {
-                            result.Add(new BaoCaoResultDTO
+                            var dbCuocGoiGroup = dbCuocGoi.GroupBy(r => r.KetQuaCuocGoiId);
+                            foreach (var item in dbCuocGoiGroup)
                             {
-                                Name = item.First().KetQuaCuocGoi.Name,
-                                Number = item.Count()
-                            });
+                                result.Add(new BaoCaoResultDTO
+                                {
+                                    Name = item.First().KetQuaCuocGoi.Name,
+                                    Number = item.Count()
+                                });
+                            }
                         }
+                        else { result.Add(new BaoCaoResultDTO { Name = "Không có dữ liệu", Number = 0 }); }
                     }
-                    else { result.Add(new BaoCaoResultDTO { Name = "Không có dữ liệu", Number = 0 }); }
                 }
+                else { result.Add(new BaoCaoResultDTO { Name = "Không có dữ liệu", Number = 0 }); }
+                return result;
             }
-            else { result.Add(new BaoCaoResultDTO { Name = "Không có dữ liệu", Number = 0 }); }
-            return result;
+            catch (Exception ex) {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
+                return result;
+            }
+
         }
         // Hàm xử lý báo cáo dành cho ban lãnh đạo công ty 
         public async Task<BaoCaoDoanhThuDTO> BaoCaoDoanhThu(DateTime tuNgay, DateTime denNgay)

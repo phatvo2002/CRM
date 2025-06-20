@@ -16,11 +16,13 @@ namespace CRM.Controllers.BaoGias
         private readonly IBaoGiaServices _baoGiaServices;
         private readonly IMailServices _mailService;
         private readonly CrmDbContext _context;
-        public BaoGiaController(IBaoGiaServices baoGiaServices, CrmDbContext context, IMailServices mailService)
+        private readonly ILogger<BaoGiaController> _logger; 
+        public BaoGiaController(IBaoGiaServices baoGiaServices, CrmDbContext context, IMailServices mailService, ILogger<BaoGiaController> logger)
         {
             _baoGiaServices = baoGiaServices;
             _context = context;
             _mailService = mailService;
+            _logger = logger;
         }
 
         [HttpGet("getbaogialist")]
@@ -50,6 +52,8 @@ namespace CRM.Controllers.BaoGias
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -64,6 +68,8 @@ namespace CRM.Controllers.BaoGias
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -80,6 +86,8 @@ namespace CRM.Controllers.BaoGias
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -106,6 +114,8 @@ namespace CRM.Controllers.BaoGias
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -120,6 +130,8 @@ namespace CRM.Controllers.BaoGias
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -134,6 +146,8 @@ namespace CRM.Controllers.BaoGias
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -148,6 +162,8 @@ namespace CRM.Controllers.BaoGias
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -158,12 +174,13 @@ namespace CRM.Controllers.BaoGias
         {
             try
             {
-                //var result = await _baoGiaServices.DeleteById(id);
                 ResultModal result = await _baoGiaServices.DeleteBaoGia(id);
                 return Ok(result);
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

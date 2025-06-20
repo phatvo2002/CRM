@@ -10,10 +10,11 @@ namespace CRM.Controllers.MailDaGuis
     public class MailDaGuiController : ControllerBase
     {
         private readonly IMailDaGuiServices _mailDaGuiServices;
-
-        public MailDaGuiController(IMailDaGuiServices mailDaGuiServices)
+        private readonly ILogger<MailDaGuiController> _logger;
+        public MailDaGuiController(IMailDaGuiServices mailDaGuiServices, ILogger<MailDaGuiController> logger)
         {
             _mailDaGuiServices = mailDaGuiServices;
+            _logger = logger;
         }
 
         [HttpGet("getall")]
@@ -27,6 +28,8 @@ namespace CRM.Controllers.MailDaGuis
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -41,6 +44,8 @@ namespace CRM.Controllers.MailDaGuis
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -55,6 +60,8 @@ namespace CRM.Controllers.MailDaGuis
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -69,6 +76,8 @@ namespace CRM.Controllers.MailDaGuis
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -83,6 +92,8 @@ namespace CRM.Controllers.MailDaGuis
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -97,6 +108,8 @@ namespace CRM.Controllers.MailDaGuis
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

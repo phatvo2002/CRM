@@ -10,9 +10,11 @@ namespace CRM.Controllers.PhanLoaiDuBaos
     public class PhanLoaiDuBaoController : ControllerBase
     {
         private readonly IPhanLoaiDuBaoServices _phanloaiDuBaoServices;
-        public PhanLoaiDuBaoController(IPhanLoaiDuBaoServices phanloaiDuBaoServices)
+        private readonly ILogger<PhanLoaiDuBaoController> _logger;
+        public PhanLoaiDuBaoController(IPhanLoaiDuBaoServices phanloaiDuBaoServices, ILogger<PhanLoaiDuBaoController> logger)
         {
             _phanloaiDuBaoServices = phanloaiDuBaoServices;
+            _logger = logger;
         }
 
         [HttpGet("getallphanloaioaidubao")]
@@ -26,6 +28,8 @@ namespace CRM.Controllers.PhanLoaiDuBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -40,6 +44,8 @@ namespace CRM.Controllers.PhanLoaiDuBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -54,6 +60,8 @@ namespace CRM.Controllers.PhanLoaiDuBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -68,6 +76,8 @@ namespace CRM.Controllers.PhanLoaiDuBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -82,6 +92,8 @@ namespace CRM.Controllers.PhanLoaiDuBaos
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

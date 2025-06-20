@@ -13,10 +13,11 @@ namespace CRM.Controllers.ChucVus
     public class ChucVuController : ControllerBase
     {
         private readonly IChucVuServices _chucVuServices;
-
-        public ChucVuController(IChucVuServices chucVuServices)
+        private readonly ILogger<ChucVuController> _logger;
+        public ChucVuController(IChucVuServices chucVuServices, ILogger<ChucVuController> logger)
         {
             _chucVuServices = chucVuServices;
+            _logger = logger;
         }
 
 
@@ -31,6 +32,8 @@ namespace CRM.Controllers.ChucVus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -45,6 +48,8 @@ namespace CRM.Controllers.ChucVus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -59,6 +64,8 @@ namespace CRM.Controllers.ChucVus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -74,6 +81,8 @@ namespace CRM.Controllers.ChucVus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -89,6 +98,8 @@ namespace CRM.Controllers.ChucVus
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

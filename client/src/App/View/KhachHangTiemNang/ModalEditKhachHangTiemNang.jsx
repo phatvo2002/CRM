@@ -262,10 +262,6 @@ const ModalEditKhachHangTiemNang = (props) => {
         <Grid2 size={12}>
           <h3>I. Thông tin chung</h3>
         </Grid2>
-        {/* <Grid2 size={6}>
-          <TextFieldRHF label={labelObj.id}
-           disabled={true} />
-        </Grid2> */}
         <Grid2 size={6}>
           <TextFieldRHF
             name={modelObj.tenKhachHang}

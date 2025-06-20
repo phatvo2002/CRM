@@ -89,10 +89,10 @@ namespace CRM.Entities
 
         public virtual DbSet<KhaoSat> KhaoSats { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-S9B3N7M;Database=CRM;User Id=sa;Password=abc@123;Encrypt=True;TrustServerCertificate=true;Connection Timeout=1000;");
-        }
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server=DESKTOP-S9B3N7M;Database=CRM;User Id=sa;Password=abc@123;Encrypt=True;TrustServerCertificate=true;Connection Timeout=1000;");
+        //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ThongBao>(entity =>

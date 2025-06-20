@@ -12,9 +12,11 @@ namespace CRM.Controllers.LichHens
     public class LichhenController : ControllerBase
     {
         private readonly ILichHenServices _lichHenServices;
-        public LichhenController(ILichHenServices lichHenServices)
+        private readonly ILogger<LichhenController> _logger;
+        public LichhenController(ILichHenServices lichHenServices, ILogger<LichhenController> logger)
         {
             _lichHenServices = lichHenServices;
+            _logger = logger;
         }
 
         [HttpGet("getalllichhen")]
@@ -28,6 +30,8 @@ namespace CRM.Controllers.LichHens
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -43,6 +47,8 @@ namespace CRM.Controllers.LichHens
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -58,6 +64,8 @@ namespace CRM.Controllers.LichHens
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -73,6 +81,8 @@ namespace CRM.Controllers.LichHens
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -87,6 +97,8 @@ namespace CRM.Controllers.LichHens
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -103,6 +115,8 @@ namespace CRM.Controllers.LichHens
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -118,6 +132,8 @@ namespace CRM.Controllers.LichHens
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -134,6 +150,8 @@ namespace CRM.Controllers.LichHens
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

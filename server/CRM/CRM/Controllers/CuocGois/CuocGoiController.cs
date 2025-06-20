@@ -12,9 +12,11 @@ namespace CRM.Controllers.CuocGois
     public class CuocGoiController : ControllerBase
     {
         private readonly ICuocGoiServices _cuocGoiServices;
-        public CuocGoiController(ICuocGoiServices cuocGoiServices)
+        private readonly ILogger<CuocGoiController> _logger;    
+        public CuocGoiController(ICuocGoiServices cuocGoiServices, ILogger<CuocGoiController> logger)
         {
             _cuocGoiServices = cuocGoiServices;
+            _logger = logger;
         }
 
         [HttpGet("getallcuocgoi")]
@@ -28,6 +30,8 @@ namespace CRM.Controllers.CuocGois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -43,6 +47,8 @@ namespace CRM.Controllers.CuocGois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -59,6 +65,8 @@ namespace CRM.Controllers.CuocGois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -73,6 +81,8 @@ namespace CRM.Controllers.CuocGois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -87,6 +97,8 @@ namespace CRM.Controllers.CuocGois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -101,6 +113,8 @@ namespace CRM.Controllers.CuocGois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -116,6 +130,8 @@ namespace CRM.Controllers.CuocGois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -133,6 +149,8 @@ namespace CRM.Controllers.CuocGois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -148,6 +166,8 @@ namespace CRM.Controllers.CuocGois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -164,6 +184,8 @@ namespace CRM.Controllers.CuocGois
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

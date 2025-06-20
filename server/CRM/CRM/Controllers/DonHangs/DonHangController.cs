@@ -14,10 +14,12 @@ namespace CRM.Controllers.DonHangs
     {
         private readonly IDonHangServices _donHangServices;
         private readonly CrmDbContext _crmDbContext;
-        public DonHangController(IDonHangServices donHangServices, CrmDbContext crmDbContext)
+        private readonly ILogger<DonHangController> _logger;
+        public DonHangController(IDonHangServices donHangServices, CrmDbContext crmDbContext, ILogger<DonHangController> logger)
         {
             _donHangServices = donHangServices;
             _crmDbContext = crmDbContext;
+            _logger = logger;
         }
         [HttpGet("getalldonhang")]
         [JwtAuthorize]
@@ -30,6 +32,8 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -60,7 +64,8 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
-
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -75,6 +80,8 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -89,6 +96,8 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -103,6 +112,8 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -119,6 +130,8 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -133,6 +146,8 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -147,6 +162,8 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -161,6 +178,8 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -175,6 +194,8 @@ namespace CRM.Controllers.DonHangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

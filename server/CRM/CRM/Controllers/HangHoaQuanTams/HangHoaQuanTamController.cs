@@ -11,10 +11,11 @@ namespace CRM.Controllers.HangHoaQuanTams
     public class HangHoaQuanTamController : ControllerBase
     {
         private readonly IHangHoaQuanTamServices _hangHoaQuanTamServices;
-
-        public HangHoaQuanTamController(IHangHoaQuanTamServices hangHoaQuanTamServices)
+        private readonly ILogger<HangHoaQuanTamController> _logger;
+        public HangHoaQuanTamController(IHangHoaQuanTamServices hangHoaQuanTamServices, ILogger<HangHoaQuanTamController> logger)
         {
             _hangHoaQuanTamServices = hangHoaQuanTamServices;
+            _logger = logger;
         }
 
         [HttpGet("getallhanghoaquantam")]
@@ -28,6 +29,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -42,6 +45,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -56,6 +61,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -70,6 +77,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -84,6 +93,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -98,6 +109,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -112,6 +125,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -126,6 +141,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -140,6 +157,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -154,6 +173,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -168,6 +189,8 @@ namespace CRM.Controllers.HangHoaQuanTams
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

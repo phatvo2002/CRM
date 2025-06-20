@@ -18,11 +18,13 @@ namespace CRM.Controllers.KhachHangTiemnangs
         private readonly IKhachHangTiemNangServices _khachHangTiemNangServices;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly CrmDbContext _dbContext;
-        public KhachHangTiemNangController(IKhachHangTiemNangServices khachHangTiemNangServices, IWebHostEnvironment webHostEnvironment, CrmDbContext dbContext)
+        private readonly ILogger<KhachHangTiemNangController> _logger;
+        public KhachHangTiemNangController(IKhachHangTiemNangServices khachHangTiemNangServices, IWebHostEnvironment webHostEnvironment, CrmDbContext dbContext, ILogger<KhachHangTiemNangController> logger)
         {
             _khachHangTiemNangServices = khachHangTiemNangServices;
             _webHostEnvironment = webHostEnvironment;
             _dbContext = dbContext;
+            _logger = logger;
         }
         [HttpGet("getallkhachhangtiemnang")]
         [JwtAuthorize]
@@ -35,6 +37,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -50,6 +54,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             catch
             (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -98,6 +104,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(new { ex.Message });
             }
 
@@ -114,6 +122,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             catch
             (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -129,6 +139,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             catch
             (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -145,6 +157,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             catch
             (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -179,6 +193,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception e)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(e.Message);
                 return BadRequest(e.Message);
             }
         }
@@ -204,6 +220,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
 
@@ -223,6 +241,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -425,6 +445,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);c
                 return BadRequest(ex.Message);
             }
         }
@@ -440,6 +462,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -454,6 +478,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -468,6 +494,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -482,6 +510,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -496,6 +526,8 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
             catch (Exception ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

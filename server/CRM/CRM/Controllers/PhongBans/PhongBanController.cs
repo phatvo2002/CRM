@@ -11,11 +11,12 @@ namespace CRM.Controllers.PhongBans
     [ApiController]
     public class PhongBanController : ControllerBase
     {
-        public readonly IPhongBanServices _phongBanServices;
-
-        public PhongBanController(IPhongBanServices phongBanServices)
+        private readonly IPhongBanServices _phongBanServices;
+        private readonly ILogger<PhongBanController> _logger;
+        public PhongBanController(IPhongBanServices phongBanServices, ILogger<PhongBanController> logger)
         {
             _phongBanServices = phongBanServices;
+            _logger = logger;
         }
 
         [HttpGet("getAllphongban")]
@@ -29,6 +30,8 @@ namespace CRM.Controllers.PhongBans
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -43,6 +46,8 @@ namespace CRM.Controllers.PhongBans
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -58,6 +63,8 @@ namespace CRM.Controllers.PhongBans
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -72,6 +79,8 @@ namespace CRM.Controllers.PhongBans
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
@@ -87,6 +96,8 @@ namespace CRM.Controllers.PhongBans
             }
             catch (ArgumentException ex)
             {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }
