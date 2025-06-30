@@ -5,18 +5,13 @@ namespace CRM.Repositories.Menus
 {
     public interface IMenuRepository
     {
-        public Task<ResultModal> AddMenu(MenuModel modal);
-
-        public Task<List<MenuDTO>> GetAllMenu(Guid groupId);
-
-        public Task<MenuDTO> GetMenuById(Guid id);
-
-        public Task<ResultModal> DeleteMenu(Guid id);
-
-        public Task<ResultModal> UpdateGroup(GroupModel model);
-
-        public Task<List<MenuRoleDTO>> GetAllMenuRole(Guid Id);
-
-        public Task<ResultModal> UpdateMenu(MenuModel model);
+         Task<ResultModal> AddMenu(MenuModel modal);
+         Task<List<MenuDTO>> GetAllMenu(Guid groupId);
+         Task<List<MenuDTO>> GetAllMenuParent();
+         Task<MenuDTO> GetMenuById(Guid id);
+         Task<ResultModal> DeleteMenu(Guid id);
+         Task<ResultModal> UpdateGroup(GroupModel model);
+         Task<List<MenuRoleDTO>> GetAllMenuRole(Guid Id);
+         Task<ResultModal> UpdateMenu(MenuModel model);
     }
 }

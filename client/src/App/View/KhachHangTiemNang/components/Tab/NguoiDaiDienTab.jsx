@@ -6,11 +6,11 @@ import { useDeleteLienHeMutation, useGetLienHeByKhachHangTiemNangIdQuery } from 
 import CreateIcon from "@mui/icons-material/Create";
 import { Button, Grid2, IconButton } from '@mui/material';
 import CustomDatagrid from 'src/App/Components/DataGrid/CustomDatagrid';
-import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import ModalAddNguoiDaiDien from './Modal/ModalAddNguoiDaiDien';
 import ModalUpdateNguoiDaiDien from './Modal/ModalUpdateNguoiDaiDien';
 import Swal from 'sweetalert2';
-const NguoiDaiDienTab = () => {
+import CustomButtonAction from 'src/App/Components/CustomButtonAction/CustomButtonAction';
+const NguoiDaiDienTab = (props) => {
   const { id } = useParams()
   const [modalAdd, setModalAdd] = useState(false),
     [rows, setRows] = useState([]),
@@ -25,30 +25,33 @@ const NguoiDaiDienTab = () => {
       width: 100,
       renderCell: () => (
         <div style={{ alignItems: "center" }}>
-          <IconButton
-            style={{}}
-            color='success'
-            disabled={selectedRow.length === 0}
-            onClick={handleOpenModalUpdate}
-          >
-            <CreateIcon></CreateIcon>
-          </IconButton>
-          <IconButton
-            style={{ margin: "0 10px" }}
-             disabled={selectedRow.length === 0}
-             color='error'
-             onClick={handelDelete}
-          >
-            <DeleteIcon></DeleteIcon>
-          </IconButton>
+          <CustomButtonAction
+            menuId={props.menuId}
+            typeButton={2}
+            type={"sua"}
+            action={handleOpenModalUpdate}
+            icon={<EditIcon />}
+            styleText={"sửa"}
+            colorStyle={"success"}
+          />
+
+          <CustomButtonAction
+            menuId={props.menuId}
+            typeButton={2}
+            type={"xoa"}
+            action={handelDelete}
+            icon={<DeleteIcon />}
+            styleText={"xóa"}
+            colorStyle={"success"}
+          />
         </div>
       ),
     },
-    { field: "id", headerName: "Mã Liên Hệ", width: 200 , flex : 1 },
-    { field: "tenLienHe", headerName: "Tên Liên Hệ", width: 200 ,flex : 1  },
-    { field: "email", headerName: "Địa chỉ Email", width: 200 ,flex : 1  },
-    { field: "soDienThoai", headerName: "Số Điện Thoại", width: 200 ,flex : 1  },
-   
+    { field: "id", headerName: "Mã Liên Hệ", width: 200, flex: 1 },
+    { field: "tenLienHe", headerName: "Tên Liên Hệ", width: 200, flex: 1 },
+    { field: "email", headerName: "Địa chỉ Email", width: 200, flex: 1 },
+    { field: "soDienThoai", headerName: "Số Điện Thoại", width: 200, flex: 1 },
+
   ]
 
   const handleOpenModalAdd = () => {
@@ -57,32 +60,31 @@ const NguoiDaiDienTab = () => {
   const handleCloseModalAdd = () => {
     setModalAdd(false)
   }
-  const handleOpenModalUpdate = ()=>{
+  const handleOpenModalUpdate = () => {
     setModalUpdate(true)
   }
-  const handleCloseModalUpdate = ()=>
-  {
+  const handleCloseModalUpdate = () => {
     setModalUpdate(false)
   }
-    const handelDelete = () => {
-      Swal.fire({
-        title: "Bạn có muốn xóa dữ liệu này",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Có",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await deleteLienHe(selectedRow[0]?.id);
-          Swal.fire({
-            title: "Xóa thành công",
-            icon: "success",
-          });
-          retchLienHe();
-        }
-      });
-    };
+  const handelDelete = () => {
+    Swal.fire({
+      title: "Bạn có muốn xóa dữ liệu này",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Có",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteLienHe(selectedRow[0]?.id);
+        Swal.fire({
+          title: "Xóa thành công",
+          icon: "success",
+        });
+        retchLienHe();
+      }
+    });
+  };
   useEffect(() => {
     if (dataLienHe) {
       setRows(dataLienHe);
@@ -94,15 +96,16 @@ const NguoiDaiDienTab = () => {
   return (
     <Grid2 container spacing={2}>
       <Grid2 size={12}>
-        <Button
-          variant="outlined"
-          sx={{ marginLeft: 1 }}
-          startIcon={<PermContactCalendarIcon />}
-          color="inherit"
-          onClick={handleOpenModalAdd}
-        >
-          Thêm liên hệ
-        </Button>
+           <CustomButtonAction
+            menuId={props.menuId}
+            typeButton={1}
+            type={"xoa"}
+            action={handleOpenModalAdd}
+            icon={<CreateIcon />}
+            nameButton={"Thêm liên hệ"}
+            styleText={"thêm"}
+            colorStyle={"primary"}
+          />
       </Grid2>
       <Grid2 size={12}>
         <CustomDatagrid
@@ -122,14 +125,14 @@ const NguoiDaiDienTab = () => {
         refetch={retchLienHe}
       />
       {/* Modal update */}
-      <ModalUpdateNguoiDaiDien 
+      <ModalUpdateNguoiDaiDien
         showModal={modalUpdate}
         closeModal={handleCloseModalUpdate}
         selectedItem={selectedRow}
         refetch={retchLienHe}
       />
     </Grid2>
-    
+
   )
 }
 

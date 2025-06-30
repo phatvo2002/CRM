@@ -54,6 +54,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import ModalBanGiaoKhachHangHangHoat from "./Modal/ModalBanGiaoKhachHangHangHoat";
 import CustomButtonAction from "src/App/Components/CustomButtonAction/CustomButtonAction";
+import { useLocation } from "react-router-dom";
 const KhachHangTiemNang = () => {
   const [selectedRow, setSelectedRow] = useState([]);
   const [selectRowId, setSelectedRowId] = useState([]);
@@ -72,8 +73,10 @@ const KhachHangTiemNang = () => {
     navigate("/tiemnang/uploadkhachhang");
   };
 
-  const { menuId } = useParams()
 
+  const location = useLocation()
+  const query = new URLSearchParams(location.search);
+  const menuId = query.get("menu");
   const columns = useMemo(
     () => [
       {
@@ -165,7 +168,7 @@ const KhachHangTiemNang = () => {
         renderCell: (params) => (
           <div>
             <Link
-              to={`/tiemnang/${params.id}`}
+              to={`/tiemnang/${params.id}?menu=${menuId}`}
               style={{
                 textDecoration: "none",
                 display: "flex",

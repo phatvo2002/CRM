@@ -28,7 +28,7 @@ import {
 import Swal from "sweetalert2";
 import { useDeleteLichHenMutation, useGetLichHenByKhachHangTiemNangIdQuery } from "src/App/Api/LichhenApi";
 import { useGetNhiemVuByKhachHangTiemNangIdQuery } from "src/App/Api/NhiemVuApi";
-const CongViecThucHienTab = () => {
+const CongViecThucHienTab = (props) => {
   const columnsCuocGoi = [
     {
       field: "action",

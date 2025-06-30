@@ -12,7 +12,7 @@ import {
   Tabs,
   Tab,
 } from "@mui/material";
-
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import { useParams, useNavigate } from "react-router-dom";
 import { useGetKhachHangTiemNangByIdQuery } from "src/App/Api/KhachHangTiemNangApi";
 import image from "../../../Assets/image/person.png";
@@ -26,10 +26,17 @@ import ModalConvertKhachHangTiemNang from "./ModalConvertKhachHangTiemNang";
 import ModalEditKhachHangTiemNang from "../ModalEditKhachHangTiemNang";
 import { ModalGuiMail } from "../Modal/ModalGuiMail";
 import { MoreVert, Edit, SyncAlt } from "@mui/icons-material";
-
+import { useLocation } from "react-router-dom";
+import CustomButtonAction from "src/App/Components/CustomButtonAction/CustomButtonAction";
+import LocalPostOfficeIcon from '@mui/icons-material/LocalPostOffice';
+import TextsmsIcon from '@mui/icons-material/Textsms';
 const KhachHangTiemNangDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const location = useLocation()
+  const query = new URLSearchParams(location.search);
+  const menuId = query.get("menu");
+
   const { data: dataKhachHangById, isLoading } = useGetKhachHangTiemNangByIdQuery(id);
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -113,46 +120,35 @@ const KhachHangTiemNangDetail = () => {
           </Stack>
 
           <Stack direction="row" spacing={1.5} sx={{ ml: "auto" }}>
-            <Button
-              variant="contained"
-              // endIcon={<LocalPhoneIcon />}
-              sx={{
-                borderRadius: 2,
-                textTransform: "none",
-                px: 2.5,
-                bgcolor: "#1976d2",
-                "&:hover": { bgcolor: "#1565c0" },
-              }}
-            >
-              Gọi điện thoại
-            </Button>
-            <Button
-              variant="contained"
-              // endIcon={<MarkunreadIcon />}
-              onClick={handleOpenModalGuiMail}
-              sx={{
-                borderRadius: 2,
-                textTransform: "none",
-                px: 2.5,
-                bgcolor: "#43a047",
-                "&:hover": { bgcolor: "#388e3c" },
-              }}
-            >
-              Gửi mail
-            </Button>
-            <Button
-              variant="contained"
-              // endIcon={<TextsmsIcon />}
-              sx={{
-                borderRadius: 2,
-                textTransform: "none",
-                px: 2.5,
-                bgcolor: "#fb8c00",
-                "&:hover": { bgcolor: "#e07b00" },
-              }}
-            >
-              Gửi SMS
-            </Button>
+             <CustomButtonAction
+                menuId={menuId}
+                typeButton={1}
+                type={"sua"}
+                icon ={<LocalPhoneIcon/>}
+                styleText={"gọi điện thoại"}
+                nameButton={"Gọi điện thoại"}
+                colorStyle={"success"}
+              />
+            
+              <CustomButtonAction
+                menuId={menuId}
+                typeButton={1}
+                type={"sua"}
+                action={handleOpenModalGuiMail}
+                icon ={<LocalPostOfficeIcon/>}
+                styleText={"gửi mail"}
+                nameButton={"Gửi mail"}
+                colorStyle={"primary"}
+              />
+              <CustomButtonAction
+                menuId={menuId}
+                typeButton={1}
+                type={"sua"}
+                icon ={<TextsmsIcon/>}
+                styleText={"tin nhắn"}
+                nameButton={"Tin nhắn"}
+                colorStyle={"error"}
+              />
             <Button
               id="expand-button"
               variant="outlined"
@@ -184,14 +180,31 @@ const KhachHangTiemNangDetail = () => {
           }}
         >
          {dataKhachHangById.isChuyenDoi === false && (
-          <MenuItem onClick={handleOpenModalConvert} >
-            <SyncAlt sx={{ mr: 1, color: "#0288d1" }} />
-            Chuyển đổi khách hàng
+          <MenuItem  >
+             <CustomButtonAction
+                menuId={menuId}
+                typeButton={2}
+                type={"sua"}
+                action={handleOpenModalConvert}
+                icon ={ <SyncAlt sx={{ mr: 1, color: "#0288d1" }} />}
+                styleText={"Chuyển đổi khách hàng"}
+                nameButton={"Chuyển đổi khách hàng"}
+                colorStyle={""}
+              />
           </MenuItem>
         )}
-          <MenuItem onClick={handleOpenModalEdit} >
-          <Edit sx={{ mr: 1, color: "#0288d1" }} />
-          Chỉnh sửa khách hàng
+          <MenuItem >
+        
+          <CustomButtonAction
+                menuId={menuId}
+                typeButton={2}
+                type={"sua"}
+                action={handleOpenModalEdit}
+                icon ={ <Edit sx={{ mr: 1, color: "#0288d1" }} />}
+                styleText={"Chỉnh sửa khách hàng"}
+                nameButton={"Chỉnh sửa khách hàng"}
+                colorStyle={""}
+              />
         </MenuItem>
         </Menu>
 
@@ -238,12 +251,12 @@ const KhachHangTiemNangDetail = () => {
                 <Tab label="SMS" value="6" />
               </Tabs>
 
-              {tabValue === "1" && <ThongTInChiTietTab />}
-              {tabValue === "2" && <NguoiDaiDienTab />}
-              {tabValue === "3" && <HangHoaQuanTamTab />}
-              {tabValue === "4" && <EmailTab />}
-              {tabValue === "5" && <CongViecThucHienTab />}
-              {tabValue === "6" && <SMStab />}
+              {tabValue === "1" && <ThongTInChiTietTab menuId={menuId} />}
+              {tabValue === "2" && <NguoiDaiDienTab menuId={menuId} />}
+              {tabValue === "3" && <HangHoaQuanTamTab menuId={menuId} />}
+              {tabValue === "4" && <EmailTab menuId={menuId} />}
+              {tabValue === "5" && <CongViecThucHienTab menuId={menuId} />}
+              {tabValue === "6" && <SMStab menuId={menuId} />}
             </Box>
           </Grid2>
         </Grid2>

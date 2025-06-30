@@ -446,7 +446,7 @@ namespace CRM.Controllers.KhachHangTiemnangs
             catch (Exception ex)
             {
                 _logger.LogInformation("{Time}", DateTime.Now);
-                _logger.LogError(ex.Message);c
+                _logger.LogError(ex.Message);
                 return BadRequest(ex.Message);
             }
         }

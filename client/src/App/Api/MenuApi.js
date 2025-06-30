@@ -31,6 +31,9 @@ export const apiMenu = createApi({
           body: data,
         }),
       }),
+      getAllMenuParent: builder.query({
+        query: () => `/Menu/getmenuparent`,
+      }),
       UpdateMenuRole: builder.mutation({
         query: (data) => ({
           url: `/Menu/updategroup`, 
@@ -56,6 +59,7 @@ export const apiMenu = createApi({
   export const { 
     useGetAllMenuQuery, 
     useGetMenuRoleByIdQuery, 
+    useGetAllMenuParentQuery,
     useAddMenuMutation,
     useUpdateMenuRoleMutation,
     useUpdateMenuMutation,

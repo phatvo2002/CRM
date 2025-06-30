@@ -7,23 +7,26 @@ import { validateString } from "../../../../Until/validateYup";
 import * as yup from "yup";
 import SwitchRHF from "../../../../Components/ReactHookFormComp/SwitchRHF/SwitchRHF";
 import { useAddPhongbanMutation } from "../../../../Api/Phongban";
-import {toast} from 'react-toastify';
-import { useAddMenuMutation } from "src/App/Api/MenuApi";
+import { toast } from 'react-toastify';
+import { useAddMenuMutation, useGetAllMenuParentQuery } from "src/App/Api/MenuApi";
+import { AutocompleteRHF } from "src/App/Components/ReactHookFormComp";
+import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
 // ------ Form Config ------ //
 const modelObj = {
-orderNumber: "orderNumber",
+  orderNumber: "orderNumber",
   name: "name",
   url: "url",
-  icon :"icon",
-  isAcTive : "isAcTive"
-
+  icon: "icon",
+  isAcTive: "isAcTive",
+  ParentId: "ParentId"
 },
   labelObj = {
     orderNumber: "Số thứ tự",
     name: "Tên menu",
     url: "Đường dẫn",
-    icon :  "Icon",
-    isAcTive :"Kích hoạt menu"
+    icon: "Icon",
+    isAcTive: "Kích hoạt menu",
+    ParentId: "Menu cha"
   },
   initialFormState = {
     [modelObj.orderNumber]: "",
@@ -31,6 +34,7 @@ orderNumber: "orderNumber",
     [modelObj.url]: "",
     [modelObj.icon]: "",
     [modelObj.isAcTive]: false,
+    [modelObj.ParentId]: null,
   },
   schema = yup.object().shape({
     [modelObj.orderNumber]: validateString(),
@@ -48,13 +52,15 @@ const getHeader = (typeModal) => {
 };
 
 const ModalAddMenu = (props) => {
-  const { showModal, closeModal, typeModal, setTypeModal ,setLoading ,refetch} =
+  const { showModal, closeModal, typeModal, setTypeModal, setLoading, refetch } =
     props,
     _isMounted = useRef(false),
     modalRef = useRef(null),
     [addMenu] = useAddMenuMutation(),
     isLoading = false,
     header = getHeader(typeModal);
+
+  const { data: dataMenuParent , isFetching : isGetAllMenuParentFetching } = useGetAllMenuParentQuery()
 
   const submitForm = (data) => {
     const tempData = {
@@ -63,41 +69,42 @@ const ModalAddMenu = (props) => {
       [modelObj.url]: data[modelObj.url],
       [modelObj.icon]: data[modelObj.icon],
       [modelObj.isAcTive]: data[modelObj.isAcTive],
+      [modelObj.ParentId]: data[modelObj.ParentId],
     };
 
     typeModal === TYPE_MODAL.INSERT && callApiInsert(tempData);
- 
+
   },
     callApiInsert = async (data) => {
       try {
         await addMenu(data).unwrap();
         toast.success("Thêm mới thành công!", {
           position: "top-center",
-          autoClose: 3000,  
+          autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-      });
+        });
 
-        refetch(); 
-        closeModalWithOtherFunc() 
+        refetch();
+        closeModalWithOtherFunc()
       } catch (error) {
         toast.error("Đã có lỗi khi xảy ra!", {
           position: "top-center",
-          autoClose: 3000,  
+          autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-      });
+        });
       } finally {
         setLoading(false);
       }
     },
-   
+
     closeModalWithOtherFunc = () => {
       setTypeModal("");
       modalRef.current.reset(initialFormState);
@@ -159,7 +166,15 @@ const ModalAddMenu = (props) => {
           />
         </Grid>
         <Grid item xs={12}>
-        <label>{labelObj.isAcTive}</label>
+          <AutocompleteRHF
+            name={modelObj.ParentId}
+            label={labelObj.ParentId}
+            isGetOnlyId
+            data={commonMapDataAutocomplete(dataMenuParent, "name")}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <label>{labelObj.isAcTive}</label>
           <SwitchRHF
             name={modelObj.isAcTive}
             label={labelObj.isAcTive}

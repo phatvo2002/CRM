@@ -11,11 +11,10 @@ import { useGetKhachHangTiemNangByIdQuery } from "src/App/Api/KhachHangTiemNangA
 import React from "react";
 import { useParams } from "react-router-dom";
 
-const ThongTInChiTietTab = () => {
+const ThongTInChiTietTab = (props) => {
   const { id } = useParams();
-  const { data: dataKhachHangById, isLoading } =
+  const { data: dataKhachHangById } =
     useGetKhachHangTiemNangByIdQuery(id);
-
   return (
     <>
       <Typography

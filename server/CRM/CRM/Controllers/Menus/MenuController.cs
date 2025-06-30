@@ -55,6 +55,23 @@ namespace CRM.Controllers.Menus
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getmenuparent")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetMenuParent()
+        {
+            try
+            {
+                List<MenuDTO> result = await _menuServices.GetAllMenuParent();
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("insertmenu")]
         [JwtAuthorize]
         public async Task<IActionResult> InsertMenu(MenuModel model)

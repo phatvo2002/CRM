@@ -8,21 +8,25 @@ import { TYPE_MODAL } from "../../../../Until/constant";
 import * as yup from "yup";
 import {useUpdatePhongBanMutation } from "../../../../Api/Phongban";
 import { toast } from "react-toastify";
-import { useUpdateMenuMutation } from "src/App/Api/MenuApi";
+import { useGetAllMenuParentQuery, useUpdateMenuMutation } from "src/App/Api/MenuApi";
+import { commonMapDataAutocomplete } from "src/App/Until/mapData.helper";
+import { AutocompleteRHF } from "src/App/Components/ReactHookFormComp";
 // ------ Form Config ------ //
 const modelObj = {
     orderNumber: "orderNumber",
     name: "name",
     url: "url",
     icon :"icon",
-    isAcTive : "isAcTive"
+    isAcTive : "isAcTive",
+    parentId: "parentId"
 },
   labelObj = {
     orderNumber: "Số thứ tự",
     name: "Tên menu",
     url: "Đường dẫn",
     icon :  "icon",
-    isAcTive :"Kích hoạt menu"
+    isAcTive :"Kích hoạt menu",
+     parentId: "Menu Cha"
   },
   initialFormState = {
     [modelObj.orderNumber]: 0,
@@ -30,6 +34,7 @@ const modelObj = {
     [modelObj.url]: "",
     [modelObj.icon]: "",
     [modelObj.isAcTive]: false,
+    [modelObj.parentId]: null,
   },
   schema = yup.object().shape({
     [modelObj.orderNumber]: validateString(),
@@ -54,6 +59,7 @@ const ModalUpdateMenu = (props) => {
     [updateMenu ,{isLoading : isUpdatePhongBan}] = useUpdateMenuMutation(),
     isLoading =   isUpdatePhongBan,
     header = getHeader(typeModal);
+  const { data: dataMenuParent , isFetching : isGetAllMenuParentFetching } = useGetAllMenuParentQuery()
   const submitForm = (data) => {
     const tempData = {
       id  : data.id,
@@ -61,18 +67,21 @@ const ModalUpdateMenu = (props) => {
       [modelObj.name]: data[modelObj.name],
       [modelObj.url]: data[modelObj.url],
       [modelObj.icon]: data[modelObj.icon],
+      [modelObj.parentId]: data[modelObj.parentId],
       [modelObj.isAcTive]: data[modelObj.isAcTive]
     };
 
     typeModal === TYPE_MODAL.UPDATE && callApiUpdate(tempData);
   },
+
+
   
     callApiUpdate = async (paramData) => {
         try {
             await updateMenu(paramData).unwrap();
             toast.success("Chỉnh sửa thành công thành công")
-            refetch(); 
             closeModalWithOtherFunc() 
+            refetch(); 
           } catch (error) {
             toast.error("Đã có lỗi xảy ra vui lòng liên hệ bộ phận");
           } finally {
@@ -97,6 +106,7 @@ const ModalUpdateMenu = (props) => {
           [modelObj.url]: selectedItem[modelObj.url] ,
           [modelObj.icon]: selectedItem[modelObj.icon],
           [modelObj.isAcTive]: selectedItem?.isActive,
+          [modelObj.parentId]: selectedItem?.parentId
         },
         { keepDirty: true }
       );
@@ -107,6 +117,7 @@ const ModalUpdateMenu = (props) => {
     }
   }, [selectedItem[0], typeModal]);
 
+    console.log(selectedItem)
   useEffect(() => {
     _isMounted.current = true;
     return () => {
@@ -159,6 +170,14 @@ const ModalUpdateMenu = (props) => {
             label={labelObj.icon}
             disabled={isLoading}
             required
+          />
+        </Grid>
+        <Grid item xs={12}>
+         <AutocompleteRHF
+            name={modelObj.parentId}
+            label={labelObj.parentId}
+            isGetOnlyId
+            data={commonMapDataAutocomplete(dataMenuParent, "name")}
           />
         </Grid>
         <Grid item xs={12}>

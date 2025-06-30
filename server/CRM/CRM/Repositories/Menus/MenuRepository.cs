@@ -21,7 +21,7 @@ namespace CRM.Repositories.Menus
         public async Task<ResultModal> AddMenu(MenuModel modal)
         {
 
-            var db = _context.Menus.FirstOrDefault(r => r.Name == modal.Name);
+            var db = _context.Menus.FirstOrDefault(r => r.Id == modal.Id);
             try
             {
                 if (db != null)
@@ -37,6 +37,7 @@ namespace CRM.Repositories.Menus
                     menu.Icon = modal.Icon;
                     menu.OrderNumber = modal.OrderNumber;
                     menu.IsActive = modal.IsActive;
+                    menu.ParentId = modal.ParentId; 
                     _context.Menus.Add(menu);
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Message = "Tạo menu thành công", Status = 200, Success = true };
@@ -77,8 +78,19 @@ namespace CRM.Repositories.Menus
         public async Task<List<MenuDTO>> GetAllMenu(Guid groupId)
         {
             var data = await _context.Menus.AsNoTracking()
-                                           .Include(r=> r.MenuRoles.Where(m => m.GroupId == groupId))
-                                           .OrderBy(r => r.OrderNumber).ToListAsync();
+                                                         .Include(r=> r.MenuChildrent)
+                                                         .Include(r=> r.MenuRoles
+                                                         .Where(m => m.GroupId == groupId))
+                                                         .OrderBy(r => r.OrderNumber).ToListAsync();
+            return _mapper.Map<List<MenuDTO>>(data);
+        }
+
+        public async Task<List<MenuDTO>> GetAllMenuParent()
+        {
+            var data = await _context.Menus.AsNoTracking()
+                                           .Where(r => r.ParentId == null)
+                                           .OrderBy(r => r.OrderNumber)
+                                           .ToArrayAsync();
             return _mapper.Map<List<MenuDTO>>(data);
         }
 
@@ -148,6 +160,7 @@ namespace CRM.Repositories.Menus
                     data.Url = model.Url;
                     data.Icon = model.Icon;
                     data.IsActive = model.IsActive;
+                    data.ParentId = model.ParentId;
                     _context.Menus.Update(data);
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Cập nhật thành công", Success = true };

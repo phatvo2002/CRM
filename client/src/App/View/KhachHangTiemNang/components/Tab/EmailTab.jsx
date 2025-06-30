@@ -11,7 +11,7 @@ import Moment from "react-moment";
 import { useDeleteMutation } from "src/App/Api/MailDaGui.Api";
 import { toast } from "react-toastify";
 
-const EmailTab = () => {
+const EmailTab = (props) => {
   const { id } = useParams();
   const columns = [
     {

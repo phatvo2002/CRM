@@ -63,7 +63,7 @@ const MucTieu = lazy(() => import("./View/MucTieu/index"));
 
 const RouteChild = [
   {
-    path: "/banlamviec/:menuId",
+    path: "/banlamviec",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <BanLamViec />
@@ -71,7 +71,7 @@ const RouteChild = [
     ),
   },
   {
-    path: "/nvbanlamviec/:menuId",
+    path: "/nvbanlamviec",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <BanLamViecNV />
@@ -79,7 +79,7 @@ const RouteChild = [
     ),
   },
   {
-    path: "/tpbanlamviec/:menuId",
+    path: "/tpbanlamviec",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <BanLamViecTP />
@@ -155,7 +155,7 @@ const RouteChild = [
     ),
   },
   {
-    path: "/quantrihethong/:menuId",
+    path: "/quantrihethong",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <DashBoardThietLap />
@@ -181,7 +181,7 @@ const RouteChild = [
 
   // Khách hàng tiềm năng
   {
-    path: "/tiemnang/:menuId",
+    path: "/tiemnang",
     element: (
       <Suspense
         fallback={
@@ -228,7 +228,7 @@ const RouteChild = [
   },
   // Khách hàng mục tiêu
   {
-    path: "/khachhang/:menuId",
+    path: "/khachhang",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <KhachHangMucTieu />
@@ -244,7 +244,7 @@ const RouteChild = [
     ),
   },
   {
-    path: "/khachhang/:meuId/:id",
+    path: "/khachhang/:id",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <KhachHangMucTieuDetail />
@@ -253,7 +253,7 @@ const RouteChild = [
   },
   // hàng hóa
   {
-    path: "/hanghoa/:menuId",
+    path: "/hanghoa",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <HangHoa />
@@ -271,7 +271,7 @@ const RouteChild = [
   },
   // nhiệm vụ
   {
-    path: "/nhiemvu/:menuId",
+    path: "/nhiemvu",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <NhiemVu />
@@ -280,7 +280,7 @@ const RouteChild = [
   },
   // Cơ hội
   {
-    path: "/cohoi/:menuId",
+    path: "/cohoi",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <CoHoi />
@@ -298,7 +298,7 @@ const RouteChild = [
 
   // báo giá
   {
-    path: "/baogia/:menuId",
+    path: "/baogia",
     element: (
       <Suspense
         fallback={
@@ -344,7 +344,7 @@ const RouteChild = [
 
   // đơn hàng
   {
-    path: "/donhang/:menuId",
+    path: "/donhang",
     element: (
       <Suspense
         fallback={
@@ -366,7 +366,7 @@ const RouteChild = [
     ),
   },
   {
-    path: "/muctieu/:menuId",
+    path: "/muctieu",
     element: (
       <Suspense
         fallback={

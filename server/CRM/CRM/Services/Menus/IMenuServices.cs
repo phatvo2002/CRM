@@ -5,16 +5,12 @@ namespace CRM.Services.Menus
 {
     public interface IMenuServices
     {
-        public Task<ResultModal> InsertMenu(MenuModel modal);
-
-        public Task<ResultModal> DeleteMenu(Guid Id);
-
-        public Task<List<MenuDTO>> GetAllMenu(Guid groupId);
-
-        public Task<ResultModal> UpdateMenuRole(GroupModel model);
-
-        public Task<List<MenuRoleDTO>> GetAllMenuRoles(Guid roleid);
-
-        public Task<ResultModal> UpdateMenu(MenuModel model);
+         Task<ResultModal> InsertMenu(MenuModel modal);
+         Task<ResultModal> DeleteMenu(Guid Id);
+         Task<List<MenuDTO>> GetAllMenu(Guid groupId);
+         Task<ResultModal> UpdateMenuRole(GroupModel model);
+         Task<List<MenuRoleDTO>> GetAllMenuRoles(Guid roleid);
+         Task<ResultModal> UpdateMenu(MenuModel model);
+         Task<List<MenuDTO>> GetAllMenuParent();
     }
 }

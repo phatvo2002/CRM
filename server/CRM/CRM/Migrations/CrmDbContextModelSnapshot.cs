@@ -64,6 +64,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiDungUpdate")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -73,6 +76,9 @@ namespace CRM.Migrations
 
                     b.Property<decimal?>("TongTien")
                         .HasColumnType("decimal");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id")
                         .HasName("PK_BaoGia");
@@ -189,6 +195,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiDungUpdate")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -266,6 +275,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiDungUpdate")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -278,6 +290,9 @@ namespace CRM.Migrations
                     b.Property<string>("TieuDe")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id")
                         .HasName("PK_CuocGoi");
@@ -380,6 +395,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiDungUpdate")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -406,6 +424,9 @@ namespace CRM.Migrations
 
                     b.Property<decimal>("ThucThuDonHang")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id")
                         .HasName("PK_DonHang");
@@ -483,12 +504,18 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiDungUpdate")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TieuDe")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id")
                         .HasName("PK_EmailDaGui");
@@ -686,6 +713,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiDungUpdate")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -754,6 +784,9 @@ namespace CRM.Migrations
                     b.Property<decimal?>("TongTiLeThucTe")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id")
                         .HasName("PK_KPINhanVien");
@@ -843,10 +876,16 @@ namespace CRM.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int?>("NamGuiMailSinhNhat")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("NgayThanhLap")
                         .HasColumnType("date");
 
                     b.Property<Guid?>("NguoiDungId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("NguoiDungUpdate")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("PhongBanId")
@@ -974,6 +1013,9 @@ namespace CRM.Migrations
                         .HasColumnType("date");
 
                     b.Property<Guid?>("NguoiDungId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("NguoiDungUpdate")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("PhongBanId")
@@ -1120,6 +1162,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiDungUpdate")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1129,6 +1174,9 @@ namespace CRM.Migrations
 
                     b.Property<Guid?>("TrangThaiThucHienId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id")
                         .HasName("PK_LichHen");
@@ -1173,6 +1221,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiDungUpdate")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1183,6 +1234,9 @@ namespace CRM.Migrations
                     b.Property<string>("TenLienHe")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime");
 
                     b.Property<string>("XungHo")
                         .HasMaxLength(50)
@@ -1382,12 +1436,17 @@ namespace CRM.Migrations
                     b.Property<int?>("OrderNumber")
                         .HasColumnType("int");
 
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Url")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_menu");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Menu", (string)null);
                 });
@@ -1470,6 +1529,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiDungUpdate")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("NguoiTaoId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1545,6 +1607,9 @@ namespace CRM.Migrations
                     b.Property<decimal?>("TongTiLeThucTe")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("decimal");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id")
                         .HasName("PK_MucTieuDoanhSoId");
@@ -1730,6 +1795,9 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("NguoiDungUpdate")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1739,6 +1807,9 @@ namespace CRM.Migrations
 
                     b.Property<Guid?>("TrangThaiThucHienId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("UpdateAt")
+                        .HasColumnType("datetime");
 
                     b.HasKey("Id")
                         .HasName("PK_NhiemVu");
@@ -2559,6 +2630,16 @@ namespace CRM.Migrations
                         .HasForeignKey("LoaiHangHoaId");
                 });
 
+            modelBuilder.Entity("CRM.Entities.Menu", b =>
+                {
+                    b.HasOne("CRM.Entities.Menu", "Parent")
+                        .WithMany("MenuChildrent")
+                        .HasForeignKey("ParentId")
+                        .HasConstraintName("FK_Menu_Menu");
+
+                    b.Navigation("Parent");
+                });
+
             modelBuilder.Entity("CRM.Entities.MenuRole", b =>
                 {
                     b.HasOne("CRM.Entities.ChucVu", "ChucVu")
@@ -2834,6 +2915,8 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Entities.Menu", b =>
                 {
+                    b.Navigation("MenuChildrent");
+
                     b.Navigation("MenuRoles");
                 });
 

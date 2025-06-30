@@ -32,7 +32,7 @@ import ThreePIcon from "@mui/icons-material/ThreeP";
 import { ActionComponents } from "./Components/Action";
 import UpdateIcon from "@mui/icons-material/Update";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import ModalUpdateKHMucTieu from "./Modal/ModalUpdateKHMucTieu";
 import ModalBanGiaoKhachHangMucTieu from "./Modal/ModalBanGiaoKhachHangMucTieu";
 import {
@@ -73,8 +73,8 @@ const KhachHangMucTieu = () => {
     setIsActionOpen(false);
   };
 
-  const { menuId } = useParams()
-
+  const location = useLocation();
+  const menuId = location.state?.menuId;
   const columns = [
     {
       field: "action",
@@ -183,7 +183,8 @@ const KhachHangMucTieu = () => {
       renderCell: (params) => (
         <div>
           <Link
-            to={`/khachhang/${menuId}/${params.id}`}
+            to={`/khachhang/${params.id}`}
+            state={{menuId : menuId}}
             style={{
               textDecoration: "none",
               display: "flex",
@@ -467,31 +468,31 @@ const KhachHangMucTieu = () => {
             <MenuItem >
 
               <Stack direction="row" spacing={1} alignItems="center">
-                 <CustomButtonAction
-                menuId={menuId}
-                action={handleGetTemplates}
-                typeButton={2}
-                icon={<GetAppIcon color="primary" />}
-                type={"xem"}
-                styleText={"tải file"}
-                nameButton={"Xuất mẫu"}
-                colorStyle={"success"}
-              />
+                <CustomButtonAction
+                  menuId={menuId}
+                  action={handleGetTemplates}
+                  typeButton={2}
+                  icon={<GetAppIcon color="primary" />}
+                  type={"xem"}
+                  styleText={"tải file"}
+                  nameButton={"Xuất mẫu"}
+                  colorStyle={"success"}
+                />
               </Stack>
             </MenuItem>
 
             <MenuItem onClick={handleOpenKhDaXoa}>
               <Stack direction="row" spacing={1} alignItems="center">
                 <CustomButtonAction
-                menuId={menuId}
-                action={handleOpenKhDaXoa}
-                typeButton={2}
-                icon={<AutoDeleteIcon color="error" />}
-                type={"xoa"}
-                styleText={"Đã xóa"}
-                nameButton={"Đã xóa"}
-                colorStyle={"error"}
-              />
+                  menuId={menuId}
+                  action={handleOpenKhDaXoa}
+                  typeButton={2}
+                  icon={<AutoDeleteIcon color="error" />}
+                  type={"xoa"}
+                  styleText={"Đã xóa"}
+                  nameButton={"Đã xóa"}
+                  colorStyle={"error"}
+                />
               </Stack>
             </MenuItem>
 

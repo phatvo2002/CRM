@@ -18,7 +18,7 @@ const CustomButtonAction = (props) => {
 
   const handleCheckPermission = () => {
     const dataPermission = JSON.parse(localStorage.getItem("permission") || "[]");
-    const permissionItem = dataPermission?.menuRoleData.find(r=> r.menuId == menuId);
+    const permissionItem = dataPermission?.menuRoleData.find(r => r.menuId == menuId);
     if (!permissionItem) {
       toast.warning("Không tìm thấy quyền truy cập.");
       return;
@@ -49,16 +49,17 @@ const CustomButtonAction = (props) => {
         startIcon={icon}
         color={colorStyle}
         size={size}
+       
         variant='contained'
         onClick={handleCheckPermission}
-        style={{borderRadius :6}}
+        style={{ borderRadius: 6 }}
       >
         {nameButton}
       </Button> :
-       <IconButton  onClick={handleCheckPermission}>
-           {React.cloneElement(icon, { sx: { color: {colorStyle} } })}
-           {nameButton == null ? null : <Typography variant='body2'>{nameButton}</Typography>}
-      </IconButton>}
+        <IconButton onClick={handleCheckPermission}>
+          {React.cloneElement(icon, { sx: { color: { colorStyle } } })}
+          {nameButton == null ? null : <Typography variant='body2'>{nameButton}</Typography>}
+        </IconButton>}
     </React.Fragment>
   );
 };

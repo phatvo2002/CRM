@@ -1,9 +1,10 @@
-import { Button, Container, IconButton, Switch } from "@mui/material";
+import { Box, Button, Container, IconButton, Switch } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import AddIcon from "@mui/icons-material/Add";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { useMemo } from 'react';
 import { TYPE_MODAL } from "../../../Until/constant";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -12,47 +13,134 @@ import ModalAddMenu from "./Modal/ModalAddMenu";
 import ModalUpdateMenu from "./Modal/ModalUpdateMenu";
 import { useDeleteMenuMutation, useGetAllMenuQuery } from "src/App/Api/MenuApi";
 import ButtonCustom from "src/App/Components/CustomButton/ButtonCustom";
+import MarterialReactTableGroup from "src/App/Components/MarterialReactTableGroupMenu";
 const QuanLyMenu = () => {
-  const columns = [
-    { field: "orderNumber", headerName: "Số thứ tự", width: 200, flex: 1 },
-    { field: "name", headerName: "Tên menu", width: 200, flex: 1 },
-    { field: "url", headerName: "Đường dẫn", width: 200, flex: 1 },
-    { field: "icon", headerName: "Icon", width: 200, flex: 1 },
-    {
-      field: "isActive",
-      headerName: "Kích hoạt",
-      width: 200,
-      flex: 1,
-      renderCell: (params) => (
-        <div>
-          <Switch checked={params.row.isActive} disabled />
-        </div>
-      ),
-    },
-    {
-      field: "action",
-      headerName: "Thao tác",
-      flex: 1,
-      renderCell: () => (
-        <div style={{ alignItems: "center" }}>
-          <IconButton
-            style={{}}
-            disabled={selectedRow.length === 0}
-            onClick={onOpenModalUpdatePhongBan}
-          >
-            <CreateIcon></CreateIcon>
-          </IconButton>
-          <IconButton
-            style={{ margin: "0 10px" }}
-            disabled={selectedRow.length === 0}
-            onClick={handleDeletePhongBan}
-          >
-            <DeleteIcon></DeleteIcon>
-          </IconButton>
-        </div>
-      ),
-    },
-  ];
+
+
+
+  const columns = useMemo(
+    () => [
+      {
+        id: 'menu', //id used to define `group` column
+        header: 'Danh sách menu',
+        columns: [
+          {
+            accessorKey: 'thaotac',
+            header: 'Thao tác',
+            size: 50,
+            enableClickToCopy: false,
+            filterVariant: 'autocomplete',
+            Cell: ({ row }) => (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                }}
+              >
+                <IconButton onClick={() => onOpenModalUpdatePhongBan()} >
+                  <CreateIcon color="success" />
+                </IconButton>
+                <IconButton onClick={() => handleDeletePhongBan()} >
+                  <DeleteIcon color="error" />
+                </IconButton>
+              </Box>
+            ),
+          },
+          {
+            accessorFn: (row) => `${row.name}`,
+            id: 'name',
+            header: 'Name',
+            size: 250,
+          },
+          {
+            accessorKey: 'orderNumber',
+            enableClickToCopy: true,
+            header: 'Hình ảnh',
+            size: 300,
+          },
+          {
+            accessorKey: 'url',
+            enableClickToCopy: true,
+            filterVariant: 'autocomplete',
+            header: 'url',
+            size: 300,
+          },
+          {
+            accessorKey: 'icon',
+            enableClickToCopy: true,
+            filterVariant: 'autocomplete',
+            header: 'Hình ảnh',
+            size: 300,
+          },
+        ],
+      },
+    ],
+    [],
+  );
+
+  const subColumns = useMemo(
+    () => [
+      {
+        id: 'employee', //id used to define `group` column
+        header: 'Employee',
+        columns: [
+          {
+            accessorKey: 'thaotac',
+            header: 'Thao tác',
+            size: 50,
+            enableClickToCopy: false,
+            filterVariant: 'autocomplete',
+            Cell: ({ row }) => (
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem',
+                }}
+              >
+                <IconButton onClick={() => onOpenModalUpdatePhongBan()} >
+                  <CreateIcon color="success" />
+                </IconButton>
+                <IconButton onClick={() => handleDeletePhongBan()} >
+                  <DeleteIcon color="error" />
+                </IconButton>
+              </Box>
+            ),
+          },
+          {
+            accessorFn: (row) => `${row.name}`,
+            id: 'name',
+            header: 'Tên menu',
+            size: 250,
+          },
+          {
+            accessorKey: 'orderNumber',
+            enableClickToCopy: true,
+            filterVariant: 'autocomplete',
+            header: 'Số thứ tự',
+            size: 300,
+          },
+          {
+            accessorKey: 'url',
+            enableClickToCopy: true,
+            filterVariant: 'autocomplete',
+            header: 'url',
+            size: 300,
+          },
+          {
+            accessorKey: 'icon',
+            enableClickToCopy: true,
+            filterVariant: 'autocomplete',
+            header: 'Hình ',
+            size: 300,
+          },
+
+        ],
+      },
+    ],
+    [],
+  );
 
   const [selectedRow, setSelectedRow] = useState([]);
   const [openModal, setOpenmodal] = useState(false);
@@ -60,11 +148,12 @@ const QuanLyMenu = () => {
   const [openModalAdd, setOpenModalAdd] = useState(false);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [rows, setRows] = useState([]);
-
+  const [rowChild, setRowsChild] = useState([])
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { data: menuList, refetch } = useGetAllMenuQuery();
   const [DeleteMenu] = useDeleteMenuMutation();
+  const [rowSelection, setRowSelection] = useState({});
 
   const onOpenModalAddMenu = () => {
     setOpenModalAdd(true);
@@ -106,9 +195,6 @@ const QuanLyMenu = () => {
       }
     });
   };
-  const gotoLink = () => {
-    navigate(-1);
-  };
 
   const backLink = async () => {
     navigate("/quantrihethong");
@@ -116,14 +202,10 @@ const QuanLyMenu = () => {
 
   useEffect(() => {
     if (menuList) {
-      setRows(menuList);
+      setRowsChild(menuList)
+      setRows(menuList.filter(item => !item.parentId));
     }
   }, [menuList]);
-
-  const handleRowSelectionChange = (selectedRows) => {
-    setSelectedRow(selectedRows);
-  };
-
   return (
     <Container style={{ maxWidth: "100%" }}>
       <div style={{ width: "100%" }}>
@@ -137,7 +219,7 @@ const QuanLyMenu = () => {
             margin: "10px 0",
           }}
         >
-          <ButtonCustom handle={backLink}/>
+          <ButtonCustom handle={backLink} />
           <Button
             variant="contained"
             style={{ marginTop: "10px" }}
@@ -148,7 +230,7 @@ const QuanLyMenu = () => {
           </Button>
         </div>
 
-        <CustomDatagrid
+        {/* <CustomDatagrid
           rows={rows}
           columns={columns}
           pageSizeOptions={[10, 25, 50]}
@@ -156,6 +238,15 @@ const QuanLyMenu = () => {
           checkboxSelection={true}
           showTopToolbar={true}
           onRowSelectionChange={handleRowSelectionChange}
+        /> */}
+        <MarterialReactTableGroup
+          columns={columns}
+          data={rows}
+          subColumns={subColumns}
+          childata={rowChild}
+          setRowSelection={setRowSelection}
+          rowSelection={rowSelection}
+          setSelectedRow={setSelectedRow}
         />
       </div>
       {/* <ModalThemSua openModal={openModal} selectedRow={selectedRow} closeModal={handelCloseModalThemSua} /> */}

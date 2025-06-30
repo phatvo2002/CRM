@@ -16,7 +16,6 @@
         public int? MaNguonGocKhachHang { get; set; }
         public string? DiaChi { get; set; }
         public DateTime? DeleteAt { get; set; }
-        public DateTime? UpdateAt { get; set; }
         public virtual LoaiCoHoi? LoaiCoHoi { get; set; }
         public virtual LoaiHangHoa? LoaiHangHoa { get; set; }
         public virtual KhachHangMucTieu? KhachHangMucTieu { get; set; }

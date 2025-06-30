@@ -12,5 +12,6 @@
         public int? OrderNumber { get; set; }
 
         public bool? IsActive { get; set; }
+        public Guid? ParentId { get; set; }
     }
 }

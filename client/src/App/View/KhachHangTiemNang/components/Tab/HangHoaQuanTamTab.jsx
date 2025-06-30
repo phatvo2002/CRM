@@ -15,7 +15,7 @@ import {
   useGetHangHoaQuanTamByKhachHangTiemNangIdQuery,
 } from "src/App/Api/HangHoaQuanTam";
 
-const HangHoaQuanTamTab = () => {
+const HangHoaQuanTamTab = (props) => {
   const { id } = useParams();
   const [hangHoa, setHangHoa] = useState([]);
   const { data: rows, refetch } =
@@ -233,6 +233,7 @@ const HangHoaQuanTamTab = () => {
         slots={{
           toolbar: () => (
             <GridToolbarContainer>
+              
               <Button
                 color="primary"
                 startIcon={<AddIcon />}
