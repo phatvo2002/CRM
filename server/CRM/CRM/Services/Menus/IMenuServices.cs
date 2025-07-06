@@ -12,5 +12,6 @@ namespace CRM.Services.Menus
          Task<List<MenuRoleDTO>> GetAllMenuRoles(Guid roleid);
          Task<ResultModal> UpdateMenu(MenuModel model);
          Task<List<MenuDTO>> GetAllMenuParent();
+        Task<List<MenuRoleDTO>> GetAllMenuByRole(Guid RoleId);
     }
 }

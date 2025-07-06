@@ -3,6 +3,7 @@ using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
 using Microsoft.EntityFrameworkCore;
+using MoreLinq.Extensions;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -85,9 +86,19 @@ namespace CRM.Repositories.Menus
             return _mapper.Map<List<MenuDTO>>(data);
         }
 
+        public async Task<List<MenuRoleDTO>> GetAllMenuByRole(Guid RoleId)
+        {
+            var data = await _context.MenuRoles.AsNoTracking().
+                                               Where(r => r.GroupId == RoleId).
+                                               ToListAsync();
+            return _mapper.Map<List<MenuRoleDTO>>(data);
+        }
+
         public async Task<List<MenuDTO>> GetAllMenuParent()
         {
             var data = await _context.Menus.AsNoTracking()
+                                           .Include(r=> r.MenuChildrent)
+                                           .ThenInclude(r=> r.MenuRoles)
                                            .Where(r => r.ParentId == null)
                                            .OrderBy(r => r.OrderNumber)
                                            .ToArrayAsync();
@@ -96,9 +107,11 @@ namespace CRM.Repositories.Menus
 
         public async Task<List<MenuRoleDTO>> GetAllMenuRole(Guid Id)
         {
-            var result = await _context.MenuRoles.Where(r => r.GroupId == Id)
+            var result = await _context.MenuRoles.Where(r => r.GroupId == Id )
                                                  .AsNoTracking()
                                                  .Include(r => r.Menu)
+                                                 .ThenInclude(r=> r.MenuChildrent.Where(r=> r.MenuRoles.Count > 0))
+                                                 .ThenInclude(r=> r.MenuRoles.Where(r=> r.GroupId == Id))
                                                  .OrderBy(p => p.Menu.OrderNumber)
                                                  .ToListAsync();
             return _mapper.Map<List<MenuRoleDTO>>(result);

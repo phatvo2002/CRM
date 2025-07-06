@@ -21,6 +21,11 @@ namespace CRM.Services.Menus
             return await _menuRepository.GetAllMenu(groupId);
         }
 
+        public async Task<List<MenuRoleDTO>> GetAllMenuByRole(Guid RoleId)
+        {
+           return await _menuRepository.GetAllMenuRole(RoleId); 
+        }
+
         public async Task<List<MenuDTO>> GetAllMenuParent()
         {
             return await _menuRepository.GetAllMenuParent();

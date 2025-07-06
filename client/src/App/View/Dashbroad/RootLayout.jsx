@@ -66,7 +66,7 @@ function Copyright(props) {
   );
 }
 
-const drawerWidth = 240;
+const drawerWidth = 300;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
@@ -140,6 +140,7 @@ export default function RootLayout() {
       createTheme({
         palette: {
           mode: darkMode ? "dark" : "light",
+          fontFamily: 'Times New Roman, serif',
         },
       }),
     [darkMode]
@@ -204,7 +205,7 @@ export default function RootLayout() {
           display: "flex",
           bgcolor: "background.default",
           color: "text.primary",
-          fontFamily: "inherit",
+          fontFamily: "sans-serif",
         }}
       >
         <CssBaseline />

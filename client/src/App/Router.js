@@ -98,7 +98,7 @@ const RouteChild = [
 
   // Quản trị hệ thống
   {
-    path: "/quantrihethong/thietlapvaitro",
+    path: "/phanquyen",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ThietLapVaiTro />
@@ -106,7 +106,7 @@ const RouteChild = [
     ),
   },
   {
-    path: "/quantrihethong/quanlyphongban",
+    path: "/quantriphongban",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <QuanLyPhongban />
@@ -114,7 +114,7 @@ const RouteChild = [
     ),
   },
   {
-    path: "/quantrihethong/quanlymenu",
+    path: "/menu",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <QuanLyMenu />
@@ -122,7 +122,7 @@ const RouteChild = [
     ),
   },
   {
-    path: "/quantrihethong/thietlapnhanvien",
+    path: "/quantringuoidung",
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <ThietLapNhanVien />

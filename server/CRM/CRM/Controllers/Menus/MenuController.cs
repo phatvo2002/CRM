@@ -46,6 +46,22 @@ namespace CRM.Controllers.Menus
             try
             {
                 List<MenuRoleDTO> result = await _menuServices.GetAllMenuRoles(roleid);
+                return Ok(result.Where(r=> r.Menu.MenuChildrent.Count > 0));
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("getmenuallrole/{roleid}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetRoleAllMenu(Guid roleid)
+        {
+            try
+            {
+                List<MenuRoleDTO> result = await _menuServices.GetAllMenuByRole(roleid);
                 return Ok(result);
             }
             catch (ArgumentException ex)

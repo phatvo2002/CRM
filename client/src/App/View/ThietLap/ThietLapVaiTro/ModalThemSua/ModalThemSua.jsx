@@ -5,10 +5,36 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Checkbox from '@mui/material/Checkbox';
-import { useGetAllMenuQuery, useGetMenuRoleByIdQuery, useUpdateMenuRoleMutation } from "../../../../Api/MenuApi";
+import { useGetAllMenuParentQuery, useGetAllMenuQuery, useGetMenuAllRoleByIdQuery, useGetMenuRoleByIdQuery, useUpdateMenuRoleMutation } from "../../../../Api/MenuApi";
 
+import { styled, alpha } from '@mui/material/styles';
+import { TreeItem, treeItemClasses } from '@mui/x-tree-view/TreeItem';
+import { SimpleTreeView } from '@mui/x-tree-view/SimpleTreeView';
 import { Box, Card, CardContent, Divider, FormControlLabel, Grid, Grid2, Switch, Typography } from '@mui/material';
 import { toast } from 'react-toastify';
+
+
+
+
+const CustomTreeItem = styled(TreeItem)(({ theme }) => ({
+  [`& .${treeItemClasses.content}`]: {
+    padding: theme.spacing(0.5, 1),
+    margin: theme.spacing(0.2, 0),
+  },
+  [`& .${treeItemClasses.iconContainer}`]: {
+    '& .close': {
+      opacity: 0.3,
+    },
+  },
+  [`& .${treeItemClasses.groupTransition}`]: {
+    marginLeft: 15,
+    paddingLeft: 18,
+    borderLeft: `1px dashed ${alpha(theme.palette.text.primary, 0.4)}`,
+  },
+}));
+
+
+
 const ModalThemSua = (props) => {
   const {
     openModal,
@@ -19,146 +45,227 @@ const ModalThemSua = (props) => {
   const [menuRole, setMenuRole] = useState([])
   const [checkedMenuIds, setCheckedMenuIds] = useState([{
     menu: "",
-    xem: true,
-    them: true,
-    sua: true,
-    xoa: true
+    xem: false,
+    them: false,
+    sua: false,
+    xoa: false
   }]);
-  const { data: menuData } = useGetAllMenuQuery({ skip: !openModal });
-  const { data: menuRoleData } = useGetMenuRoleByIdQuery(selectedRow[0]?.id, {
+  const { data: menuData } = useGetAllMenuParentQuery({ skip: !openModal });
+  const { data: menuRoleData } = useGetMenuAllRoleByIdQuery(selectedRow[0]?.id, {
     skip: !openModal || !selectedRow[0],
   });
   const [updateGroupMenu] = useUpdateMenuRoleMutation()
-  const handleCheckboxChange = (event, menuId) => {
-    if (event.target.checked) {
-      const selectedMenu = menu.find(item => item.id === menuId);
-      if (selectedMenu) {
-        setCheckedMenuIds(prev => [...prev, {
-           menu: selectedMenu.id,
-           xem: selectedMenu.xem,
-           them: selectedMenu.them,
-           sua: selectedMenu.sua,
-           xoa: selectedMenu.xoa
-        }]);
+
+  const handleCheckboxChange = (event, menuId, children = []) => {
+    const isChecked = event.target.checked;
+
+    setCheckedMenuIds(prev => {
+      let updated = [...prev];
+      if (isChecked) {
+        if (!updated.some(item => item.menu === menuId)) {
+          const selectedMenu = menu.find(item => item.id === menuId || item.menuChildrent?.some(c => c.id === menuId));
+          if (selectedMenu) {
+            updated.push({
+              menu: menuId,
+              xem: selectedMenu.xem,
+              them: selectedMenu.them,
+              sua: selectedMenu.sua,
+              xoa: selectedMenu.xoa
+            });
+          }
+        }
+        children.forEach(child => {
+          if (updated.some(item => item.menu === child.id)) {
+            updated.push({
+              menu: child.id,
+              xem: child.xem,
+              them: child.them,
+              sua: child.sua,
+              xoa: child.xoa
+            });
+          }
+        });
+
+      } else {
+        updated = updated.filter(item => item.menu !== menuId);
+
+        children.forEach(child => {
+          updated = updated.filter(item => item.menu !== child.id);
+        });
       }
-    } else {
-      setCheckedMenuIds(prev => prev.filter(item => item.menu !== menuId));
-    }
+
+      return updated;
+    });
   };
+
+  const handleSwitchChange = (menuId, key, value) => {
+    setCheckedMenuIds(prev =>
+      prev.map(item =>
+        item.menu === menuId ? { ...item, [key]: value } : item
+      )
+    );
+  };
+
+
   const handelSubmit = async () => {
     const data = {
       oid: selectedRow[0]?.id,
       menu: checkedMenuIds
     }
+   
     const res = await updateGroupMenu(data)
     if (res?.data.status == 200) {
       closeModal()
       toast.success("Phân quyền thành công!");
     }
     else {
-       toast.error("Đã có lỗi xảy ra!");
+      toast.error("Đã có lỗi xảy ra!");
     }
   }
 
 
-  const handleSwitchChange = (menuId, key, value) => {
-  setCheckedMenuIds(prev =>
-    prev.map(item =>
-      item.menu === menuId ? { ...item, [key]: value } : item
-    )
-  );
-};
+
 
   useEffect(() => {
     if (menuData) {
       setMenu(menuData.length > 0 ? menuData : []);
     }
   }, [menuData]);
-
+   console.log(checkedMenuIds)
+   console.log(menuRoleData)
   useEffect(() => {
-    if (menuRoleData) {
-      if (menuRoleData.length > 0) {
-        setMenuRole(menuRoleData);
-        setCheckedMenuIds(menuRoleData.map(e => ({ menu: e.menuId, xem: e.xem, them: e.them, sua: e.sua, xoa: e.xoa })));
-      } else {
-        setMenuRole([]);
-      }
+    if (Array.isArray(menuRoleData) && menuRoleData.length > 0) {
+      setMenuRole(menuRoleData);
+      setCheckedMenuIds(menuRoleData.map(e => ({
+        menu: e.menuId,
+        xem: e.xem,
+        them: e.them,
+        sua: e.sua,
+        xoa: e.xoa
+      })));
+    } else {
+      setMenuRole([]);
+      setCheckedMenuIds([]);
     }
   }, [menuRoleData]);
   return (
     <React.Fragment>
       <Dialog
         open={openModal}
-        keepMounted
-        maxWidth={"400px"}
+
+        maxWidth={"1200px"}
         //   onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>Phân quyền menu</DialogTitle>
         <DialogContent>
-          <Card variant="outlined" sx={{ p: 2, boxShadow: 3, borderRadius: 2 }}>
-            <CardContent>
-              <Typography variant="h5" gutterBottom>
-                Phân quyền menu
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              {menu.map((item, index) => (
-                <Box
-                  key={index}
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    mb: 1.5,
-                    p: 1,
-                    border: '1px solid #e0e0e0',
-                    borderRadius: 2,
-                    backgroundColor: '#f9f9f9'
-                  }}
-                >
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={checkedMenuIds?.some(r => r.menu === item.id)}
-                        onChange={(e) => handleCheckboxChange(e, item.id)}
-                        name={`menu-${item.id}`}
-                      />
-                    }
-                    label={
-                      <Typography variant="subtitle1" sx={{ minWidth: 160 }}>
-                        {item.name}
-                      </Typography>
-                    }
-                  />
 
-                  <Grid container spacing={2} sx={{ ml: 2 }}>
-                    <Grid item>
+          <Card variant="outlined" sx={{ p: 2, boxShadow: 3, borderRadius: 2 }}>
+            <SimpleTreeView sx={{ width: "100%" }}>
+              {Array.isArray(menuData) && menuData.length > 0 && menuData.map((item, index) => (
+                <TreeItem
+                  key={item.id}
+                  itemId={String(item.id)}
+                  label={
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <FormControlLabel
-                        control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.xem}  onChange={(e) => handleSwitchChange(item.id, 'xem', e.target.checked)}/>}
-                        label="Xem"
+                        control={
+                          <Checkbox
+                            checked={checkedMenuIds?.some(r => r.menu === item.id)}
+                            onChange={(e) => handleCheckboxChange(e, item.id, item.menuChildrent || [])}
+                            name={`menu-${item.id}`}
+                          />
+                        }
+                        label={
+                          <Typography variant="subtitle1" sx={{ minWidth: 160 }}>
+                            {item.name}
+                          </Typography>
+                        }
+
                       />
-                    </Grid>
-                    <Grid item>
-                      <FormControlLabel
-                        control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.them} onChange={(e) => handleSwitchChange(item.id, 'them', e.target.checked)}/>}
-                        label="Thêm"
-                      />
-                    </Grid>
-                    <Grid item>
-                      <FormControlLabel
-                        control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.sua}  onChange={(e) => handleSwitchChange(item.id, 'sua', e.target.checked)}/>}
-                        label="Sửa"
-                      />
-                    </Grid>
-                    <Grid item>
-                      <FormControlLabel
-                        control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.xoa} onChange={(e) => handleSwitchChange(item.id, 'xoa', e.target.checked)}/>}
-                        label="Xóa"
-                      />
-                    </Grid>
-                  </Grid>
-                </Box>
+                      <Grid container spacing={2} sx={{ ml: 2 }}>
+                        <Grid item>
+                          <FormControlLabel
+                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.xem} onChange={(e) => handleSwitchChange(item.id, 'xem', e.target.checked)} />}
+                            label="Xem"
+                          />
+                        </Grid>
+                        <Grid item>
+                          <FormControlLabel
+                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.them} onChange={(e) => handleSwitchChange(item.id, 'them', e.target.checked)} />}
+                            label="Thêm"
+                          />
+                        </Grid>
+                        <Grid item>
+                          <FormControlLabel
+                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.sua} onChange={(e) => handleSwitchChange(item.id, 'sua', e.target.checked)} />}
+                            label="Sửa"
+                          />
+                        </Grid>
+                        <Grid item>
+                          <FormControlLabel
+                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.xoa} onChange={(e) => handleSwitchChange(item.id, 'xoa', e.target.checked)} />}
+                            label="Xóa"
+                          />
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  }
+                >
+                  {Array.isArray(item.menuChildrent) && item.menuChildrent.length > 0 && item.menuChildrent?.map((child, childIndex) => (
+                    <TreeItem
+                      key={child.id}
+                      itemId={String(child.id)}
+                      label={
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={checkedMenuIds?.some(r => r.menu === child.id)}
+                                onChange={(e) => handleCheckboxChange(e, child.id)}
+                                name={`menu-${child.id}`}
+                              />
+                            }
+                            label={
+                              <Typography variant="subtitle1" sx={{ minWidth: 160 }}>
+                                {child.name}
+                              </Typography>
+                            }
+
+                          />
+                          <Grid container spacing={2} sx={{ ml: 2 }}>
+                            <Grid item>
+                              <FormControlLabel
+                                control={<Switch checked={checkedMenuIds.find(r => r?.menu == child?.id)?.xem} onChange={(e) => handleSwitchChange(child.id, 'xem', e.target.checked)} />}
+                                label="Xem"
+                              />
+                            </Grid>
+                            <Grid item>
+                              <FormControlLabel
+                                control={<Switch checked={checkedMenuIds.find(r => r?.menu == child?.id)?.them} onChange={(e) => handleSwitchChange(child.id, 'them', e.target.checked)} />}
+                                label="Thêm"
+                              />
+                            </Grid>
+                            <Grid item>
+                              <FormControlLabel
+                                control={<Switch checked={checkedMenuIds.find(r => r?.menu == child?.id)?.sua} onChange={(e) => handleSwitchChange(child.id, 'sua', e.target.checked)} />}
+                                label="Sửa"
+                              />
+                            </Grid>
+                            <Grid item>
+                              <FormControlLabel
+                                control={<Switch checked={checkedMenuIds.find(r => r?.menu == child?.id)?.xoa} onChange={(e) => handleSwitchChange(child.id, 'xoa', e.target.checked)} />}
+                                label="Xóa"
+                              />
+                            </Grid>
+                          </Grid>
+                        </Box>
+                      }
+                    />
+                  ))}
+                </TreeItem>
               ))}
-            </CardContent>
+            </SimpleTreeView>
           </Card>
         </DialogContent>
         <DialogActions>

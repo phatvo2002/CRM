@@ -12,6 +12,7 @@ namespace CRM.Repositories.Menus
          Task<ResultModal> DeleteMenu(Guid id);
          Task<ResultModal> UpdateGroup(GroupModel model);
          Task<List<MenuRoleDTO>> GetAllMenuRole(Guid Id);
+         Task<List<MenuRoleDTO>> GetAllMenuByRole(Guid RoleId);
          Task<ResultModal> UpdateMenu(MenuModel model);
     }
 }

@@ -24,6 +24,9 @@ export const apiMenu = createApi({
       getMenuRoleById: builder.query({
         query: (roleId) => `/Menu/getmenurole/${roleId}`,
       }),
+      getMenuAllRoleById: builder.query({
+        query: (roleId) => `/Menu/getmenuallrole/${roleId}`,
+      }),
       addMenu: builder.mutation({
         query: (data) => ({
           url: '/Menu/insertmenu',
@@ -60,6 +63,7 @@ export const apiMenu = createApi({
     useGetAllMenuQuery, 
     useGetMenuRoleByIdQuery, 
     useGetAllMenuParentQuery,
+    useGetMenuAllRoleByIdQuery,
     useAddMenuMutation,
     useUpdateMenuRoleMutation,
     useUpdateMenuMutation,
