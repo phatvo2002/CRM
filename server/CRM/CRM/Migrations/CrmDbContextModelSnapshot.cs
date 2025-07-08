@@ -96,6 +96,32 @@ namespace CRM.Migrations
                     b.ToTable("BaoGia", (string)null);
                 });
 
+            modelBuilder.Entity("CRM.Entities.ChiNhanh", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DiaChi")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<bool?>("IsChiNhanhTong")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MoTa")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("TenChiNhanh")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_ChiNhanh");
+
+                    b.ToTable("ChiNhanh", (string)null);
+                });
+
             modelBuilder.Entity("CRM.Entities.ChiTietKetQua", b =>
                 {
                     b.Property<Guid?>("Id")
@@ -1655,8 +1681,17 @@ namespace CRM.Migrations
                     b.Property<bool>("CheckIsGiamDoc")
                         .HasColumnType("bit");
 
+                    b.Property<bool?>("CheckIsSuperAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("CheckIsTongGiamDoc")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("CheckIsTruongPhong")
                         .HasColumnType("bit");
+
+                    b.Property<Guid?>("ChiNhanhId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("DiaChi")
                         .HasMaxLength(100)
@@ -1728,6 +1763,8 @@ namespace CRM.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_NguoiDung");
+
+                    b.HasIndex("ChiNhanhId");
 
                     b.HasIndex("MaChucVu");
 
@@ -1872,6 +1909,9 @@ namespace CRM.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("ChiNhanhId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool?>("IsActive")
                         .HasColumnType("bit");
 
@@ -1890,6 +1930,8 @@ namespace CRM.Migrations
 
                     b.HasKey("Id")
                         .HasName("PK_PhongBan");
+
+                    b.HasIndex("ChiNhanhId");
 
                     b.ToTable("PhongBan", (string)null);
                 });
@@ -2696,6 +2738,11 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Entities.Nguoidung", b =>
                 {
+                    b.HasOne("CRM.Entities.ChiNhanh", "ChiNhanh")
+                        .WithMany("Nguoidung")
+                        .HasForeignKey("ChiNhanhId")
+                        .HasConstraintName("FK_ChiNhanh_NguoiDung");
+
                     b.HasOne("CRM.Entities.ChucVu", "ChucVu")
                         .WithMany("Nguoidung")
                         .HasForeignKey("MaChucVu")
@@ -2710,6 +2757,8 @@ namespace CRM.Migrations
                         .WithMany("Nguoidung")
                         .HasForeignKey("MaTinhTrang")
                         .HasConstraintName("FK_TinhTrang_NguoiDung");
+
+                    b.Navigation("ChiNhanh");
 
                     b.Navigation("ChucVu");
 
@@ -2768,6 +2817,24 @@ namespace CRM.Migrations
                     b.Navigation("PhongBan");
 
                     b.Navigation("TrangThaiThucHien");
+                });
+
+            modelBuilder.Entity("CRM.Entities.PhongBan", b =>
+                {
+                    b.HasOne("CRM.Entities.ChiNhanh", "ChiNhanh")
+                        .WithMany("PhongBans")
+                        .HasForeignKey("ChiNhanhId")
+                        .IsRequired()
+                        .HasConstraintName("FK_ChiNhanh_PhongBan");
+
+                    b.Navigation("ChiNhanh");
+                });
+
+            modelBuilder.Entity("CRM.Entities.ChiNhanh", b =>
+                {
+                    b.Navigation("Nguoidung");
+
+                    b.Navigation("PhongBans");
                 });
 
             modelBuilder.Entity("CRM.Entities.ChucVu", b =>

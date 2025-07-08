@@ -61,6 +61,9 @@ const NhiemVu = lazy(() => import("./View/NhiemVu/index"));
 // Mục tiêu
 const MucTieu = lazy(() => import("./View/MucTieu/index"));
 
+// Mục tiêu
+const ChiNhanh = lazy(() => import("./View/ThietLap/QuanLyChiNhanh/index"));
+
 const RouteChild = [
   {
     path: "/banlamviec",
@@ -118,6 +121,14 @@ const RouteChild = [
     element: (
       <Suspense fallback={<div>Loading...</div>}>
         <QuanLyMenu />
+      </Suspense>
+    ),
+  },
+   {
+    path: "/chinhanh",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ChiNhanh />
       </Suspense>
     ),
   },

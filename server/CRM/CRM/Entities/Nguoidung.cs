@@ -21,12 +21,17 @@
         public bool CheckIsTruongPhong { get; set; }
         public byte[]? HinhAnh { get; set; }
         public bool CheckIsGiamDoc { get; set; }
+        public bool? CheckIsTongGiamDoc { get; set; }
+        public bool? CheckIsSuperAdmin { get; set; }
         public Guid? MaChucVu { get; set; }
         public virtual ChucVu? ChucVu { get; set; }
         public Guid? MaPhongBan { get; set; }
         public virtual PhongBan? PhongBan { get; set; }
         public int? MaTinhTrang { get; set; }
         public virtual TinhTrang? TinhTrang { get; set; }
+        // Chi nhánh 
+        public virtual ChiNhanh? ChiNhanh { get; set; }
+        public Guid? ChiNhanhId { get; set; }
         public virtual ICollection<KhachHangTiemNang> KhachHangTiemNangs { get; set; } = new List<KhachHangTiemNang>();
         public virtual ICollection<KhachHangMucTieu> KhachHangMucTieus { get; set; } = new List<KhachHangMucTieu>();
         public virtual ICollection<CoHoi> CoHois { get; set; } = new List<CoHoi>();
@@ -41,5 +46,7 @@
         // kpi
         public virtual ICollection<MucTieuDoanhSo> MucTieuDoanhSos { get; set; } = new List<MucTieuDoanhSo>();
         public virtual ICollection<KPINhanVien> KPINhanViens { get; set; } = new List<KPINhanVien>();
+
+       
     }
 }

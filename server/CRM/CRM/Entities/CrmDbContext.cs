@@ -89,6 +89,8 @@ namespace CRM.Entities
 
         public virtual DbSet<KhaoSat> KhaoSats { get; set; }
 
+        public virtual DbSet<ChiNhanh> ChiNhanhs { get; set; }
+
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
         //    optionsBuilder.UseSqlServer("Server=DESKTOP-S9B3N7M;Database=CRM;User Id=sa;Password=abc@123;Encrypt=True;TrustServerCertificate=true;Connection Timeout=1000;");
@@ -177,6 +179,10 @@ namespace CRM.Entities
                 entity.ToTable("PhongBan");
                 entity.Property(e => e.Id).ValueGeneratedNever();
                 entity.Property(e => e.TenPhongBan).HasMaxLength(50);
+                entity.HasOne(d => d.ChiNhanh).WithMany(p => p.PhongBans)
+                    .HasForeignKey(d => d.ChiNhanhId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ChiNhanh_PhongBan");
             });
             modelBuilder.Entity<Nguoidung>(entity =>
             {
@@ -200,20 +206,24 @@ namespace CRM.Entities
                 entity.Property(e => e.IsActive);
                 entity.Property(e => e.IsDelete).HasColumnType("bit");
                 entity.Property(e => e.CheckIsTruongPhong);
-
+                entity.Property(e => e.CheckIsTongGiamDoc).HasColumnType("bit");
+                entity.Property(e => e.CheckIsSuperAdmin).HasColumnType("bit");
                 entity.Property(e => e.CheckIsGiamDoc);
 
                 entity.HasOne(d => d.ChucVu).WithMany(p => p.Nguoidung)
                       .HasForeignKey(d => d.MaChucVu)
                       .OnDelete(DeleteBehavior.ClientSetNull)
                       .HasConstraintName("FK_ChucVu_NguoiDung");
-
                 entity.HasOne(d => d.PhongBan).WithMany(p => p.Nguoidung)
                       .HasForeignKey(d => d.MaPhongBan)
                       .HasConstraintName("FK_PhongBan_NguoiDung");
                 entity.HasOne(d => d.TinhTrang).WithMany(p => p.Nguoidung)
                       .HasForeignKey(d => d.MaTinhTrang)
                       .HasConstraintName("FK_TinhTrang_NguoiDung");
+                entity.HasOne(d => d.ChiNhanh).WithMany(p => p.Nguoidung)
+                     .HasForeignKey(d => d.ChiNhanhId)
+                     .OnDelete(DeleteBehavior.ClientSetNull)
+                     .HasConstraintName("FK_ChiNhanh_NguoiDung");
             });
             // Khách hàng tiềm năng 
             modelBuilder.Entity<PhongBanKhachHang>(entity =>
@@ -1108,6 +1118,19 @@ namespace CRM.Entities
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
 
             });
+
+            modelBuilder.Entity<ChiNhanh>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_ChiNhanh");
+
+                entity.ToTable("ChiNhanh");
+
+                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.MoTa).HasMaxLength(150);
+                entity.Property(e => e.DiaChi).HasMaxLength(150);
+                entity.Property(e => e.TenChiNhanh).HasMaxLength(100);
+            });
+
 
         }
 
