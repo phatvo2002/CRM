@@ -193,7 +193,8 @@ namespace CRM.Repositories.NguoiDungs
                         new Claim("UserId",result.Id.ToString()),
                         new Claim("MaChucVu", result.MaChucVu.ToString()),
                         new Claim("PhongBan", result.MaPhongBan.ToString()),
-                        new Claim("TaiKhoan", loginViewModel.TaiKhoan.ToString())
+                        new Claim("TaiKhoan", loginViewModel.TaiKhoan.ToString()),
+                        //new Claim("ChiNhanh", result.MaChiNhanh.ToString())
                }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials
@@ -206,8 +207,6 @@ namespace CRM.Repositories.NguoiDungs
             return result;
         }
 
-
-
         public async Task<ResultModal> UserDepartment(Guid userId, Guid departmentId)
         {
             var db = _context.Nguoidungs.AsNoTracking().FirstOrDefault(r => r.Id == userId);
@@ -215,7 +214,10 @@ namespace CRM.Repositories.NguoiDungs
             {
                 if (db != null)
                 {
+                    var dbPhongBan  = await _context.PhongBans.FirstOrDefaultAsync(r=> r.Id == departmentId);
+
                     db.MaPhongBan = departmentId;
+                    db.ChiNhanhId = dbPhongBan?.ChiNhanhId;
                     _context.Nguoidungs.Update(db);
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Phân quyền phòng ban thành công", Success = true };
@@ -237,20 +239,46 @@ namespace CRM.Repositories.NguoiDungs
             {
                 if (db != null)
                 {
-                    if (roleName == "Giám đốc")
+                    if (roleId  == Guid.Parse(AppSettingsProvider.Get("Role:GiamDoc")))
                     {
                         db.MaChucVu = roleId;
                         db.CheckIsGiamDoc = true;
                         db.CheckIsTruongPhong = false;
+                        db.CheckIsSuperAdmin = false;
+                        db.CheckIsTongGiamDoc= false;
                         _context.Nguoidungs.Update(db);
                         await _context.SaveChangesAsync();
                         return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };
                     }
-                    else if (roleName == "Trưởng phòng")
+                    else if (roleId == Guid.Parse(AppSettingsProvider.Get("Role:TruongPhong")))
                     {
                         db.MaChucVu = roleId;
                         db.CheckIsTruongPhong = true;
                         db.CheckIsGiamDoc = false;
+                        db.CheckIsSuperAdmin = false;
+                        db.CheckIsTongGiamDoc  = false;
+                        _context.Nguoidungs.Update(db);
+                        await _context.SaveChangesAsync();
+                        return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };
+                    }
+                    else if (roleId == Guid.Parse(AppSettingsProvider.Get("Role:TongGiamDoc")))
+                    {
+                        db.MaChucVu = roleId;
+                        db.CheckIsTruongPhong = false;
+                        db.CheckIsGiamDoc = false;
+                        db.CheckIsSuperAdmin = false;
+                        db.CheckIsTongGiamDoc = true;
+                        _context.Nguoidungs.Update(db);
+                        await _context.SaveChangesAsync();
+                        return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };
+                    }
+                    else if (roleId == Guid.Parse(AppSettingsProvider.Get("Role:SuperAdmin")))
+                    {
+                        db.MaChucVu = roleId;
+                        db.CheckIsTruongPhong = false;
+                        db.CheckIsGiamDoc = false;
+                        db.CheckIsSuperAdmin = true;
+                        db.CheckIsTongGiamDoc = false;
                         _context.Nguoidungs.Update(db);
                         await _context.SaveChangesAsync();
                         return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };
@@ -258,8 +286,10 @@ namespace CRM.Repositories.NguoiDungs
                     else
                     {
                         db.MaChucVu = roleId;
-                        db.CheckIsGiamDoc = false;
                         db.CheckIsTruongPhong = false;
+                        db.CheckIsGiamDoc = false;
+                        db.CheckIsSuperAdmin = false;
+                        db.CheckIsTongGiamDoc = false;
                         _context.Nguoidungs.Update(db);
                         await _context.SaveChangesAsync();
                         return new ResultModal() { Status = 200, Message = "Chỉnh sửa thành công ", Success = true };

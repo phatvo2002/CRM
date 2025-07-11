@@ -112,7 +112,7 @@ const ModalThemSua = (props) => {
       oid: selectedRow[0]?.id,
       menu: checkedMenuIds
     }
-   
+
     const res = await updateGroupMenu(data)
     if (res?.data.status == 200) {
       closeModal()
@@ -131,8 +131,8 @@ const ModalThemSua = (props) => {
       setMenu(menuData.length > 0 ? menuData : []);
     }
   }, [menuData]);
-   console.log(checkedMenuIds)
-   console.log(menuRoleData)
+  console.log(checkedMenuIds)
+  console.log(menuRoleData)
   useEffect(() => {
     if (Array.isArray(menuRoleData) && menuRoleData.length > 0) {
       setMenuRole(menuRoleData);
@@ -174,6 +174,7 @@ const ModalThemSua = (props) => {
                             checked={checkedMenuIds?.some(r => r.menu === item.id)}
                             onChange={(e) => handleCheckboxChange(e, item.id, item.menuChildrent || [])}
                             name={`menu-${item.id}`}
+                            onClick={(e) => e.stopPropagation()}
                           />
                         }
                         label={
@@ -186,25 +187,33 @@ const ModalThemSua = (props) => {
                       <Grid container spacing={2} sx={{ ml: 2 }}>
                         <Grid item>
                           <FormControlLabel
-                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.xem} onChange={(e) => handleSwitchChange(item.id, 'xem', e.target.checked)} />}
+                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.xem}
+                              onChange={(e) => handleSwitchChange(item.id, 'xem', e.target.checked)}
+                              onClick={(e) => e.stopPropagation()} />}
                             label="Xem"
                           />
                         </Grid>
                         <Grid item>
                           <FormControlLabel
-                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.them} onChange={(e) => handleSwitchChange(item.id, 'them', e.target.checked)} />}
+                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.them}
+                              onChange={(e) => handleSwitchChange(item.id, 'them', e.target.checked)}
+                              onClick={(e) => e.stopPropagation()} />}
                             label="Thêm"
                           />
                         </Grid>
                         <Grid item>
                           <FormControlLabel
-                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.sua} onChange={(e) => handleSwitchChange(item.id, 'sua', e.target.checked)} />}
+                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.sua} onChange={(e) =>
+                              handleSwitchChange(item.id, 'sua', e.target.checked)}
+                              onClick={(e) => e.stopPropagation()} />}
                             label="Sửa"
                           />
                         </Grid>
                         <Grid item>
                           <FormControlLabel
-                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.xoa} onChange={(e) => handleSwitchChange(item.id, 'xoa', e.target.checked)} />}
+                            control={<Switch checked={checkedMenuIds.find(r => r?.menu == item?.id)?.xoa}
+                              onChange={(e) => handleSwitchChange(item.id, 'xoa', e.target.checked)}
+                              onClick={(e) => e.stopPropagation()} />}
                             label="Xóa"
                           />
                         </Grid>

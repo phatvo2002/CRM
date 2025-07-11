@@ -8,6 +8,8 @@
         public string? TenPhongBan { get; set; }
         public string? MoTa { get; set; }
         public string? IsActive { get; set; }
+        public Guid ChiNhanhId { get; set; }
         public List<UserDTO>? Nguoidung { get; set; }
+        public ChiNhanhDTO? ChiNhanh{ get; set; }
     }
 }

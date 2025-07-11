@@ -19,6 +19,7 @@
         public Guid? MaChucVu { get; set; }
 
         public Guid? MaPhongBan { get; set; }
+        public Guid? MaChiNhanh { get; set; }
         public PhongBanDTO? PhongBan { get; set; }
         public ChucVuDTO? ChucVu { get; set; }
         public bool CheckIsTruongPhong { get; set; }

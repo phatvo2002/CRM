@@ -2,7 +2,7 @@ import { Button, Chip, Container, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AddIcon from "@mui/icons-material/Add";
-import { useDeleteMutation, useGetAllQuery } from "src/App/Api/XepLoai.api";
+import { useDeleteMutation, useGetAllQuery } from "src/App/Api/ChiNhanh.api";
 import CreateIcon from "@mui/icons-material/Create";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CustomDatagrid from "src/App/Components/DataGrid/CustomDatagrid";
@@ -15,7 +15,7 @@ const index = () => {
     {
       field: "action",
       headerName: "Thao tác",
-      width: 200,
+      width: 100,
       renderCell: () => (
         <div style={{ alignItems: "center" }}>
           <IconButton
@@ -37,23 +37,10 @@ const index = () => {
         </div>
       ),
     },
-    { field: "tenXepLoai", headerName: "Tên xếp loại", width: 200},
-    { field: "tuDiem", headerName: "Từ điểm", width: 200 },
-    { field: "denDiem", headerName: "Đến điểm", width: 200},
-    {
-      field: "maMau",
-      headerName: "Mã màu",
-      width: 200,
-      renderCell: (params) => (
-        <div style={{ alignItems: "center" }}>
-          <Chip
-            label={params.value}
-            variant="outlined"
-            style={{ backgroundColor: params.value, color: "#fff" }}
-          />
-        </div>
-      ),
-    }
+    { field: "tenChiNhanh", headerName: "Tên chi nhánh", width: 200 , flex : 1},
+    { field: "diaChi", headerName: "Địa chỉ", width: 200 , flex : 1 },
+    { field: "moTa", headerName: "Mô tả", width: 200 , flex : 1},
+
     
   ];
 
@@ -108,15 +95,16 @@ const index = () => {
             }}
           >
             <ButtonCustom handle={backLink}/>
-            <Button
+            <IconButton
               variant="contained"
               style={{ marginTop: "10px" }}
               onClick={handleOpenModal}
-              startIcon={<AddIcon />}
-            />
+            >
+              <AddIcon />
+            </IconButton>
           </div>
              
-               {/* <CustomDatagrid
+               <CustomDatagrid
                  rows={rows}
                  columns={columns}
                  pageSizeOptions={[10, 25, 50]}
@@ -124,12 +112,12 @@ const index = () => {
                  checkboxSelection={true}
                  showTopToolbar={true}
                  onRowSelectionChange={handleRowSelectionChange}
-               /> */}
+               />
         </div>
 
         {/* Modal thêm chức vụ */}
-        {/* <ModalThemXepLoai showModal={modalAdd} closeModal={handleCloseModal} refetch={refetch} />
-        <ModalSuaXepLoai showModal={modalUpdate}  closeModal={handleCloseModalUpdate} refetch={refetch} selectedItem={selectedRow}/> */}
+        <ModalAdd showModal={modalAdd} closeModal={handleCloseModal} refetch={refetch} />
+        <ModalUpdate showModal={modalUpdate}  closeModal={handleCloseModalUpdate} refetch={refetch} selectedItem={selectedRow}/>
       </Container>
     </>
   );

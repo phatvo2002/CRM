@@ -191,28 +191,31 @@ const ThietLap = () => {
         </div>
       ),
     },
-    { field: "hoVaDem", headerName: "Họ Và Đệm", width: 150 },
+    { field: "hoVaDem", headerName: "Họ Và Đệm", width: 150 , flex : 1},
     { field: "ten", headerName: "Tên" },
     // { field: "diaChi", headerName: "Địa Chỉ", width: 200, flex: 1 },
-    { field: "soDienThoai", headerName: "Số điện thoại", width: 150 },
-    { field: "email", headerName: "Tài khoản Email", width: 150 },
-    { field: "taiKhoan", headerName: "Tài khoản", width: 150 },
+    { field: "soDienThoai", headerName: "Số điện thoại", width: 150  ,flex : 1},
+    { field: "email", headerName: "Tài khoản Email", width: 150 ,flex : 1},
+    { field: "taiKhoan", headerName: "Tài khoản", width: 150 ,flex : 1},
     {
       field: "phongBan",
       headerName: "Phòng ban",
       width: 150,
+      flex : 1,
       renderCell: (params) => <span>{params.row?.phongBan?.tenPhongBan}</span>,
     },
     {
       field: "chucVu",
       headerName: "Chức vụ ",
       width: 150,
+      flex : 1,
       renderCell: (params) => <span>{params.row?.chucVu?.tenChucVu}</span>,
     },
     {
       field: "isActive",
       headerName: "Kích hoạt tài khoản",
       width: 150,
+      flex : 1,
       renderCell: (params) => (
         <Switch
           checked={params.row.isActive}
@@ -222,26 +225,6 @@ const ThietLap = () => {
         />
       ),
     },
-    // {
-    //   field: "",
-    //   headerName: "Hành động",
-    //   width: 250,
-    //   flex: 1,
-    //   renderCell: () => (
-    //     <div>
-    //        <Button >
-    //         <GroupIcon/>
-    //       </Button>
-    //       <Button onClick={handleOpenModalUpdate}>
-    //         <CreateIcon>
-    //         </CreateIcon>
-    //       </Button>
-    //       <Button disabled={selectedRow.length > 0 ? false : true}>
-    //         <DeleteIcon  onClick={handleDeleteNguoiDung}></DeleteIcon>
-    //       </Button>
-    //     </div>
-    //   ),
-    // },
   ];
 
   const handleRowSelectionChange = (selectedRows) => {

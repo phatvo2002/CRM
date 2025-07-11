@@ -6,6 +6,7 @@ using CRM.Helper;
 using CRM.Modal;
 using CRM.Repositories.BaoCaos;
 using CRM.Repositories.BaoGias;
+using CRM.Repositories.ChiNhanhs;
 using CRM.Repositories.ChucVus;
 using CRM.Repositories.CoHois;
 using CRM.Repositories.CuocGois;
@@ -37,6 +38,7 @@ using CRM.Repositories.XepLoais;
 using CRM.Services.Automations;
 using CRM.Services.BaoCaos;
 using CRM.Services.BaoGias;
+using CRM.Services.ChiNhanhs;
 using CRM.Services.ChucVus;
 using CRM.Services.CoHois;
 using CRM.Services.CuocGois;
@@ -193,6 +195,9 @@ builder.Services.AddScoped<IBaoCaoServices, BaoCaoServices>();
 
 builder.Services.AddScoped<IKhaoSatRepository, KhaoSatRepository>();
 builder.Services.AddScoped<IKhaoSatServices, KhaoSatServices>();
+
+builder.Services.AddScoped<IChiNhanhRepository, ChiNhanhRepository>();
+builder.Services.AddScoped<IChiNhanhServices, ChiNhanhServices>();
 
 builder.Services.AddScoped<JwtAuthorizeFilter>();
 

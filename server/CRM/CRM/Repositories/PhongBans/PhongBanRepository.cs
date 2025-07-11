@@ -31,6 +31,7 @@ namespace CRM.Repositories.PhongBans
                 phongBan.TenPhongBan = model.TenPhongban;
                 phongBan.MaQuanLy = model.MaQuanLy;
                 phongBan.IsActive = model.IsAcTive;
+                phongBan.ChiNhanhId = model.MaChiNhanh;
                 _context.PhongBans.Add(phongBan);
                 await _context.SaveChangesAsync();
                 return new ResultModal() { Status = 200, Message = "Thêm mới thành công", Success = true };
@@ -60,7 +61,10 @@ namespace CRM.Repositories.PhongBans
 
         public async Task<List<PhongBanDTO>> GetAllPhongBan()
         {
-            var db = await _context.PhongBans.Include(e => e.Nguoidung).ThenInclude(r => r.ChucVu).OrderBy(r => r.SoThuTu).ToListAsync();
+            var db = await _context.PhongBans.Include(r => r.ChiNhanh)
+                                             .Include(e => e.Nguoidung)
+                                             .ThenInclude(r => r.ChucVu)
+                                             .OrderBy(r => r.SoThuTu).ToListAsync();
             return _mapper.Map<List<PhongBanDTO>>(db);
         }
 
@@ -83,6 +87,7 @@ namespace CRM.Repositories.PhongBans
                     db.SoThuTu = model.Stt;
                     db.TenPhongBan = model.TenPhongban;
                     db.IsActive = model.IsAcTive;
+                    db.ChiNhanhId = model.MaChiNhanh;
                     _context.PhongBans.Update(db);
                     await _context.SaveChangesAsync();
                     return new ResultModal() { Status = 200, Message = "Cập nhật thành công", Success = false };

@@ -86,6 +86,9 @@ namespace CRM.Helper
             CreateMap<KhaoSat, KhaoSatDTO>();
             CreateMap<KhaoSatModal, KhaoSat>().ReverseMap();
             CreateMap<PhanLoaiKhachHang, ClassDTO>();
+            CreateMap<ChiNhanh, ChiNhanhDTO>();
+            CreateMap<ChiNhanhModal, ChiNhanh>().ReverseMap();
+
 
         }
     }

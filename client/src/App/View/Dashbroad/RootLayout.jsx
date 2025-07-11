@@ -66,7 +66,7 @@ function Copyright(props) {
   );
 }
 
-const drawerWidth = 300;
+const drawerWidth = 280;
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",

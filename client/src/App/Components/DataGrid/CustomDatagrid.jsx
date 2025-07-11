@@ -174,7 +174,7 @@ const CustomToolbar = () => {
         justifyContent: 'space-between',
         alignItems: 'center',
         padding: 1.5,
-        backgroundColor: 'grey.50',
+        backgroundColor: 'background.primary',
         borderRadius: '8px 8px 0 0',
       }}
     >

@@ -205,10 +205,6 @@ namespace CRM.Repositories
             return _mapper.Map<List<TDto>>(db);
         }
 
-
-
-
-
         public async Task<ResultModal> Update(TModal modal)
         {
             var idProperty = modal.GetType().GetProperty("Id");

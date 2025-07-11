@@ -86,11 +86,9 @@ const QuanLyPhongban = () => {
       }
     });
   };
-  const gotoLink = () => {
-    navigate(-1);
-  };
+
   const backLink = async () => {
-    navigate("/quantrihethong");
+    navigate(-1);
   };
   useEffect(() => {
     if (phongbanlist) {
@@ -177,6 +175,15 @@ const QuanLyPhongban = () => {
             }}
           >
             {data?.maQuanLy}
+          </TableCell>
+           <TableCell
+            align="center"
+            sx={{
+              borderRight: "1px solid rgba(224, 224, 224, 1)",
+              padding: "8px",
+            }}
+          >
+            {data?.chiNhanh?.tenChiNhanh}
           </TableCell>
           <TableCell
             align="center"
@@ -332,6 +339,14 @@ const QuanLyPhongban = () => {
                         >
                           {item2?.diaChi}
                         </TableCell>
+                          <TableCell
+                          align="center"
+                          sx={{
+                            borderRight: "1px solid rgba(224, 224, 224, 1)",
+                          }}
+                        >
+                     
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -387,6 +402,7 @@ const QuanLyPhongban = () => {
                 <TableCell align="center">Số thứ tự</TableCell>
                 <TableCell align="center">Tên phòng ban</TableCell>
                 <TableCell align="center">Mã quản lý</TableCell>
+                <TableCell align="center">Chi nhánh</TableCell>
                 <TableCell align="center">Mô tả</TableCell>
               </TableRow>
             </TableHead>

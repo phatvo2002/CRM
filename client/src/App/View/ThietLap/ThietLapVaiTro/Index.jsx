@@ -16,23 +16,24 @@ import ButtonCustom from "src/App/Components/CustomButton/ButtonCustom";
 const ThietLapVaiTro = () => {
   const navigate = useNavigate();
   const columns = [
-    { field: "tenChucVu", headerName: "Tên chức vụ", width: 200, flex: 1 },
-    { field: "moTa", headerName: "Mô Tả", width: 200, flex: 1 },
-    {
+      {
       field: "",
       headerName: "Action",
-      width: 150,
+      width: 100,
       renderCell: () => (
         <div>
           <Button disabled={selectedRow.length > 0 ? false : true}>
             <CreateIcon></CreateIcon>
           </Button>
-          <Button disabled={selectedRow.length > 0 ? false : true}>
+          {/* <Button disabled={selectedRow.length > 0 ? false : true}>
             <DeleteIcon onClick={handleDeleteNguoiDung}></DeleteIcon>
-          </Button>
+          </Button> */}
         </div>
       ),
     },
+    { field: "tenChucVu", headerName: "Tên chức vụ", width: 200, flex: 1 },
+    { field: "moTa", headerName: "Mô Tả", width: 200, flex: 1 },
+
   ];
   const [datatable, setDataTable] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -103,13 +104,13 @@ const ThietLapVaiTro = () => {
     setSelectedRow(selectedRows);
   };
   const backLink = async () => {
-    navigate("/quantrihethong");
+    navigate(-1);
   };
   return (
     <Container style={{ maxWidth: "100%" }}>
       <div style={{ width: "100%" }}>
-        <h2>DANH SÁCH CHỨC VỤ</h2>
-        <p>Quản lý danh sách các chức vụ có trong phần mềm LPCRM</p>
+        <h2>Phân QUYỀN CHỨC VỤ</h2>
+        <p>Phân quyền các chức vụ có trong phần mềm LPCRM</p>
 
         <div
           style={{
@@ -142,25 +143,11 @@ const ThietLapVaiTro = () => {
               disabled={!selectedRow[0]}
             >
               {" "}
-              <AddIcon></AddIcon> Phân quyền menu
+              <AddIcon></AddIcon> Phân quyền 
             </Button>
           </div>
         </div>
-        {/* <DataGrid
-          rows={datatable}
-          columns={columns}
-          style={{ marginTop: "10px" }}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          onRowSelectionModelChange={(newRowSelectionModel) => {
-            setSelectedRow(newRowSelectionModel);
-          }}
-          pageSizeOptions={[5, 10]}
-          checkboxSelection
-        /> */}
+
         <CustomDatagrid
           rows={datatable}
           columns={columns}
