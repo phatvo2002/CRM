@@ -112,6 +112,9 @@ namespace CRM.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<int>("SoThuTu")
+                        .HasColumnType("int");
+
                     b.Property<string>("TenChiNhanh")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -1909,7 +1912,7 @@ namespace CRM.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ChiNhanhId")
+                    b.Property<Guid?>("ChiNhanhId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool?>("IsActive")
@@ -2824,7 +2827,6 @@ namespace CRM.Migrations
                     b.HasOne("CRM.Entities.ChiNhanh", "ChiNhanh")
                         .WithMany("PhongBans")
                         .HasForeignKey("ChiNhanhId")
-                        .IsRequired()
                         .HasConstraintName("FK_ChiNhanh_PhongBan");
 
                     b.Navigation("ChiNhanh");

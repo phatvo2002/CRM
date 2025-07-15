@@ -46,7 +46,26 @@ namespace CRM.Controllers.Menus
             try
             {
                 List<MenuRoleDTO> result = await _menuServices.GetAllMenuRoles(roleid);
-                return Ok(result.Where(r=> r.Menu.MenuChildrent.Count > 0));
+                var filteredResult = result
+         .Where(r => r.Menu.MenuChildrent.Count > 0
+              && r.Menu.MenuChildrent.Any(child => child.MenuRoles.Count > 0))
+                    .Select(r => new MenuRoleDTO
+                {
+            Menu = new MenuDTO
+         {
+             Id = r.Menu.Id,
+             Name = r.Menu.Name,
+             Url = r.Menu.Url,
+             Icon = r.Menu.Icon,
+             IsActive = r.Menu.IsActive,
+             MenuChildrent = r.Menu.MenuChildrent
+                 .Where(child => child.MenuRoles.Count > 0)
+                 .ToList()
+         },
+         GroupId = r.GroupId,
+         MenuId = r.MenuId}).ToList();
+                return Ok(filteredResult);
+
             }
             catch (ArgumentException ex)
             {

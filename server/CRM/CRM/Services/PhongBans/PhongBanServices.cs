@@ -23,9 +23,9 @@ namespace CRM.Services.PhongBans
             return await _phongBanRepository.DeletePhongBan(id);
         }
 
-        public async Task<List<PhongBanDTO>> GetAllPhongBan()
+        public async Task<List<PhongBanDTO>> GetAllPhongBan(Guid ChiNhanhId)
         {
-            return await _phongBanRepository.GetAllPhongBan();
+            return await _phongBanRepository.GetAllPhongBan(ChiNhanhId);
         }
 
         public async Task<PhongBanDTO> GetPhongBanById(Guid id)

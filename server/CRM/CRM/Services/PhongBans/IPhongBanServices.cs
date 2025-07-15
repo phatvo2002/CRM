@@ -8,7 +8,7 @@ namespace CRM.Services.PhongBans
 
         public Task<ResultModal> CreatePhongBan(PhongBanModel model);
 
-        public Task<List<PhongBanDTO>> GetAllPhongBan();
+        public Task<List<PhongBanDTO>> GetAllPhongBan(Guid ChiNhanhId);
 
         public Task<PhongBanDTO> GetPhongBanById(Guid id);
 

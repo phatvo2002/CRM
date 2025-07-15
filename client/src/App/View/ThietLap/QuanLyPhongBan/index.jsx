@@ -208,7 +208,7 @@ const QuanLyPhongban = () => {
                   sx={{ border: "1px solid rgba(224, 224, 224, 1)" }}
                 >
                   <TableHead>
-                    <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                    <TableRow sx={{ backgroundColor: "background.primary" }}>
                       <TableCell
                         sx={{
                           borderRight: "1px solid rgba(224, 224, 224, 1)",
@@ -257,6 +257,15 @@ const QuanLyPhongban = () => {
                         }}
                       >
                         Địa chỉ
+                      </TableCell>
+                       <TableCell
+                        align="center"
+                        sx={{
+                          borderRight: "1px solid rgba(224, 224, 224, 1)",
+                          width: "200px",
+                        }}
+                      >
+                        Chi nhánh
                       </TableCell>
                     </TableRow>
                   </TableHead>

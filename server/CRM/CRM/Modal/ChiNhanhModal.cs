@@ -7,5 +7,6 @@
         public string? DiaChi { get; set; }
         public string? MoTa { get; set; }
         public bool? IsChiNhanhTong { get; set; }
+        public int SoThuTu { get; set; }
     }
 }

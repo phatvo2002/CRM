@@ -12,14 +12,16 @@ const modelObj = {
   tenChiNhanh: "tenChiNhanh",
   diaChi: "diaChi",
   moTa: "moTa",
-  isChiNhanhTong: "isChiNhanhTong"
+  isChiNhanhTong: "isChiNhanhTong",
+  soThuTu:"soThuTu"
 };
 const labelObj = {
   id: "Mã chi nhánh",
   tenChiNhanh: "Tên chi nhánh",
   diaChi: "Địa chỉ",
   moTa: "Mô tả",
-  isChiNhanhTong: "Chi nhánh tổng"
+  isChiNhanhTong: "Chi nhánh tổng",
+  soThuTu:"Số thứ tự"
 };
 const initialFormState = {
   [modelObj.id]: null,
@@ -27,6 +29,7 @@ const initialFormState = {
   [modelObj.diaChi]: "",
   [modelObj.moTa]: "",
   [modelObj.isChiNhanhTong]: false,
+  [modelObj.soThuTu] : 0
 },
   schema = yup.object().shape({
     [modelObj.tenChiNhanh]: validateString(),
@@ -45,6 +48,7 @@ const ModalUpdate = ({ showModal, closeModal, selectedItem, refetch }) => {
       [modelObj.diaChi]: data[modelObj.diaChi],
       [modelObj.moTa]: data[modelObj.moTa],
       [modelObj.isChiNhanhTong]: data[modelObj.isChiNhanhTong],
+      [modelObj.soThuTu]: data[modelObj.soThuTu]
     };
     
     callApiUpdate(tempData);
@@ -75,6 +79,8 @@ const ModalUpdate = ({ showModal, closeModal, selectedItem, refetch }) => {
           [modelObj.diaChi]: selectedItem[modelObj.diaChi],
           [modelObj.moTa]: selectedItem[modelObj.moTa],
           [modelObj.isChiNhanhTong]: selectedItem[modelObj.isChiNhanhTong],
+          [modelObj.soThuTu]: selectedItem[modelObj.soThuTu],
+
         },
         { keepDirty: true }
       );
@@ -105,6 +111,14 @@ const ModalUpdate = ({ showModal, closeModal, selectedItem, refetch }) => {
         ref={modalRef}
       >
         <Grid container spacing={2}>
+           <Grid item xs={12}>
+            <TextFieldRHF
+              name={modelObj.soThuTu}
+              label={labelObj.soThuTu}
+              type={"number"}
+              required
+            />
+          </Grid>
           <Grid item xs={12}>
             <TextFieldRHF
               name={modelObj.tenChiNhanh}

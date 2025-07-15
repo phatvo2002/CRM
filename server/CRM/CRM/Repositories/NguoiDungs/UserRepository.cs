@@ -153,10 +153,29 @@ namespace CRM.Repositories.NguoiDungs
             return _mapper.Map<List<UserDTO>>(data);
         }
 
-        public async Task<List<UserDTO>> GetUsers()
+        public async Task<List<UserDTO>> GetUsers(Guid userId, Guid chiNhanhId)
         {
-            var data = await _context.Nguoidungs.Where(r => r.IsDelete == false).Include(r => r.PhongBan).Include(r => r.ChucVu).ToListAsync();
-            return _mapper.Map<List<UserDTO>>(data);
+            var dataUser = _context.Nguoidungs.Where(r=> r.Id == userId)
+                                              .Include(r=> r.ChiNhanh).FirstOrDefault();
+            var result = new List<Nguoidung>();
+            if (dataUser != null && dataUser.ChiNhanh != null)
+            {
+            if(dataUser.ChiNhanh.IsChiNhanhTong == true)
+            {
+               result =  await _context.Nguoidungs.Where(r => r.IsDelete == false)
+                                                  .Include(r => r.PhongBan)
+                                                  .Include(r => r.ChucVu)
+                                                  .ToListAsync();
+            }
+            else
+            {
+                result = await _context.Nguoidungs.Where(r => r.IsDelete == false && r.ChiNhanhId == chiNhanhId)
+                                                .Include(r => r.PhongBan)
+                                                .Include(r => r.ChucVu)
+                                                .ToListAsync();
+            }    
+            }    
+            return _mapper.Map<List<UserDTO>>(result);
         }
 
         public async Task<LoginDTO> Login(LoginViewModal loginViewModel)
@@ -165,9 +184,12 @@ namespace CRM.Repositories.NguoiDungs
             string hashedPassword = Helper.Helper.GetMd5Hash(loginViewModel.Password);
             var user = await _context.Nguoidungs
            .Where(r => r.TaiKhoan == loginViewModel.TaiKhoan &&
-                   (r.MatKhau == hashedPassword || loginViewModel.Password == "abc@123")).Include(r => r.ChucVu).Include(r => r.PhongBan)
-       .AsNoTracking()
-       .FirstOrDefaultAsync();
+                   (r.MatKhau == hashedPassword || loginViewModel.Password == "abc@123"))
+                                                              .Include(r => r.ChucVu)
+                                                              .Include(r => r.PhongBan)
+                                                              .Include(r=> r.ChiNhanh)
+                                                              .AsNoTracking()
+        .FirstOrDefaultAsync();
             if (user != null)
             {
                 if (user.IsActive == true)
@@ -194,7 +216,7 @@ namespace CRM.Repositories.NguoiDungs
                         new Claim("MaChucVu", result.MaChucVu.ToString()),
                         new Claim("PhongBan", result.MaPhongBan.ToString()),
                         new Claim("TaiKhoan", loginViewModel.TaiKhoan.ToString()),
-                        //new Claim("ChiNhanh", result.MaChiNhanh.ToString())
+                        new Claim("ChiNhanhId", result.ChiNhanhId.ToString())
                }),
                 Expires = DateTime.UtcNow.AddDays(1),
                 SigningCredentials = new SigningCredentials

@@ -166,13 +166,7 @@ namespace CRM.Entities
             #endregion
 
 
-            modelBuilder.Entity<TinhTrang>(entity =>
-            {
-                entity.HasKey(e => e.Id).HasName("PK_TinhTrang");
-                entity.ToTable("TinhTrang");
-                entity.Property(e => e.Id).ValueGeneratedNever();
-                entity.Property(e => e.TenTinhTrang).HasMaxLength(50);
-            });
+           
             modelBuilder.Entity<PhongBan>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_PhongBan");
@@ -225,7 +219,14 @@ namespace CRM.Entities
                      .OnDelete(DeleteBehavior.ClientSetNull)
                      .HasConstraintName("FK_ChiNhanh_NguoiDung");
             });
-            // Khách hàng tiềm năng 
+            modelBuilder.Entity<TinhTrang>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK_TinhTrang");
+                entity.ToTable("TinhTrang");
+                entity.Property(e => e.Id).ValueGeneratedNever();
+                entity.Property(e => e.TenTinhTrang).HasMaxLength(50);
+            });
+            #region Khách hàng tiềm năng
             modelBuilder.Entity<PhongBanKhachHang>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_PhongBanKhachhang");
@@ -246,7 +247,6 @@ namespace CRM.Entities
                 entity.Property(e => e.TenNguonGoc).HasMaxLength(50);
 
             });
-
             modelBuilder.Entity<LoaiTiemNang>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_LoaiTiemNang");
@@ -403,7 +403,9 @@ namespace CRM.Entities
                 entity.Property(e => e.Name).HasMaxLength(50);
 
             });
-            #region
+            #endregion
+
+            #region Hoạt động
             modelBuilder.Entity<CuocGoi>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_CuocGoi");
@@ -1097,6 +1099,8 @@ namespace CRM.Entities
                 entity.Property(e => e.MaMau).HasMaxLength(50);
             });
             #endregion
+
+            #region Khảo sát
             modelBuilder.Entity<KhaoSat>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_KhaoSat");
@@ -1118,7 +1122,9 @@ namespace CRM.Entities
                 entity.Property(e => e.CreateAt).HasColumnType("datetime");
 
             });
+            #endregion
 
+            #region Chi nhánh
             modelBuilder.Entity<ChiNhanh>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK_ChiNhanh");
@@ -1129,7 +1135,10 @@ namespace CRM.Entities
                 entity.Property(e => e.MoTa).HasMaxLength(150);
                 entity.Property(e => e.DiaChi).HasMaxLength(150);
                 entity.Property(e => e.TenChiNhanh).HasMaxLength(100);
+                entity.Property(e => e.SoThuTu).HasColumnType("int");
             });
+            #endregion
+
 
 
         }

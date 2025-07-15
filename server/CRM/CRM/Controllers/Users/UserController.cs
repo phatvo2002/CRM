@@ -26,7 +26,9 @@ namespace CRM.Controllers.Users
         {
             try
             {
-                List<UserDTO> result = await _userService.GetUsers();
+                Guid userId = HttpContext.GetUserId();
+                Guid chiNhanhId = HttpContext.GetChiNhanhId();
+                List<UserDTO> result = await _userService.GetUsers(userId , chiNhanhId);
                 return Ok(result);
             }
             catch (ArgumentException ex)

@@ -7,9 +7,9 @@ const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem('token');
   if (token) {
     const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000; // Tính thời gian hiện tại
+    const currentTime = Date.now() / 1000; 
     if (decodedToken.exp < currentTime) {
-      localStorage.removeItem('token'); // Xóa token hết hạn
+      localStorage.removeItem('token'); 
       return <Navigate to="/login" />;
     }
     return children;

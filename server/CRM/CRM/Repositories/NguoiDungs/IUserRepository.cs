@@ -10,7 +10,7 @@ namespace CRM.Repositories.NguoiDungs
         Task<ResultModal> ChangePassword(Guid id, string oldpass, string newpass);
         Task<ResultModal> ActiveMailServices(Guid Id, string passEmail, string email);
         Task<ResultModal> CreateUser(UserModal userModal);
-        Task<List<UserDTO>> GetUsers();
+        Task<List<UserDTO>> GetUsers(Guid userId , Guid chiNhanhId);
         Task<List<UserDTO>> GetUserIsTruongPhong();
         Task<List<UserDTO>> GetUserIsNhanVien(Guid phongBanId);
         Task<List<UserDTO>> GetUserByPhongBanId(Guid id);

@@ -25,9 +25,9 @@ namespace CRM.Services.NguoiDungs
             return await _userRepository.DeleteUser(id);
         }
 
-        public async Task<List<UserDTO>> GetUsers()
+        public async Task<List<UserDTO>> GetUsers(Guid userId, Guid chiNhanhId)
         {
-            return await _userRepository.GetUsers();
+            return await _userRepository.GetUsers(userId, chiNhanhId);
         }
 
         public async Task<UserDTO> GetUserById(Guid Id)

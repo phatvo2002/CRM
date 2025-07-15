@@ -59,13 +59,32 @@ namespace CRM.Repositories.PhongBans
             }
         }
 
-        public async Task<List<PhongBanDTO>> GetAllPhongBan()
+        public async Task<List<PhongBanDTO>> GetAllPhongBan(Guid ChiNhanhId)
         {
-            var db = await _context.PhongBans.Include(r => r.ChiNhanh)
-                                             .Include(e => e.Nguoidung)
-                                             .ThenInclude(r => r.ChucVu)
-                                             .OrderBy(r => r.SoThuTu).ToListAsync();
-            return _mapper.Map<List<PhongBanDTO>>(db);
+            var chiNhanhData = _context.ChiNhanhs.FirstOrDefault(r=> r.Id == ChiNhanhId);
+            var db = new List<PhongBan>();
+            if(chiNhanhData != null)
+            {
+                if (chiNhanhData.IsChiNhanhTong == true)
+                {
+                    db = await _context.PhongBans.Include(r => r.ChiNhanh)
+                                                    .Include(e => e.Nguoidung)
+                                                    .ThenInclude(r => r.ChucVu)
+                                                    .OrderBy(r => r.ChiNhanh.SoThuTu).ToListAsync();
+                }
+                else
+                {
+                    db = await _context.PhongBans.Where(p=> p.ChiNhanhId == chiNhanhData.Id)
+                                                   .Include(r => r.ChiNhanh)
+                                                   .Include(e => e.Nguoidung)
+                                                   .ThenInclude(r => r.ChucVu)
+                                                   .OrderBy(r => r.ChiNhanh.SoThuTu).ToListAsync();
+                }
+                return _mapper.Map<List<PhongBanDTO>>(db);
+            }
+            return new List<PhongBanDTO>();
+          
+         
         }
 
         public async Task<PhongBanDTO> GetPhongBanById(Guid id)

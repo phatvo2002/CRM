@@ -52,6 +52,8 @@ namespace CRM.Filters
                 context.HttpContext.Items["MaChucVu"] = groupId;
                 var userName = jwtToken.Claims.First(x => x.Type == "TaiKhoan").Value;
                 context.HttpContext.Items["TaiKhoan"] = userName;
+                var chiNhanhId = new Guid(jwtToken.Claims.First(x => x.Type == "ChiNhanhId").Value);
+                context.HttpContext.Items["ChiNhanhId"] = chiNhanhId;
             }
             catch (Exception ex) { 
             

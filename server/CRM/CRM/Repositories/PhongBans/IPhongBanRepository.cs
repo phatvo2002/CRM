@@ -6,12 +6,9 @@ namespace CRM.Repositories.PhongBans
     public interface IPhongBanRepository
     {
         Task<ResultModal> CreatePhongBan(PhongBanModel model);
-
-        Task<List<PhongBanDTO>> GetAllPhongBan();
+        Task<List<PhongBanDTO>> GetAllPhongBan(Guid ChiNhanhId);
         Task<PhongBanDTO> GetPhongBanById(Guid id);
-
         Task<ResultModal> UpdatePhongBan(PhongBanModel model, Guid phongBanId);
-
         Task<ResultModal> DeletePhongBan(Guid id);
     }
 }

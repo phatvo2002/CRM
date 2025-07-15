@@ -27,7 +27,7 @@ namespace CRM.Controllers.ChiNhanhs
             try
             {
                 var result = await _chiNhanhServices.GetAll();
-                return Ok(result);
+                return Ok(result.OrderBy(r=> r.SoThuTu));
             }
             catch (Exception ex)
             {

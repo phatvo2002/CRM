@@ -16,7 +16,12 @@ namespace CRM.Extensions
         public static Guid GetChucVuId(this HttpContext httpContext)
         {
             return httpContext.Items["MaChucVu"] as Guid? ??
-                throw new Exception("User ID not found in HttpContext.Items");
+                throw new Exception("MaChucVu not found in HttpContext.Items");
+        }
+        public static Guid GetChiNhanhId(this HttpContext httpContext)
+        {
+            return httpContext.Items["ChiNhanhId"] as Guid? ??
+                throw new Exception("ChiNhanhId not found in HttpContext.Items");
         }
 
 

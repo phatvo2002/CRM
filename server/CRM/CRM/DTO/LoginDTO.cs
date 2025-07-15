@@ -19,9 +19,10 @@
         public Guid? MaChucVu { get; set; }
 
         public Guid? MaPhongBan { get; set; }
-        public Guid? MaChiNhanh { get; set; }
+        public Guid? ChiNhanhId { get; set; }
         public PhongBanDTO? PhongBan { get; set; }
         public ChucVuDTO? ChucVu { get; set; }
+        public ChiNhanhDTO? ChiNhanh { get; set; }
         public bool CheckIsTruongPhong { get; set; }
 
         public bool CheckIsGiamDoc { get; set; }

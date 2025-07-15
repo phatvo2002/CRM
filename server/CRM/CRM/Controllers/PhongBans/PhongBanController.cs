@@ -1,5 +1,6 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
+using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.PhongBans;
 using Microsoft.AspNetCore.Http;
@@ -25,7 +26,8 @@ namespace CRM.Controllers.PhongBans
         {
             try
             {
-                List<PhongBanDTO> result = await _phongBanServices.GetAllPhongBan();
+                Guid chiNhanhId = HttpContext.GetChiNhanhId();
+                List<PhongBanDTO> result = await _phongBanServices.GetAllPhongBan(chiNhanhId);
                 return Ok(result);
             }
             catch (ArgumentException ex)

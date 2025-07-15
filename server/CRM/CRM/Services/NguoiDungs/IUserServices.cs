@@ -9,7 +9,7 @@ namespace CRM.Services.NguoiDungs
 
         Task<ResultModal> CreateUser(UserModal userModal);
         Task<ResultModal> ActiveMailServices(Guid Id, string passEmail, string email);
-        Task<List<UserDTO>> GetUsers();
+        Task<List<UserDTO>> GetUsers(Guid userId, Guid chiNhanhId);
         Task<List<UserDTO>> GetUserByPhongBanId(Guid id);
         Task<List<UserDTO>> GetUserIsNhanVien(Guid phongBanId);
         Task<ResultModal> DeleteUser(Guid id);

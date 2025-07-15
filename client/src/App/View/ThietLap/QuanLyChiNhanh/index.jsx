@@ -37,6 +37,7 @@ const index = () => {
         </div>
       ),
     },
+    { field: "soThuTu", headerName: "Số thứ tự", width: 100 },
     { field: "tenChiNhanh", headerName: "Tên chi nhánh", width: 200 , flex : 1},
     { field: "diaChi", headerName: "Địa chỉ", width: 200 , flex : 1 },
     { field: "moTa", headerName: "Mô tả", width: 200 , flex : 1},

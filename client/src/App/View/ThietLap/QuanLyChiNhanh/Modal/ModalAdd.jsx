@@ -14,20 +14,23 @@ const modelObj = {
   tenChiNhanh: "tenChiNhanh",
   diaChi: "diachi",
   moTa: "moTa",
-  isChiNhanhTong :"isChiNhanhTong"
+  isChiNhanhTong :"isChiNhanhTong",
+  soThuTu :"soThuTu"
 };
 const labelObj = {
   id: "Mã chi nhánh",
   tenChiNhanh: "Tên chi nhánh",
   diaChi: "Địa chỉ",
   moTa: "Mô tả",
-  isChiNhanhTong :"Chi nhánh tổng"
+  isChiNhanhTong :"Chi nhánh tổng",
+  soThuTu :"soThuTu"
 };
 const initialFormState = {
     [modelObj.id]: null,
     [modelObj.tenChiNhanh]: "",
     [modelObj.diaChi]: "",
     [modelObj.moTa]: "",
+    [modelObj.soThuTu]: 0,
     [modelObj.isChiNhanhTong]: false,
   },
   schema = yup.object().shape({
@@ -85,6 +88,14 @@ const ModalAdd = ({
         ref={modalRef}
       >
         <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextFieldRHF
+              name={modelObj.soThuTu}
+              label={labelObj.soThuTu}
+              type={"number"}
+              required
+            />
+          </Grid>
           <Grid item xs={12}>
             <TextFieldRHF
               name={modelObj.tenChiNhanh}
