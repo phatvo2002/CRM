@@ -24,7 +24,6 @@
         public int? MaDoanhThu {  get; set; }
         public bool? IsDungChung { get; set; }
         public bool? IsChuyenDoi { get; set; }
-        public DateTime? DeleteAt { get; set; }
         public virtual PhongBanKhachHang? PhongBanKhachHang {get; set;}
         public virtual NguonGocKhachHang? NguonGocKhachHang{get; set;}
         public virtual LoaiTiemNang? LoaiTiemNang{get;set;}

@@ -2,7 +2,10 @@
 using AutoMapper.QueryableExtensions;
 using CRM.Entities;
 using CRM.Modal;
+using DocumentFormat.OpenXml.VariantTypes;
 using Microsoft.EntityFrameworkCore;
+using OpenXmlPowerTools;
+using System.Linq.Expressions;
 
 namespace CRM.Repositories
 {
@@ -10,6 +13,7 @@ namespace CRM.Repositories
     {
         protected readonly CrmDbContext _crmDbContext;
         protected readonly IMapper _mapper;
+
         public BaseRepository(CrmDbContext crmDbContext, IMapper mapper)
         {
             _crmDbContext = crmDbContext;
@@ -271,6 +275,77 @@ namespace CRM.Repositories
                     && EF.Property<bool>(r, "IsDeleted") == false)
               .ProjectTo<TDto>(_mapper.ConfigurationProvider)
               .ToListAsync();
+        }
+
+        public async Task<List<TDto>> GetAllByRole(
+                                      Guid userId,
+                                      Guid roleId,
+                                      Guid chiNhanhId,
+                                      DateTime tuNgay,
+                                      DateTime denNgay,
+                                     params Expression<Func<TEntity, object>>[] includes)
+        {
+            var query = _crmDbContext.Set<TEntity>().AsQueryable();
+
+            var dataUser = _crmDbContext.Nguoidungs
+                .AsNoTracking()
+                .FirstOrDefault(r => r.Id == userId);
+
+            if (dataUser == null)
+                return new List<TDto>();
+            var fromDate = Helper.Helper.ConvertDate(tuNgay);
+            var toDate = Helper.Helper.ConvertDate(denNgay);
+            query = query.Where(r =>
+                               EF.Property<DateTime>(r, "CreateAt") >= fromDate &&
+                               EF.Property<DateTime>(r, "CreateAt") <= toDate &&
+                               EF.Property<bool>(r, "IsDeleted") == false
+                           );
+
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+            query = query.Include(nameof(PhongBan));
+            var superAdminRole = Guid.Parse(AppSettingsProvider.Get("Role:SuperAdmin"));
+            var tongGiamDocRole = Guid.Parse(AppSettingsProvider.Get("Role:TongGiamDoc"));
+            var adminRole = Guid.Parse(AppSettingsProvider.Get("Role:Admin"));
+            var giamDocRole = Guid.Parse(AppSettingsProvider.Get("Role:GiamDoc"));
+            var truongPhongRole = Guid.Parse(AppSettingsProvider.Get("Role:TruongPhong"));
+
+            if (roleId == superAdminRole || roleId == tongGiamDocRole)
+            {
+            }
+            else if (roleId == adminRole || roleId == giamDocRole)
+            {
+                query = query.Where(r =>
+                    EF.Property<Guid>(EF.Property<object>(r, nameof(PhongBan)), nameof(PhongBan.ChiNhanhId)) == chiNhanhId);
+            }
+            else if (roleId == truongPhongRole)
+            {
+                query = query.Where(r =>
+                    EF.Property<Guid>(r, "PhongBanId") == dataUser.MaPhongBan);
+            }
+            else
+            {
+                query = query.Where(r =>
+                    EF.Property<Guid>(r, "NguoiDungId") == dataUser.Id);
+            }
+
+            // Trả về DTO
+            return await query.ProjectTo<TDto>(_mapper.ConfigurationProvider).ToListAsync();
+        }
+
+        public async Task<List<TDto>> GetDataIsDelete()
+        {
+            return await _crmDbContext.Set<TEntity>()
+                                      .Where(r => EF.Property<bool>(r, "IsDelete") == false)
+                                      .ProjectTo<TDto>(_mapper.ConfigurationProvider)
+                                      .ToListAsync();
+        }
+
+        public Task<ResultModal> RestoreMultiple(List<TModal> modals)
+        {
+            throw new NotImplementedException();
         }
     }
 }

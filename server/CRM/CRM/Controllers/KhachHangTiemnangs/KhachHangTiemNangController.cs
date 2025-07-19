@@ -110,58 +110,58 @@ namespace CRM.Controllers.KhachHangTiemnangs
             }
 
         }
-        [HttpGet("getkhachhangtiemnangbynguoidungid")]
-        [JwtAuthorize]
-        public async Task<IActionResult> GetKhachHangTiemNangByNguoiDungId(Guid Id, DateTime tuNgay, DateTime denNgay)
-        {
-            try
-            {
-                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByNguoiDungIdAsync(Id, tuNgay, denNgay);
-                return Ok(result);
-            }
-            catch
-            (Exception ex)
-            {
-                _logger.LogInformation("{Time}", DateTime.Now);
-                _logger.LogError(ex.Message);
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet("getkhachhangtiemnangbyPhongbanId/{phongBanId}")]
-        [JwtAuthorize]
-        public async Task<IActionResult> GetKhachHangTiemNangByPhongBanId(Guid phongBanId, DateTime tuNgay, DateTime denNgay)
-        {
-            try
-            {
-                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
-                return Ok(result);
-            }
-            catch
-            (Exception ex)
-            {
-                _logger.LogInformation("{Time}", DateTime.Now);
-                _logger.LogError(ex.Message);
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet("getkhachhangtiemnangbyphongbanidcontext")]
-        [JwtAuthorize]
-        public async Task<IActionResult> GetKhachHangTiemNangByPhongBanIdContext(DateTime tuNgay, DateTime denNgay)
-        {
-            try
-            {
-                Guid phongBanId = HttpContext.GetPhongBanId();
-                List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
-                return Ok(result);
-            }
-            catch
-            (Exception ex)
-            {
-                _logger.LogInformation("{Time}", DateTime.Now);
-                _logger.LogError(ex.Message);
-                return BadRequest(ex.Message);
-            }
-        }
+        //[HttpGet("getkhachhangtiemnangbynguoidungid")]
+        //[JwtAuthorize]
+        //public async Task<IActionResult> GetKhachHangTiemNangByNguoiDungId(Guid Id, DateTime tuNgay, DateTime denNgay)
+        //{
+        //    try
+        //    {
+        //        List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByNguoiDungIdAsync(Id, tuNgay, denNgay);
+        //        return Ok(result);
+        //    }
+        //    catch
+        //    (Exception ex)
+        //    {
+        //        _logger.LogInformation("{Time}", DateTime.Now);
+        //        _logger.LogError(ex.Message);
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+        //[HttpGet("getkhachhangtiemnangbyPhongbanId/{phongBanId}")]
+        //[JwtAuthorize]
+        //public async Task<IActionResult> GetKhachHangTiemNangByPhongBanId(Guid phongBanId, DateTime tuNgay, DateTime denNgay)
+        //{
+        //    try
+        //    {
+        //        List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
+        //        return Ok(result);
+        //    }
+        //    catch
+        //    (Exception ex)
+        //    {
+        //        _logger.LogInformation("{Time}", DateTime.Now);
+        //        _logger.LogError(ex.Message);
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+        //[HttpGet("getkhachhangtiemnangbyphongbanidcontext")]
+        //[JwtAuthorize]
+        //public async Task<IActionResult> GetKhachHangTiemNangByPhongBanIdContext(DateTime tuNgay, DateTime denNgay)
+        //{
+        //    try
+        //    {
+        //        Guid phongBanId = HttpContext.GetPhongBanId();
+        //        List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
+        //        return Ok(result);
+        //    }
+        //    catch
+        //    (Exception ex)
+        //    {
+        //        _logger.LogInformation("{Time}", DateTime.Now);
+        //        _logger.LogError(ex.Message);
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
         [HttpGet("getkhachhangbyrole")]
         [JwtAuthorize]
         public async Task<IActionResult> GetKhachHangTiemNangByRole(DateTime tuNgay, DateTime denNgay)
@@ -170,25 +170,17 @@ namespace CRM.Controllers.KhachHangTiemnangs
             {
                 Guid nguoiDungId = HttpContext.GetUserId();
                 Guid phongBanId = HttpContext.GetPhongBanId();
-                var db = _dbContext.Nguoidungs.FirstOrDefault(r => r.Id == nguoiDungId);
-                if (db.CheckIsGiamDoc == true)
-                {
-                    List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetAllKhachHangTiemNangAsync(tuNgay, denNgay);
-                    return Ok(result);
-                }
-                else
-                {
-                    if (db.CheckIsTruongPhong == true)
-                    {
-                        List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByPhongBanIdAsync(phongBanId, tuNgay, denNgay);
-                        return Ok(result);
-                    }
-                    else
-                    {
-                        List<KhachHangTiemNangDTO> result = await _khachHangTiemNangServices.GetKhachHangTiemNangByNguoiDungIdAsync(nguoiDungId, tuNgay, denNgay);
-                        return Ok(result);
-                    }
-                }
+                Guid chiNhanhId = HttpContext.GetChiNhanhId();
+                Guid maChucVu = HttpContext.GetChucVuId();
+                var result = await _khachHangTiemNangServices.GetAllByRole( 
+                                                             nguoiDungId , 
+                                                             maChucVu, 
+                                                             chiNhanhId, 
+                                                             tuNgay, 
+                                                             denNgay ,
+                                                             x=> x.Nguoidung);
+                return Ok(result);
+              
 
             }
             catch (Exception e)

@@ -55,12 +55,30 @@ import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import ModalBanGiaoKhachHangHangHoat from "./Modal/ModalBanGiaoKhachHangHangHoat";
 import CustomButtonAction from "src/App/Components/CustomButtonAction/CustomButtonAction";
 import { useLocation } from "react-router-dom";
+import { useDate } from "src/App/Hooks/hook";
 const KhachHangTiemNang = () => {
+
+
+  const { tuNgay, denNgay, setTuNgay, setDenNgay } = useDate();
+
+const tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]);
+ const denNgayObj = useMemo(() => dayjs(denNgay), [denNgay]);
+
   const [selectedRow, setSelectedRow] = useState([]);
   const [selectRowId, setSelectedRowId] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isActionOpen, setIsActionOpen] = useState(false);
   const [KhachHangDaXoaModal, setKhachHangDaXoaModal] = useState(false);
+  const userData = JSON.parse(localStorage.getItem("authorizationData"));
+  const [rows, setRows] = useState([]);
+  const [openModalUpdate, setOpenModalUpdate] = useState(false);
+  const [typeModal, setTypeModal] = useState("");
+  const [openModalAdd, setOpenModalAdd] = useState(false)
+  const [loading, setLoading] = useState(false);
+
+  const [openModalBanGiao, setOpenModalBanGiao] = useState(false);
+  const [openModalBanGiaoHangLoat, setOpenModalBanGiaohangLoat] = useState(false);
+
   const handleOpen = () => setIsActionOpen(true);
   const handleClose = () => setIsActionOpen(false);
   const handleOpenModalXem = () => setKhachHangDaXoaModal(true);
@@ -241,29 +259,11 @@ const KhachHangTiemNang = () => {
   const handleCloseDrop = () => {
     setAnchorEl(null);
   };
-  const userData = JSON.parse(localStorage.getItem("authorizationData"));
-  const [rows, setRows] = useState([]);
-  const [openModalUpdate, setOpenModalUpdate] = useState(false);
-  const [typeModal, setTypeModal] = useState("");
-  const [openModalAdd, setOpenModalAdd] = useState(false)
-  const [loading, setLoading] = useState(false);
-  const [valueTuNgay, setValueTuNgay] = React.useState(
-    dayjs().startOf("month")
-  );
-  const [valueDenNgay, setValueDenNgay] = React.useState(
-    dayjs().endOf("month")
-  );
-  const [openModalBanGiao, setOpenModalBanGiao] = useState(false);
-  const [openModalBanGiaoHangLoat, setOpenModalBanGiaohangLoat] = useState(false);
   const [getTemplate] = useGetTemplatesMutation();
-
-  const tuNgayString = valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
-  const denNgayString = valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS");
-
   const { data: dataKHByRole, refetch: refetchkh } =
     useGetKhachHangTiemNangByroleQuery({
-      tuNgay: tuNgayString,
-      denNgay: denNgayString,
+      tuNgay: tuNgay,
+      denNgay: denNgay,
     });
   const [deleteNguoiDung] = useDeleteKhachHangTiemNangMutation();
   const [deleteHangLoat] = useDeletehangLoatKhachHangTiemNangMutation();
@@ -526,13 +526,17 @@ const KhachHangTiemNang = () => {
               >
                 <DateTimePicker
                   label="Từ ngày"
-                  value={valueTuNgay}
-                  onChange={(newValue) => setValueTuNgay(newValue)}
+                  value={tuNgayObj}
+                  onChange={(newValue) => {
+                    if (newValue) setTuNgay(newValue);
+                  }}
                 />
                 <DateTimePicker
                   label="Đến ngày"
-                  value={valueDenNgay}
-                  onChange={(newValue) => setValueDenNgay(newValue)}
+                  value={denNgayObj}
+                  onChange={(newValue) => {
+                    if (newValue) setDenNgay(newValue);
+                  }}
                 />
               </Stack>
             </DemoContainer>

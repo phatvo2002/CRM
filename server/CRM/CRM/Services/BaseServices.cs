@@ -1,5 +1,6 @@
 ﻿using CRM.Modal;
 using CRM.Repositories;
+using System.Linq.Expressions;
 
 namespace CRM.Services
 {
@@ -41,6 +42,11 @@ namespace CRM.Services
         public async Task<List<TDto>> GetAll()
         {
             return await _repository.GetAll();
+        }
+
+        public async Task<List<TDto>> GetAllByRole(Guid userId, Guid roleId, Guid chiNhanhId, DateTime tuNgay, DateTime denNgay, params Expression<Func<TEntity, object>>[] includes)
+        {
+            return await _repository.GetAllByRole(userId , roleId , chiNhanhId , tuNgay , denNgay , includes);  
         }
 
         public async Task<List<TDto>> GetAllDto(DateTime tuNgay, DateTime denNgay)

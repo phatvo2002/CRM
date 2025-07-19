@@ -43,5 +43,17 @@ namespace CRM.Helper
 
             return result.ToString();
         }
+
+        public static DateTime ConvertDate(DateTime dateTime)
+        {
+            string formatted = dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+            return DateTime.ParseExact(
+                formatted,
+                "yyyy-MM-dd HH:mm:ss.fff",
+                System.Globalization.CultureInfo.InvariantCulture
+            );
+        }
+
     }
 }

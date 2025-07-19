@@ -1,4 +1,5 @@
 ﻿using CRM.Modal;
+using System.Linq.Expressions;
 
 namespace CRM.Services
 {
@@ -18,5 +19,6 @@ namespace CRM.Services
         Task<ResultModal> DeleteById(string id);
         Task<ResultModal> DeleteMultiple(List<TModal> modals);
         Task<List<Tdto>> GetAllDto(DateTime tuNgay, DateTime denNgay);
+        Task<List<Tdto>> GetAllByRole(Guid userId, Guid roleId, Guid chiNhanhId, DateTime tuNgay, DateTime denNgay, params Expression<Func<TEntity, object>>[] includes);
     }
 }

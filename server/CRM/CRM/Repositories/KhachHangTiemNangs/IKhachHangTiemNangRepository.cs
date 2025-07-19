@@ -1,14 +1,13 @@
 ﻿using CRM.DTO;
+using CRM.Entities;
 using CRM.Modal;
 
 namespace CRM.Repositories.KhachHangTiemNangs
 {
-    public interface IKhachHangTiemNangRepository
+    public interface IKhachHangTiemNangRepository : IBaseRepository<KhachHangTiemNang ,KhachHangTiemNangModel , Guid , KhachHangTiemNangDTO> 
     {
         Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync(DateTime tuNgay, DateTime denNgay);
         Task<KhachHangTiemNangDTO> GetKhachHangTiemNangByIdAsync(Guid id);
-        Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByNguoiDungIdAsync(Guid nguoiDungId, DateTime tuNgay, DateTime denNgay);
-        Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByPhongBanIdAsync(Guid phongBanId, DateTime tuNgay, DateTime denNgay);
         Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangDaXoaAsync(Guid nguoiDungId);
         Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangDaXoaByPhongBanAsync(Guid phongbanId);
         Task<ResultModal> ThemMoiKhachHangTiemNangAsync(KhachHangTiemNangModel model, Guid nguoiDungId, Guid phongBanId);

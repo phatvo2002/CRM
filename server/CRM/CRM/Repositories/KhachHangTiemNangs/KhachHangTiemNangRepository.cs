@@ -5,12 +5,12 @@ using CRM.Modal;
 using Microsoft.EntityFrameworkCore;
 namespace CRM.Repositories.KhachHangTiemNangs
 {
-    public class KhachHangTiemNangRepository : IKhachHangTiemNangRepository
+    public class KhachHangTiemNangRepository : BaseRepository<KhachHangTiemNang , KhachHangTiemNangModel , Guid , KhachHangTiemNangDTO> , IKhachHangTiemNangRepository 
     {
         private readonly CrmDbContext _context;
         private readonly IMapper _mapper;
         private readonly ILogger<KhachHangTiemNangRepository> _logger;
-        public KhachHangTiemNangRepository(CrmDbContext context, IMapper mapper, ILogger<KhachHangTiemNangRepository> logger)
+        public KhachHangTiemNangRepository(CrmDbContext context, IMapper mapper, ILogger<KhachHangTiemNangRepository> logger) : base(context , mapper)
         {
             _context = context;
             _mapper = mapper;
@@ -18,9 +18,10 @@ namespace CRM.Repositories.KhachHangTiemNangs
         }
         public async Task<List<KhachHangTiemNangDTO>> GetAllKhachHangTiemNangAsync(DateTime tuNgay, DateTime denNgay)
         {
+
             var db = await _context.KhachHangTiemNangs.AsNoTracking().Where(r => r.IsDeleted == false &&
-                                                                            r.CreateAt >= tuNgay &&
-                                                                            r.CreateAt <= denNgay)
+                                                                            r.CreateAt >= Helper.Helper.ConvertDate(tuNgay) &&
+                                                                            r.CreateAt <= Helper.Helper.ConvertDate(denNgay))
                                                                     .Include(r => r.Nguoidung).ToListAsync();
             return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
         }
@@ -30,19 +31,6 @@ namespace CRM.Repositories.KhachHangTiemNangs
             var db = await _context.KhachHangTiemNangs.Where(r => r.Id == id).FirstOrDefaultAsync();
             return _mapper.Map<KhachHangTiemNangDTO>(db);
         }
-
-        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByNguoiDungIdAsync(Guid nguoiDungId, DateTime tuNgay, DateTime denNgay)
-        {
-            var db = await _context.KhachHangTiemNangs.Where(r => r.NguoiDungId == nguoiDungId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay).Include(r => r.Nguoidung).ToListAsync();
-            return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
-        }
-
-        public async Task<List<KhachHangTiemNangDTO>> GetKhachHangTiemNangByPhongBanIdAsync(Guid phongBanId, DateTime tuNgay, DateTime denNgay)
-        {
-            var db = await _context.KhachHangTiemNangs.Where(r => r.PhongBanId == phongBanId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay).Include(r => r.Nguoidung).ToListAsync();
-            return _mapper.Map<List<KhachHangTiemNangDTO>>(db);
-        }
-
         public async Task<ResultModal> ThemMoiKhachHangTiemNangAsync(KhachHangTiemNangModel model, Guid nguoiDungId, Guid phongBanId)
         {
             var db = _context.KhachHangTiemNangs.FirstOrDefault(r => r.Id == model.Id);
