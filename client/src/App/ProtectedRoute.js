@@ -14,7 +14,6 @@ const ProtectedRoute = ({ children }) => {
     }
     return children;
   } else {
-    console.log("No token found");
     return <Navigate to="/login" />;
   }
 };

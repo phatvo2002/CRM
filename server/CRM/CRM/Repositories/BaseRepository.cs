@@ -335,17 +335,26 @@ namespace CRM.Repositories
             return await query.ProjectTo<TDto>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
-        public async Task<List<TDto>> GetDataIsDelete()
+        public async Task<List<TDto>> GetDataIsDelete(Guid userId)
         {
             return await _crmDbContext.Set<TEntity>()
-                                      .Where(r => EF.Property<bool>(r, "IsDelete") == false)
+                                      .Where(r => EF.Property<bool>(r, "IsDelete") == false
+                                       &&  EF.Property<Guid>(r,"NguoiDungID") == userId)
                                       .ProjectTo<TDto>(_mapper.ConfigurationProvider)
                                       .ToListAsync();
         }
 
-        public Task<ResultModal> RestoreMultiple(List<TModal> modals)
+        public async Task<ResultModal> RestoreMultiple(List<Guid> modals)
         {
-            throw new NotImplementedException();
+            foreach (var item in modals)
+            {
+                var data = _crmDbContext.Set<TEntity>().
+                                         FirstOrDefault(r => EF.Property<Guid>(r, "Id") == item);
+                if(data != null)
+                    _crmDbContext.Update<TEntity>(data);
+            }
+            await _crmDbContext.SaveChangesAsync();
+           return new ResultModal() { Status = 200  , Message="Thành công", Success = true };
         }
     }
 }

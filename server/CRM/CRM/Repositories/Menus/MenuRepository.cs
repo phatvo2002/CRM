@@ -2,6 +2,7 @@
 using CRM.DTO;
 using CRM.Entities;
 using CRM.Modal;
+using DocumentFormat.OpenXml.VariantTypes;
 using Microsoft.EntityFrameworkCore;
 using MoreLinq.Extensions;
 using System.Collections.Generic;
@@ -117,9 +118,11 @@ namespace CRM.Repositories.Menus
             return _mapper.Map<List<MenuRoleDTO>>(result);
         }
 
-        public Task<MenuDTO> GetMenuById(Guid id)
+        public async Task<MenuDTO> GetMenuById(Guid id, Guid roleId)
         {
-            throw new NotImplementedException();
+            var db = await _context.Menus.Include(r => r.MenuRoles.Where(g => g.GroupId == roleId))
+                                       .FirstOrDefaultAsync(r => r.Id == id);
+            return _mapper.Map<MenuDTO>(db);
         }
 
         public async Task<ResultModal> UpdateGroup(GroupModel model)

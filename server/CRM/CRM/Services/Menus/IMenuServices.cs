@@ -7,7 +7,8 @@ namespace CRM.Services.Menus
     {
          Task<ResultModal> InsertMenu(MenuModel modal);
          Task<ResultModal> DeleteMenu(Guid Id);
-         Task<List<MenuDTO>> GetAllMenu(Guid groupId);
+        Task<MenuDTO> GetMenuById(Guid id, Guid roleId);
+        Task<List<MenuDTO>> GetAllMenu(Guid groupId);
          Task<ResultModal> UpdateMenuRole(GroupModel model);
          Task<List<MenuRoleDTO>> GetAllMenuRoles(Guid roleid);
          Task<ResultModal> UpdateMenu(MenuModel model);

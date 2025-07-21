@@ -31,6 +31,12 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteUser")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DiaChi")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -64,9 +70,6 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("NguoiDungUpdate")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -79,6 +82,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_BaoGia");
@@ -190,6 +197,9 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("DeleteUser")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DiaChi")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
@@ -224,9 +234,6 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("NguoiDungUpdate")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -242,6 +249,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_CoHoi");
@@ -276,6 +287,13 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -304,9 +322,6 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("NguoiDungUpdate")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -322,6 +337,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_CuocGoi");
@@ -371,6 +390,13 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<decimal>("GiaTriDonHang")
                         .HasColumnType("decimal");
@@ -424,9 +450,6 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("NguoiDungUpdate")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -456,6 +479,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_DonHang");
@@ -513,6 +540,12 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteUser")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("DiaChiGui")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -533,9 +566,6 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("NguoiDungUpdate")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -545,6 +575,9 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("UpdateUser")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id")
                         .HasName("PK_EmailDaGui");
@@ -708,6 +741,13 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<int?>("DoanhSo")
                         .HasColumnType("int");
 
@@ -740,9 +780,6 @@ namespace CRM.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<Guid?>("NguoiDungId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("NguoiDungUpdate")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("PhongBanId")
@@ -817,6 +854,10 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
 
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.HasKey("Id")
                         .HasName("PK_KPINhanVien");
 
@@ -856,6 +897,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("DeleteUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(50)
@@ -914,9 +959,6 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("NguoiDungUpdate")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -946,6 +988,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Website")
                         .HasMaxLength(50)
@@ -991,6 +1037,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("DeleteAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("DeleteUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("DiaChi")
                         .HasMaxLength(100)
@@ -1044,9 +1094,6 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("NguoiDungUpdate")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1076,6 +1123,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_KhachHangTiemNang");
@@ -1165,6 +1216,13 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<string>("DiaDiem")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -1191,9 +1249,6 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("NguoiDungUpdate")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1206,6 +1261,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_LichHen");
@@ -1233,6 +1292,12 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteUser")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -1250,9 +1315,6 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("NguoiDungUpdate")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1266,6 +1328,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("XungHo")
                         .HasMaxLength(50)
@@ -1530,6 +1596,13 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime");
 
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<int?>("DoanhSo")
                         .HasColumnType("int");
 
@@ -1556,9 +1629,6 @@ namespace CRM.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<Guid?>("NguoiDungId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("NguoiDungUpdate")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("NguoiTaoId")
@@ -1639,6 +1709,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_MucTieuDoanhSoId");
@@ -1807,6 +1881,13 @@ namespace CRM.Migrations
                     b.Property<DateTime?>("CreateAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DeleteAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DeleteUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<DateTime?>("HanHoanThanh")
                         .HasColumnType("datetime");
 
@@ -1835,9 +1916,6 @@ namespace CRM.Migrations
                     b.Property<Guid?>("NguoiDungId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("NguoiDungUpdate")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("PhongBanId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1850,6 +1928,10 @@ namespace CRM.Migrations
 
                     b.Property<DateTime?>("UpdateAt")
                         .HasColumnType("datetime");
+
+                    b.Property<string>("UpdateUser")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id")
                         .HasName("PK_NhiemVu");

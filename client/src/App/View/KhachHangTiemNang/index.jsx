@@ -55,15 +55,16 @@ import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import ModalBanGiaoKhachHangHangHoat from "./Modal/ModalBanGiaoKhachHangHangHoat";
 import CustomButtonAction from "src/App/Components/CustomButtonAction/CustomButtonAction";
 import { useLocation } from "react-router-dom";
-import { useDate } from "src/App/Hooks/hook";
+import { useDate, useMenuStore } from "src/App/Hooks/hook";
+import { useGetMenuByIdQuery } from "src/App/Api/MenuApi";
 const KhachHangTiemNang = () => {
 
 
   const { tuNgay, denNgay, setTuNgay, setDenNgay } = useDate();
-
-const tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]);
- const denNgayObj = useMemo(() => dayjs(denNgay), [denNgay]);
-
+  const tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]);
+  const denNgayObj = useMemo(() => dayjs(denNgay), [denNgay]);
+  const { menuId, setMenuId } = useMenuStore();
+  const { data: menuData } = useGetMenuByIdQuery(menuId)
   const [selectedRow, setSelectedRow] = useState([]);
   const [selectRowId, setSelectedRowId] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -90,11 +91,7 @@ const tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]);
   const gotoLinkImport = () => {
     navigate("/tiemnang/uploadkhachhang");
   };
-
-
-  const location = useLocation()
-  const query = new URLSearchParams(location.search);
-  const menuId = query.get("menu");
+  console.log(menuData?.menuRoles[0].xem)
   const columns = useMemo(
     () => [
       {
@@ -113,38 +110,23 @@ const tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]);
           >
             <Tooltip title="Sửa thông tin ">
               <span>
-                <CustomButtonAction
-                  menuId={menuId}
-                  action={onOpenModalUpdateKhachHang}
-                  typeButton={2}
-                  icon={<EditIcon color="success" />}
-                  type={"sua"}
-                  styleText={"Chỉnh sửa dữ liệu"}
-                />
+                <IconButton onClick={onOpenModalUpdateKhachHang} disabled={!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)}>
+                  <EditIcon color={(!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)) ? "disabled" : "success"} />
+                </IconButton>
               </span>
             </Tooltip>
             <Tooltip title="Xóa">
               <span>
-                <CustomButtonAction
-                  menuId={menuId}
-                  action={() => handleDeletePhongBan(params?.id)}
-                  typeButton={2}
-                  icon={<DeleteIcon color="error" />}
-                  type={"xoa"}
-                  styleText={"xóa dữ liệu"}
-                />
+                <IconButton onClick={() => handleDeletePhongBan(params?.id)} disabled={!menuData?.menuRoles[0]?.xoa || !(selectedRow?.length > 0)}>
+                  <DeleteIcon color={(!menuData?.menuRoles[0]?.xoa || !(selectedRow?.length > 0)) ? "disabled" : "error"} />
+                </IconButton>
               </span>
             </Tooltip>
             <Tooltip title="Bàn giao tiềm năng">
               <span>
-                <CustomButtonAction
-                  menuId={menuId}
-                  action={handleOpenModalBanGiaoKhachHang}
-                  typeButton={2}
-                  icon={<ThreePIcon color="primary" />}
-                  type={"sua"}
-                  styleText={"bàn giao"}
-                />
+                <IconButton onClick={handleOpenModalBanGiaoKhachHang} disabled={!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)}>
+                  <ThreePIcon color={(!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)) ? "disabled" : "info"} />
+                </IconButton>
               </span>
             </Tooltip>
           </div>
@@ -185,19 +167,28 @@ const tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]);
         width: 200,
         renderCell: (params) => (
           <div>
-            <Link
-              to={`/tiemnang/${params.id}?menu=${menuId}`}
-              style={{
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-                color: "inherit",
-              }}
-            >
-              <Person2Icon style={{ color: "#1976d2" }} />
-              <span style={{ fontWeight: "500" }}>{params.value}</span>
-            </Link>
+            {menuData?.menuRoles[0].xem === true ? (
+              <Link
+                to={`/tiemnang/${params.id}?menu=${menuId}`}
+                style={{
+                  textDecoration: "none",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  color: "inherit",
+                }}
+              >
+                <Person2Icon style={{ color: "#1976d2" }} />
+                <span style={{ fontWeight: "500" }}>{params.value}</span>
+              </Link>
+            ) : (
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", opacity: 0.5 }}>
+                <Person2Icon style={{ color: "#1976d2" }} />
+                <span style={{ fontWeight: "500" }}>{params.value}</span>
+              </div>
+            )}
+
+
           </div>
         ),
       },
@@ -398,39 +389,18 @@ const tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]);
       >
 
         <Stack direction="row" spacing={1.5} >
-          <CustomButtonAction
-            menuId={menuId}
-            action={gotoLink}
-            typeButton={1}
-            icon={<AddIcon />}
-            type={"them"}
-            styleText={"Thêm tiềm năng"}
-            nameButton={"Thêm mới"}
-            colorStyle={"primary"}
-          />
-          <CustomButtonAction
-            menuId={menuId}
-            action={gotoLinkImport}
-            typeButton={1}
-            icon={<GetAppIcon />}
-            type={"them"}
-            styleText={"Nhập khẩu"}
-            nameButton={"Nhập khẩu khách hàng"}
-            colorStyle={""}
-          />
+          <Button variant={"contained"} style={{ fontWeight: "bold" }} color="primary" onClick={gotoLink} startIcon={<AddIcon />} disabled={!menuData?.menuRoles[0]?.them}>
+            Thêm tiềm năng
+          </Button>
+          <Button variant={"contained"} style={{ fontWeight: "bold" }} color="success" onClick={gotoLinkImport} startIcon={<GetAppIcon />} disabled={!menuData?.menuRoles[0]?.them}>
+            Nhập khẩu tiềm năng
+          </Button>
+          <Button variant={"contained"} style={{ fontWeight: "bold" }} color="inherit" onClick={handleOpen} startIcon={<UpdateIcon />} disabled={!menuData?.menuRoles[0]?.xem}>
+            Lịch sử tương tác
+          </Button>
 
-          <CustomButtonAction
-            menuId={menuId}
-            action={handleOpen}
-            typeButton={1}
-            icon={<UpdateIcon />}
-            type={"xem"}
-            styleText={"Nhập khẩu"}
-            nameButton={"Lịch sử tương tác"}
-            colorStyle={""}
-          />
           <Button
-            variant="outlined"
+            variant="contained"
             startIcon={<OpenInNewIcon />}
             endIcon={<KeyboardArrowDownIcon />}
             sx={{
@@ -445,17 +415,9 @@ const tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]);
           >
             Tùy chỉnh
           </Button>
-
-          <CustomButtonAction
-            menuId={menuId}
-            action={handleOpenModalBanGiaoKhachHangHangLoat}
-            typeButton={1}
-            icon={<PeopleOutlineIcon />}
-            type={"sua"}
-            styleText={"bàn giao"}
-            nameButton={"Bàn giao tiềm năng"}
-            colorStyle={"primary"}
-          />
+          <Button variant={"contained"} style={{ fontWeight: "bold" }} color="info" onClick={handleOpenModalBanGiaoKhachHangHangLoat} startIcon={<PeopleOutlineIcon />} disabled={!menuData?.menuRoles[0]?.sua}>
+            Bàn giao tiềm năng
+          </Button>
         </Stack>
       </Stack>
 
@@ -475,14 +437,14 @@ const tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]);
           },
         }}
       >
-        <MenuItem onClick={handleGetTemplates}>
+        <MenuItem onClick={handleGetTemplates} disabled={!menuData?.menuRoles[0]?.sua}>
           <Stack direction="row" spacing={1} alignItems="center">
             <ImportExportIcon color="primary" />
             <Typography>Xuất mẫu</Typography>
           </Stack>
         </MenuItem>
 
-        <MenuItem onClick={handleOpenModalXem}>
+        <MenuItem onClick={handleOpenModalXem} disabled={!menuData?.menuRoles[0]?.xem}>
           <Stack direction="row" spacing={1} alignItems="center">
             <AutoDeleteIcon color="primary" />
             <Typography>Đã xóa</Typography>
@@ -493,7 +455,7 @@ const tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]);
 
         <MenuItem
           onClick={handleDeleteMuliple}
-          disabled={selectedRow.length === 0}
+          disabled={selectedRow.length === 0 || !menuData?.menuRoles[0]?.xoa}
         >
           <Stack direction="row" spacing={1} alignItems="center">
             <DeleteOutlineIcon

@@ -20,7 +20,7 @@ namespace CRM.Repositories
         // Get list object with params first date to end date 
         Task<List<Tdto>> GetAllDto(DateTime tuNgay, DateTime denNgay);
         // Get list data had Datete
-        Task<List<Tdto>> GetDataIsDelete();
+        Task<List<Tdto>> GetDataIsDelete(Guid userId);
         // Get List by UserId 
         Task<List<Tdto>> GetByNguoiDungId(Guid id);
         // Get list by department 
@@ -38,6 +38,6 @@ namespace CRM.Repositories
         // Delete muntilple an object with UUID type
         Task<ResultModal> DeleteMultiple(List<TModal> modals);
         // Restore multiple object had delete
-        Task<ResultModal> RestoreMultiple(List<TModal> modals);
+        Task<ResultModal> RestoreMultiple(List<Guid> modals);
     }
 }

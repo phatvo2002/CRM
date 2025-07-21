@@ -39,6 +39,23 @@ namespace CRM.Controllers.Menus
                 return BadRequest(ex.Message);
             }
         }
+        [HttpGet("getMenuById/{id}")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetMenuById(Guid id)
+        {
+            try
+            {
+                Guid groupId = HttpContext.GetChucVuId();
+                MenuDTO result = await _menuServices.GetMenuById(id, groupId);
+                return Ok(result);
+            }
+            catch (ArgumentException ex)
+            {
+                _logger.LogInformation("{Time}", DateTime.Now);
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpGet("getmenurole/{roleid}")]
         [JwtAuthorize]
         public async Task<IActionResult> GetRoleMenu(Guid roleid)
@@ -47,23 +64,24 @@ namespace CRM.Controllers.Menus
             {
                 List<MenuRoleDTO> result = await _menuServices.GetAllMenuRoles(roleid);
                 var filteredResult = result
-         .Where(r => r.Menu.MenuChildrent.Count > 0
+                                     .Where(r => r.Menu.MenuChildrent.Count > 0
               && r.Menu.MenuChildrent.Any(child => child.MenuRoles.Count > 0))
                     .Select(r => new MenuRoleDTO
-                {
-            Menu = new MenuDTO
-         {
-             Id = r.Menu.Id,
-             Name = r.Menu.Name,
-             Url = r.Menu.Url,
-             Icon = r.Menu.Icon,
-             IsActive = r.Menu.IsActive,
-             MenuChildrent = r.Menu.MenuChildrent
+                    {
+                        Menu = new MenuDTO
+                        {
+                            Id = r.Menu.Id,
+                            Name = r.Menu.Name,
+                            Url = r.Menu.Url,
+                            Icon = r.Menu.Icon,
+                            IsActive = r.Menu.IsActive,
+                            MenuChildrent = r.Menu.MenuChildrent
                  .Where(child => child.MenuRoles.Count > 0)
                  .ToList()
-         },
-         GroupId = r.GroupId,
-         MenuId = r.MenuId}).ToList();
+                        },
+                        GroupId = r.GroupId,
+                        MenuId = r.MenuId
+                    }).ToList();
                 return Ok(filteredResult);
 
             }

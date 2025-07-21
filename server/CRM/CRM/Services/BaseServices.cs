@@ -82,6 +82,11 @@ namespace CRM.Services
             return await _repository.GetByPhongBanId(id);
         }
 
+        public async Task<ResultModal> RestoreMultiple(List<Guid> modals)
+        {
+            return await _repository.RestoreMultiple(modals);   
+        }
+
         public async Task<ResultModal> Update(TModal modal)
         {
             return await _repository.Update(modal);

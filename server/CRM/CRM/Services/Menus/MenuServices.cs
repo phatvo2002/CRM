@@ -36,6 +36,11 @@ namespace CRM.Services.Menus
             return await _menuRepository.GetAllMenuRole(roleid);
         }
 
+        public async Task<MenuDTO> GetMenuById(Guid id, Guid roleId)
+        {
+           return await _menuRepository.GetMenuById(id, roleId);
+        }
+
         public async Task<ResultModal> InsertMenu(MenuModel modal)
         {
             return await _menuRepository.AddMenu(modal);

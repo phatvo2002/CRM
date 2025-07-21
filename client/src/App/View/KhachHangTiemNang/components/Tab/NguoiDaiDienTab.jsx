@@ -18,6 +18,7 @@ const NguoiDaiDienTab = (props) => {
     [modalUpdate, setModalUpdate] = useState(false);
   const { data: dataLienHe, refetch: retchLienHe } = useGetLienHeByKhachHangTiemNangIdQuery(id)
   const [deleteLienHe] = useDeleteLienHeMutation()
+  const menuData = props?.menuData
   const columns = [
     {
       field: "action",
@@ -25,25 +26,12 @@ const NguoiDaiDienTab = (props) => {
       width: 100,
       renderCell: () => (
         <div style={{ alignItems: "center" }}>
-          <CustomButtonAction
-            menuId={props.menuId}
-            typeButton={2}
-            type={"sua"}
-            action={handleOpenModalUpdate}
-            icon={<EditIcon />}
-            styleText={"sửa"}
-            colorStyle={"success"}
-          />
-
-          <CustomButtonAction
-            menuId={props.menuId}
-            typeButton={2}
-            type={"xoa"}
-            action={handelDelete}
-            icon={<DeleteIcon />}
-            styleText={"xóa"}
-            colorStyle={"success"}
-          />
+          <IconButton onClick={handleOpenModalUpdate} disabled={!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)}>
+            <EditIcon color={(!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)) ? "disabled" : "success"} />
+          </IconButton>
+          <IconButton onClick={handelDelete} disabled={!menuData?.menuRoles[0]?.xoa || !(selectedRow?.length > 0)}>
+            <DeleteIcon color={(!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)) ? "disabled" : "error"} />
+          </IconButton>
         </div>
       ),
     },
@@ -96,16 +84,9 @@ const NguoiDaiDienTab = (props) => {
   return (
     <Grid2 container spacing={2}>
       <Grid2 size={12}>
-           <CustomButtonAction
-            menuId={props.menuId}
-            typeButton={1}
-            type={"xoa"}
-            action={handleOpenModalAdd}
-            icon={<CreateIcon />}
-            nameButton={"Thêm liên hệ"}
-            styleText={"thêm"}
-            colorStyle={"primary"}
-          />
+        <Button variant={"contained"} style={{ fontWeight: "bold" }} color="primary" onClick={handleOpenModalAdd} startIcon={<CreateIcon />} disabled={!menuData?.menuRoles[0]?.them}>
+          Thêm tiềm năng
+        </Button>
       </Grid2>
       <Grid2 size={12}>
         <CustomDatagrid

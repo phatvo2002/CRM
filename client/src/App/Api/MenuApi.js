@@ -21,6 +21,9 @@ export const apiMenu = createApi({
       getAllMenu: builder.query({
         query: () => `/Menu/getallmenu`,
       }),
+       getMenuById: builder.query({
+        query: (id) => `/Menu/getMenuById/${id}`,
+      }),
       getMenuRoleById: builder.query({
         query: (roleId) => `/Menu/getmenurole/${roleId}`,
       }),
@@ -61,6 +64,7 @@ export const apiMenu = createApi({
   });
   export const { 
     useGetAllMenuQuery, 
+    useGetMenuByIdQuery,
     useGetMenuRoleByIdQuery, 
     useGetAllMenuParentQuery,
     useGetMenuAllRoleByIdQuery,

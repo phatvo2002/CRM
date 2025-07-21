@@ -25,6 +25,8 @@ const HangHoaQuanTamTab = (props) => {
   const [updateData] = useUpdateHangHoaQuanTamMutation();
   const [deleteData] = useDeleteHangHoaQuanTamMutation();
 
+  const menuData = props.menuData
+
   useEffect(() => {
     if (rows) {
       setHangHoa(rows);
@@ -36,10 +38,10 @@ const HangHoaQuanTamTab = (props) => {
       maHangHoaId: "",
       tenHangHoa: "",
       khachHangTiemNangId: id,
-      maDonViTinh:0,
-      thueSuat:0,
-      tienThue:0,
-      donGia : 0,
+      maDonViTinh: 0,
+      thueSuat: 0,
+      tienThue: 0,
+      donGia: 0,
       soLuong: 0,
       thanhTien: 0,
       tongTien: 0,
@@ -71,27 +73,24 @@ const HangHoaQuanTamTab = (props) => {
       toast.error("Không tìm thấy hàng hóa để lưu!");
       return;
     }
-      let updatedRow;
-      if (currentRow.isNew === true) {
-        updatedRow = await createData(currentRow).unwrap();
-        currentRow.isNew = false; 
-        refetch()
-      } else {
-        updatedRow = await updateData(currentRow).unwrap();
-        refetch()
-      }
-      // setHangHoa((prev) =>
-      //   prev.map((row) => (row.id === id ? { ...updatedRow } : row))
-      // );
-      toast.success("Lưu dữ liệu thành công!");
+    let updatedRow;
+    if (currentRow.isNew === true) {
+      updatedRow = await createData(currentRow).unwrap();
+      currentRow.isNew = false;
+      refetch()
+    } else {
+      updatedRow = await updateData(currentRow).unwrap();
+      refetch()
+    }
+    toast.success("Lưu dữ liệu thành công!");
   };
-  
+
 
   const processRowUpdate = (newRow) => {
     const selectedItem = hangHoas?.find(
       (item) => item.id === newRow.maHangHoaId
     );
-    
+
     const updatedThanhTien = selectedItem
       ? selectedItem.donGia * (newRow.soLuong || 0)
       : 0;
@@ -99,12 +98,12 @@ const HangHoaQuanTamTab = (props) => {
     const updateTongTien = selectedItem ? updatedThanhTien + updateTienThue : 0;
     const updatedRow = {
       ...newRow,
-      tenHangHoa : selectedItem?.tenHangHoa,
-      maDonViTinh :selectedItem?.donViTinh?.id,
-      tienThue : updateTienThue,
+      tenHangHoa: selectedItem?.tenHangHoa,
+      maDonViTinh: selectedItem?.donViTinh?.id,
+      tienThue: updateTienThue,
       thanhTien: updatedThanhTien,
       tongTien: updateTongTien,
-      donGia : selectedItem.donGia
+      donGia: selectedItem.donGia
     };
     setHangHoa((prev) =>
       prev.map((row) => (row.id === updatedRow.id ? updatedRow : row))
@@ -124,6 +123,7 @@ const HangHoaQuanTamTab = (props) => {
           key={`edit-${id}`}
           onClick={() => handleSaveClick(id)}
           color="primary"
+          disabled={!menuData?.menuRoles[0]?.sua}
         >
           <SaveIcon />
         </IconButton>,
@@ -131,8 +131,9 @@ const HangHoaQuanTamTab = (props) => {
           key={`delete-${id}`}
           onClick={handleDeleteClick(id)}
           color="error"
+          disabled={!menuData?.menuRoles[0]?.xoa}
         >
-           <DeleteIcon/>
+          <DeleteIcon />
         </IconButton>,
       ],
     },
@@ -157,7 +158,7 @@ const HangHoaQuanTamTab = (props) => {
       editable: false,
       renderCell: (params) => {
         const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
-        return selectedItem ? selectedItem.tenHangHoa : "" ;
+        return selectedItem ? selectedItem.tenHangHoa : "";
       },
     },
     {
@@ -167,7 +168,7 @@ const HangHoaQuanTamTab = (props) => {
       editable: false,
       renderCell: (params) => {
         const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
-        return selectedItem ? selectedItem.donViTinh.name  : "" ;
+        return selectedItem ? selectedItem.donViTinh.name : "";
       },
     },
     {
@@ -183,7 +184,7 @@ const HangHoaQuanTamTab = (props) => {
       editable: false,
       renderCell: (params) => {
         const selectedItem = hangHoas?.find((item) => item.id === params.row.maHangHoaId);
-        return selectedItem ? selectedItem.donGia.toLocaleString("vi-VN") : 0 ;
+        return selectedItem ? selectedItem.donGia.toLocaleString("vi-VN") : 0;
       },
     },
     {
@@ -197,21 +198,21 @@ const HangHoaQuanTamTab = (props) => {
       headerName: "Tiền thuế",
       width: 200,
       editable: false,
-      renderCell: (params) =>  params.value ? params.value.toLocaleString("vi-VN") : 0,
+      renderCell: (params) => params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
     {
       field: "thanhTien",
       headerName: "Thành Tiền",
       width: 200,
       editable: false,
-      renderCell: (params) =>  params.value ? params.value.toLocaleString("vi-VN") : 0,
+      renderCell: (params) => params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
 
     {
       field: "tongTien",
       headerName: "Tổng Tiền",
       width: 200,
-      renderCell: (params) =>  params.value ? params.value.toLocaleString("vi-VN") : 0,
+      renderCell: (params) => params.value ? params.value.toLocaleString("vi-VN") : 0,
     },
   ];
 
@@ -221,23 +222,17 @@ const HangHoaQuanTamTab = (props) => {
         rows={hangHoa}
         columns={columns}
         editMode="row"
-        style={{fontSize:"1rem"}}
-        // initialState={{
-        //   aggregation: {
-        //     model: {
-        //       tongTien: 'sum',
-        //     },
-        //   },
-        // }}
+        style={{ fontSize: "1rem" }}
         processRowUpdate={processRowUpdate}
         slots={{
           toolbar: () => (
             <GridToolbarContainer>
-              
+
               <Button
                 color="primary"
                 startIcon={<AddIcon />}
                 onClick={handleAddClick}
+                disabled={!menuData?.menuRoles[0]?.them}
               >
                 Thêm hàng hóa
               </Button>

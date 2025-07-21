@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid2,
   Paper,
@@ -30,12 +30,19 @@ import { useLocation } from "react-router-dom";
 import CustomButtonAction from "src/App/Components/CustomButtonAction/CustomButtonAction";
 import LocalPostOfficeIcon from '@mui/icons-material/LocalPostOffice';
 import TextsmsIcon from '@mui/icons-material/Textsms';
+import { useMenuStore } from "src/App/Hooks/hook";
+import { useGetMenuByIdQuery } from "src/App/Api/MenuApi";
+import { set } from "lodash";
 const KhachHangTiemNangDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const location = useLocation()
-  const query = new URLSearchParams(location.search);
-  const menuId = query.get("menu");
+  const searchParams = new URLSearchParams(location.search);
+  const menu = searchParams.get("menu");
+  const { menuId, setMenuId } = useMenuStore();
+  const { data: menuData } = useGetMenuByIdQuery(menuId)
+
+
 
   const { data: dataKhachHangById, isLoading } = useGetKhachHangTiemNangByIdQuery(id);
 
@@ -58,6 +65,12 @@ const KhachHangTiemNangDetail = () => {
   const handleCloseModalEdit = () => setOpenModalEdit(false);
   const handleOpenModalGuiMail = () => setModalGuiMail(true);
   const handleCloseModalGuiMail = () => setModalGuiMail(false);
+
+  useEffect(() => {
+    if (menu != null) {
+      setMenuId(menu)
+    }
+  }, [])
 
   if (isLoading) {
     return (
@@ -120,35 +133,15 @@ const KhachHangTiemNangDetail = () => {
           </Stack>
 
           <Stack direction="row" spacing={1.5} sx={{ ml: "auto" }}>
-             <CustomButtonAction
-                menuId={menuId}
-                typeButton={1}
-                type={"sua"}
-                icon ={<LocalPhoneIcon/>}
-                styleText={"gọi điện thoại"}
-                nameButton={"Gọi điện thoại"}
-                colorStyle={"success"}
-              />
-            
-              <CustomButtonAction
-                menuId={menuId}
-                typeButton={1}
-                type={"sua"}
-                action={handleOpenModalGuiMail}
-                icon ={<LocalPostOfficeIcon/>}
-                styleText={"gửi mail"}
-                nameButton={"Gửi mail"}
-                colorStyle={"primary"}
-              />
-              <CustomButtonAction
-                menuId={menuId}
-                typeButton={1}
-                type={"sua"}
-                icon ={<TextsmsIcon/>}
-                styleText={"tin nhắn"}
-                nameButton={"Tin nhắn"}
-                colorStyle={"error"}
-              />
+            <Button variant={"contained"} style={{ fontWeight: "bold" }} color="success" onClick={gotoLink} startIcon={<LocalPhoneIcon />} disabled={!menuData?.menuRoles[0]?.sua}>
+              Gọi điện thoại
+            </Button>
+            <Button variant={"contained"} style={{ fontWeight: "bold" }} color="primary" onClick={handleOpenModalGuiMail} startIcon={<LocalPostOfficeIcon />} disabled={!menuData?.menuRoles[0]?.sua}>
+              Gủi mail
+            </Button>
+            <Button variant={"contained"} style={{ fontWeight: "bold" }} color="info" startIcon={<TextsmsIcon />} disabled={!menuData?.menuRoles[0]?.sua}>
+              Tin nhắn
+            </Button>
             <Button
               id="expand-button"
               variant="outlined"
@@ -179,33 +172,30 @@ const KhachHangTiemNangDetail = () => {
             sx: { mt: 1, borderRadius: 2, minWidth: 220 },
           }}
         >
-         {dataKhachHangById.isChuyenDoi === false && (
-          <MenuItem  >
-             <CustomButtonAction
+          {dataKhachHangById.isChuyenDoi === false && (
+            <MenuItem  >
+              <IconButton onClick={handleOpenModalConvert} disabled={!menuData?.menuRoles[0]?.them}>
+                <SyncAlt sx={{ mr: 1, color: "#0288d1" }} />
+               <Typography variant='body2'>Chuyển đối khách hàng</Typography>
+              </IconButton>
+              {/* <CustomButtonAction
                 menuId={menuId}
                 typeButton={2}
                 type={"sua"}
                 action={handleOpenModalConvert}
-                icon ={ <SyncAlt sx={{ mr: 1, color: "#0288d1" }} />}
+                icon={<SyncAlt sx={{ mr: 1, color: "#0288d1" }} />}
                 styleText={"Chuyển đổi khách hàng"}
                 nameButton={"Chuyển đổi khách hàng"}
                 colorStyle={""}
-              />
-          </MenuItem>
-        )}
+              /> */}
+            </MenuItem>
+          )}
           <MenuItem >
-        
-          <CustomButtonAction
-                menuId={menuId}
-                typeButton={2}
-                type={"sua"}
-                action={handleOpenModalEdit}
-                icon ={ <Edit sx={{ mr: 1, color: "#0288d1" }} />}
-                styleText={"Chỉnh sửa khách hàng"}
-                nameButton={"Chỉnh sửa khách hàng"}
-                colorStyle={""}
-              />
-        </MenuItem>
+            <IconButton onClick={handleOpenModalEdit} disabled={!menuData?.menuRoles[0]?.sua}>
+              <Edit sx={{ mr: 1, color: "#0288d1" }} />
+              <Typography variant='body2'>Chỉnh sửa khách hàng</Typography>
+            </IconButton>
+          </MenuItem>
         </Menu>
 
         {/* Main Content */}
@@ -251,12 +241,12 @@ const KhachHangTiemNangDetail = () => {
                 <Tab label="SMS" value="6" />
               </Tabs>
 
-              {tabValue === "1" && <ThongTInChiTietTab menuId={menuId} />}
-              {tabValue === "2" && <NguoiDaiDienTab menuId={menuId} />}
-              {tabValue === "3" && <HangHoaQuanTamTab menuId={menuId} />}
-              {tabValue === "4" && <EmailTab menuId={menuId} />}
-              {tabValue === "5" && <CongViecThucHienTab menuId={menuId} />}
-              {tabValue === "6" && <SMStab menuId={menuId} />}
+              {tabValue === "1" && <ThongTInChiTietTab  />}
+              {tabValue === "2" && <NguoiDaiDienTab menuData={menuData} />}
+              {tabValue === "3" && <HangHoaQuanTamTab menuId={menuId}   menuData={menuData} />}
+              {tabValue === "4" && <EmailTab menuId={menuId}   menuData={menuData}/>}
+              {tabValue === "5" && <CongViecThucHienTab menuId={menuId}  menuData={menuData} />}
+              {tabValue === "6" && <SMStab menuId={menuId}  menuData={menuData} />}
             </Box>
           </Grid2>
         </Grid2>

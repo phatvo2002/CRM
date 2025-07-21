@@ -2,23 +2,19 @@ import * as React from "react";
 
 import { Link as RouterLink } from "react-router-dom";
 import { Grid, Icon, Link, useTheme } from "@mui/material";
-import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import DraftsIcon from '@mui/icons-material/Drafts';
-import SendIcon from '@mui/icons-material/Send';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
+import { useMenuStore } from "src/App/Hooks/hook";
 
 
 
 const ListItems = ({ listMenu }) => {
-
+   const { menuId, setMenuId } = useMenuStore();
   const [openItems, setOpenItems] = React.useState({});
 
   const handleClick = (index) => {
@@ -133,7 +129,8 @@ const ListItems = ({ listMenu }) => {
                   {Array.isArray(item?.menu.menuChildrent) && item?.menu.menuChildrent.length > 0 && item?.menu.menuChildrent.map((item2, index2) => (
                     <ListItemButton sx={{ pl: 4 }} key={index2}
                       component={RouterLink}
-                      to={`${item2.url}?menu=${item2.id}`}
+                      to={`${item2.url}`}
+                      onClick={()=>{setMenuId(item2.id)}}
                     >
                       <ListItemIcon>
                         <Icon

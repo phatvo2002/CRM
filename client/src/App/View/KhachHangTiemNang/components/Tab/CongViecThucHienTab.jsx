@@ -29,6 +29,7 @@ import Swal from "sweetalert2";
 import { useDeleteLichHenMutation, useGetLichHenByKhachHangTiemNangIdQuery } from "src/App/Api/LichhenApi";
 import { useGetNhiemVuByKhachHangTiemNangIdQuery } from "src/App/Api/NhiemVuApi";
 const CongViecThucHienTab = (props) => {
+  const menuData = props?.menuData
   const columnsCuocGoi = [
     {
       field: "action",
@@ -38,14 +39,14 @@ const CongViecThucHienTab = (props) => {
         <div style={{ alignItems: "center" }}>
           <IconButton
             style={{}}
-            disabled={selectedRowCuocGoi.length === 0}
+            disabled={!menuData?.menuRoles[0]?.sua || !(selectedRowCuocGoi?.length > 0)}
             onClick={onOpenModalUpdateCuocGoi}
           >
             <CreateIcon color="primary"></CreateIcon>
           </IconButton>
           <IconButton
             style={{ margin: "0 10px" }}
-            disabled={selectedRowCuocGoi.length === 0}
+            disabled={!menuData?.menuRoles[0]?.xoa || !(selectedRowCuocGoi?.length > 0)}
             onClick={handelDeleteCuocGoi}
           >
             <DeleteIcon color="error"></DeleteIcon>
@@ -53,7 +54,7 @@ const CongViecThucHienTab = (props) => {
         </div>
       ),
     },
-    { field: "tieuDe", headerName: "Tiêu đề", width: 200},
+    { field: "tieuDe", headerName: "Tiêu đề", width: 200 },
     { field: "moTa", headerName: "Mô tả", width: 200 },
     {
       field: "NgayBa",
@@ -126,14 +127,14 @@ const CongViecThucHienTab = (props) => {
         <div style={{ alignItems: "center" }}>
           <IconButton
             style={{}}
-            disabled={selectedRowLichHen.length === 0}
+            disabled={!menuData?.menuRoles[0]?.sua || !(selectedRowLichHen?.length > 0)}
             onClick={handleOpenModalUpdateLichHen}
           >
             <CreateIcon color="primary"></CreateIcon>
           </IconButton>
           <IconButton
             style={{ margin: "0 10px" }}
-            disabled={selectedRowLichHen.length === 0}
+            disabled={!menuData?.menuRoles[0]?.xoa || !(selectedRowLichHen?.length > 0)}
             onClick={handelDeleteLichHen}
           >
             <DeleteIcon color="error"></DeleteIcon>
@@ -190,21 +191,7 @@ const CongViecThucHienTab = (props) => {
         </div>
       ),
     },
-    //  {
-    //    field: "isHoanThanh",
-    //    headerName: "Đã hoàn thành",
-    //    width: 200,
-    //    flex: 1,
-    //    renderCell: (params) => (
-    //      <div>
-    //        {params?.row?.isHoanThanh === false ? (
-    //          <span style={{backgroundColor:"#ff1744" , textAlign:"center",padding:2 , borderRadius : 10 , color :"white"}}>Chưa hoàn thành</span>
-    //        ) : (
-    //          <span style={{backgroundColor:"#76ff03" , textAlign:"center",padding:2 , borderRadius : 10 , color :"white"}}>Đã hoàn thành</span>
-    //        )}
-    //      </div>
-    //    )
-    //  },
+
     { field: "createAt", headerName: "Ngày tạo", width: 200 },
   ];
   const columnsNhiemVu = [
@@ -216,18 +203,12 @@ const CongViecThucHienTab = (props) => {
         <div style={{ alignItems: "center" }}>
           <IconButton
             style={{}}
-            disabled={selectedRowNhiemVu.length === 0}
+            disabled={!menuData?.menuRoles[0]?.sua || !(selectedRowNhiemVu?.length > 0)}
             onClick={handleOpenModalUpdateNhiemVu}
+            
           >
             <VisibilityIcon color="primary"></VisibilityIcon>
           </IconButton>
-          {/* <IconButton
-            style={{ margin: "0 10px" }}
-            disabled={selectedRowNhiemVu.length === 0}
-            onClick={handelDeleteLichHen}
-          >
-            <DeleteIcon></DeleteIcon>
-          </IconButton> */}
         </div>
       ),
     },
@@ -241,17 +222,17 @@ const CongViecThucHienTab = (props) => {
         <div style={{ alignItems: "center" }}>{params?.row?.hanHoanThanh}</div>
       ),
     },
-     {
-       field: "mucDoUuTien",
-       headerName: "Mức độ ưu tiên",
-       width: 200,
-       flex: 1,
-       renderCell: (params) => (
-         <div>
-            {params?.row?.mucDoUuTien?.name}
-         </div>
-       )
-     },
+    {
+      field: "mucDoUuTien",
+      headerName: "Mức độ ưu tiên",
+      width: 200,
+      flex: 1,
+      renderCell: (params) => (
+        <div>
+          {params?.row?.mucDoUuTien?.name}
+        </div>
+      )
+    },
     // { field: "createAt", headerName: "Ngày tạo", width: 200, flex: 1 },
   ];
   const { id } = useParams();
@@ -370,25 +351,7 @@ const CongViecThucHienTab = (props) => {
       }
     });
   };
-  // const handelDeleteNhiemVu = () => {
-  //   Swal.fire({
-  //     title: "Bạn có muốn xóa nhiệm vụ này",
-  //     icon: "warning",
-  //     showCancelButton: true,
-  //     confirmButtonColor: "#3085d6",
-  //     cancelButtonColor: "#d33",
-  //     confirmButtonText: "Có",
-  //   }).then(async (result) => {
-  //     if (result.isConfirmed) {
-  //       await deleteLichHen(selectedRowLichHen[0]?.id);
-  //       Swal.fire({
-  //         title: "Xóa thành công",
-  //         icon: "success",
-  //       });
-  //       isLichHenRefetch();
-  //     }
-  //   });
-  // };
+
   const handleRowCuocGoiSelectionChange = (selectedRows) => {
     setSelectedRowCuocGoi(selectedRows);
   };
@@ -434,16 +397,6 @@ const CongViecThucHienTab = (props) => {
           >
             Thêm lịch hẹn
           </Button>
-          {/* <Button
-            variant="outlined"
-            color="error"
-            sx={{ marginLeft: 1 }}
-            startIcon={<PermContactCalendarIcon />}
-            onClick={handleOpenModalAddNhiemVu}
-          >
-            Thêm nhiệm vụ
-          </Button> */}
-
         </Grid2>
         <Grid2 size={12}>
           <Box sx={{ width: "100%", typography: "body1" }}>
@@ -553,13 +506,13 @@ const CongViecThucHienTab = (props) => {
         />
         {/* modal update nhiệm vụ */}
         <ModalUpdateNhiemVu
-           selectedItem={selectedRowNhiemVu}
-           closeModal={handleCloseModalUpdateNhiemVu}
-           typeModal={typeModal}
-           setTypeModal={setTypeModal}
-           showModal={modalUpdateNhiemVu}
-           setLoading={setIsLoading}
-           refetch={isNhiemVuRefetch}
+          selectedItem={selectedRowNhiemVu}
+          closeModal={handleCloseModalUpdateNhiemVu}
+          typeModal={typeModal}
+          setTypeModal={setTypeModal}
+          showModal={modalUpdateNhiemVu}
+          setLoading={setIsLoading}
+          refetch={isNhiemVuRefetch}
         />
       </Grid2>
     </>
