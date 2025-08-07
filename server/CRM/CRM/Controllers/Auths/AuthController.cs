@@ -1,8 +1,10 @@
 ﻿using CRM.Attributes;
 using CRM.DTO;
+using CRM.Entities;
 using CRM.Extensions;
 using CRM.Modal;
 using CRM.Services.NguoiDungs;
+using Google.Apis.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRM.Controllers.Auths
@@ -13,10 +15,12 @@ namespace CRM.Controllers.Auths
     {
         public readonly IUserServices _userServices;
         private readonly ILogger<AuthController> _logger;
+        private readonly CrmDbContext  _crmDbContext;
 
-        public AuthController(IUserServices userServices)
+        public AuthController(IUserServices userServices , CrmDbContext crmDbContext)
         {
             _userServices = userServices;
+            _crmDbContext = crmDbContext;
         }
 
         [HttpPost("Login")]
@@ -34,6 +38,43 @@ namespace CRM.Controllers.Auths
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("LoginWithGoogle")]
+        public async Task<IActionResult> LoginWithGoogle(LoginEmailModal modal)
+        {
+
+            try
+            {
+                var payload = await GoogleJsonWebSignature.ValidateAsync(modal.Token);
+                if (payload == null)
+                    return Ok(new ResultModal() { Status = 202, Message = "Mã không hợp lệ", Success = false });
+
+                var userEmail = payload.Email;
+                var userdb =  _crmDbContext.Nguoidungs.Where(r=>r.Email == userEmail).FirstOrDefault();
+                LoginDTO result = new LoginDTO();
+                if (userdb == null)
+                {
+                    return Ok(new ResultModal() { Status = 202, Message = "Không tìm thấy tài khoản", Success = false });
+                }
+                else
+                {
+                     LoginViewModal viewModal = new LoginViewModal()
+                     {
+                         TaiKhoan = userdb.TaiKhoan,
+                         Password = "abc@123",
+                     };
+                     result = await _userServices.Login(viewModal);
+                }
+
+                    return Ok(result);
+
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+      
 
         [HttpPut("ActiveAccount")]
         [JwtAuthorize]

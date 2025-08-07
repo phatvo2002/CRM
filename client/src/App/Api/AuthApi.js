@@ -8,6 +8,11 @@ const login = (taiKhoan, password) => {
     .post(`${API_URL}/Auth/Login`, { taiKhoan, password })
     .then((response) => response.data);
 };
+const loginGoogle = (token) => {
+  return axios
+    .post(`${API_URL}/Auth/LoginWithGoogle`, { token })
+    .then((response) => response.data);
+};
 const ActiveEmailService = (passwordEmail, email) => {
   return axios
     .put(`${API_URL}/Auth/ActiveMailSerVices/${passwordEmail}/${email}`, null, {
@@ -39,5 +44,6 @@ export default {
   login,
   ActiveAccount,
   ChangePassword,
-  ActiveEmailService
+  ActiveEmailService,
+  loginGoogle
 };

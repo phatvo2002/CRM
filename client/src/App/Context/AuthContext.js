@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AuthApi from "../Api/AuthApi";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
+import { tr } from "date-fns/locale";
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -54,6 +55,41 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const LoginWithGoogle = (response) =>
+  {
+    try {
+      if (response.status === 200) {
+        localStorage.setItem("token", response.token);
+        localStorage.setItem("userId", response.id);
+        localStorage.setItem("roleId",response.maChucVu);
+        localStorage.setItem("authorizationData", JSON.stringify({ response }));
+        setAuthState(response.token);
+        setIsAuthenticated(true)
+        navigate("/user/profile");
+        toast.success("Đăng nhập thành công")
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        Swal.fire({
+          title: "Tài khoản chưa được kích hoạt !",
+          icon: "error",
+          showCancelButton: false,
+          showConfirmButton: false,
+        });
+        setIsAuthenticated(false)
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+        navigate("/login");
+      }
+      //   const userData = await AuthApi.getUserData(token);
+      //   setUser(userData);
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  }
+
   const logout = () => {
     localStorage.clear()
     setUser(null);
@@ -62,7 +98,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ authState, user, login, logout }}>
+    <AuthContext.Provider value={{ authState, user, login, logout ,LoginWithGoogle}}>
       {children}
     </AuthContext.Provider>
   );

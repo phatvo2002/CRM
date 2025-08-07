@@ -386,6 +386,7 @@ const CongViecThucHienTab = (props) => {
             color="success"
             startIcon={<PermPhoneMsgIcon />}
             onClick={handelModalAddCuocGoi}
+            disabled={!menuData?.menuRoles[0]?.them}
           >
             Thêm Cuộc gọi
           </Button>
@@ -394,6 +395,7 @@ const CongViecThucHienTab = (props) => {
             sx={{ marginLeft: 1 }}
             startIcon={<TodayIcon />}
             onClick={handleOpenModalAddLichHen}
+            disabled={!menuData?.menuRoles[0]?.them}
           >
             Thêm lịch hẹn
           </Button>

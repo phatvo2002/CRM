@@ -33,7 +33,8 @@ import ModalThemMoi from "./modal/ModalThemMoi";
 import { useGetAllMucTieuDoanhSoQuery } from "src/App/Api/MucTieuDoanhSo.Api";
 import Moment from "react-moment";
 import ModalChinhSua from "./modal/ModalChinhSua";
-
+import { useDateCustomer } from "src/App/Hooks/hook";
+ const { tuNgay, denNgay, setTuNgay, setDenNgay } = useDateCustomer();
 const userData = JSON.parse(localStorage.getItem("authorizationData"));
 const index = () => {
   const [valueTuNgay, setValueTuNgay] = useState(dayjs().startOf("month"));

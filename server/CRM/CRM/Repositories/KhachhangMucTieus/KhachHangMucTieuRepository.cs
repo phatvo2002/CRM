@@ -179,25 +179,7 @@ namespace CRM.Repositories.KhachhangMucTieus
             return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
         }
 
-        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByNguoiDungIdQuery(Guid NguoiDungId)
-        {
-            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.NguoiDungId == NguoiDungId && r.IsDeleted == false)
-               .Include(r => r.NguonGocKhachHang)
-               .Include(r => r.LoaiTiemNang)
-               .Include(r => r.Nguoidung)
-               .Include(r => r.PhanLoaiKhachHang).ToListAsync();
-            return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
-        }
-
-        public async Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuByPhongBanId(Guid PhongBanId, DateTime tuNgay, DateTime denNgay)
-        {
-            var db = await _crmDbContext.KhachHangMucTieus.Where(r => r.PhongBanId == PhongBanId && r.IsDeleted == false && r.CreateAt >= tuNgay && r.CreateAt <= denNgay)
-                .Include(r => r.NguonGocKhachHang)
-                .Include(r => r.LoaiTiemNang)
-                .Include(r => r.Nguoidung)
-                .Include(r => r.PhanLoaiKhachHang).ToListAsync();
-            return _mapper.Map<List<KhachHangMucTieuDTO>>(db);
-        }
+     
 
         public async Task<ResultModal> UpdateKhachHangMucTieu(KhachHangMucTieuModal modal, Guid nguoiDungId, Guid phongBanId)
         {
@@ -355,5 +337,6 @@ namespace CRM.Repositories.KhachhangMucTieus
                                                           .FirstOrDefaultAsync(r => r.Id == khachHangId);
             return _mapper.Map<KhachHangMucTieuDTO>(db);
         }
+
     }
 }

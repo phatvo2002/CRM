@@ -12,7 +12,7 @@ import {
   Divider,
   Chip,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import GetAppIcon from "@mui/icons-material/GetApp";
 import AddIcon from "@mui/icons-material/Add";
 import FileDownloadDoneIcon from "@mui/icons-material/FileDownloadDone";
@@ -50,15 +50,20 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import CustomButtonAction from "src/App/Components/CustomButtonAction/CustomButtonAction";
+import { useDateCustomer, useMenuStore } from "src/App/Hooks/hook";
+import { useGetMenuByIdQuery } from "src/App/Api/MenuApi";
 const KhachHangMucTieu = () => {
-  const [selectedRow, setSelectedRow] = useState([]),
+  const { tuNgay, denNgay, setTuNgay, setDenNgay } = useDateCustomer(),
+    { menuId, setMenuId } = useMenuStore(),
+    { data: menuData } = useGetMenuByIdQuery(menuId),
+    tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]),
+    denNgayObj = useMemo(() => dayjs(denNgay), [denNgay]),
+    [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
     [anchorEl, setAnchorEl] = useState(null),
     [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false),
     [modalbanGiao, setModalBanGiao] = useState(false),
     [modalKhDaXoa, setModalKhDaXoa] = useState(false),
-    [valueTuNgay, setValueTuNgay] = React.useState(dayjs().startOf("month")),
-    [valueDenNgay, setValueDenNgay] = React.useState(dayjs().endOf("month")),
     [modalImportKhachHangMucTeu, setModalImportKhachHangMucTeu] =
       useState(false),
     navigate = useNavigate(),
@@ -73,8 +78,6 @@ const KhachHangMucTieu = () => {
     setIsActionOpen(false);
   };
 
-  const location = useLocation();
-  const menuId = location.state?.menuId;
   const columns = [
     {
       field: "action",
@@ -92,38 +95,23 @@ const KhachHangMucTieu = () => {
         >
           <Tooltip title="Sửa thông tin ">
             <span>
-              <CustomButtonAction
-                menuId={menuId}
-                action={handleOpenModalUpdateKhachHang}
-                typeButton={2}
-                icon={<EditIcon color="success" />}
-                type={"sua"}
-                styleText={"Chỉnh sửa dữ liệu"}
-              />
+              <IconButton onClick={handleOpenModalUpdateKhachHang} disabled={!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)}>
+                <EditIcon color={(!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)) ? "disabled" : "success"} />
+              </IconButton>
             </span>
           </Tooltip>
           <Tooltip title="Xóa">
             <span>
-              <CustomButtonAction
-                menuId={menuId}
-                action={() => handleDeleteKhachHang(params?.id)}
-                typeButton={2}
-                icon={<DeleteIcon color="error" />}
-                type={"xoa"}
-                styleText={"xóa dữ liệu"}
-              />
+              <IconButton onClick={() => handleDeleteKhachHang(params?.id)} disabled={!menuData?.menuRoles[0]?.xoa || !(selectedRow?.length > 0)}>
+                <DeleteIcon color={(!menuData?.menuRoles[0]?.xoa || !(selectedRow?.length > 0)) ? "disabled" : "error"} />
+              </IconButton>
             </span>
           </Tooltip>
           <Tooltip title="Bàn giao khách hàng">
             <span>
-              <CustomButtonAction
-                menuId={menuId}
-                action={handleOpenModalBanGiao}
-                typeButton={2}
-                icon={<ThreePIcon color="primary" />}
-                type={"sua"}
-                styleText={"Bàn giao khách hàng"}
-              />
+              <IconButton onClick={handleOpenModalBanGiao} disabled={!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)}>
+                <ThreePIcon color={(!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)) ? "disabled" : "info"} />
+              </IconButton>
             </span>
           </Tooltip>
         </div>
@@ -184,7 +172,7 @@ const KhachHangMucTieu = () => {
         <div>
           <Link
             to={`/khachhang/${params.id}`}
-            state={{menuId : menuId}}
+            state={{ menuId: menuId }}
             style={{
               textDecoration: "none",
               display: "flex",
@@ -266,8 +254,8 @@ const KhachHangMucTieu = () => {
   };
   const { data: dataKhachHangByNguoiDung, refetch } =
     useGetKhachHangMucTieuByNguoiDungIdQuery({
-      tuNgay: valueTuNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
-      denNgay: valueDenNgay.format("YYYY-MM-DD HH:mm:ss.SSS"),
+      tuNgay: tuNgay,
+      denNgay: denNgay,
     });
   const [getTemplate] = useGetTemplatesMutation();
   const [deleteNguoiDung] = useDeleteKhachHangMucTieuMutation();
@@ -386,46 +374,18 @@ const KhachHangMucTieu = () => {
               </div>
             </Stack>
             <Stack direction="row" spacing={1.5}>
-              <CustomButtonAction
-                menuId={menuId}
-                action={gotoLink}
-                typeButton={1}
-                icon={<AddIcon />}
-                type={"them"}
-                styleText={"Thêm khách hàng"}
-                nameButton={"Thêm mới"}
-                colorStyle={"primary"}
-              />
-              <CustomButtonAction
-                menuId={menuId}
-                action={handleOpenModalImportKhachHang}
-                typeButton={1}
-                icon={<FileDownloadDoneIcon />}
-                type={"them"}
-                styleText={"Nhập khẩu khách hàng"}
-                nameButton={"Nhập dữ liệu"}
-                colorStyle={"success"}
-              />
-              <CustomButtonAction
-                menuId={menuId}
-                typeButton={1}
-                icon={<SupervisedUserCircleIcon />}
-                type={"sua"}
-                styleText={"Bàn giao khách hàng"}
-                nameButton={"bàn giao"}
-                colorStyle={"primary"}
-              />
-              <CustomButtonAction
-                menuId={menuId}
-                typeButton={1}
-                action={handleOpen}
-                icon={<UpdateIcon />}
-                type={"xem"}
-                styleText={"Xem lịch sử mua hàng"}
-                nameButton={"Lịch sử mua hàng"}
-                colorStyle={"primary"}
-              />
-
+              <Button variant={"contained"} style={{ fontWeight: "bold" }} color="primary" onClick={gotoLink} startIcon={<AddIcon />} disabled={!menuData?.menuRoles[0]?.them}>
+                Thêm Khách hàng
+              </Button>
+              <Button variant={"contained"} style={{ fontWeight: "bold" }} color="success" onClick={handleOpenModalImportKhachHang} startIcon={<FileDownloadDoneIcon />} disabled={!menuData?.menuRoles[0]?.them}>
+                Nhập khẩu Khách hàng
+              </Button>
+              <Button variant={"contained"} style={{ fontWeight: "bold" }} color="info" onClick={handleOpenModalImportKhachHang} startIcon={<SupervisedUserCircleIcon />} disabled={!menuData?.menuRoles[0]?.them}>
+                Bàn giao Khách hàng
+              </Button>
+              <Button variant={"contained"} style={{ fontWeight: "bold" }} color="inherit" onClick={handleOpen} startIcon={<UpdateIcon />} disabled={!menuData?.menuRoles[0]?.them}>
+                Lịch sử mua hàng
+              </Button>
               <Button
                 id="basic-button"
                 aria-controls={open ? "basic-menu" : undefined}
@@ -465,54 +425,27 @@ const KhachHangMucTieu = () => {
               },
             }}
           >
-            <MenuItem >
-
+            <MenuItem onClick={handleGetTemplates} disabled={!menuData?.menuRoles[0]?.sua}>
               <Stack direction="row" spacing={1} alignItems="center">
-                <CustomButtonAction
-                  menuId={menuId}
-                  action={handleGetTemplates}
-                  typeButton={2}
-                  icon={<GetAppIcon color="primary" />}
-                  type={"xem"}
-                  styleText={"tải file"}
-                  nameButton={"Xuất mẫu"}
-                  colorStyle={"success"}
-                />
+                <GetAppIcon color="primary" />
+                <Typography>Xuất mẫu</Typography>
               </Stack>
             </MenuItem>
-
-            <MenuItem onClick={handleOpenKhDaXoa}>
+            <MenuItem onClick={handleOpenKhDaXoa} disabled={!menuData?.menuRoles[0]?.xem}>
               <Stack direction="row" spacing={1} alignItems="center">
-                <CustomButtonAction
-                  menuId={menuId}
-                  action={handleOpenKhDaXoa}
-                  typeButton={2}
-                  icon={<AutoDeleteIcon color="error" />}
-                  type={"xoa"}
-                  styleText={"Đã xóa"}
-                  nameButton={"Đã xóa"}
-                  colorStyle={"error"}
-                />
+                <DeleteIcon color="error" />
+                <Typography>Đã xóa</Typography>
               </Stack>
             </MenuItem>
-
             <Divider sx={{ my: 0.5 }} />
-
-            <MenuItem
-              onClick={handleDeleteMuliple}
-              disabled={selectedRow.length === 0}
-            >
+            <MenuItem onClick={handleDeleteMuliple} disabled={!menuData?.menuRoles[0]?.xoa}>
               <Stack direction="row" spacing={1} alignItems="center">
-                <DeleteOutlineIcon
-                  color={selectedRow.length ? "error" : "disabled"}
-                />
-                <Typography
-                  color={selectedRow.length ? "error" : "text.disabled"}
-                >
-                  Xóa hàng loạt
-                </Typography>
+                <DeleteOutlineIcon color="error" />
+                <Typography>Xóa nhiều dòng</Typography>
               </Stack>
             </MenuItem>
+
+
           </Menu>
 
           {/* Data Grid Section */}
@@ -537,13 +470,17 @@ const KhachHangMucTieu = () => {
                     >
                       <DateTimePicker
                         label="Từ ngày"
-                        value={valueTuNgay}
-                        onChange={(newValue) => setValueTuNgay(newValue)}
+                        value={tuNgayObj}
+                        onChange={(newValue) => {
+                          if (newValue) setTuNgay(newValue);
+                        }}
                       />
                       <DateTimePicker
                         label="Đến ngày"
-                        value={valueDenNgay}
-                        onChange={(newValue) => setValueDenNgay(newValue)}
+                        value={denNgayObj}
+                        onChange={(newValue) => {
+                          if (newValue) setDenNgay(newValue);
+                        }}
                       />
                     </Stack>
                   </DemoContainer>

@@ -53,8 +53,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import PeopleOutlineIcon from '@mui/icons-material/PeopleOutline';
 import ModalBanGiaoKhachHangHangHoat from "./Modal/ModalBanGiaoKhachHangHangHoat";
-import CustomButtonAction from "src/App/Components/CustomButtonAction/CustomButtonAction";
-import { useLocation } from "react-router-dom";
 import { useDate, useMenuStore } from "src/App/Hooks/hook";
 import { useGetMenuByIdQuery } from "src/App/Api/MenuApi";
 const KhachHangTiemNang = () => {
@@ -70,7 +68,6 @@ const KhachHangTiemNang = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isActionOpen, setIsActionOpen] = useState(false);
   const [KhachHangDaXoaModal, setKhachHangDaXoaModal] = useState(false);
-  const userData = JSON.parse(localStorage.getItem("authorizationData"));
   const [rows, setRows] = useState([]);
   const [openModalUpdate, setOpenModalUpdate] = useState(false);
   const [typeModal, setTypeModal] = useState("");
@@ -91,7 +88,6 @@ const KhachHangTiemNang = () => {
   const gotoLinkImport = () => {
     navigate("/tiemnang/uploadkhachhang");
   };
-  console.log(menuData?.menuRoles[0].xem)
   const columns = useMemo(
     () => [
       {
@@ -278,15 +274,6 @@ const KhachHangTiemNang = () => {
   const handleCloseModalBanGiaoKhachHangHangLoat = () => setOpenModalBanGiaohangLoat(false)
 
   const handleDeletePhongBan = async (id) => {
-    if (
-      !userData?.response.checkIsTruongPhong &&
-      userData?.response.maChucVu !== "6840b4ed-39ce-4d32-8c69-835d3356de42"
-    ) {
-      toast.warning(
-        "Chỉ trưởng phòng hoặc nhân viên quản trị hệ thống mới có quyền xóa khách hàng."
-      );
-      return;
-    }
 
     Swal.fire({
       title: "Bạn có muốn xóa khách hàng này?",

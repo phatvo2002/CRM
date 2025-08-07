@@ -14,6 +14,8 @@ import logo from "../../Assets/image/logo.png";
 import { keyframes } from "@mui/system";
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
 import { toast } from "react-toastify";
+import { GoogleLogin } from "@react-oauth/google";
+import AuthApi from "src/App/Api/AuthApi";
 const FlexBox = styled(Box)(() => ({ display: "flex", alignItems: "center" }));
 
 const JustifyBox = styled(FlexBox)(() => ({ justifyContent: "center" }));
@@ -76,7 +78,7 @@ const JwtLogin = () => {
   const captchaInputRef = useRef(null);
   // const userCaptcha = captchaInputRef.current?.value || '';
   const [userCaptcha, setUserCaptcha] = useState("");
-  const { login } = useContext(AuthContext);
+  const { login,LoginWithGoogle } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event) => {
@@ -84,33 +86,23 @@ const JwtLogin = () => {
   };
   const [loading, setLoading] = useState(false);
 
-  // const handleFormSubmit = async (values) => {
-  //   if (validateCaptcha(userCaptcha) === true) {
-  //     loadCaptchaEnginge(6)
-  //     captchaInputRef.current.value = '';
-  //     setLoading(true);
-  //     try {
-  //       await login(values.UserName, values.password);
-  //       // navigate("/user/profile");
-  //       // Swal.fire({
-  //       //   title: "Đăng nhập thành công!",
-  //       //   icon: "success",
-  //       // });
-  //     } catch (e) {
-  //       setLoading(false);
-  //     }
-  //   }
-  //   else {
-  //     toast.error("Mã kiểm tra không đúng")
-  //     if (captchaInputRef.current) {
-  //       captchaInputRef.current.value = '';
-  //     }
-  //   }
-  // };
+  const handleLoginSuccess = async (credentialResponse) => {
+    const { credential } = credentialResponse;
+    const res = await AuthApi.loginGoogle(credential)
+        console.log(res)
+    if(res?.status === 200)
+    {
+       LoginWithGoogle(res)
+    }
+    else toast.error("Đăng nhập thất bại")
+
+
+  }
+
   const handleFormSubmit = async (values) => {
-    if (validateCaptcha(userCaptcha)) { 
-      loadCaptchaEnginge(6); 
-      captchaInputRef.current.value = ""; 
+    if (validateCaptcha(userCaptcha)) {
+      loadCaptchaEnginge(6);
+      captchaInputRef.current.value = "";
       setUserCaptcha("");
       setLoading(true);
       try {
@@ -126,9 +118,9 @@ const JwtLogin = () => {
     } else {
       toast.error("Mã kiểm tra không đúng");
       if (captchaInputRef.current) {
-        captchaInputRef.current.value = ""; 
+        captchaInputRef.current.value = "";
       }
-      setUserCaptcha(""); 
+      setUserCaptcha("");
     }
   };
   useEffect(() => {
@@ -144,7 +136,7 @@ const JwtLogin = () => {
               <Box textAlign={"center"} color={"gray"}>
                 <img
                   src={logo}
-                  style={{ textAlign: "center", width: "200px" }}
+                  style={{ textAlign: "center", width: "150px" }}
                 />
                 <h2>PHẦN MỀM QUẢN LÝ QUAN HỆ KHÁCH HÀNG </h2>
                 <h2>LPCRM</h2>
@@ -253,6 +245,8 @@ const JwtLogin = () => {
                     >
                       {loading ? (<><CircularProgress color="success" /></>) : (<>ĐĂNG NHẬP</>)}
                     </LoadingButton>
+                    <p>Hoặc đăng nhập bằng</p>
+                    <GoogleLogin onSuccess={handleLoginSuccess} onError={() => console.log("Login Failed")} />
                     <Box
                       sx={{
                         display: "flex",
@@ -261,7 +255,7 @@ const JwtLogin = () => {
                         width: "100%",
                       }}
                     >
-                     
+
                     </Box>
                   </form>
                 )}
