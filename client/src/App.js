@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 function App() {
   return (
-    <GoogleOAuthProvider clientId={"654243851037-v101h8jc241279mknctkvsc5ehe3st05.apps.googleusercontent.com"}>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_CLIENT_ID}>
       <AuthProvider>
         <AppRouter />
         <ToastContainer position="top-center" style={{ zIndex: 9999 }} />

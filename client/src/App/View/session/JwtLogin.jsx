@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab";
-import { Card, CircularProgress, Grid, TextField } from "@mui/material";
+import { Card, Checkbox, CircularProgress, Grid, Grid2, TextField, Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 // import { GoogleLogin } from "@react-oauth/google";
 import { AuthContext } from "../../Context/AuthContext";
@@ -16,6 +16,7 @@ import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-s
 import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
 import AuthApi from "src/App/Api/AuthApi";
+import { NavLink } from "react-router-dom";
 const FlexBox = styled(Box)(() => ({ display: "flex", alignItems: "center" }));
 
 const JustifyBox = styled(FlexBox)(() => ({ justifyContent: "center" }));
@@ -47,7 +48,7 @@ const JWTRoot = styled(JustifyBox)(() => ({
   minHeight: "100% !important",
   animation: `${slideDown} 1s ease-out`,
   "& .card": {
-    maxWidth: "80%",
+    maxWidth: "60%",
     // minHeight: 400,
     // margin: '1rem',
     display: "flex",
@@ -89,14 +90,11 @@ const JwtLogin = () => {
   const handleLoginSuccess = async (credentialResponse) => {
     const { credential } = credentialResponse;
     const res = await AuthApi.loginGoogle(credential)
-        console.log(res)
     if(res?.status === 200)
     {
        LoginWithGoogle(res)
     }
     else toast.error("Đăng nhập thất bại")
-
-
   }
 
   const handleFormSubmit = async (values) => {
@@ -130,8 +128,9 @@ const JwtLogin = () => {
   return (
     <JWTRoot>
       <Card className="card">
-        <Grid container>
-          <Grid item sm={12} xs={12}>
+        <Grid2 >
+          
+          <Grid2 item sm={12} xs={12} boxShadow={"rgba(0, 0, 0, 0.35) 0px 5px 15px;"}>
             <ContentBox>
               <Box textAlign={"center"} color={"gray"}>
                 <img
@@ -200,7 +199,7 @@ const JwtLogin = () => {
                       }}
                     />
                     <FlexBox justifyContent="space-between">
-                      {/* <FlexBox gap={1}>
+                      <FlexBox gap={1}>
                         <Checkbox
                           size="small"
                           name="remember"
@@ -209,15 +208,15 @@ const JwtLogin = () => {
                           sx={{ padding: 0 }}
                         />
 
-                        <Paragraph>Remember Me</Paragraph>
-                      </FlexBox> */}
-                      {/* 
+                        <Typography variant="body2">Nhớ tài khoản</Typography>
+                      </FlexBox>
+                      
                       <NavLink
                         to="/session/forgot-password"
                         style={{ color: "black" }}
                       >
                         Quên mật khẩu?
-                      </NavLink> */}
+                      </NavLink>
                     </FlexBox>
                     <div style={{ textAlign: 'center' }}>
                       <LoadCanvasTemplate reloadText="Reload Captcha" reloadColor="red" />
@@ -245,7 +244,7 @@ const JwtLogin = () => {
                     >
                       {loading ? (<><CircularProgress color="success" /></>) : (<>ĐĂNG NHẬP</>)}
                     </LoadingButton>
-                    <p>Hoặc đăng nhập bằng</p>
+                    <p style={{textAlign:"center"}}>Hoặc đăng nhập bằng</p>
                     <GoogleLogin onSuccess={handleLoginSuccess} onError={() => console.log("Login Failed")} />
                     <Box
                       sx={{
@@ -261,8 +260,8 @@ const JwtLogin = () => {
                 )}
               </Formik>
             </ContentBox>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Card>
     </JWTRoot>
   );

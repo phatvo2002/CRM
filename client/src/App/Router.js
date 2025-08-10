@@ -64,6 +64,81 @@ const MucTieu = lazy(() => import("./View/MucTieu/index"));
 // Mục tiêu
 const ChiNhanh = lazy(() => import("./View/ThietLap/QuanLyChiNhanh/index"));
 
+
+export const RouteDefault = [
+ {
+    path: "/user/profile",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThongTinNguoiDung />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/khachhang/themmoikhachhang",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThemMoiKhachHangMucTieu />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/khachhang/:id",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <KhachHangMucTieuDetail />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/tiemnang/themmoikhachhangtiemnang",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <ThemMoiKhachHangTiemNang />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/tiemnang/:id",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <KhachHangTiemNangDetail />
+      </Suspense>
+    ),
+  },
+    {
+    path: "/cohoi/:id",
+    element: (
+      <Suspense fallback={<div>Loading...</div>}>
+        <CoHoiDetail />
+      </Suspense>
+    ),
+  },
+  {
+    path: "/baogia/:id",
+    element: (
+      <Suspense
+        fallback={
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100vh",
+              width: "100vw",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        }
+      >
+        <ChiTietBaoGia />
+      </Suspense>
+    ),
+  },
+
+]
+
 const RouteChild = [
   {
     path: "/banlamviec",
@@ -89,14 +164,7 @@ const RouteChild = [
       </Suspense>
     ),
   },
-  {
-    path: "/user/profile",
-    element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <ThongTinNguoiDung />
-      </Suspense>
-    ),
-  },
+ 
 
 
   // Quản trị hệ thống
@@ -213,22 +281,7 @@ const RouteChild = [
       </Suspense>
     ),
   },
-  {
-    path: "/tiemnang/themmoikhachhangtiemnang",
-    element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <ThemMoiKhachHangTiemNang />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/tiemnang/:id",
-    element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <KhachHangTiemNangDetail />
-      </Suspense>
-    ),
-  },
+  
   {
     path: "/tiemnang/uploadkhachhang",
     element: (
@@ -246,22 +299,7 @@ const RouteChild = [
       </Suspense>
     ),
   },
-  {
-    path: "/khachhang/themmoikhachhang",
-    element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <ThemMoiKhachHangMucTieu />
-      </Suspense>
-    ),
-  },
-  {
-    path: "/khachhang/:id",
-    element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <KhachHangMucTieuDetail />
-      </Suspense>
-    ),
-  },
+  
   // hàng hóa
   {
     path: "/hanghoa",
@@ -298,14 +336,6 @@ const RouteChild = [
       </Suspense>
     ),
   },
-  {
-    path: "/cohoi/:id",
-    element: (
-      <Suspense fallback={<div>Loading...</div>}>
-        <CoHoiDetail />
-      </Suspense>
-    ),
-  },
 
   // báo giá
   {
@@ -330,28 +360,7 @@ const RouteChild = [
       </Suspense>
     ),
   },
-  {
-    path: "/baogia/:id",
-    element: (
-      <Suspense
-        fallback={
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100vh",
-              width: "100vw",
-            }}
-          >
-            <CircularProgress />
-          </Box>
-        }
-      >
-        <ChiTietBaoGia />
-      </Suspense>
-    ),
-  },
+  
 
   // đơn hàng
   {

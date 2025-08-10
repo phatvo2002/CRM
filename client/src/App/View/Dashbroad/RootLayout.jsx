@@ -171,6 +171,7 @@ export default function RootLayout() {
   } = useGetMenuRoleByIdQuery(roleId, {
     skip: !roleId,
   });
+  
   React.useEffect(() => {
     if (menuRoleData) {
       if (menuRoleData.length > 0) {
