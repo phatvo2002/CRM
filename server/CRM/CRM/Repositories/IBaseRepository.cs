@@ -7,17 +7,12 @@ namespace CRM.Repositories
     {
         // lấy toàn bộ danh sách
         Task<List<Tdto>> GetAll();
-        // Get object with Id follow int UUID
-        Task<TEntity> GetById(TId id);
-        // Get Object follow UUID and response to DTO (Data transfers Object)
         Task<Tdto> GetByIdDTO(TId id);
         // Get list by role 
         Task<List<Tdto>> GetAllByRole( Guid userId,Guid roleId , Guid chiNhanhId , DateTime tuNgay, DateTime denNgay, params Expression<Func<TEntity, object>>[] includes );
         // Get object with Id follow int type
-        Task<TEntity> GetById(int id);
+        Task<TEntity> GetById(object id);
         // Get object with Id follow string type
-        Task<TEntity> GetById(string id);
-        // Get list object with params first date to end date 
         Task<List<Tdto>> GetAllDto(DateTime tuNgay, DateTime denNgay);
         // Get list data had Datete
         Task<List<Tdto>> GetDataIsDelete(Guid userId);

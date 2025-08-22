@@ -16,5 +16,7 @@
         public virtual TinhTrangBaoGia? TinhTrangBaoGia { get; set; }
         public virtual CoHoi? CoHoi { get; set; }
         public virtual KhachHangMucTieu? KhachHangMucTieu { get; set; }
+        public ICollection<ChiTietBaoGia>? chiTietBaoGias { get; set; } = new List<ChiTietBaoGia>();
+
     }
 }

@@ -42,5 +42,6 @@
         public virtual ICollection<BaoGia> BaoGias { get; set; } = new List<BaoGia>();
         public virtual ICollection<EmailDaGui> EmailDaGuis { get; set; } = new List<EmailDaGui>();
         public virtual ICollection<DonHang> DonHangs { get; set; } = new List<DonHang>();
+        public virtual ICollection<ChiTietBaoGia> ChiTietBaoGias { get; set; } = new List<ChiTietBaoGia>();
     }
 }

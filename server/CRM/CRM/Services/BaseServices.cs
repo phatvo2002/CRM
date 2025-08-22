@@ -54,18 +54,11 @@ namespace CRM.Services
             return await _repository.GetAllDto(tuNgay, denNgay);
         }
 
-        public async Task<TEntity> GetById(TId id)
+        public async Task<TEntity> GetById(object id)
         {
             return await _repository.GetById(id);
         }
-        public async Task<TEntity> GetById(int id)
-        {
-            return await _repository.GetById(id);
-        }
-        public async Task<TEntity> GetById(string id)
-        {
-            return await _repository.GetById(id);
-        }
+      
 
         public async Task<TDto> GetByIdDTO(TId id)
         {

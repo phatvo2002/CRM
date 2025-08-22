@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
 import AuthApi from "src/App/Api/AuthApi";
 import { NavLink } from "react-router-dom";
+import { iconPass, iConUser } from "src/App/Until/constant";
 const FlexBox = styled(Box)(() => ({ display: "flex", alignItems: "center" }));
 
 const JustifyBox = styled(FlexBox)(() => ({ justifyContent: "center" }));
@@ -79,7 +80,7 @@ const JwtLogin = () => {
   const captchaInputRef = useRef(null);
   // const userCaptcha = captchaInputRef.current?.value || '';
   const [userCaptcha, setUserCaptcha] = useState("");
-  const { login,LoginWithGoogle } = useContext(AuthContext);
+  const { login, LoginWithGoogle } = useContext(AuthContext);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
   const handleMouseDownPassword = (event) => {
@@ -90,9 +91,8 @@ const JwtLogin = () => {
   const handleLoginSuccess = async (credentialResponse) => {
     const { credential } = credentialResponse;
     const res = await AuthApi.loginGoogle(credential)
-    if(res?.status === 200)
-    {
-       LoginWithGoogle(res)
+    if (res?.status === 200) {
+      LoginWithGoogle(res)
     }
     else toast.error("Đăng nhập thất bại")
   }
@@ -129,8 +129,8 @@ const JwtLogin = () => {
     <JWTRoot>
       <Card className="card">
         <Grid2 >
-          
-          <Grid2 item sm={12} xs={12} boxShadow={"rgba(0, 0, 0, 0.35) 0px 5px 15px;"}>
+
+          <Grid2 item sm={12} xs={12} boxShadow={"rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;"}>
             <ContentBox>
               <Box textAlign={"center"} color={"gray"}>
                 <img
@@ -167,6 +167,11 @@ const JwtLogin = () => {
                       helperText={touched.UserName && errors.UserName}
                       error={Boolean(errors.UserName && touched.UserName)}
                       sx={{ mb: 3 }}
+                      slotProps={{
+                        input: {
+                          startAdornment: <InputAdornment position="start">{iConUser}</InputAdornment>,
+                        },
+                      }}
                     />
                     <TextField
                       fullWidth
@@ -180,6 +185,11 @@ const JwtLogin = () => {
                       type={'password' && showPassword ? 'text' : 'password'}
                       helperText={touched.password && errors.password}
                       error={Boolean(errors.password && touched.password)}
+                      slotProps={{
+                        input: {
+                          startAdornment: <InputAdornment position="start">{iconPass}</InputAdornment>,
+                        },
+                      }}
                       sx={{ mb: 1.5 }}
                       InputProps={{
                         ...('password' && {
@@ -210,7 +220,7 @@ const JwtLogin = () => {
 
                         <Typography variant="body2">Nhớ tài khoản</Typography>
                       </FlexBox>
-                      
+
                       <NavLink
                         to="/session/forgot-password"
                         style={{ color: "black" }}
@@ -244,7 +254,7 @@ const JwtLogin = () => {
                     >
                       {loading ? (<><CircularProgress color="success" /></>) : (<>ĐĂNG NHẬP</>)}
                     </LoadingButton>
-                    <p style={{textAlign:"center"}}>Hoặc đăng nhập bằng</p>
+                    <p style={{ textAlign: "center" }}>Hoặc đăng nhập bằng</p>
                     <GoogleLogin onSuccess={handleLoginSuccess} onError={() => console.log("Login Failed")} />
                     <Box
                       sx={{

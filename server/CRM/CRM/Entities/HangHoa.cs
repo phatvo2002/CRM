@@ -14,5 +14,6 @@
         public virtual DonViTinh? DonViTinh { get; set; }
         public virtual LoaiHangHoa? LoaiHangHoa { get; set; }
         public virtual List<HangHoaQuanTam> HangHoaQuanTams { get; set; } = new List<HangHoaQuanTam>();
+        public virtual List<ChiTietBaoGia> ChiTietBaoGias { get; set; } = new List<ChiTietBaoGia>();
     }
 }

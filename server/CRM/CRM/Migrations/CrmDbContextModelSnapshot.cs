@@ -132,6 +132,53 @@ namespace CRM.Migrations
                     b.ToTable("ChiNhanh", (string)null);
                 });
 
+            modelBuilder.Entity("CRM.Entities.ChiTietBaoGia", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BaoGiaId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal?>("DonGia")
+                        .HasMaxLength(50)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("KhachHangId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("MaDonViTinh")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MaHangHoaId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("SoLuong")
+                        .HasMaxLength(50)
+                        .HasColumnType("int");
+
+                    b.Property<string>("TenHangHoa")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<decimal?>("ThanhTien")
+                        .HasMaxLength(50)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id")
+                        .HasName("PK_ChiTietBaoGia");
+
+                    b.HasIndex("BaoGiaId");
+
+                    b.HasIndex("KhachHangId");
+
+                    b.HasIndex("MaDonViTinh");
+
+                    b.HasIndex("MaHangHoaId");
+
+                    b.ToTable("ChiTietBaoGia", (string)null);
+                });
+
             modelBuilder.Entity("CRM.Entities.ChiTietKetQua", b =>
                 {
                     b.Property<Guid?>("Id")
@@ -2246,6 +2293,38 @@ namespace CRM.Migrations
                     b.Navigation("TinhTrangBaoGia");
                 });
 
+            modelBuilder.Entity("CRM.Entities.ChiTietBaoGia", b =>
+                {
+                    b.HasOne("CRM.Entities.BaoGia", "BaoGia")
+                        .WithMany("chiTietBaoGias")
+                        .HasForeignKey("BaoGiaId")
+                        .IsRequired()
+                        .HasConstraintName("FK_ChiTietBaoGia_BaoGia");
+
+                    b.HasOne("CRM.Entities.KhachHangMucTieu", "KhachHangMucTieu")
+                        .WithMany("ChiTietBaoGias")
+                        .HasForeignKey("KhachHangId")
+                        .HasConstraintName("FK_KhachHangMucTieu_BaoGia");
+
+                    b.HasOne("CRM.Entities.DonViTinh", "DonViTinh")
+                        .WithMany("ChiTietBaoGias")
+                        .HasForeignKey("MaDonViTinh")
+                        .HasConstraintName("FK_DonViTinh_BaoGia");
+
+                    b.HasOne("CRM.Entities.HangHoa", "HangHoa")
+                        .WithMany("ChiTietBaoGias")
+                        .HasForeignKey("MaHangHoaId")
+                        .HasConstraintName("FK_HangHoa_BaoGia");
+
+                    b.Navigation("BaoGia");
+
+                    b.Navigation("DonViTinh");
+
+                    b.Navigation("HangHoa");
+
+                    b.Navigation("KhachHangMucTieu");
+                });
+
             modelBuilder.Entity("CRM.Entities.ChiTietKetQua", b =>
                 {
                     b.HasOne("CRM.Entities.CoHoi", "CoHoi")
@@ -2914,6 +2993,11 @@ namespace CRM.Migrations
                     b.Navigation("ChiNhanh");
                 });
 
+            modelBuilder.Entity("CRM.Entities.BaoGia", b =>
+                {
+                    b.Navigation("chiTietBaoGias");
+                });
+
             modelBuilder.Entity("CRM.Entities.ChiNhanh", b =>
                 {
                     b.Navigation("Nguoidung");
@@ -2950,6 +3034,8 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Entities.DonViTinh", b =>
                 {
+                    b.Navigation("ChiTietBaoGias");
+
                     b.Navigation("HangHoaQuanTams");
 
                     b.Navigation("HangHoas");
@@ -2964,6 +3050,8 @@ namespace CRM.Migrations
 
             modelBuilder.Entity("CRM.Entities.HangHoa", b =>
                 {
+                    b.Navigation("ChiTietBaoGias");
+
                     b.Navigation("HangHoaQuanTams");
                 });
 
@@ -2975,6 +3063,8 @@ namespace CRM.Migrations
             modelBuilder.Entity("CRM.Entities.KhachHangMucTieu", b =>
                 {
                     b.Navigation("BaoGias");
+
+                    b.Navigation("ChiTietBaoGias");
 
                     b.Navigation("CoHois");
 

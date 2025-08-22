@@ -35,15 +35,7 @@ namespace CRM.Repositories
             }
 
         }
-        public async Task<TEntity> GetById(TId id)
-        {
-            return await _crmDbContext.Set<TEntity>().FindAsync(id);
-        }
-        public async Task<TEntity> GetById(int id)
-        {
-            return await _crmDbContext.Set<TEntity>().FindAsync(id);
-        }
-        public async Task<TEntity> GetById(string id)
+        public async Task<TEntity> GetById(object id)
         {
             return await _crmDbContext.Set<TEntity>().FindAsync(id);
         }
