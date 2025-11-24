@@ -1,11 +1,13 @@
 ﻿using CRM.DTO;
 using CRM.Entities;
+using CRM.Entities.StoreProcedure;
 using CRM.Modal;
 
 namespace CRM.Repositories.KhachhangMucTieus
 {
     public interface IKhachHangMucTieuRepository : IBaseRepository<KhachHangMucTieu, KhachHangMucTieuModal, Guid, KhachHangMucTieuDTO>
     {
+        Task<List<sp_CRM_DanhSachKhachHangMucTieu>> GetAllByQuery(int pageNumber , int pageSize , DateTime tuNgay , DateTime denNgay , Guid nguoiDungId , Guid phongBanId , Guid chucVuId , Guid chiNhanhId);
         Task<KhachHangMucTieuDTO> GetKhachHangMucTieuById(string khachHangId);
         Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuDaXoaByNguoiDungId(Guid NguoiDungId);
         Task<List<KhachHangMucTieuDTO>> GetKhachHangMucTieuDaXoaByPhongBanId(Guid PhongBanId);

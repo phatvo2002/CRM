@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CRM.DTO;
 using CRM.Entities;
+using CRM.Entities.StoreProcedure;
 using CRM.Modal;
 using CRM.Repositories.MucTieuDoanhSos;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +11,11 @@ namespace CRM.Repositories.KhachhangMucTieus
     public class KhachHangMucTieuRepository : BaseRepository<KhachHangMucTieu, KhachHangMucTieuModal, Guid, KhachHangMucTieuDTO>, IKhachHangMucTieuRepository
     {
         private readonly IMucTieuDoanhSoRepository _mucTieuDoanhSoRepository;
-        public KhachHangMucTieuRepository(CrmDbContext crmDbContext, IMapper mapper, IMucTieuDoanhSoRepository mucTieuDoanhSoRepository) : base(crmDbContext, mapper)
+        private readonly AppCrmContext _appCrmContext;
+        public KhachHangMucTieuRepository(CrmDbContext crmDbContext, IMapper mapper, IMucTieuDoanhSoRepository mucTieuDoanhSoRepository, AppCrmContext appCrmContext) : base(crmDbContext, mapper)
         {
             _mucTieuDoanhSoRepository = mucTieuDoanhSoRepository;
+            _appCrmContext = appCrmContext;
         }
         public async Task<ResultModal> ConvertKhachHangMucTieu(ConvertKhachHangModal modal, Guid nguoiDungId, Guid phongBanId)
         {
@@ -338,5 +341,9 @@ namespace CRM.Repositories.KhachhangMucTieus
             return _mapper.Map<KhachHangMucTieuDTO>(db);
         }
 
+        public  async Task<List<sp_CRM_DanhSachKhachHangMucTieu>> GetAllByQuery(int pageNumber, int pageSize, DateTime tuNgay, DateTime denNgay, Guid nguoiDungId, Guid phongBanId, Guid chucVuId, Guid chiNhanhId)
+        {
+            return await _appCrmContext.sp_CRM_DanhSachKhachHangMucTieu.FromSqlInterpolated($"Execute sp_CRM_DanhSachKhachHangMucTieu @pageNumber={pageNumber} , @pageSize={pageSize}, @nguoiDungId={nguoiDungId},@phongBanId={phongBanId},@chucVuID={chucVuId}, @chiNhanhId={chiNhanhId},@tuNgay={tuNgay},@denNgay={denNgay}").ToListAsync();
+        }
     }
 }

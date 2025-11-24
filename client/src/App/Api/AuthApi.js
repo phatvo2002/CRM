@@ -1,31 +1,38 @@
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL =
+  process.env.NODE_ENV === "production"
+    ? "/api/v1" // Khi deploy trên Vercel (qua proxy)
+    : process.env.REACT_APP_API_URL; 
+
 const Token = localStorage.getItem("token");
 
 const login = (taiKhoan, password) => {
   return axios
     .post(`${API_URL}/Auth/Login`, { taiKhoan, password })
-    .then((response) => response.data);
+    .then((res) => res.data);
 };
+
 const loginGoogle = (token) => {
   return axios
     .post(`${API_URL}/Auth/LoginWithGoogle`, { token })
-    .then((response) => response.data);
+    .then((res) => res.data);
 };
+
 const ActiveEmailService = (passwordEmail, email) => {
   return axios
     .put(`${API_URL}/Auth/ActiveMailSerVices/${passwordEmail}/${email}`, null, {
       headers: { Authorization: `Bearer ${Token}` },
     })
-    .then((response) => response.data);
+    .then((res) => res.data);
 };
+
 const ActiveAccount = (data) => {
   return axios
     .put(`${API_URL}/Auth/ActiveAccount`, data, {
       headers: { Authorization: `Bearer ${Token}` },
     })
-    .then((response) => response.data);
+    .then((res) => res.data);
 };
 
 const ChangePassword = (id, NewPassword, OldPassword) => {
@@ -37,13 +44,13 @@ const ChangePassword = (id, NewPassword, OldPassword) => {
         headers: { Authorization: `Bearer ${Token}` },
       }
     )
-    .then((response) => response.data);
+    .then((res) => res.data);
 };
 
 export default {
   login,
+  loginGoogle,
+  ActiveEmailService,
   ActiveAccount,
   ChangePassword,
-  ActiveEmailService,
-  loginGoogle
 };

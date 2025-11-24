@@ -13,7 +13,7 @@ import Container from "@mui/material/Container";
 import { Outlet } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Link as RouterLink } from "react-router-dom";
-import { Avatar, Breadcrumbs, Button, Fab, Grid2, Link } from "@mui/material";
+import { Avatar, Breadcrumbs, Button, Fab, Grid2, Link, Tooltip } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -24,13 +24,13 @@ import { AuthContext } from "../../Context/AuthContext";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { CustomNotification } from "src/App/Components/CustomNotification/CustomNotification";
-// import Chart from "./Chart";
 import { useGetMenuRoleByIdQuery } from "../../Api/MenuApi";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import panner from "../../Assets/image/banner.png";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { json } from "@files-ui/core";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+
 
 function Copyright(props) {
   return (
@@ -171,11 +171,11 @@ export default function RootLayout() {
   } = useGetMenuRoleByIdQuery(roleId, {
     skip: !roleId,
   });
-  
+
   React.useEffect(() => {
     if (menuRoleData) {
       if (menuRoleData.length > 0) {
-        localStorage.setItem("permission",JSON.stringify({menuRoleData}))
+        localStorage.setItem("permission", JSON.stringify({ menuRoleData }))
         setMenu(menuRoleData);
       } else {
         setMenu([]);
@@ -219,30 +219,44 @@ export default function RootLayout() {
         >
           <Toolbar
             sx={{
-              pr: "24px",
+              pr: 2,
+              pl: 2,
+              borderRadius: 2,
+              boxShadow: 1,
+              bgcolor: theme.palette.background.paper,
             }}
           >
+            {/* Drawer toggle */}
             <IconButton
               edge="start"
-              color="black"
+              color="inherit"
               aria-label="open drawer"
               onClick={toggleDrawer}
               sx={{
-                marginRight: "36px",
+                mr: 2,
                 ...(open && { display: "none" }),
               }}
             >
               <MenuIcon />
             </IconButton>
-            <Breadcrumbs maxItems={2} aria-label="breadcrumb">
+
+            {/* Breadcrumb */}
+            <Breadcrumbs
+              maxItems={3}
+              separator={<ChevronRightIcon fontSize="small" />}
+              aria-label="breadcrumb"
+              sx={{ flexGrow: 1 }}
+            >
               {pathParts.map((item, index) => {
                 const href = "/" + pathParts.slice(0, index + 1).join("/");
                 return (
                   <Link
                     key={index}
                     underline="hover"
-                    color="Highlight"
-                    href={href}
+                    color="primary"
+                    variant="body2"
+                    component={RouterLink}
+                    to={href}
                   >
                     {item.charAt(0).toUpperCase() + item.slice(1)}
                   </Link>
@@ -250,87 +264,80 @@ export default function RootLayout() {
               })}
             </Breadcrumbs>
 
-            <Typography
-              component="h6"
-              variant="caption"
-              color="white"
-              sx={{ flexGrow: 1 }}
-            ></Typography>
-            <IconButton onClick={toggleTheme}>
-              {darkMode ? (
-                <WbSunnyIcon style={{ color: "white" }} />
-              ) : (
-                <DarkModeIcon style={{ color: "black" }} />
-              )}
-            </IconButton>
+            {/* Right side icons */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+              {/* Theme switch */}
+              <Tooltip title="Đổi giao diện">
+                <IconButton onClick={toggleTheme} sx={{ bgcolor: "action.hover" }}>
+                  {darkMode ? (
+                    <WbSunnyIcon color="warning" />
+                  ) : (
+                    <DarkModeIcon color="action" />
+                  )}
+                </IconButton>
+              </Tooltip>
 
-            <IconButton color="black" onClick={handleOpenSetting}>
-              <SettingsIcon />
+              {/* Settings */}
+              <Tooltip title="Cài đặt">
+                <IconButton onClick={handleOpenSetting} sx={{ bgcolor: "action.hover" }}>
+                  <SettingsIcon />
+                </IconButton>
+              </Tooltip>
               <Menu
                 id="basic-menu"
                 anchorEl={openSetting}
                 open={intitialSetting}
                 onClose={handleCloseSetting}
-                MenuListProps={{
-                  "aria-labelledby": "basic-button",
-                }}
               >
                 <MenuItem onClick={linkToMail}>Thiết lập Mail</MenuItem>
               </Menu>
-            </IconButton>
 
-            <CustomNotification
-              openNoti={openNoti}
-              handleOpenNoti={handleOpenNoti}
-              handleClose={handleCloseNoti}
-              intitialNoti={intitialNoti}
-            />
-            <IconButton
-              onClick={handleClick}
-              sx={{
-                border: "1px solid #ccc",
-                ml: 2,
-                p: 0.5,
-                transition: "0.3s",
-                "&:hover": {
-                  borderColor: "primary.main",
-                  boxShadow: 2,
-                },
-              }}
-              id="basic-button"
-              aria-controls={open ? "basic-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={open ? "true" : undefined}
-            >
-              <Avatar
-                src={
-                  userData?.response?.hinhAnh
-                    ? "data:image/jpeg;base64," + userData.response.hinhAnh
-                    : undefined
-                }
-                alt="User"
-                sx={{ width: 32, height: 32 }}
+              {/* Notification */}
+              <CustomNotification
+                openNoti={openNoti}
+                handleOpenNoti={handleOpenNoti}
+                handleClose={handleCloseNoti}
+                intitialNoti={intitialNoti}
+              />
+
+              {/* Avatar */}
+              <Tooltip title="Tài khoản">
+                <IconButton
+                  onClick={handleClick}
+                  sx={{
+                    border: "2px solid transparent",
+                    transition: "0.3s",
+                    "&:hover": {
+                      borderColor: theme.palette.primary.main,
+                    },
+                  }}
+                >
+                  <Avatar
+                    src={
+                      userData?.response?.hinhAnh
+                        ? "data:image/jpeg;base64," + userData.response.hinhAnh
+                        : undefined
+                    }
+                    alt="User"
+                    sx={{ width: 36, height: 36 }}
+                  >
+                    {userData?.response?.ten?.charAt(0) ?? "U"}
+                  </Avatar>
+                </IconButton>
+              </Tooltip>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={opens}
+                onClose={handleClose}
               >
-                {userData?.response?.ten?.charAt(0) ?? "U"}
-              </Avatar>
-            </IconButton>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={opens}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem>
-                <Link component={RouterLink} to="/user/profile">
+                <MenuItem component={RouterLink} to="/user/profile">
                   Thông tin tài khoản
-                </Link>
-              </MenuItem>
-              <MenuItem onClick={gotoLink}>Đổi mật khẩu</MenuItem>
-              <MenuItem onClick={logout}>Đăng Xuất</MenuItem>
-            </Menu>
+                </MenuItem>
+                <MenuItem onClick={gotoLink}>Đổi mật khẩu</MenuItem>
+                <MenuItem onClick={logout}>Đăng Xuất</MenuItem>
+              </Menu>
+            </Box>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -339,7 +346,7 @@ export default function RootLayout() {
           sx={{
             display: "flex",
             flexDirection: "column",
-            height: "100vh",
+            height: "100%",
           }}
         >
           {/* Nội dung phía trên */}
@@ -354,7 +361,7 @@ export default function RootLayout() {
             >
               <img
                 src={panner}
-                style={{ width: "100%", paddingLeft: "30px" }}
+                style={{ maxWidth: "100%", paddingLeft: "30px" }}
                 alt="Panner"
               />
               <IconButton
@@ -372,24 +379,24 @@ export default function RootLayout() {
           </div>
           <Button
             variant="outlined"
-            color="primary" 
+            color="primary"
             startIcon={<LogoutIcon />}
             onClick={logout}
             sx={{
               fontWeight: "600",
               marginTop: "auto",
               mb: 2,
-              padding: "8px 16px", 
-              borderRadius: "8px", 
-              textTransform: "none", 
-              fontSize: "0.95rem", 
-              borderColor: "primary.main", 
+              padding: "8px 16px",
+              borderRadius: "8px",
+              textTransform: "none",
+              fontSize: "0.95rem",
+              borderColor: "primary.main",
               "&:hover": {
-                backgroundColor: "primary.main", 
-                color: "white", 
+                backgroundColor: "primary.main",
+                color: "white",
                 borderColor: "primary.main",
               },
-              transition: "all 0.3s ease", 
+              transition: "all 0.3s ease",
             }}
           >
             Đăng Xuất

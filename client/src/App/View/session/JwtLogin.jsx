@@ -1,5 +1,5 @@
 import { LoadingButton } from "@mui/lab";
-import { Card, Checkbox, CircularProgress, Grid, Grid2, TextField, Typography } from "@mui/material";
+import { Card, Checkbox, CircularProgress, Grid, Grid2, Paper, TextField, Typography } from "@mui/material";
 import { Box, styled } from "@mui/system";
 // import { GoogleLogin } from "@react-oauth/google";
 import { AuthContext } from "../../Context/AuthContext";
@@ -18,6 +18,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import AuthApi from "src/App/Api/AuthApi";
 import { NavLink } from "react-router-dom";
 import { iconPass, iConUser } from "src/App/Until/constant";
+import panner from "src/App/Assets/image/panner.jpg"
 const FlexBox = styled(Box)(() => ({ display: "flex", alignItems: "center" }));
 
 const JustifyBox = styled(FlexBox)(() => ({ justifyContent: "center" }));
@@ -45,11 +46,11 @@ const JWTRoot = styled(JustifyBox)(() => ({
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  height: "100vh",
-  minHeight: "100% !important",
+  height: "80vh",
+  minHeight: "80% !important",
   animation: `${slideDown} 1s ease-out`,
   "& .card": {
-    maxWidth: "60%",
+    maxWidth: "100%",
     // minHeight: 400,
     // margin: '1rem',
     display: "flex",
@@ -99,7 +100,7 @@ const JwtLogin = () => {
 
   const handleFormSubmit = async (values) => {
     if (validateCaptcha(userCaptcha)) {
-      loadCaptchaEnginge(6);
+      loadCaptchaEnginge(4);
       captchaInputRef.current.value = "";
       setUserCaptcha("");
       setLoading(true);
@@ -122,158 +123,162 @@ const JwtLogin = () => {
     }
   };
   useEffect(() => {
-    loadCaptchaEnginge(6);
+    loadCaptchaEnginge(4);
   }, []);
 
   return (
-    <JWTRoot>
-      <Card className="card">
-        <Grid2 >
 
-          <Grid2 item sm={12} xs={12} boxShadow={"rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;"}>
-            <ContentBox>
-              <Box textAlign={"center"} color={"gray"}>
-                <img
-                  src={logo}
-                  style={{ textAlign: "center", width: "150px" }}
-                />
-                <h2>PHẦN MỀM QUẢN LÝ QUAN HỆ KHÁCH HÀNG </h2>
-                <h2>LPCRM</h2>
-              </Box>
 
-              <Formik
-                onSubmit={handleFormSubmit}
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-              >
-                {({
-                  values,
-                  errors,
-                  touched,
-                  handleChange,
-                  handleBlur,
-                  handleSubmit,
-                }) => (
-                  <form onSubmit={handleSubmit}>
-                    <TextField
-                      fullWidth
-                      type="text"
-                      name="UserName"
-                      label="Tên đăng nhập"
-                      variant="outlined"
-                      onBlur={handleBlur}
-                      value={values.UserName}
-                      onChange={handleChange}
-                      helperText={touched.UserName && errors.UserName}
-                      error={Boolean(errors.UserName && touched.UserName)}
-                      sx={{ mb: 3 }}
-                      slotProps={{
-                        input: {
-                          startAdornment: <InputAdornment position="start">{iConUser}</InputAdornment>,
-                        },
-                      }}
-                    />
-                    <TextField
-                      fullWidth
-                      name="password"
-                      // type="password"
-                      label="Mật khẩu"
-                      variant="outlined"
-                      onBlur={handleBlur}
-                      value={values.password}
-                      onChange={handleChange}
-                      type={'password' && showPassword ? 'text' : 'password'}
-                      helperText={touched.password && errors.password}
-                      error={Boolean(errors.password && touched.password)}
-                      slotProps={{
-                        input: {
-                          startAdornment: <InputAdornment position="start">{iconPass}</InputAdornment>,
-                        },
-                      }}
-                      sx={{ mb: 1.5 }}
-                      InputProps={{
-                        ...('password' && {
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                aria-label="toggle password visibility"
-                                onClick={handleClickShowPassword}
-                                onMouseDown={handleMouseDownPassword}
-                                edge="end"
-                              >
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }),
-                      }}
-                    />
-                    <FlexBox justifyContent="space-between">
-                      <FlexBox gap={1}>
-                        <Checkbox
-                          size="small"
-                          name="remember"
-                          onChange={handleChange}
-                          checked={values.remember}
-                          sx={{ padding: 0 }}
-                        />
+    <Grid2 container spacing={2}>
 
-                        <Typography variant="body2">Nhớ tài khoản</Typography>
-                      </FlexBox>
+      <Grid2
+        size={{ xs: 6, md: 6 }}
+        sx={{
+          backgroundImage: `url(${panner})`,
+          backgroundSize: "cover",
+        }}
+      />
 
-                      <NavLink
-                        to="/session/forgot-password"
-                        style={{ color: "black" }}
-                      >
-                        Quên mật khẩu?
-                      </NavLink>
+      <Grid2
+        size={{ xs: 6, md: 6 }}
+
+        p={4}
+        sx={{ animation: `${slideDown} 1s ease-out` }}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Paper>
+          <ContentBox sx={{ width: "100%", maxWidth: 500 }}>
+
+            <Box textAlign="center" color="gray">
+              <img src={logo} style={{ width: "120px" }} />
+              <h2>PHẦN MỀM QUẢN LÝ QUAN HỆ KHÁCH HÀNG</h2>
+              <h2>LPCRM</h2>
+            </Box>
+
+            <Formik
+              onSubmit={handleFormSubmit}
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+            >
+              {({
+                values,
+                errors,
+                touched,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+              }) => (
+                <form onSubmit={handleSubmit}>
+
+                  {/* USERNAME */}
+                  <TextField
+                    fullWidth
+                    type="text"
+                    name="UserName"
+                    label="Tên đăng nhập"
+                    variant="outlined"
+                    onBlur={handleBlur}
+                    value={values.UserName}
+                    onChange={handleChange}
+                    helperText={touched.UserName && errors.UserName}
+                    error={Boolean(errors.UserName && touched.UserName)}
+                    sx={{ mb: 3 }}
+                    slotProps={{
+                      input: {
+                        startAdornment: (
+                          <InputAdornment position="start">{iConUser}</InputAdornment>
+                        ),
+                      },
+                    }}
+                  />
+
+                  {/* PASSWORD */}
+                  <TextField
+                    fullWidth
+                    name="password"
+                    label="Mật khẩu"
+                    variant="outlined"
+                    onBlur={handleBlur}
+                    value={values.password}
+                    onChange={handleChange}
+                    type={showPassword ? "text" : "password"}
+                    helperText={touched.password && errors.password}
+                    error={Boolean(errors.password && touched.password)}
+                    sx={{ mb: 1.5 }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">{iconPass}</InputAdornment>
+                      ),
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+
+                  <FlexBox justifyContent="space-between">
+                    <FlexBox gap={1}>
+                      <Checkbox
+                        size="small"
+                        name="remember"
+                        onChange={handleChange}
+                        checked={values.remember}
+                        sx={{ padding: 0 }}
+                      />
+                      <Typography variant="body2">Nhớ tài khoản</Typography>
                     </FlexBox>
-                    <div style={{ textAlign: 'center' }}>
-                      <LoadCanvasTemplate reloadText="Reload Captcha" reloadColor="red" />
-                    </div>
 
-                    <TextField
-                      id="user_captcha_input"
-                      label="Nhập mã kiểm tra"
-                      fullWidth
-                      name="user_captcha_input"
-                      type="text"
-                      inputRef={captchaInputRef}
-                      onChange={(e) => setUserCaptcha(e.target.value)}
-                    />
-                    <LoadingButton
-                      type="submit"
-                      // color="#70ad56"
-                      style={{
-                        background: "black",
-                        color: "#fff",
-                      }}
-                      loading={loading}
-                      variant="contained"
-                      sx={{ my: 3, width: "100%" }}
-                    >
-                      {loading ? (<><CircularProgress color="success" /></>) : (<>ĐĂNG NHẬP</>)}
-                    </LoadingButton>
-                    <p style={{ textAlign: "center" }}>Hoặc đăng nhập bằng</p>
-                    <GoogleLogin onSuccess={handleLoginSuccess} onError={() => console.log("Login Failed")} />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: "100%",
-                      }}
-                    >
+                    <NavLink to="/session/forgot-password" style={{ color: "black" }}>
+                      Quên mật khẩu?
+                    </NavLink>
+                  </FlexBox>
 
-                    </Box>
-                  </form>
-                )}
-              </Formik>
-            </ContentBox>
-          </Grid2>
-        </Grid2>
-      </Card>
-    </JWTRoot>
+                  <div style={{ textAlign: "center" }}>
+                    <LoadCanvasTemplate reloadText="Reload Captcha" reloadColor="red" />
+                  </div>
+
+                  <TextField
+                    label="Nhập mã kiểm tra"
+                    fullWidth
+                    name="user_captcha_input"
+                    type="text"
+                    inputRef={captchaInputRef}
+                    onChange={(e) => setUserCaptcha(e.target.value)}
+                  />
+
+                  <LoadingButton
+                    type="submit"
+                    style={{ background: "black", color: "#fff" }}
+                    loading={loading}
+                    variant="contained"
+                    sx={{ my: 3, width: "100%" }}
+                  >
+                    {loading ? <CircularProgress /> : "ĐĂNG NHẬP"}
+                  </LoadingButton>
+
+                  <p style={{ textAlign: "center" }}>Hoặc đăng nhập bằng</p>
+                  <GoogleLogin
+                    onSuccess={handleLoginSuccess}
+                    onError={() => console.log("Login Failed")}
+                  />
+                </form>
+              )}
+            </Formik>
+          </ContentBox>
+        </Paper>
+
+      </Grid2>
+
+    </Grid2>
+
   );
 };
 

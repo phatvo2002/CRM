@@ -11,7 +11,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -45,6 +45,8 @@ import dayjs from "dayjs";
 import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useDateBaoGia, useDateCustomer, useMenuStore } from "src/App/Hooks/hook";
+import { useGetMenuByIdQuery } from "src/App/Api/MenuApi";
 
 const statusColors = {
   "Mới tạo": "#3498db",
@@ -60,6 +62,8 @@ const statusColors = {
 };
 const userData = JSON.parse(localStorage.getItem("authorizationData"));
 const index = () => {
+  const { tuNgay, denNgay, setTuNgay, setDenNgay } = useDateBaoGia()
+
   const [selectedRow, setSelectedRow] = useState([]),
     [rows, setRows] = useState([]),
     [anchorEl, setAnchorEl] = useState(null),
@@ -72,6 +76,10 @@ const index = () => {
     [isActionOpen, setIsActionOpen] = useState(false),
     [deleteBaoGia] = useDeleteBaoGiaMutation(),
     [downloadBaoGia] = useDownloadFileMutation(),
+    tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]),
+    denNgayObj = useMemo(() => dayjs(denNgay), [denNgay]),
+    { menuId, setMenuId } = useMenuStore(),
+    { data: menuData } = useGetMenuByIdQuery(menuId),
     handleOpen = () => setIsActionOpen(true);
 
   const handleOpenModalThemMoi = () => setModalThemMoi(true);
@@ -145,16 +153,16 @@ const index = () => {
         >
           <Tooltip title="Sửa thông tin ">
             <IconButton
-              disabled={selectedRow.length == 0}
               style={{}}
               onClick={handleOpenModalSuaThongTinBaoGia}
+              disabled={!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)}
             >
               <EditIcon color="success" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Xóa">
             <IconButton
-              disabled={selectedRow.length == 0}
+              disabled={!menuData?.menuRoles[0]?.xoa || !(selectedRow?.length > 0)}
               style={{}}
               onClick={() => handleDeleteBaoGia(params?.id)}
             >
@@ -163,7 +171,7 @@ const index = () => {
           </Tooltip>
           <Tooltip title="Xuất báo giá">
             <IconButton
-              disabled={selectedRow.length === 0}
+              disabled={!menuData?.menuRoles[0]?.sua || !(selectedRow?.length > 0)}
               onClick={() => handleDownLoadFileBaoGia(params?.id)}
             >
               <img src={IconWord} alt="Xuất báo giá" width={24} height={24} />
@@ -282,17 +290,6 @@ const index = () => {
         </div>
       ),
     },
-    // {
-    //   field: "tinhTrang",
-    //   headerName: "Tình trạng báo giá",
-    //   width: 200,
-    //   renderCell: (params) => (
-    //     <div style={{ alignItems: "center" }}>
-    //       {" "}
-    //       {params?.row?.tinhTrangBaoGia?.name}
-    //     </div>
-    //   ),
-    // },
     {
       field: "tinhTrang",
       headerName: "Tình trạng báo giá",
@@ -336,19 +333,11 @@ const index = () => {
       ),
     },
   ];
-  const [valueTuNgay, setValueTuNgay] = React.useState(
-    dayjs().startOf("month")
-  );
-  const [valueDenNgay, setValueDenNgay] = React.useState(
-    dayjs().endOf("month")
-  );
 
-  const dataTuNgay = valueTuNgay.format("YYYY-MM-DDT00:00:00");
-  const dataDenNgay = valueDenNgay.format("YYYY-MM-DDT23:59:59");
 
   const { data: dataBaogia, refetch } = useGetBaoGiaListQuery({
-    tuNgay: dataTuNgay,
-    denNgay: dataDenNgay,
+      tuNgay: tuNgay,
+      denNgay: denNgay,
   });
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -388,7 +377,8 @@ const index = () => {
               variant="contained"
               color="primary"
               onClick={handleOpenModalThemMoi}
-              sx={{ borderRadius: 2, textTransform: "none", boxShadow: 3 }}
+              disabled={!menuData?.menuRoles[0]?.them}
+              sx={{  textTransform: "none", boxShadow: 3 }}
               startIcon={<AddIcon />}
             >
               Thêm báo giá
@@ -398,19 +388,20 @@ const index = () => {
               variant="outlined"
               color="primary"
               onClick={handleOpenModalOpenModalNhanBan}
-              disabled={selectedRow.length == 0}
-              sx={{ borderRadius: 2, textTransform: "none", boxShadow: 3 }}
+              disabled={selectedRow.length == 0 || !menuData?.menuRoles[0]?.them}
+              sx={{ textTransform: "none", boxShadow: 3 }}
               startIcon={<ContentCopyIcon />}
             >
               Nhân bản
             </Button>
             {userData?.response?.checkIsTruongPhong == true && (
               <Button
-                variant="outlined"
+                variant="contained"
                 color="primary"
-                disabled={selectedRow.length == 0}
+                disabled={selectedRow.length == 0 || !menuData?.menuRoles[0]?.sua}
+                
                 onClick={handleOpenModalPheDuyet}
-                sx={{ borderRadius: 2, textTransform: "none", boxShadow: 3 }}
+                sx={{ textTransform: "none", boxShadow: 3 }}
                 startIcon={<ContentCopyIcon />}
               >
                 Phê duyệt
@@ -418,17 +409,17 @@ const index = () => {
             )}
             {(selectedRow[0]?.tinhTrangBaoGia?.name === "Đang chờ duyệt" ||
               selectedRow[0]?.tinhTrangBaoGia?.name === "Bản thảo") && (
-              <Button
-                sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
-                variant="outlined"
-                color="primary"
-                disabled={selectedRow.length === 0}
-                onClick={handleOpenModalSuaThongTinHangHoa}
-                startIcon={<Inventory2Icon />}
-              >
-                Chỉnh sửa hàng hóa
-              </Button>
-            )}
+                <Button
+                  sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
+                  variant="contained"
+                  color="primary"
+                  disabled={selectedRow.length === 0 || !menuData?.menuRoles[0]?.sua}
+                  onClick={handleOpenModalSuaThongTinHangHoa}
+                  startIcon={<Inventory2Icon />}
+                >
+                  Chỉnh sửa hàng hóa
+                </Button>
+              )}
 
             <Button
               sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
@@ -444,7 +435,7 @@ const index = () => {
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
-              sx={{ borderRadius: 2, textTransform: "none", boxShadow: 1 }}
+              sx={{ textTransform: "none", boxShadow: 1 }}
               variant="outlined"
               startIcon={<OpenInNewIcon />}
               endIcon={<KeyboardArrowDownIcon />}
@@ -466,11 +457,12 @@ const index = () => {
 
             <MenuItem onClick={handleClose}>
               <Button
-                variant="outlined"
+                variant="contained"
                 color="error"
+                
                 startIcon={<DeleteOutlineIcon />}
                 sx={{ width: "100%", justifyContent: "flex-start" }}
-                disabled={false}
+                disabled={!menuData?.menuRoles[0]?.xoa}
               >
                 Xóa hàng loạt
               </Button>
@@ -481,6 +473,7 @@ const index = () => {
                 variant="outlined"
                 color="error"
                 startIcon={<AutoDeleteIcon />}
+                 disabled={!menuData?.menuRoles[0]?.xoa}
                 sx={{ width: "100%", justifyContent: "flex-start" }}
               >
                 Đã xóa
@@ -490,7 +483,7 @@ const index = () => {
         </Grid2>
         <Grid2 size={12}>
           <Paper sx={{ p: 2, borderRadius: 2, boxShadow: 3 }}>
-            <Grid2 size={12}>
+            <Grid2 size={12} sx={{marginBottom:4 }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DemoContainer
                   components={["DateTimePicker", "DateTimePicker"]}
@@ -502,13 +495,17 @@ const index = () => {
                   >
                     <DateTimePicker
                       label="Từ ngày"
-                      value={valueTuNgay}
-                      onChange={(newValue) => setValueTuNgay(newValue)}
+                      value={tuNgayObj}
+                      onChange={(newValue) => {
+                        if (newValue) setTuNgay(newValue);
+                      }}
                     />
                     <DateTimePicker
                       label="Đến ngày"
-                      value={valueDenNgay}
-                      onChange={(newValue) => setValueDenNgay(newValue)}
+                      value={denNgayObj}
+                      onChange={(newValue) => {
+                        if (newValue) setDenNgay(newValue);
+                      }}
                     />
                   </Stack>
                 </DemoContainer>

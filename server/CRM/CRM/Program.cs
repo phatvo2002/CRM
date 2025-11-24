@@ -88,6 +88,7 @@ builder.Services.AddDbContext<CrmDbContext>(options =>
 
 builder.Services.AddDbContext<AppCrmContext>(options =>
         options.UseSqlServer(settings["DefaultConnection"]));
+
 builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
 
 Log.Logger = new LoggerConfiguration()
@@ -252,16 +253,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowSpecificOrigin", builder =>
-//    {
-//        builder
-//            .WithOrigins("https://crm2024-sand.vercel.app")
-//            .AllowAnyHeader()
-//            .AllowAnyMethod()
-//            .AllowCredentials();
-//    });
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("*",
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
+
 //});
 //builder.Services.AddCors(options =>
 //{
@@ -311,17 +313,15 @@ var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-
-//}
-
-app.UseSwagger();
-app.UseSwaggerUI();
 
 app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"));
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("*");
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

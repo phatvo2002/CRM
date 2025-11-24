@@ -16,6 +16,9 @@ export const apiKhachHangMucTieu = createApi({
       },
     }),
     endpoints: (builder) => ({
+      getAll: builder.query({
+        query: ({pageNumber,pageSize,tuNgay,denNgay}) => `/KhachHangMucTieu/getAll?pageNumber=${pageNumber}&pageSize=${pageSize}&tuNgay=${tuNgay}&denNgay=${denNgay}`,
+      }),
       getAllKhachHangMucTieu: builder.query({
         query: () => `/KhachHangMucTieu/getallkhachhangmuctieu`,
       }),
@@ -109,6 +112,7 @@ export const apiKhachHangMucTieu = createApi({
     }),
   });
   export const { 
+    useGetAllQuery,
     useGetAllKhachHangMucTieuQuery,
     useGetKhachHangMucTieuByIdQuery,
     useGetKhachHangMucTieuByNguoiDungIdQuery,

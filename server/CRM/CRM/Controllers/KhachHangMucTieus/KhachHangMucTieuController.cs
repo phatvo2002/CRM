@@ -27,6 +27,24 @@ namespace CRM.Controllers.KhachHangMucTieus
             _logger = logger;
         }
 
+        [HttpGet("getAll")]
+        [JwtAuthorize]
+        public async Task<IActionResult> GetAll(int pageNumber , int pageSize  , DateTime tuNgay , DateTime denNgay)
+        {
+            try
+            {
+                Guid nguoiDungId = HttpContext.GetUserId();
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                Guid chucVuId = HttpContext.GetChucVuId();
+                Guid chiNhanhId = HttpContext.GetChiNhanhId();
+                var result = await _khacHangMucTieuServices.GetAllByQuery(pageNumber , pageSize , tuNgay , denNgay , nguoiDungId , phongBanId , chucVuId , chiNhanhId);
+                return Ok(result);
+            }
+            catch (Exception ex) { 
+                return BadRequest(ex.Message);             
+            }
+        }
+
         [HttpGet("getallkhachhangmuctieu")]
         [JwtAuthorize]
         public async Task<IActionResult> GetAllKhachHangMucTieu()
@@ -89,22 +107,6 @@ namespace CRM.Controllers.KhachHangMucTieus
                 return BadRequest(ex.Message);
             }
         }
-        //[HttpGet("getkhachhangmuctieubynguoidungidquery/{id}")]
-        //[JwtAuthorize]
-        //public async Task<IActionResult> GetKhachHangMucTieuByIdQuery(Guid id)
-        //{
-        //    try
-        //    {
-        //        var result = await _khacHangMucTieuServices.GetKhachHangMucTieuByNguoiDungIdQuery(id);
-        //        return Ok(result);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogInformation("{Time}", DateTime.Now);
-        //        _logger.LogError(ex.Message);
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
         [HttpGet("getkhachhangmuctieudaxoa")]
         [JwtAuthorize]
         public async Task<IActionResult> GetKhachHangDaXoa()

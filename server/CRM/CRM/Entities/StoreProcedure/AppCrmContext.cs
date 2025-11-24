@@ -15,5 +15,6 @@ namespace CRM.Entities.StoreProcedure
             Database.SetCommandTimeout(36000);
         }
         public virtual DbSet<crm_getmenugroup_by_id> crm_getmenugroup_by_id { get; set; }
+        public virtual DbSet<sp_CRM_DanhSachKhachHangMucTieu> sp_CRM_DanhSachKhachHangMucTieu { get; set; }
     }
 }

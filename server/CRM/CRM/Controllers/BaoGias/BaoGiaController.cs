@@ -31,24 +31,21 @@ namespace CRM.Controllers.BaoGias
         {
             try
             {
-                Guid phongbanId = HttpContext.GetPhongBanId();
+                Guid nguoiDungId = HttpContext.GetUserId();
+                Guid phongBanId = HttpContext.GetPhongBanId();
+                Guid chucVuId = HttpContext.GetChucVuId();
+                Guid chiNhanhId = HttpContext.GetChiNhanhId();
                 Guid userId = HttpContext.GetUserId();
-                var db = _context.Nguoidungs.FirstOrDefault(r => r.Id == userId);
-                if (db.CheckIsGiamDoc == true)
-                {
-                    var result = await _baoGiaServices.GetAllDto(tuNgay, denNgay);
-                    return Ok(result);
-                }
-                else if (db.CheckIsTruongPhong)
-                {
-                    List<BaoGiaDTO> result = await _baoGiaServices.GetBaoGiaByPhongBanId(phongbanId, tuNgay, denNgay);
-                    return Ok(result);
-                }
-                else
-                {
-                    List<BaoGiaDTO> result = await _baoGiaServices.GetBaoGiaByNguoiDungId(userId, tuNgay, denNgay);
-                    return Ok(result);
-                }
+                var result = await _baoGiaServices.GetAllByRole(nguoiDungId,
+                                                                         chucVuId,
+                                                                         chiNhanhId,
+                                                                         tuNgay,
+                                                                         denNgay,
+                                                                         r => r.KhachHangMucTieu,
+                                                                         r => r.CoHoi,
+                                                                         r => r.Nguoidung,
+                                                                         r => r.TinhTrangBaoGia);
+                return Ok(result);  
             }
             catch (Exception ex)
             {

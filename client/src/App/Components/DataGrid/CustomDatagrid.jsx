@@ -225,11 +225,13 @@ const CustomDatagrid = ({
   pageSizeOptions = [10, 25, 50, 100],
   initialPageSize = 25,
   getRowId,
+  count,
   checkboxSelection,
   disableMultipleSelection = false,
   disableRowSelectionOnClick = true,
   showTopToolbar = true,
   onRowSelectionChange,
+  onPaginationChange,
   height = 'auto',
 }) => {
   const [paginationModel, setPaginationModel] = React.useState({
@@ -237,12 +239,29 @@ const CustomDatagrid = ({
     page: 0,
   });
 
+
+
   const handleRowSelectionChange = (newRowSelectionModel) => {
     if (onRowSelectionChange) {
       const selectedRows = rows.filter((row) => newRowSelectionModel.includes(row.id));
       onRowSelectionChange(selectedRows);
     }
   };
+
+  const handlePaginationChange = (newModel) => {
+    setPaginationModel(newModel);
+
+
+    if (onPaginationChange) {
+      onPaginationChange({
+        pageNumber: newModel.page + 1,
+        pageSize: newModel.pageSize,
+      });
+    }
+  };
+
+ 
+
 
   return (
     <Box
@@ -261,7 +280,7 @@ const CustomDatagrid = ({
         disableMultipleSelection={disableMultipleSelection}
         disableRowSelectionOnClick={disableRowSelectionOnClick}
         paginationModel={paginationModel}
-        onPaginationModelChange={setPaginationModel}
+        onPaginationModelChange={handlePaginationChange}
         pageSizeOptions={pageSizeOptions}
         showCellVerticalBorder
         getRowId={getRowId}
@@ -279,7 +298,7 @@ const CustomDatagrid = ({
         }}
         initialState={{
           pagination: {
-            paginationModel: { pageSize: initialPageSize, page: 0 },
+            paginationModel: { pageSize: initialPageSize, page: 1},
           },
         }}
         onRowSelectionModelChange={handleRowSelectionChange}

@@ -24,6 +24,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import {
   useDeletehangLoatKhachHangMucTieuMutation,
   useDeleteKhachHangMucTieuMutation,
+  useGetAllQuery,
   useGetKhachHangMucTieuByNguoiDungIdQuery,
 } from "src/App/Api/KhachHangMucTieuApi";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -53,31 +54,7 @@ import CustomButtonAction from "src/App/Components/CustomButtonAction/CustomButt
 import { useDateCustomer, useMenuStore } from "src/App/Hooks/hook";
 import { useGetMenuByIdQuery } from "src/App/Api/MenuApi";
 const KhachHangMucTieu = () => {
-  const { tuNgay, denNgay, setTuNgay, setDenNgay } = useDateCustomer(),
-    { menuId, setMenuId } = useMenuStore(),
-    { data: menuData } = useGetMenuByIdQuery(menuId),
-    tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]),
-    denNgayObj = useMemo(() => dayjs(denNgay), [denNgay]),
-    [selectedRow, setSelectedRow] = useState([]),
-    [rows, setRows] = useState([]),
-    [anchorEl, setAnchorEl] = useState(null),
-    [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false),
-    [modalbanGiao, setModalBanGiao] = useState(false),
-    [modalKhDaXoa, setModalKhDaXoa] = useState(false),
-    [modalImportKhachHangMucTeu, setModalImportKhachHangMucTeu] =
-      useState(false),
-    navigate = useNavigate(),
-    [isActionOpen, setIsActionOpen] = useState(false),
-    handleOpen = () => setIsActionOpen(true),
-    handleOpenModalBanGiao = () => setModalBanGiao(true),
-    handleCloseModalBanGiao = () => setModalBanGiao(false),
-    handleOpenKhDaXoa = () => setModalKhDaXoa(true),
-    handleCloseKhDaXoa = () => setModalKhDaXoa(false);
-
-  const handleCloseAction = () => {
-    setIsActionOpen(false);
-  };
-
+  
   const columns = [
     {
       field: "action",
@@ -122,10 +99,10 @@ const KhachHangMucTieu = () => {
       headerName: "Nhân viên chăm sóc",
       width: 200,
       renderCell: (params) => {
-        return params?.row?.nguoiDung?.ten ? (
+        return params?.row?.tenNhanVien ? (
           <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
             <div>
-              {params?.row?.nguoiDung?.hinhAnh == "" ? (
+              {params?.row?.hinhAnh == "" ? (
                 <div>
                   <img
                     src={NoImage}
@@ -142,7 +119,7 @@ const KhachHangMucTieu = () => {
                   <img
                     src={
                       "data:image/jpeg;base64," +
-                      params?.row?.nguoiDung?.hinhAnh
+                      params?.row?.hinhAnh
                     }
                     style={{
                       width: "40px",
@@ -156,7 +133,7 @@ const KhachHangMucTieu = () => {
             </div>
             <span>
               {" "}
-              {params?.row?.nguoiDung?.hoVaDem} {params?.row?.nguoiDung?.ten}
+              {params?.row?.nguoiDung?.hoVaDem} {params?.row?.tenNhanVien}
             </span>
           </div>
         ) : (
@@ -189,11 +166,11 @@ const KhachHangMucTieu = () => {
     },
     { field: "id", headerName: "Mã khách hàng", width: 200 },
     {
-      field: "phanLoaiKhachHang",
+      field: "maPhanLoaiKhachHang",
       headerName: "Phân loại khách hàng",
       width: 200,
       renderCell: (params) => {
-        const name = params?.row?.phanLoaiKhachHang?.id || "";
+        const name = params?.row?.maPhanLoaiKhachHang || "";
 
         const getColor = (name) => {
           switch (name) {
@@ -213,7 +190,7 @@ const KhachHangMucTieu = () => {
         };
 
         return (
-          <Chip label={params?.row?.phanLoaiKhachHang?.name} sx={{ backgroundColor: getColor(name), color: "white" }} />
+          <Chip label={params?.row?.tenPhanLoai} sx={{ backgroundColor: getColor(name), color: "white" }} />
         );
       },
     },
@@ -242,6 +219,39 @@ const KhachHangMucTieu = () => {
       ),
     },
   ];
+  let initialPageSize =  10;
+  const { tuNgay, denNgay, setTuNgay, setDenNgay } = useDateCustomer(),
+    { menuId, setMenuId } = useMenuStore(),
+    { data: menuData } = useGetMenuByIdQuery(menuId),
+    tuNgayObj = useMemo(() => dayjs(tuNgay), [tuNgay]),
+    denNgayObj = useMemo(() => dayjs(denNgay), [denNgay]),
+    [selectedRow, setSelectedRow] = useState([]),
+    [rows, setRows] = useState([]),
+    [anchorEl, setAnchorEl] = useState(null),
+    [modalUpdateKhachHang, setModalUpdateKhachHang] = useState(false),
+    [modalbanGiao, setModalBanGiao] = useState(false),
+    [modalKhDaXoa, setModalKhDaXoa] = useState(false),
+     [totalCount, setTotalCount] = React.useState(0),
+    [paginationModal , setPaginationModal]=useState(
+      {
+        pageNumber : 1,
+        pageSize : initialPageSize
+      }
+    ),
+    [modalImportKhachHangMucTeu, setModalImportKhachHangMucTeu] =
+      useState(false),
+    navigate = useNavigate(),
+    [isActionOpen, setIsActionOpen] = useState(false),
+    handleOpen = () => setIsActionOpen(true),
+    handleOpenModalBanGiao = () => setModalBanGiao(true),
+    handleCloseModalBanGiao = () => setModalBanGiao(false),
+    handleOpenKhDaXoa = () => setModalKhDaXoa(true),
+    handleCloseKhDaXoa = () => setModalKhDaXoa(false);
+
+  const handleCloseAction = () => {
+    setIsActionOpen(false);
+  };
+
   const gotoLink = () => {
     navigate("/khachhang/themmoikhachhang");
   };
@@ -253,13 +263,19 @@ const KhachHangMucTieu = () => {
     setAnchorEl(null);
   };
   const { data: dataKhachHangByNguoiDung, refetch } =
-    useGetKhachHangMucTieuByNguoiDungIdQuery({
+    useGetAllQuery({
+      pageNumber:0, 
+      pageSize: 0,
       tuNgay: tuNgay,
       denNgay: denNgay,
     });
   const [getTemplate] = useGetTemplatesMutation();
   const [deleteNguoiDung] = useDeleteKhachHangMucTieuMutation();
   const [deleteHangLoat] = useDeletehangLoatKhachHangMucTieuMutation();
+  const { data: testData } = useGetAllQuery({ pageNumber: 0, pageSize: 0, tuNgay: tuNgay, denNgay: denNgay })
+  const handlePaginationChange = ({ pageNumber, pageSize }) => {
+    setPaginationModal({pageNumber :pageNumber ,pageSize : pageSize})
+  };
 
   const handleDeleteKhachHang = async (id) => {
     Swal.fire({
@@ -340,6 +356,12 @@ const KhachHangMucTieu = () => {
   const handleCloseOpenModalImportKhachHang = () => {
     setModalImportKhachHangMucTeu(false);
   };
+
+    useEffect(()=>
+  {
+      if(testData)
+        setTotalCount(testData?.length)
+  },[testData])
 
   return (
     <>
@@ -492,9 +514,11 @@ const KhachHangMucTieu = () => {
                   rows={rows}
                   columns={columns}
                   pageSizeOptions={[10, 25, 50]}
-                  initialPageSize={25}
+                  initialPageSize={initialPageSize}
+                  count={totalCount}
                   checkboxSelection={true}
                   showTopToolbar={true}
+                  onPaginationChange={handlePaginationChange}
                   onRowSelectionChange={handleRowSelectionChange}
                   sx={{
                     "& .MuiDataGrid-root": {

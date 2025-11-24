@@ -31,6 +31,19 @@ export const useDateCustomer = create(
   )
 );
 
+export const useDateBaoGia = create(
+  persist(
+    (set) => ({
+      tuNgay:  dayjs().startOf("month").toISOString(),
+      setTuNgay: (date) => set({ tuNgay: date.toISOString() }),
+      denNgay: dayjs().endOf("month").toISOString(),
+      setDenNgay : (date) => set({denNgay : date.toISOString()})
+    }),
+    {
+      name: 'date-storage-customer', 
+    }
+  )
+);
 
 export const useMenuStore = create(
   persist(

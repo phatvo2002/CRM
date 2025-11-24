@@ -1,5 +1,6 @@
 ﻿using CRM.DTO;
 using CRM.Entities;
+using CRM.Entities.StoreProcedure;
 using CRM.Modal;
 using CRM.Repositories.KhachhangMucTieus;
 
@@ -26,6 +27,11 @@ namespace CRM.Services.KhachHangMucTieus
         public async Task<ResultModal> CreateKhachHangMucTieu(KhachHangMucTieuModal modal, Guid nguoiDungId, Guid phongBanId)
         {
             return await _khachHangMucTieuRepository.CreateKhachHangMucTieu(modal, nguoiDungId, phongBanId);
+        }
+
+        public async Task<List<sp_CRM_DanhSachKhachHangMucTieu>> GetAllByQuery(int pageNumber, int pageSize, DateTime tuNgay, DateTime denNgay, Guid nguoiDungId, Guid phongBanId, Guid chucVuId, Guid chiNhanhId)
+        {
+            return await _khachHangMucTieuRepository.GetAllByQuery(pageNumber, pageSize, tuNgay, denNgay, nguoiDungId, phongBanId, chucVuId, chiNhanhId);
         }
 
         public async Task<KhachHangMucTieuDTO> GetKhachHangMucTieuById(string khachHangId)
